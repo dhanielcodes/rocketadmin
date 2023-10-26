@@ -13,7 +13,7 @@ import {
 import { styled } from "styled-components";
 import Dashboard from "./Routes/Dashboard";
 import Agent from "./Routes/Agent";
-import Customers from "./Routes/customers";
+import Customers from "./Routes/Customers";
 import Login from "./Routes/Login";
 import ActionRequired from "./Routes/ActionRequired";
 import IncompleteRegistration from "./Routes/IncompleteRegistration";
