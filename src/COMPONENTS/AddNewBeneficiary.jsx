@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineDown } from "react-icons/ai";
 import { styled } from "styled-components";
-import Appbutton from "../reuseables/Appbutton";
+//import Appbutton from "../reuseables/Appbutton";
 
 function AddNewBeneficiary({ closeBeneficiary }) {
   //  const handleOnChange = (e) => {
