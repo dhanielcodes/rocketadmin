@@ -1,7 +1,7 @@
 import React from "react";
 import { styled } from "styled-components";
 
-function Appbutton({ placeholder, onClick, style }) {
+function AppButton({ placeholder, onClick, style }) {
   return (
     <Content>
       <div className="btn" onClick={onClick}>
@@ -11,7 +11,7 @@ function Appbutton({ placeholder, onClick, style }) {
   );
 }
 
-export default Appbutton;
+export default AppButton;
 const Content = styled.div`
   .btn button {
     display: flex;

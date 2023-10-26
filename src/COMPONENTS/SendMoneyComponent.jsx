@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import { DummyProfile, saheedprofile } from "../../public/IMAGES";
 import style from "../styles/ComponentStyle/sendmoney.module.css";
 import { AiOutlineDown } from "react-icons/ai";
-import Appbutton from "../reuseables/Appbutton";
+import AppButton from "../reuseables/AppButton";
 import ReviewTransferComponent from "./ReviewTransferComponent";
 
 function SendMoneyComponent({ reviewTransfer, sendMoney }) {
@@ -326,7 +326,7 @@ function SendMoneyComponent({ reviewTransfer, sendMoney }) {
               </div>
               <div className="apply">
                 <input type="text" />
-                <Appbutton
+                <AppButton
                   style={{ backgroundColor: "#00A85A", color: "white" }}
                   placeholder="Apply"
                 />
@@ -362,7 +362,7 @@ function SendMoneyComponent({ reviewTransfer, sendMoney }) {
             </div>
           </div>
           <div className="btn2">
-            <Appbutton
+            <AppButton
               onClick={() => sendMoney(false)}
               placeholder="Back"
               style={{
@@ -371,7 +371,7 @@ function SendMoneyComponent({ reviewTransfer, sendMoney }) {
                 border: "1px solid gainsboro",
               }}
             />
-            <Appbutton
+            <AppButton
               placeholder="Continue"
               style={{ backgroundColor: "#00A85A", color: "white" }}
               onClick={() => {

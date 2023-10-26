@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "styled-components";
-import Appbutton from "../reuseables/Appbutton";
+import AppButton from "../reuseables/AppButton";
 
 function ReviewTransferComponent({ ViewTransfer, reviewTransfer }) {
   return (
@@ -111,7 +111,7 @@ function ReviewTransferComponent({ ViewTransfer, reviewTransfer }) {
       </div>
 
       <div className="btn2">
-        <Appbutton
+        <AppButton
           placeholder="Back"
           style={{
             backgroundColor: "transparent",
@@ -122,7 +122,7 @@ function ReviewTransferComponent({ ViewTransfer, reviewTransfer }) {
             ViewTransfer(false), reviewTransfer(false);
           }}
         />
-        <Appbutton
+        <AppButton
           placeholder="Proceed to Payment"
           style={{ backgroundColor: "#00A85A", color: "white", width: "100%" }}
         />

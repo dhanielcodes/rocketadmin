@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import AppInput from "../reuseables/AppInput";
 import Modal from "../reuseables/Modal";
 import { styled } from "styled-components";
-import Appbutton from "../reuseables/Appbutton";
+import AppButton from "../reuseables/AppButton";
 import { AiOutlineDown } from "react-icons/ai";
 import { useMutation } from "@tanstack/react-query";
 import { sendAgentInvite } from "../services/Dashboard";
@@ -75,7 +75,7 @@ function InviteAgent({ closeinviteAgent }) {
           </div>
         </div>
         <div className="btn">
-          <Appbutton
+          <AppButton
             placeholder="Cancel"
             style={{
               backgroundColor: "transparent",
@@ -83,7 +83,7 @@ function InviteAgent({ closeinviteAgent }) {
             }}
             onClick={() => closeinviteAgent(false)}
           />
-          <Appbutton
+          <AppButton
             placeholder="Invite Agent"
             style={{
               backgroundColor: "#00A85A",

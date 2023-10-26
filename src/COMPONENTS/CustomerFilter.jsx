@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import Modal from "../reuseables/Modal";
 import { AiOutlineDown } from "react-icons/ai";
 import AppInput from "../reuseables/AppInput";
-import Appbutton from "../reuseables/Appbutton";
+import AppButton from "../reuseables/AppButton";
 function CustomerFilter({ closeCustomer }) {
   return (
     <Content>
@@ -112,7 +112,7 @@ function CustomerFilter({ closeCustomer }) {
           </div>
         </div>
         <div className="btn">
-          <Appbutton
+          <AppButton
             placeholder="Reset"
             style={{
               backgroundColor: "transparent",
@@ -120,7 +120,7 @@ function CustomerFilter({ closeCustomer }) {
             }}
             onClick={() => closeCustomer(false)(false)}
           />
-          <Appbutton
+          <AppButton
             placeholder="Apply Filter"
             style={{
               backgroundColor: "#00A85A",

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineDown } from "react-icons/ai";
 import { styled } from "styled-components";
-//import Appbutton from "../reuseables/Appbutton";
+//import AppButton from "../reuseables/AppButton";
 
 function AddNewBeneficiary({ closeBeneficiary }) {
   //  const handleOnChange = (e) => {
@@ -173,7 +173,7 @@ function AddNewBeneficiary({ closeBeneficiary }) {
             </div>
           </div>
           <div className="btn2">
-            <Appbutton
+            <AppButton
               placeholder="Cancel"
               style={{
                 backgroundColor: "transparent",
@@ -181,7 +181,7 @@ function AddNewBeneficiary({ closeBeneficiary }) {
                 border: "1px solid gainsboro",
               }}
             />
-            <Appbutton
+            <AppButton
               placeholder="Proceed to Payment"
               style={{
                 border: "none",
