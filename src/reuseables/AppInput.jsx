@@ -1,29 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
+import { TiEye } from "react-icons/ti";
 import { styled } from "styled-components";
 
-function AppInput({ placeholder, value, onChange, width, type, name }) {
+function AppInput({
+  placeholder,
+  value,
+  onChange,
+  width,
+  type,
+  name,
+  padding,
+}) {
+  const [ntype, setType] = useState("password");
   return (
     <Content>
       <div className="top">
         <input
-          style={{ width: width }}
-          type={type}
+          style={{ width: width, padding: padding }}
+          type={type === "password" ? ntype : type}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
           name={name}
         />
       </div>
+      {type === "password" && (
+        <TiEye
+          onClick={() => {
+            if (ntype === "password") {
+              setType("text");
+            } else {
+              setType("password");
+            }
+          }}
+          style={{
+            position: "absolute",
+            right: "10px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            cursor: "pointer",
+          }}
+        />
+      )}
     </Content>
   );
 }
 
 export default AppInput;
 const Content = styled.div`
+  position: relative;
   .top input {
-    padding: 10px;
+    padding: 12px;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 1px solid gainsboro;
     font-size: 14px;
     font-weight: 500;
@@ -31,5 +60,6 @@ const Content = styled.div`
   .top ::placeholder {
     font-size: 14px;
     font-weight: 500;
+    color: #bebebe;
   }
 `;

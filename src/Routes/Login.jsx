@@ -22,6 +22,8 @@ import { Axios } from "../utils/Axios";
 import ReusableModal from "../reuseables/ReusableModal";
 import Msg from "../reuseables/Msg";
 import { BASE_URL } from "../../config/config";
+import AppInput from "../reuseables/AppInput";
+import lock from "../assets/images/padlock.jpeg";
 
 // Inside your component
 
@@ -38,6 +40,8 @@ function Login() {
   const [modal, setModal] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const [isKyc, setIsKyc] = useState(false);
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
   const [loginDetails, setloginDetails] = useState({
     username: "",
     password: "",
@@ -46,7 +50,12 @@ function Login() {
   });
 
   const handleLogin = async () => {
-    mutate(loginDetails);
+    mutate({
+      username: username,
+      password: password,
+      deviceId: "Tets",
+      source: "Web",
+    });
   };
 
   const handleChange = (value, i) => {
@@ -58,7 +67,7 @@ function Login() {
       };
 
       axios
-        .get(`${baseurl}moneybusiness/checkUserExistByEmail`, requestData)
+        .get(`${baseurl}/checkUserExistByEmail`, requestData)
         .then((response) => {
           console.log(response.data);
 
@@ -137,7 +146,16 @@ function Login() {
   return (
     <LoginCotainer>
       <div className="flex">
-        <div className="side1"></div>
+        <div className="side1">
+          <img
+            style={{
+              width: "300px",
+              height: "300px",
+              borderRadius: "10000px",
+            }}
+            src={lock}
+          />
+        </div>
         <div className="side2">
           <Center>
             <img src={Logo} />
@@ -160,30 +178,45 @@ function Login() {
                   </Msg>
                 </ReusableModal>
               )}
-              <div>
-                <span>Email</span>
+              <div className="name">
+                <label>Email</label>
+                <AppInput
+                  placeholder="Enter your email"
+                  type="email"
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                  }}
+                  width="96%"
+                  name="username"
+                  padding="12px"
+                />
+              </div>
+              {/*  <div>
+                <span>Password</span>
                 <InputStyle>
-                  <Input
-                    onChange={handleChange}
-                    name="username"
+                  <Input.Password
+                    style={{ width: "100%", outline: "none" }}
                     className="input"
-                    style={{ borderRadius: "8px;" }}
-                    placeholder="Enter your email"
+                    defaultValue=""
+                    onChange={handleChange}
+                    name="password"
+                    placeholder="Enter your password"
                   />
                 </InputStyle>
-              </div>
-              <div>
-                <span>Password</span>
-                {/* <InputStyle > */}
-                <Input.Password
-                  style={{ width: "100%" }}
-                  className="input"
-                  defaultValue=""
-                  onChange={handleChange}
-                  name="password"
+
+              </div> */}
+              <div className="name">
+                <label>Password</label>
+                <AppInput
                   placeholder="Enter your password"
+                  type="password"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                  width="96%"
+                  name="password"
+                  padding="12px"
                 />
-                {/* </InputStyle > */}
               </div>
               <div className="flexjustify">
                 <Checkbox>Remember me</Checkbox>
@@ -193,22 +226,21 @@ function Login() {
               </div>
               <div>
                 <Btn
-                  disabled={
-                    loginDetails?.username === "" &&
-                    loginDetails?.password === ""
-                      ? true
-                      : false
-                  }
+                  disabled={username === "" && password === "" ? true : false}
                   clicking={handleLogin}
                   styles={{
                     width: "100%",
-                    background: "var(--primary-color)",
+                    background: "green",
                     color: "#fff",
                     borderRadius: "8px",
                     padding: "0.8em",
                   }}
                 >
-                  {isLoading ? <Spin dot /> : "Sign In"}
+                  {isLoading ? (
+                    <Spin dot />
+                  ) : (
+                    <span style={{ color: "#fff" }}>Sign In</span>
+                  )}
                 </Btn>
               </div>
               <CenterElement>
@@ -277,6 +309,8 @@ const LoginCotainer = styled.div`
       width: 50%;
       height: 100%;
       background: var(--Primary-Colour, #00a85a);
+      display: grid;
+      place-items: center;
     }
     .side2 {
       background: #fcfcfc;
