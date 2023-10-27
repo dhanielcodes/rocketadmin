@@ -31,6 +31,9 @@ import {
 } from "../../services/PayoutDashboard";
 import { useSearchParams } from "react-router-dom";
 import { kFormatter, kFormatter2, kFormatter4 } from "../../utils/format";
+import PayoutChart from "../../Graphs/PayoutChart";
+import TransactionsChartPayout from "../../Graphs/TransactionsChartPayout";
+import ClientTable from "../../TableComponent/Payout/ClientTable";
 function PayoutDashboard() {
   const [userID, setUserID] = useState();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -44,6 +47,12 @@ function PayoutDashboard() {
   const id = userID;
 
   const cardDetails = payoutDashboard?.data?.transactionVolume?.NGN;
+  const transactions =
+    payoutDashboard?.data?.analyticByTransactionStatus?.October;
+
+  const providers = payoutDashboard?.data?.analyticByProvider?.October;
+
+  console.log(transactions, providers);
 
   console.log();
 
@@ -55,7 +64,7 @@ function PayoutDashboard() {
             <div className="contside2">
               <div className="contside2down">
                 <div className="contside2childdown">
-                  <div
+                  {/* <div
                     className=""
                     style={{
                       borderRight: "1px solid rgba(213, 219, 229, 1)",
@@ -82,7 +91,7 @@ function PayoutDashboard() {
                     <div style={{ fontSize: "40px", fontWeight: "600" }}>
                       200
                     </div>
-                  </div>
+                  </div> */}
                   <div
                     className=""
                     style={{
@@ -115,8 +124,8 @@ function PayoutDashboard() {
                     <div style={{ fontSize: "40px", fontWeight: "600" }}>
                       {kFormatter4(
                         cardDetails?.successful +
-                          cardDetails?.pending +
-                          cardDetails?.failed
+                          cardDetails?.pendingAmount +
+                          cardDetails?.failedAmount
                       )}
                     </div>
                   </div>
@@ -173,7 +182,7 @@ function PayoutDashboard() {
                       </div>
                     </div>
                     <div style={{ fontSize: "40px", fontWeight: "600" }}>
-                      {kFormatter4(cardDetails?.pending)}
+                      {kFormatter4(cardDetails?.pendingAmount)}
                     </div>
                   </div>
                   <div
@@ -200,7 +209,7 @@ function PayoutDashboard() {
                       </div>
                     </div>
                     <div style={{ fontSize: "40px", fontWeight: "600" }}>
-                      {kFormatter4(cardDetails?.failed)}
+                      {kFormatter4(cardDetails?.failedAmount)}
                     </div>
                   </div>
                 </div>
@@ -258,12 +267,8 @@ function PayoutDashboard() {
                   <div className="color3"></div>
                   <span>Bank Transfer</span>
                 </div>
-                <div className="card">
-                  <div className="color4"></div>
-                  <span>Pay By Bank</span>
-                </div>
               </div>
-              <PaymentType />
+              <PayoutChart apiData={providers} />
             </div>
             {/* Three Shold Stamp */}
             <div className="Payment">
@@ -300,14 +305,14 @@ function PayoutDashboard() {
                   <span>Failed</span>
                 </div>
               </div>
-              <TransactionsChart />
+              <TransactionsChartPayout apiData={transactions} />
             </div>
           </div>
 
           {/* Transaction Chart Stamp */}
-
           <Transferlist />
           <NewCustomerList />
+          <ClientTable />
         </Content>
       </BodyLayout>
     </>
@@ -401,7 +406,7 @@ const Content = styled.div`
     border-radius: 50%;
   }
   .color2 {
-    background-color: #d94040;
+    background-color: #5adbbd;
     height: 15px;
     width: 15px;
     border-radius: 50%;
@@ -412,12 +417,7 @@ const Content = styled.div`
     width: 15px;
     border-radius: 50%;
   }
-  .color4 {
-    background-color: #d94040;
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-  }
+
   .card {
     display: flex;
     gap: 8px;
@@ -541,7 +541,7 @@ const Content = styled.div`
 
     .contside2childdown {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
       background-color: #fff;
       /* text-align: center; */
       padding-top: 20px;

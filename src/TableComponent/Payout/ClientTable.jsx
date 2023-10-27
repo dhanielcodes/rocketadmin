@@ -145,7 +145,7 @@ function ClientTable() {
               fontWeight: "700",
             }}
           >
-            {item?.isEmailVerified ? "Active" : "Inactive"}
+            {item?.status !== "Suspended" ? "Active" : "Inactive"}
           </div>
         </>
       ),
@@ -173,7 +173,7 @@ function ClientTable() {
           tableColumns={columns}
         />
 
-        <div className="row">
+        {/* <div className="row">
           <span>Showing 1-5 of entries</span>
           <div className="pagins">
             <p>Rows per page:</p>
@@ -195,7 +195,7 @@ function ClientTable() {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </Content>
   );

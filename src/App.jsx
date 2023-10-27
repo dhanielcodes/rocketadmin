@@ -22,6 +22,7 @@ import Beneficiary from "./Routes/Beneficiary";
 import PayoutDashboard from "./Routes/Payout/PayoutDashboard";
 import ClientsPage from "./Routes/Payout/Clients";
 import ClientDetailsPage from "./Routes/Payout/ClientDetails";
+import KYCProvider from "./Routes/Payout/KYCProvider";
 function App() {
   return (
     <Router>
@@ -32,6 +33,7 @@ function App() {
           {/* <Route element={<ProtectedRoute />}> */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard-payout" element={<PayoutDashboard />} />
+          <Route path="/kyc-providers" element={<KYCProvider />} />
           <Route path="/clients" element={<ClientsPage />} />
           <Route path="/client-detail" element={<ClientDetailsPage />} />
           <Route path="/agent" element={<Agent />} />

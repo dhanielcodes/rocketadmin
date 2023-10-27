@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getPayoutClientDashboard } from "../../services/PayoutDashboard";
-import { isError, useQuery } from "@tanstack/react-query";
+import {
+  getPayoutClientDashboard,
+  updatePayoutClientStatus,
+} from "../../services/PayoutDashboard";
+import { isError, useMutation, useQuery } from "@tanstack/react-query";
 import BodyLayout from "../../reuseables/BodyLayout";
 import styled from "styled-components";
 import { BackTop, Button, Skeleton } from "@arco-design/web-react";
@@ -9,6 +12,7 @@ import phone from "../../assets/icons/phoneIcon.svg";
 import mail from "../../assets/icons/mailIcon.svg";
 import profile from "../../assets/images/profile.png";
 import Details from "./ClientDetailsTabs/Details";
+import Documents from "./ClientDetailsTabs/Documents";
 
 export default function ClientDetailsPage() {
   const [params] = useSearchParams();
@@ -21,9 +25,29 @@ export default function ClientDetailsPage() {
     data: client,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery({
     queryKey: ["clients"],
     queryFn: () => getPayoutClientDashboard(userId),
+  });
+
+  const {
+    mutate,
+    isLoading: mutateLoading,
+    isError,
+  } = useMutation({
+    mutationFn: updatePayoutClientStatus,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
   });
 
   console.log(client);
@@ -33,6 +57,8 @@ export default function ClientDetailsPage() {
   const [active, setActive] = useState("Profile");
 
   const tab = ["Profile", "ID Documents", "Transactions", "Charges"];
+
+  console.log();
 
   return (
     <BodyLayout>
@@ -103,32 +129,56 @@ export default function ClientDetailsPage() {
                 <span>Fund Wallet</span>
               </button>
               &nbsp; &nbsp;
-              <button className="suspend">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+              {clientUser?.status !== "Suspended" ? (
+                <button
+                  onClick={() => {
+                    mutate({ objectId: userId, action: 0 });
+                  }}
+                  className="suspend"
                 >
-                  <g clip-path="url(#clip0_2412_13671)">
-                    <path
-                      d="M5.3335 8.00016H10.6668M14.6668 8.00016C14.6668 11.6821 11.6821 14.6668 8.00016 14.6668C4.31826 14.6668 1.3335 11.6821 1.3335 8.00016C1.3335 4.31826 4.31826 1.3335 8.00016 1.3335C11.6821 1.3335 14.6668 4.31826 14.6668 8.00016Z"
-                      stroke="white"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_2412_13671">
-                      <rect width="16" height="16" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g clip-path="url(#clip0_2412_13671)">
+                      <path
+                        d="M5.3335 8.00016H10.6668M14.6668 8.00016C14.6668 11.6821 11.6821 14.6668 8.00016 14.6668C4.31826 14.6668 1.3335 11.6821 1.3335 8.00016C1.3335 4.31826 4.31826 1.3335 8.00016 1.3335C11.6821 1.3335 14.6668 4.31826 14.6668 8.00016Z"
+                        stroke="white"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_2412_13671">
+                        <rect width="16" height="16" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
 
-                <span>Suspend</span>
-              </button>
+                  {mutateLoading ? (
+                    <span>Loading...</span>
+                  ) : (
+                    <span>Suspend</span>
+                  )}
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    mutate({ objectId: userId, action: 1 });
+                  }}
+                  className="active"
+                >
+                  {mutateLoading ? (
+                    <span>Loading...</span>
+                  ) : (
+                    <span>Activate</span>
+                  )}
+                </button>
+              )}
             </div>
           </div>
 
@@ -203,7 +253,9 @@ export default function ClientDetailsPage() {
                             fontWeight: "700",
                           }}
                         >
-                          {clientUser?.isEmailVerified ? "Active" : "Inactive"}
+                          {clientUser?.status !== "Suspended"
+                            ? "Active"
+                            : "Inactive"}
                         </div>
                       </div>
 
@@ -438,7 +490,7 @@ export default function ClientDetailsPage() {
 
             {active === "Profile" && <Details clientDetails={clientUser} />}
             {active === "ID Documents" && (
-              <Details clientDetails={clientUser} />
+              <Documents clientDetails={clientUser} />
             )}
             {active === "Transactions" && (
               <Details clientDetails={clientUser} />
@@ -505,6 +557,21 @@ const Client = styled.div`
 
       span {
         margin-left: 10px;
+        color: white;
+        font-size: 16px;
+      }
+    }
+    .active {
+      background-color: #3dd129;
+      display: flex;
+      align-items: center;
+      outline: none;
+      border: none;
+      padding: 14px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+
+      span {
         color: white;
         font-size: 16px;
       }

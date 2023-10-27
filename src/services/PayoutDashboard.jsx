@@ -17,6 +17,25 @@ export const getPayoutClientDashboard = async (userId = 0) => {
   return data;
 };
 
+export const updatePayoutClientStatus = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/togglepayoutclientaccount`,
+    body
+  );
+  return data;
+};
+
+export const updatePayoutClientWalletProvider = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/activatekycprovider/${body}`);
+  return data;
+};
+/* export const updatePayoutClientWalletProvider = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/togglepayoutclientwalletprovider`,
+    body
+  );
+  return data;
+}; */
 export const beneficiaries = async (userId, bid) => {
   const { data } = await Axios.get(
     `${baseurl}/getuserbeneficiaries?userId=${
