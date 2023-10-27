@@ -13,6 +13,8 @@ import mail from "../../assets/icons/mailIcon.svg";
 import profile from "../../assets/images/profile.png";
 import Details from "./ClientDetailsTabs/Details";
 import Documents from "./ClientDetailsTabs/Documents";
+import TransactionsList from "./ClientDetailsTabs/TransactionsList";
+import ChargesList from "./ClientDetailsTabs/ChargesList";
 
 export default function ClientDetailsPage() {
   const [params] = useSearchParams();
@@ -494,8 +496,10 @@ export default function ClientDetailsPage() {
               {active === "ID Documents" && (
                 <Documents clientDetails={clientUser} />
               )}
-              {active === "Transactions" && <></>}
-              {active === "Charges" && <></>}
+              {active === "Transactions" && (
+                <TransactionsList></TransactionsList>
+              )}
+              {active === "Charges" && <ChargesList></ChargesList>}
             </div>
           </Client>
         ))}

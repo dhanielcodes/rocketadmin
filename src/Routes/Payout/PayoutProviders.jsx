@@ -12,9 +12,13 @@ import { TiArrowUnsorted, TiMediaRecord } from "react-icons/ti";
 import SearchInput from "../../reuseables/SearchInput";
 import CustomTable from "../../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
-import { getPayoutClientDashboard } from "../../services/PayoutDashboard";
+import {
+  getPayoutClientDashboard,
+  getPayoutProviders,
+} from "../../services/PayoutDashboard";
+import BodyLayout from "../../reuseables/BodyLayout";
 
-function ClientTable() {
+function PayoutProvidersPage() {
   const [sortdate, setSortDate] = useState(0);
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -22,130 +26,60 @@ function ClientTable() {
   console.log(userDetails);
 
   const {
-    data: clients,
+    data: providers,
     isLoading,
     isFetching,
-    isError,
   } = useQuery({
-    queryKey: ["clients"],
-    queryFn: () => getPayoutClientDashboard(userDetails?.userId),
+    queryKey: ["providers"],
+    queryFn: () => getPayoutProviders(),
   });
 
-  console.log(clients);
+  console.log(providers);
 
   const columns = [
     {
-      title: "ACTIONS",
-      dataIndex: "action",
-      fixed: "left",
+      title: "PROVIDER ID",
+      dataIndex: "id",
       /*   sorter: {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
       }, */
-      width: 130,
     },
     {
-      title: "CLIENT ID",
-      dataIndex: "clientId",
-      width: 140,
-    },
-    {
-      title: "ID VERIFICATION",
-      dataIndex: "idNumber",
-      width: 190,
-    },
-    {
-      title: "NAME",
+      title: "PROVIDER NAME",
       dataIndex: "name",
-      width: 190,
-
-      //render: () => "Other",
     },
     {
-      title: "ADDRESS",
-      dataIndex: "address",
-      //render: () => "Other 1",
-      width: 420,
-    },
-    {
-      title: "EMAIL",
-      dataIndex: "email",
-      width: 320,
-      //render: () => "Other 2",
-    },
-    {
-      title: "MOBILE NO",
-      dataIndex: "phone",
-      width: 150,
+      title: "DESCRIPTION",
+      dataIndex: "description",
     },
     {
       title: "DATE ADDED",
-      dataIndex: "dateAdded",
-      width: 220,
+      dataIndex: "dateCreated",
     },
     {
       title: "STATUS",
-      dataIndex: "status",
-      width: 160,
+      dataIndex: "statusNew",
     },
   ];
 
-  const newData = clients?.data?.allPayoutClients?.map((item) => {
+  const newData = providers?.data?.map((item) => {
     return {
-      action: (
-        <Link
-          style={{
-            textDecoration: "none",
-          }}
-          to={`/client-detail?userId=${item?.userId}`}
-        >
-          <p
-            onClick={() => {
-              console.log(item?.userId);
-            }}
-            style={{
-              color: "blue",
-              cursor: "pointer",
-            }}
-          >
-            View Details
-          </p>
-        </Link>
-      ),
-      clientId: item?.userId,
-      idNumber: (
-        <div
-          style={{
-            padding: "8px 16px",
-            borderRadius: "10000px",
-            background: item?.isKYCCompleted ? "#63ff706c" : "#ff63634b",
-            color: item?.isKYCCompleted ? "green" : "red",
-            width: "fit-content",
-            fontWeight: "700",
-          }}
-        >
-          {item?.isKYCCompleted ? "Verified" : "Not Verified"}
-        </div>
-      ),
-      name: item?.companyName,
-      address: item?.address,
-      email: item?.email,
-      phone: item?.phone,
-      dateAdded: item?.lastUpdated,
-      status: (
+      ...item,
+      statusNew: (
         <>
           {" "}
           <div
             style={{
               padding: "8px 16px",
               borderRadius: "10000px",
-              background: item?.status === "Active" ? "#63ff706c" : "#ff63634b",
-              color: item?.status === "Active" ? "green" : "red",
+              background: item?.status ? "#63ff706c" : "#ff63634b",
+              color: item?.status ? "green" : "red",
               width: "fit-content",
               fontWeight: "700",
             }}
           >
-            {item?.status}
+            {item?.status ? "Active" : "Inactive"}
           </div>
         </>
       ),
@@ -155,25 +89,29 @@ function ClientTable() {
   console.log(newData);
 
   return (
-    <Content>
-      <div className="tablecontent">
-        <div className="content">
-          <div className="heading">Clients </div>
-          <div className="sub">
-            This page allows you edit and update clients{" "}
+    <BodyLayout>
+      <Content>
+        <div className="tablecontent">
+          <div className="content">
+            <div className="heading">Payout Providers </div>
+            <div className="sub">
+              This page allows you to add and update payment providers
+            </div>
           </div>
-        </div>
-        <div className="top">
-          <SearchInput placeholder="Search Records" className="SearchRecords" />
-        </div>
-        <CustomTable
-          noData={clients?.data?.allPayoutClients?.length}
-          loading={isLoading || isFetching}
-          Apidata={newData}
-          tableColumns={columns}
-        />
+          <div className="top">
+            <SearchInput
+              placeholder="Search Records"
+              className="SearchRecords"
+            />
+          </div>
+          <CustomTable
+            noData={newData?.length}
+            loading={isLoading || isFetching}
+            Apidata={newData}
+            tableColumns={columns}
+          />
 
-        {/* <div className="row">
+          {/* <div className="row">
           <span>Showing 1-5 of entries</span>
           <div className="pagins">
             <p>Rows per page:</p>
@@ -196,12 +134,13 @@ function ClientTable() {
             </div>
           </div>
         </div> */}
-      </div>
-    </Content>
+        </div>
+      </Content>
+    </BodyLayout>
   );
 }
 
-export default ClientTable;
+export default PayoutProvidersPage;
 const Content = styled.div`
   .top {
     padding: 10px 30px 30px 20px;

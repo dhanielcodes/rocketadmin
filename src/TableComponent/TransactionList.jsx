@@ -8,13 +8,11 @@ import {
   AiOutlineRight,
   AiOutlineArrowLeft,
 } from "react-icons/ai";
-import { TiArrowUnsorted, TiMediaRecord } from "react-icons/ti";
-import SearchInput from "../../reuseables/SearchInput";
-import CustomTable from "../../reuseables/CustomTable";
+import CustomTable from "../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
-import { getPayoutClientDashboard } from "../../services/PayoutDashboard";
+import { getPayoutClientDashboard } from "../services/PayoutDashboard";
 
-function ClientTable() {
+function TransactionList({ data }) {
   const [sortdate, setSortDate] = useState(0);
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -35,112 +33,107 @@ function ClientTable() {
 
   const columns = [
     {
-      title: "ACTIONS",
-      dataIndex: "action",
+      title: "TRANSACTION REF",
+      dataIndex: "clientRef",
       fixed: "left",
       /*   sorter: {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
       }, */
-      width: 130,
+      width: 160,
     },
     {
-      title: "CLIENT ID",
-      dataIndex: "clientId",
-      width: 140,
+      title: "ID",
+      dataIndex: "id",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 160,
     },
     {
-      title: "ID VERIFICATION",
-      dataIndex: "idNumber",
+      title: "DATE",
+      dataIndex: "dateCreated",
+      width: 250,
+    },
+    {
+      title: "CLIENT",
+      dataIndex: "payoutClientApp['appName']",
       width: 190,
     },
     {
-      title: "NAME",
-      dataIndex: "name",
+      title: "GATEWAY",
+      dataIndex: 'payOutProvider["name"]',
       width: 190,
 
       //render: () => "Other",
     },
     {
-      title: "ADDRESS",
-      dataIndex: "address",
+      title: "RECEIVER",
+      dataIndex: "beneficiary['beneficiaryName']",
       //render: () => "Other 1",
-      width: 420,
-    },
-    {
-      title: "EMAIL",
-      dataIndex: "email",
-      width: 320,
-      //render: () => "Other 2",
-    },
-    {
-      title: "MOBILE NO",
-      dataIndex: "phone",
-      width: 150,
-    },
-    {
-      title: "DATE ADDED",
-      dataIndex: "dateAdded",
       width: 220,
     },
     {
-      title: "STATUS",
-      dataIndex: "status",
-      width: 160,
+      title: "BANK",
+      dataIndex: "beneficiary['beneficiaryBank']['bankName']",
+      width: 200,
+      //render: () => "Other 2",
+    },
+    {
+      title: "ACCOUNT NO",
+      dataIndex: "beneficiary['beneficiaryBank']['accountNumber']",
+      width: 140,
+    },
+    {
+      title: "CURRENCY",
+      dataIndex: "country['currencyCode']",
+      width: 100,
+    },
+    {
+      title: "AMOUNT",
+      dataIndex: "Amount",
+      width: 120,
+    },
+    {
+      title: "TRANSFER FEE",
+      dataIndex: "transferFee",
+      width: 120,
+    },
+    {
+      title: "TRANSACTION STATUS",
+      dataIndex: "statusNew",
+      width: 180,
+    },
+    {
+      title: "ACTIONS",
+      dataIndex: "action",
+      width: 120,
     },
   ];
 
-  const newData = clients?.data?.allPayoutClients?.map((item) => {
+  const newData = clients?.data?.payOutTransactions?.map((item) => {
     return {
-      action: (
-        <Link
-          style={{
-            textDecoration: "none",
-          }}
-          to={`/client-detail?userId=${item?.userId}`}
-        >
-          <p
-            onClick={() => {
-              console.log(item?.userId);
-            }}
-            style={{
-              color: "blue",
-              cursor: "pointer",
-            }}
-          >
-            View Details
-          </p>
-        </Link>
-      ),
-      clientId: item?.userId,
-      idNumber: (
-        <div
-          style={{
-            padding: "8px 16px",
-            borderRadius: "10000px",
-            background: item?.isKYCCompleted ? "#63ff706c" : "#ff63634b",
-            color: item?.isKYCCompleted ? "green" : "red",
-            width: "fit-content",
-            fontWeight: "700",
-          }}
-        >
-          {item?.isKYCCompleted ? "Verified" : "Not Verified"}
-        </div>
-      ),
-      name: item?.companyName,
-      address: item?.address,
-      email: item?.email,
-      phone: item?.phone,
-      dateAdded: item?.lastUpdated,
-      status: (
+      ...item,
+      statusNew: (
         <>
           {" "}
           <div
             style={{
               padding: "8px 16px",
               borderRadius: "10000px",
-              background: item?.status === "Active" ? "#63ff706c" : "#ff63634b",
-              color: item?.status === "Active" ? "green" : "red",
+              background:
+                item?.status === "Successful"
+                  ? "#63ff706c"
+                  : item?.status === "Pending"
+                  ? "#FEF0C7"
+                  : "#ff63634b",
+              color:
+                item?.status === "Successful"
+                  ? "green"
+                  : item?.status === "Pending"
+                  ? "#DC6803"
+                  : "red",
               width: "fit-content",
               fontWeight: "700",
             }}
@@ -158,16 +151,11 @@ function ClientTable() {
     <Content>
       <div className="tablecontent">
         <div className="content">
-          <div className="heading">Clients </div>
-          <div className="sub">
-            This page allows you edit and update clients{" "}
-          </div>
+          <div className="heading">Transactions List </div>
         </div>
-        <div className="top">
-          <SearchInput placeholder="Search Records" className="SearchRecords" />
-        </div>
+
         <CustomTable
-          noData={clients?.data?.allPayoutClients?.length}
+          noData={clients?.data?.payOutTransactions?.length}
           loading={isLoading || isFetching}
           Apidata={newData}
           tableColumns={columns}
@@ -201,8 +189,9 @@ function ClientTable() {
   );
 }
 
-export default ClientTable;
+export default TransactionList;
 const Content = styled.div`
+  border-radius: 30px;
   .top {
     padding: 10px 30px 30px 20px;
   }

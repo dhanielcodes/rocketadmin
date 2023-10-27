@@ -17,6 +17,16 @@ export const getPayoutClientDashboard = async (userId = 0) => {
   return data;
 };
 
+export const getKYCProviders = async (userId = 0) => {
+  const { data } = await Axios.get(`${baseurl}/getkycprovider`);
+  return data;
+};
+
+export const getPayoutProviders = async (userId = 0) => {
+  const { data } = await Axios.get(`${baseurl}/getpayoutprovider`);
+  return data;
+};
+
 export const updatePayoutClientStatus = async (body) => {
   const { data } = await Axios.post(
     `${baseurl}/togglepayoutclientaccount`,

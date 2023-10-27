@@ -41,6 +41,9 @@ const BodyLayout = ({ children, active }) => {
         onCollapse={handleCollapsed}
         collapsible
         trigger={collapsed ? <IconCaretRight /> : <IconCaretLeft />}
+        style={{
+          width: "fit-content",
+        }}
         breakpoint="xl"
       >
         <div className="logo">
@@ -98,14 +101,14 @@ const BodyLayout = ({ children, active }) => {
                 </span>
               }
             >
-              <MenuItem key="2_1" onClick={() => navigate("/dashboard-payout")}>
+              <MenuItem key="2_2" onClick={() => navigate("/dashboard-payout")}>
                 Overview
               </MenuItem>
 
-              <MenuItem key="2_1" onClick={() => navigate("/clients")}>
+              <MenuItem key="2_3" onClick={() => navigate("/clients")}>
                 Clients
               </MenuItem>
-              <MenuItem key="2_1" onClick={() => navigate("/kyc-providers")}>
+              <MenuItem key="2_7" onClick={() => navigate("/kyc-providers")}>
                 KYC Providers
               </MenuItem>
             </SubMenu>
@@ -184,14 +187,14 @@ const BodyLayout = ({ children, active }) => {
             }
             // title='Navigation 2'
           >
-            <MenuItem key="2_1" onClick={() => navigate("/customers")}>
+            <MenuItem key="2_4" onClick={() => navigate("/customers")}>
               Customers
             </MenuItem>
-            <MenuItem key="2_2" onClick={() => navigate("/actionrequired")}>
+            <MenuItem key="2_5" onClick={() => navigate("/actionrequired")}>
               Action Required
             </MenuItem>
             <MenuItem
-              key="2_3"
+              key="2_8"
               onClick={() => navigate("/incompleteregistration")}
             >
               Incomplete Registration
@@ -295,8 +298,8 @@ const BodyLayout = ({ children, active }) => {
             <MenuItem key="1_1">Menu 1</MenuItem>
             <MenuItem key="1_2">Menu 2</MenuItem>
             <SubMenu key="2" title="Navigation 2">
-              <MenuItem key="2_1">Menu 1</MenuItem>
-              <MenuItem key="2_2">Menu 2</MenuItem>
+              <MenuItem key="2_6">Menu 1</MenuItem>
+              <MenuItem key="2_9">Menu 2</MenuItem>
             </SubMenu>
             <SubMenu key="3" title="Navigation 3">
               <MenuItem key="3_1">Menu 1</MenuItem>

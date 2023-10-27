@@ -4,22 +4,24 @@ import BodyLayout from "../../reuseables/BodyLayout";
 import { Provider } from "react-intl/src/components/injectIntl";
 import styled from "styled-components";
 import {
+  getKYCProviders,
   getPayoutClientDashboard,
   updatePayoutClientWalletProvider,
 } from "../../services/PayoutDashboard";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { Skeleton } from "@arco-design/web-react";
 
 export default function KYCProvider() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   const {
-    data: client,
+    data: kyrproviders,
     isLoading,
     isFetching,
     refetch,
   } = useQuery({
-    queryKey: ["clients"],
-    queryFn: () => getPayoutClientDashboard(userDetails?.userId),
+    queryKey: ["kyrproviders"],
+    queryFn: () => getKYCProviders(),
   });
 
   const {
@@ -41,7 +43,7 @@ export default function KYCProvider() {
     },
   });
 
-  const providers = client?.data?.allPayOutProviders;
+  const providers = kyrproviders?.data;
   return (
     <BodyLayout>
       <SectionHeader
@@ -79,10 +81,13 @@ export default function KYCProvider() {
             paddingTop: "20px",
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "20px",
           }}
         >
           {providers?.map((item) => {
-            return (
+            return isLoading || mutateLoading || isFetching ? (
+              <Skeleton />
+            ) : (
               <div
                 onClick={() => {
                   if (item?.status) {
@@ -90,10 +95,10 @@ export default function KYCProvider() {
                     // mutate({ objectId: userId, action: 0, payOutClientWalletProviderId: });
                   } else {
                     /*  mutate({
-                      objectId: userId,
-                      action: 1,
-                      payOutClientWalletProviderId: item?.id,
-                    }); */
+                    objectId: userId,
+                    action: 1,
+                    payOutClientWalletProviderId: item?.id,
+                  }); */
                     mutate(item?.id);
                   }
                 }}
