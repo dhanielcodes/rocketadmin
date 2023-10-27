@@ -146,6 +146,7 @@ function Login() {
   return (
     <LoginCotainer>
       <div className="flex">
+        {/*  */}
         <div className="side1">
           <img
             style={{
@@ -243,15 +244,6 @@ function Login() {
                   )}
                 </Btn>
               </div>
-              <CenterElement>
-                <span>Don’t have an account?</span>
-                <Link
-                  onClick={() => navigate("/signup")}
-                  style={{ color: "var(--primary-color)" }}
-                >
-                  Sign up
-                </Link>
-              </CenterElement>
             </div>
           </Center>
         </div>
