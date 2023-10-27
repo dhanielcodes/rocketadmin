@@ -63,10 +63,12 @@ export default function Documents({ clientDetails }) {
                   }}
                 />
 
-                <div>{clientDetails?.formCo2URL}</div>
+                <div style={{ width: "50%", wordBreak: "break-all" }}>
+                  {clientDetails?.formCo2URL}
+                </div>
               </div>
 
-              <div>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <TiPencil />
                 <SmallDownload
                   style={{
@@ -121,10 +123,12 @@ export default function Documents({ clientDetails }) {
                   }}
                 />
 
-                <div>{clientDetails?.formCo7URL}</div>
+                <div style={{ width: "50%", wordBreak: "break-all" }}>
+                  {clientDetails?.formCo7URL}
+                </div>
               </div>
 
-              <div>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <TiPencil />
                 <SmallDownload
                   style={{
@@ -179,10 +183,12 @@ export default function Documents({ clientDetails }) {
                   }}
                 />
 
-                <div>{clientDetails?.utilityBill}</div>
+                <div style={{ width: "50%", wordBreak: "break-all" }}>
+                  {clientDetails?.utilityBill}
+                </div>
               </div>
 
-              <div>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <TiPencil />
                 <SmallDownload
                   style={{
