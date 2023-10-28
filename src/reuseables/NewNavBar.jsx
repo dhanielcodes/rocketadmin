@@ -1,201 +1,379 @@
-import { Dropdown } from "@arco-design/web-react";
 import React, { useState } from "react";
+import DropDown from "../assets/icons/DropDown";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import Logo from "../assets/logo.png.svg";
+import DashboardIcon from "../assets/icons/Dashboard";
+import AgentsIcon from "../assets/icons/AgentsIcon";
+import SendMoneyIcon from "../assets/icons/SendMoneyIcon";
+import BeneficiaryIcon from "../assets/icons/BeneficiaryIcon";
+import UpdateIcon from "../assets/icons/UpdateIcon";
+import TransfersIcon from "../assets/icons/TransfersIcon";
+import ReportIcon from "../assets/icons/ReportIcon";
+import CustomersIcon from "../assets/icons/CustomersIcon";
 
-// Import your React components or icons here
-
-const Nav = styled.div`
-  background-color: #007bff; // Use your primary color
-  height: 100%;
-  overflow: hidden;
-  overflow-y: scroll;
-`;
-
-const NavContent = styled.div`
-  width: 100%;
-  padding: 14%;
-`;
-
-const LogoIcon = styled.div`
-  text-align: center;
-  margin: auto;
-`;
-
-const NavItem = styled.div`
-  border-top: 1px solid #5a6376;
-  border-bottom: 1px solid #5a6376;
-  color: #007bff; // Use your primary color
-  padding: 14%;
-
-  &:hover {
-    background-color: #fff;
-    border-color: #007bff; // Use your primary color
-  }
-`;
-
-const NavItemContent = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 8% 0 0;
-  cursor: pointer;
-`;
-
-const MiniNav = styled.div`
-  transition: all 0.3s;
-  transform: ${({ active }) => (active ? "rotate(90deg)" : "none")};
-`;
-
-const SubNavItem = styled.div`
-  border-left: 5px solid #34495c;
-  transition: all 100000s; // Not sure about the duration
-  padding-left: 10%;
-
-  max-height: ${({ active }) => (active ? "1000px" : "0")};
-  overflow: auto;
-`;
-
-const SubNavItemContent = styled.div`
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  padding: 3% 0;
-`;
-
-const NewNavBar = () => {
-  const [active, setActive] = useState("");
-  const [links, setLinks] = useState([
+export default function NewNavBar() {
+  const links = [
     {
-      name: "Overview",
-      path: "/dashboard",
-    },
-    {
-      name: "User Management",
-      path: "/user-management",
-    },
-    {
-      name: "Administration",
-      path: "/admin",
+      name: "Dashboard",
+      path: "//",
+      icon: DashboardIcon,
       miniLinks: [
         {
-          name: "System Monitor",
-          path: "/administration/system-monitor",
-          parentName: "Administration",
+          name: "Dashboard",
+          path: "/dashboard",
+          parentName: "Dashboard",
         },
         {
-          name: "Manage Route",
-          path: "/administration/manage-route",
-          parentName: "Administration",
-        },
-        {
-          name: "SIP Accounts",
-          path: "/administration/sip-accounts",
-          parentName: "Administration",
-        },
-        {
-          name: "Approve Caller ID",
-          path: "/administration/approve-caller",
-          parentName: "Administration",
-        },
-        {
-          name: "Blacklist Mgmt",
-          path: "/administration/blacklist-management",
-          parentName: "Administration",
-        },
-      ],
-    },
-    {
-      name: "IVR Campaign",
-      path: "/ivr-campaign",
-      miniLinks: [
-        {
-          name: "Campaign",
-          path: "/ivr-campaign/campaign",
-          parentName: "IVR Campaign",
-        },
-        {
-          name: "Media Mgmt",
+          name: "MLRO Dashboard",
           path: "/ivr-campaign/media-mgmt",
-          parentName: "IVR Campaign",
+          parentName: "Dashboard",
+        },
+
+        {
+          name: "Payout Dashboard",
+          path: "//",
+          parentName: "Dashboard",
+          miniLinks: [
+            {
+              name: "Overview",
+              path: "/dashboard-payout",
+              parentName: "Payout Dashboard",
+            },
+            {
+              name: "Clients",
+              path: "/clients",
+              parentName: "Payout Dashboard",
+            },
+            {
+              name: "KYC Providers",
+              path: "/kyc-providers",
+              parentName: "Payout Dashboard",
+            },
+          ],
         },
       ],
     },
     {
-      name: "Support Center",
-      path: "/support-center",
+      name: "Agents",
+      path: "/agent",
+      icon: AgentsIcon,
     },
     {
-      name: "Report & Analytics",
-      path: "/reports-and-analytics",
+      name: "Manage Customers",
+      path: "//",
+      icon: CustomersIcon,
+      miniLinks: [
+        {
+          name: "Customers",
+          path: "/customers",
+          parentName: "Manage Customers",
+        },
+        {
+          name: "Action Required",
+          path: "/actionrequired",
+          parentName: "Manage Customers",
+        },
+        {
+          name: "Incomplete Registration",
+          path: "/incompleteregistration",
+          parentName: "Manage Customers",
+        },
+      ],
     },
-  ]);
+    {
+      name: "Send Money",
+      path: "/sendmoney",
+      icon: SendMoneyIcon,
+    },
+    {
+      name: "Beneficiary",
+      path: "/beneficiary",
+      icon: BeneficiaryIcon,
+    },
+    {
+      name: "Transfers",
+      path: "//",
+      icon: TransfersIcon,
+      miniLinks: [
+        {
+          name: "Menu 1",
+          path: "/transfers",
+          parentName: "Manage Customers",
+        },
+        {
+          name: "Menu 1",
+          path: "/transfers",
+          parentName: "Manage Customers",
+        },
+      ],
+    },
+    {
+      name: "Updates and Rates",
+      path: "/update",
+      icon: UpdateIcon,
+    },
+    {
+      name: "Reports",
+      path: "//",
+      icon: ReportIcon,
+      miniLinks: [
+        {
+          name: "Menu 1",
+          path: "/reports",
+          parentName: "Manage Customers",
+        },
+        {
+          name: "Menu 1",
+          path: "/reports",
+          parentName: "Manage Customers",
+        },
+      ],
+    },
+  ];
 
-  const updateActiveDropDown = (payload) => {
+  const [active, setActive] = useState();
+  const [active2, setActive2] = useState();
+
+  const navigate = useNavigate();
+
+  const updateActiveDropDown = (e, payload) => {
+    e.stopPropagation();
     if (payload === active) {
       setActive("");
     } else {
       setActive(payload);
     }
   };
-
-  const navigateTo = (payload) => {
+  const navigateTo = (e, payload) => {
     if (payload?.miniLinks?.length) {
-      updateActiveDropDown(payload.name);
+      updateActiveDropDown(e, payload.name);
     } else {
-      if (payload.parentName !== active) {
+      if (payload.parentName != active) {
         setActive("");
       }
-      // Implement your routing logic here
+      navigate(payload.path);
     }
   };
 
-  return (
-    <Nav>
-      <NavContent>
-        <LogoIcon> {/* Replace this with your logo component */}</LogoIcon>
-        {links.map((item) => (
-          <NavItem key={item.name}>
-            <NavItemContent onClick={() => navigateTo(item)}>
-              <div>
-                {/*  */}
-                <div
-                  className={`text-${
-                    active === item.path ? "primary200" : "primary100"
-                  } ml-4`}
-                >
-                  {item.name}
-                </div>
-              </div>
-              {item.miniLinks && (
-                <MiniNav active={active === item.name}>
-                  <Dropdown size="100%" />{" "}
-                  {/* Replace DropdownIcon with your dropdown icon component */}
-                </MiniNav>
-              )}
-            </NavItemContent>
-            {item.miniLinks && (
-              <SubNavItem active={active === item.name}>
-                {item.miniLinks.map((link) => (
-                  <SubNavItemContent
-                    onClick={() => navigateTo(link)}
-                    key={link.name}
-                  >
-                    <div
-                      className={`text-${
-                        active === link.path ? "primary200" : "primary100"
-                      } ml-4`}
-                    >
-                      {link.name}
-                    </div>
-                  </SubNavItemContent>
-                ))}
-              </SubNavItem>
-            )}
-          </NavItem>
-        ))}
-      </NavContent>
-    </Nav>
-  );
-};
+  const updateActiveDropDown2 = (e, payload) => {
+    e.stopPropagation();
+    if (payload === active2) {
+      setActive2("");
+    } else {
+      setActive2(payload);
+    }
+  };
+  const navigateTo2 = (e, payload) => {
+    if (payload?.miniLinks?.length) {
+      updateActiveDropDown2(e, payload.name);
+    } else {
+      if (payload.parentName != active2) {
+        setActive2("");
+      }
+      navigate(payload.path);
+    }
+  };
 
-export default NewNavBar;
+  console.log(active);
+  console.log(active2);
+
+  return (
+    <div style={{ width: "290px", padding: "20px" }}>
+      <img
+        src={Logo}
+        style={{ height: "90%", width: "60%", marginBottom: "20px" }}
+      />
+
+      <div>
+        {links?.map((item) => {
+          return (
+            <>
+              <NavTab
+                onClick={(e) => {
+                  navigateTo(e, item);
+                }}
+                $active={item.path}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "15px 14px",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  width: "70%",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <item.icon
+                    color={item.path === location.pathname ? "#fff" : "#464F60"}
+                    style={{
+                      marginRight: "10px",
+                    }}
+                  />
+                  <span
+                    style={{
+                      color:
+                        item.path === location.pathname ? "#fff" : "#464F60",
+                    }}
+                  >
+                    {item.name}
+                  </span>
+                </div>
+                {item?.miniLinks && (
+                  <DropDown
+                    color={item.path === location.pathname ? "#fff" : "#464F60"}
+                  />
+                )}
+              </NavTab>
+              {
+                <div
+                  style={{
+                    borderLeft: "1px solid gray",
+                    marginLeft: "20px",
+                    height: active === item.name && "auto",
+                    maxHeight: active !== item.name ? 0 : "1000px",
+                    overflow: active === item.name ? "auto" : "hidden",
+                    transition: "all 0.4s",
+                    marginBottom: active === item.name && "14px",
+                  }}
+                >
+                  {item?.miniLinks?.map((link) => {
+                    return (
+                      <>
+                        <NavTab
+                          onClick={(e) => {
+                            navigateTo2(e, link);
+                          }}
+                          $active={link.path}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            padding: "15px 14px",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            width: "70%",
+                            marginLeft: "30px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <span
+                              style={{
+                                color:
+                                  link.path === location.pathname
+                                    ? "#fff"
+                                    : "#464F60",
+                              }}
+                            >
+                              {link.name}
+                            </span>
+                          </div>
+                          {link?.miniLinks && (
+                            <DropDown
+                              color={
+                                item.path === location.pathname
+                                  ? "#fff"
+                                  : "#464F60"
+                              }
+                            />
+                          )}
+                        </NavTab>
+
+                        {
+                          <div
+                            style={{
+                              marginLeft: "60px",
+
+                              height: active2 === link.name && "auto",
+                              maxHeight: active2 !== link.name ? 0 : "1000px",
+                              overflow:
+                                active2 === link.name ? "auto" : "hidden",
+                              transition: "all 0.4s",
+                            }}
+                          >
+                            {link?.miniLinks?.map((innerLink) => {
+                              return (
+                                <>
+                                  <NavTab
+                                    onClick={(e) => {
+                                      navigateTo(e, innerLink);
+                                      navigateTo2(e, innerLink);
+                                    }}
+                                    $active={innerLink.path}
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "space-between",
+                                      padding: "15px 14px",
+                                      borderRadius: "8px",
+                                      cursor: "pointer",
+                                      width: "70%",
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                      }}
+                                    >
+                                      <span
+                                        style={{
+                                          color:
+                                            innerLink.path === location.pathname
+                                              ? "#fff"
+                                              : "#464F60",
+                                        }}
+                                      >
+                                        {innerLink.name}
+                                      </span>
+                                    </div>
+                                  </NavTab>
+                                </>
+                              );
+                            })}
+                          </div>
+                        }
+                      </>
+                    );
+                  })}
+                </div>
+              }
+            </>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+const NavTab = styled.div`
+  transition: all 0.1s;
+  background: ${(props) =>
+    props?.$active === location.pathname ? "#00a85a" : ""};
+  margin-bottom: 10px;
+
+  &:hover {
+    background: ${(props) =>
+      props?.$active === location.pathname ? "#00a85a" : "#c6c6c632"};
+    transition: all 0.2s;
+  }
+
+  span {
+    font-size: 15px;
+    font-weight: 500;
+  }
+`;
