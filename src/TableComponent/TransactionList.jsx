@@ -105,11 +105,6 @@ function TransactionList({ data }) {
       dataIndex: "statusNew",
       width: 180,
     },
-    {
-      title: "ACTIONS",
-      dataIndex: "action",
-      width: 120,
-    },
   ];
 
   const newData = clients?.data?.payOutTransactions?.map((item) => {
@@ -151,7 +146,7 @@ function TransactionList({ data }) {
     <Content>
       <div className="tablecontent">
         <div className="content">
-          <div className="heading">Transactions List </div>
+          <div className="heading">Payout Transactions List </div>
         </div>
 
         <CustomTable
