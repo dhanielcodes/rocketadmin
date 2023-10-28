@@ -35,6 +35,14 @@ export const updatePayoutClientStatus = async (body) => {
   return data;
 };
 
+export const updateClientWallet = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/togglepayoutclientwalletprovider`,
+    body
+  );
+  return data;
+};
+
 export const updatePayoutClientWalletProvider = async (body) => {
   const { data } = await Axios.post(`${baseurl}/activatekycprovider/${body}`);
   return data;

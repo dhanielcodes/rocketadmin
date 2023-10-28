@@ -17,6 +17,7 @@ import "../../styles/layout.css";
 import Head from "./Head";
 import Logo from "../assets/logo.png.svg";
 import { useNavigate } from "react-router-dom";
+import NewNavBar from "./NewNavBar";
 
 const { Sider, Header, Footer, Content } = Layout;
 const { Item: MenuItem, SubMenu } = Menu;
@@ -36,7 +37,7 @@ const BodyLayout = ({ children, active }) => {
 
   return (
     <Layout className="layout-collapse-demo">
-      <Sider
+      {/* <Sider
         collapsed={collapsed}
         onCollapse={handleCollapsed}
         collapsible
@@ -332,7 +333,9 @@ const BodyLayout = ({ children, active }) => {
             <MenuItem key="4_3">Menu 3</MenuItem>
           </SubMenu>
         </Menu>
-      </Sider>
+      </Sider> */}
+
+      <NewNavBar />
       <Layout>
         <Header style={{ paddingLeft: 20 }}>
           <Head />
