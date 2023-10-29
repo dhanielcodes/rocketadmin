@@ -37,6 +37,7 @@ import ClientTable from "../../TableComponent/Payout/ClientTable";
 import TransactionList from "../../TableComponent/TransactionList";
 import ClientWallLog from "../../TableComponent/ClientWallLog";
 import { Skeleton } from "@arco-design/web-react";
+import Skeleton2 from "../../reuseables/Skeleton2";
 function PayoutDashboard() {
   const [userID, setUserID] = useState();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -72,26 +73,12 @@ function PayoutDashboard() {
         <Content>
           <div className="content1">
             <div className="contside2">
-              <div className="contside2down">
-                {isLoading ||
-                  (isFetching && (
-                    <div
-                      style={{
-                        background: "white",
-                        width: "100%",
-                        height: "100%",
-                        borderRadius: "10px",
-                        fontSize: "30px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      Loading Payout Data...
-                    </div>
-                  )) || (
-                    <div className="contside2childdown">
-                      {/* <div
+              {isLoading || isFetching ? (
+                <Skeleton2 height="200px" />
+              ) : (
+                <div className="contside2down">
+                  <div className="contside2childdown">
+                    {/* <div
                     className=""
                     style={{
                       borderRight: "1px solid rgba(213, 219, 229, 1)",
@@ -119,227 +106,238 @@ function PayoutDashboard() {
                       200
                     </div>
                   </div> */}
-                      <div
-                        className=""
-                        style={{
-                          borderRight: "1px solid rgba(213, 219, 229, 1)",
-                          marginLeft: "20px",
-                        }}
-                      >
-                        <div
-                          onClick={() => {
-                            refetch(id);
-                            setUserID(1);
-                          }}
-                          className=""
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            transform: "translateX(-2px)",
-                          }}
-                        >
-                          <PersonIcon />
-                          <div
-                            style={{
-                              color: "#909090",
-                            }}
-                          >
-                            {" "}
-                            Total Transaction Count
-                          </div>
-                        </div>
-                        <div style={{ fontSize: "40px", fontWeight: "600" }}>
-                          {kFormatter4(
-                            cardDetails?.successful +
-                              cardDetails?.pendingAmount +
-                              cardDetails?.failedAmount
-                          )}
-                        </div>
-                      </div>
-                      <div
-                        className=""
-                        style={{
-                          borderRight: "1px solid rgba(213, 219, 229, 1)",
-                          marginLeft: "20px",
-                        }}
-                      >
-                        <div
-                          className=""
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            transform: "translateX(-2px)",
-                          }}
-                        >
-                          <GreenCardIcon />
-                          <div
-                            style={{
-                              color: "#909090",
-                            }}
-                          >
-                            Successful
-                          </div>
-                        </div>
-                        <div style={{ fontSize: "40px", fontWeight: "600" }}>
-                          {kFormatter4(cardDetails?.successful)}
-                        </div>
-                      </div>
-                      <div
-                        className=""
-                        style={{
-                          borderRight: "1px solid rgba(213, 219, 229, 1)",
-                          marginLeft: "20px",
-                        }}
-                      >
-                        <div
-                          className=""
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            transform: "translateX(-2px)",
-                          }}
-                        >
-                          <YellowCardIcon />
-                          <div
-                            style={{
-                              color: "#909090",
-                            }}
-                          >
-                            Pending
-                          </div>
-                        </div>
-                        <div style={{ fontSize: "40px", fontWeight: "600" }}>
-                          {kFormatter4(cardDetails?.pendingAmount)}
-                        </div>
-                      </div>
-                      <div
-                        className=""
-                        style={{
-                          marginLeft: "20px",
-                        }}
-                      >
-                        <div
-                          className=""
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            transform: "translateX(-2px)",
-                          }}
-                        >
-                          <DeleteIcon />
-                          <div
-                            style={{
-                              color: "#909090",
-                            }}
-                          >
-                            Failed
-                          </div>
-                        </div>
-                        <div style={{ fontSize: "40px", fontWeight: "600" }}>
-                          {kFormatter4(cardDetails?.failedAmount)}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                <div>
-                  <Link to="/payout-providers">
                     <div
+                      className=""
                       style={{
-                        padding: "27px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        background: "white",
-                        borderRadius: "10px",
-                        cursor: "pointer",
+                        borderRight: "1px solid rgba(213, 219, 229, 1)",
+                        marginLeft: "20px",
                       }}
                     >
-                      <NavigateIcon />
-                      <div style={{ fontSize: "20px" }}>View Gateways</div>
+                      <div
+                        onClick={() => {
+                          refetch(id);
+                          setUserID(1);
+                        }}
+                        className=""
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          transform: "translateX(-2px)",
+                        }}
+                      >
+                        <PersonIcon />
+                        <div
+                          style={{
+                            color: "#909090",
+                          }}
+                        >
+                          {" "}
+                          Total Transaction Count
+                        </div>
+                      </div>
+                      <div style={{ fontSize: "40px", fontWeight: "600" }}>
+                        {kFormatter4(
+                          cardDetails?.successful +
+                            cardDetails?.pendingAmount +
+                            cardDetails?.failedAmount
+                        )}
+                      </div>
                     </div>
-                  </Link>
-                  <Link to="/clients">
                     <div
+                      className=""
                       style={{
-                        marginTop: "22px",
-                        padding: "27px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        background: "white",
-                        borderRadius: "10px",
-                        cursor: "pointer",
+                        borderRight: "1px solid rgba(213, 219, 229, 1)",
+                        marginLeft: "20px",
                       }}
                     >
-                      <ManageIcon />
-                      <div style={{ fontSize: "20px" }}>Manage Clients</div>
+                      <div
+                        className=""
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          transform: "translateX(-2px)",
+                        }}
+                      >
+                        <GreenCardIcon />
+                        <div
+                          style={{
+                            color: "#909090",
+                          }}
+                        >
+                          Successful
+                        </div>
+                      </div>
+                      <div style={{ fontSize: "40px", fontWeight: "600" }}>
+                        {kFormatter4(cardDetails?.successful)}
+                      </div>
                     </div>
-                  </Link>
+                    <div
+                      className=""
+                      style={{
+                        borderRight: "1px solid rgba(213, 219, 229, 1)",
+                        marginLeft: "20px",
+                      }}
+                    >
+                      <div
+                        className=""
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          transform: "translateX(-2px)",
+                        }}
+                      >
+                        <YellowCardIcon />
+                        <div
+                          style={{
+                            color: "#909090",
+                          }}
+                        >
+                          Pending
+                        </div>
+                      </div>
+                      <div style={{ fontSize: "40px", fontWeight: "600" }}>
+                        {kFormatter4(cardDetails?.pendingAmount)}
+                      </div>
+                    </div>
+                    <div
+                      className=""
+                      style={{
+                        marginLeft: "20px",
+                      }}
+                    >
+                      <div
+                        className=""
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          transform: "translateX(-2px)",
+                        }}
+                      >
+                        <DeleteIcon />
+                        <div
+                          style={{
+                            color: "#909090",
+                          }}
+                        >
+                          Failed
+                        </div>
+                      </div>
+                      <div style={{ fontSize: "40px", fontWeight: "600" }}>
+                        {kFormatter4(cardDetails?.failedAmount)}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Link to="/payout-providers">
+                      <div
+                        style={{
+                          padding: "27px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          background: "white",
+                          borderRadius: "10px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <NavigateIcon />
+                        <div style={{ fontSize: "20px" }}>View Gateways</div>
+                      </div>
+                    </Link>
+                    <Link to="/clients">
+                      <div
+                        style={{
+                          marginTop: "22px",
+                          padding: "27px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          background: "white",
+                          borderRadius: "10px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <ManageIcon />
+                        <div style={{ fontSize: "20px" }}>Manage Clients</div>
+                      </div>
+                    </Link>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
           {/* Bar Chart Components Stamp */}
-          <div className="PaymentTypeChart">
-            <div className="Payment">
-              <div className="type">
-                <p>Payout Type</p>
-                <span>Shows a snapshot of payment types of your business</span>
-              </div>
-              <div className="paymentmethod">
-                <div className="card">
-                  <div className="color1"></div>
-                  <span>Direct To Bank</span>
-                </div>
-                <div className="card">
-                  <div className="color2"></div>
-                  <span>Cash Pickup</span>
-                </div>
-                <div className="card">
-                  <div className="color3"></div>
-                  <span>Pay To Wallet</span>
-                </div>
-              </div>
-              <PayoutChart apiData={providers} />
+
+          {isLoading || isFetching ? (
+            <div className="PaymentTypeChart">
+              <Skeleton2 height="550px" />
+              <Skeleton2 height="550px" />
             </div>
-            {/* Three Shold Stamp */}
-            <div className="Payment">
-              <div className="type">
-                <p>Transactions</p>
-                <span>Shows a snapshot of payment types of your business</span>
+          ) : (
+            <div className="PaymentTypeChart">
+              <div className="Payment">
+                <div className="type">
+                  <p>Payout Type</p>
+                  <span>
+                    Shows a snapshot of payment types of your business
+                  </span>
+                </div>
+                <div className="paymentmethod">
+                  {providers?.map((item) => {
+                    return (
+                      <div className="card">
+                        <div className="color1"></div>
+                        <span>{item?.providerName}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <PayoutChart apiData={providers} />
               </div>
-              <div className="paymentmethod">
-                <div className="card">
-                  <div
-                    className="color1"
-                    style={{
-                      background: "#46A246",
-                    }}
-                  ></div>
-                  <span>Successful</span>
+              {/* Three Shold Stamp */}
+              <div className="Payment">
+                <div className="type">
+                  <p>Transactions</p>
+                  <span>
+                    Shows a snapshot of payment types of your business
+                  </span>
                 </div>
-                <div className="card">
-                  <div
-                    className="color2"
-                    style={{
-                      background: "#CBC7C6",
-                    }}
-                  ></div>
-                  <span>Pending</span>
+                <div className="paymentmethod">
+                  <div className="card">
+                    <div
+                      className="color1"
+                      style={{
+                        background: "#46A246",
+                      }}
+                    ></div>
+                    <span>Successful</span>
+                  </div>
+                  <div className="card">
+                    <div
+                      className="color2"
+                      style={{
+                        background: "#CBC7C6",
+                      }}
+                    ></div>
+                    <span>Pending</span>
+                  </div>
+                  <div className="card">
+                    <div
+                      className="color3"
+                      style={{
+                        background: "#D94040",
+                      }}
+                    ></div>
+                    <span>Failed</span>
+                  </div>
                 </div>
-                <div className="card">
-                  <div
-                    className="color3"
-                    style={{
-                      background: "#D94040",
-                    }}
-                  ></div>
-                  <span>Failed</span>
-                </div>
+
+                <TransactionsChartPayout apiData={transactions} />
               </div>
-              <TransactionsChartPayout apiData={transactions} />
             </div>
-          </div>
+          )}
 
           {/* Transaction Chart Stamp */}
           <TransactionList data={transactionsList} />
