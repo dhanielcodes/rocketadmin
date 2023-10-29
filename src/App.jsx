@@ -24,9 +24,33 @@ import ClientsPage from "./Routes/Payout/Clients";
 import ClientDetailsPage from "./Routes/Payout/ClientDetails";
 import KYCProvider from "./Routes/Payout/KYCProvider";
 import PayoutProvidersPage from "./Routes/Payout/PayoutProviders";
+import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <Router>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          success: {
+            style: {
+              fontSize: "16px",
+              marginTop: "14px",
+              color: "white",
+              background: "#3fb172",
+              padding: "10px",
+            },
+          },
+          error: {
+            style: {
+              fontSize: "16px",
+              marginTop: "14px",
+              color: "white",
+              background: "#ff0000",
+              padding: "10px",
+            },
+          },
+        }}
+      />
       <Routes>
         {/* <Route element={<InActivityTimeOut />}> */}
         <Route>

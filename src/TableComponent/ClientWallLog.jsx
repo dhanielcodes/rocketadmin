@@ -73,7 +73,7 @@ function ClientWallLog({ data }) {
     },
     {
       title: "CLIENT",
-      dataIndex: "SenderName",
+      dataIndex: "clientName",
       width: 130,
     },
     {
