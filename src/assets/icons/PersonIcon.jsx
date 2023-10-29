@@ -3,8 +3,8 @@ import React from "react";
 export default function PersonIcon() {
   return (
     <svg
-      width="58"
-      height="58"
+      width="22%"
+      height="22%"
       viewBox="0 0 58 58"
       fill="none"
       style={{
