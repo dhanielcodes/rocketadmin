@@ -55,6 +55,11 @@ function ClientTable() {
       width: 190,
     },
     {
+      title: "STATUS",
+      dataIndex: "status",
+      width: 160,
+    },
+    {
       title: "NAME",
       dataIndex: "name",
       width: 190,
@@ -82,11 +87,6 @@ function ClientTable() {
       title: "DATE ADDED",
       dataIndex: "dateAdded",
       width: 220,
-    },
-    {
-      title: "STATUS",
-      dataIndex: "status",
-      width: 160,
     },
   ];
 

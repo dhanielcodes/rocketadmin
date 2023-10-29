@@ -15,6 +15,7 @@ import Details from "./ClientDetailsTabs/Details";
 import Documents from "./ClientDetailsTabs/Documents";
 import TransactionsList from "./ClientDetailsTabs/TransactionsList";
 import ChargesList from "./ClientDetailsTabs/ChargesList";
+import Skeleton2 from "../../reuseables/Skeleton2";
 
 export default function ClientDetailsPage() {
   const [params] = useSearchParams();
@@ -67,9 +68,13 @@ export default function ClientDetailsPage() {
       {isLoading ||
         (isFetching && (
           <div style={{ padding: "20px" }}>
-            <Skeleton
-              style={{ height: "100vh", width: "100%", background: "white" }}
+            <Skeleton2
+              height="10vh"
+              style={{
+                marginBottom: "20px",
+              }}
             />
+            <Skeleton2 height="80vh" />
           </div>
         )) ||
         (client?.data && (
@@ -497,9 +502,11 @@ export default function ClientDetailsPage() {
                 <Documents clientDetails={clientUser} />
               )}
               {active === "Transactions" && (
-                <TransactionsList></TransactionsList>
+                <TransactionsList data={clientUser}></TransactionsList>
               )}
-              {active === "Charges" && <ChargesList></ChargesList>}
+              {active === "Charges" && (
+                <ChargesList data={clientUser}></ChargesList>
+              )}
             </div>
           </Client>
         ))}
@@ -512,6 +519,7 @@ const Client = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    margin-bottom: 10px;
 
     .back_buttton {
       display: flex;

@@ -52,6 +52,11 @@ function TransactionList({ data }) {
       width: 160,
     },
     {
+      title: "TRANSACTION STATUS",
+      dataIndex: "statusNew",
+      width: 180,
+    },
+    {
       title: "DATE",
       dataIndex: "dateCreated",
       width: 250,
@@ -99,11 +104,6 @@ function TransactionList({ data }) {
       title: "TRANSFER FEE",
       dataIndex: "transferFee",
       width: 120,
-    },
-    {
-      title: "TRANSACTION STATUS",
-      dataIndex: "statusNew",
-      width: 180,
     },
   ];
 
