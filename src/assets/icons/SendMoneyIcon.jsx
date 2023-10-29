@@ -3,7 +3,7 @@ import React from "react";
 export default function SendMoneyIcon({ color = "#464F60", ...props }) {
   return (
     <svg
-      width="30"
+      width="23"
       height="15"
       viewBox="0 0 20 20"
       fill="none"

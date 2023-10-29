@@ -179,7 +179,7 @@ export default function NewNavBar() {
   console.log(active2);
 
   return (
-    <div style={{ width: "290px", padding: "10px 20px" }}>
+    <div style={{ width: "100%", padding: "10px 20px" }}>
       <img
         src={Logo}
         style={{ height: "90%", width: "60%", marginBottom: "20px" }}

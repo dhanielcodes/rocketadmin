@@ -3,7 +3,7 @@ import React from "react";
 export default function CustomersIcon({ color = "#464F60", ...props }) {
   return (
     <svg
-      width="30"
+      width="20"
       height="15"
       viewBox="0 0 20 20"
       fill="#464F60"

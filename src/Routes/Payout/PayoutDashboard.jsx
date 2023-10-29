@@ -110,14 +110,10 @@ function PayoutDashboard() {
                       className=""
                       style={{
                         borderRight: "1px solid rgba(213, 219, 229, 1)",
-                        marginLeft: "20px",
+                        marginLeft: "1vw",
                       }}
                     >
                       <div
-                        onClick={() => {
-                          refetch(id);
-                          setUserID(1);
-                        }}
                         className=""
                         style={{
                           display: "flex",
@@ -129,13 +125,14 @@ function PayoutDashboard() {
                         <div
                           style={{
                             color: "#909090",
+                            fontSize: "0.8vw",
                           }}
                         >
                           {" "}
                           Total Transaction Count
                         </div>
                       </div>
-                      <div style={{ fontSize: "40px", fontWeight: "600" }}>
+                      <div style={{ fontSize: "2vw", fontWeight: "600" }}>
                         {kFormatter4(
                           cardDetails?.successful +
                             cardDetails?.pendingAmount +
@@ -147,7 +144,7 @@ function PayoutDashboard() {
                       className=""
                       style={{
                         borderRight: "1px solid rgba(213, 219, 229, 1)",
-                        marginLeft: "20px",
+                        marginLeft: "1vw",
                       }}
                     >
                       <div
@@ -162,12 +159,13 @@ function PayoutDashboard() {
                         <div
                           style={{
                             color: "#909090",
+                            fontSize: "0.8vw",
                           }}
                         >
                           Successful
                         </div>
                       </div>
-                      <div style={{ fontSize: "40px", fontWeight: "600" }}>
+                      <div style={{ fontSize: "2vw", fontWeight: "600" }}>
                         {kFormatter4(cardDetails?.successful)}
                       </div>
                     </div>
@@ -175,7 +173,7 @@ function PayoutDashboard() {
                       className=""
                       style={{
                         borderRight: "1px solid rgba(213, 219, 229, 1)",
-                        marginLeft: "20px",
+                        marginLeft: "1vw",
                       }}
                     >
                       <div
@@ -190,19 +188,20 @@ function PayoutDashboard() {
                         <div
                           style={{
                             color: "#909090",
+                            fontSize: "0.8vw",
                           }}
                         >
                           Pending
                         </div>
                       </div>
-                      <div style={{ fontSize: "40px", fontWeight: "600" }}>
+                      <div style={{ fontSize: "2vw", fontWeight: "600" }}>
                         {kFormatter4(cardDetails?.pendingAmount)}
                       </div>
                     </div>
                     <div
                       className=""
                       style={{
-                        marginLeft: "20px",
+                        marginLeft: "1vw",
                       }}
                     >
                       <div
@@ -217,12 +216,13 @@ function PayoutDashboard() {
                         <div
                           style={{
                             color: "#909090",
+                            fontSize: "0.8vw",
                           }}
                         >
                           Failed
                         </div>
                       </div>
-                      <div style={{ fontSize: "40px", fontWeight: "600" }}>
+                      <div style={{ fontSize: "2vw", fontWeight: "600" }}>
                         {kFormatter4(cardDetails?.failedAmount)}
                       </div>
                     </div>
@@ -232,7 +232,7 @@ function PayoutDashboard() {
                     <Link to="/payout-providers">
                       <div
                         style={{
-                          padding: "27px",
+                          padding: "10%",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "space-between",
@@ -242,14 +242,14 @@ function PayoutDashboard() {
                         }}
                       >
                         <NavigateIcon />
-                        <div style={{ fontSize: "20px" }}>View Gateways</div>
+                        <div style={{ fontSize: "1vw" }}>View Gateways</div>
                       </div>
                     </Link>
                     <Link to="/clients">
                       <div
                         style={{
                           marginTop: "22px",
-                          padding: "27px",
+                          padding: "10%",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "space-between",
@@ -259,7 +259,7 @@ function PayoutDashboard() {
                         }}
                       >
                         <ManageIcon />
-                        <div style={{ fontSize: "20px" }}>Manage Clients</div>
+                        <div style={{ fontSize: "1vw" }}>Manage Clients</div>
                       </div>
                     </Link>
                   </div>
@@ -574,8 +574,7 @@ const Content = styled.div`
       grid-template-columns: 1fr 1fr 1fr 1fr;
       background-color: #fff;
       /* text-align: center; */
-      padding-top: 20px;
-      padding-bottom: 20px;
+      padding: 2% 0;
       border-radius: 10px;
       .box2 {
         border-right: 1px solid rgba(213, 219, 229, 1);
