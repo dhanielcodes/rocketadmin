@@ -221,6 +221,7 @@ export default function NewNavBar() {
                     style={{
                       color:
                         item.path === location.pathname ? "#fff" : "#464F60",
+                      fontSize: "14px",
                     }}
                   >
                     {item.name}
@@ -276,6 +277,7 @@ export default function NewNavBar() {
                                   link.path === location.pathname
                                     ? "#fff"
                                     : "#464F60",
+                                fontSize: "14px",
                               }}
                             >
                               {link.name}
