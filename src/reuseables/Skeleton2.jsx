@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
-const Skeleton2 = ({ height = "40px" }) => {
+const Skeleton2 = ({ height = "40px", style }) => {
   return (
     <SkeletonStyle role="status">
       <div
         style={{
           height: height,
+          ...style,
         }}
         className="inner"
       ></div>

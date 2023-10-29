@@ -80,7 +80,7 @@ export default function KYCProvider() {
             paddingBottom: "20px",
             paddingTop: "20px",
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateColumns: "repeat(4, 1fr)",
             gap: "20px",
           }}
         >

@@ -268,70 +268,76 @@ function PayoutDashboard() {
             </div>
           </div>
           {/* Bar Chart Components Stamp */}
-          <div className="PaymentTypeChart">
-            <div className="Payment">
-              <div className="type">
-                <p>Payout Type</p>
-                <span>Shows a snapshot of payment types of your business</span>
-              </div>
-              <div className="paymentmethod">
-                {providers?.map((item) => {
-                  return (
-                    <div className="card">
-                      <div className="color1"></div>
-                      <span>{item?.providerName}</span>
-                    </div>
-                  );
-                })}
-              </div>
-              {isLoading || isFetching ? (
-                <Skeleton2 height="400px" />
-              ) : (
+
+          {isLoading || isFetching ? (
+            <div className="PaymentTypeChart">
+              <Skeleton2 height="550px" />
+              <Skeleton2 height="550px" />
+            </div>
+          ) : (
+            <div className="PaymentTypeChart">
+              <div className="Payment">
+                <div className="type">
+                  <p>Payout Type</p>
+                  <span>
+                    Shows a snapshot of payment types of your business
+                  </span>
+                </div>
+                <div className="paymentmethod">
+                  {providers?.map((item) => {
+                    return (
+                      <div className="card">
+                        <div className="color1"></div>
+                        <span>{item?.providerName}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+
                 <PayoutChart apiData={providers} />
-              )}
-            </div>
-            {/* Three Shold Stamp */}
-            <div className="Payment">
-              <div className="type">
-                <p>Transactions</p>
-                <span>Shows a snapshot of payment types of your business</span>
               </div>
-              <div className="paymentmethod">
-                <div className="card">
-                  <div
-                    className="color1"
-                    style={{
-                      background: "#46A246",
-                    }}
-                  ></div>
-                  <span>Successful</span>
+              {/* Three Shold Stamp */}
+              <div className="Payment">
+                <div className="type">
+                  <p>Transactions</p>
+                  <span>
+                    Shows a snapshot of payment types of your business
+                  </span>
                 </div>
-                <div className="card">
-                  <div
-                    className="color2"
-                    style={{
-                      background: "#CBC7C6",
-                    }}
-                  ></div>
-                  <span>Pending</span>
+                <div className="paymentmethod">
+                  <div className="card">
+                    <div
+                      className="color1"
+                      style={{
+                        background: "#46A246",
+                      }}
+                    ></div>
+                    <span>Successful</span>
+                  </div>
+                  <div className="card">
+                    <div
+                      className="color2"
+                      style={{
+                        background: "#CBC7C6",
+                      }}
+                    ></div>
+                    <span>Pending</span>
+                  </div>
+                  <div className="card">
+                    <div
+                      className="color3"
+                      style={{
+                        background: "#D94040",
+                      }}
+                    ></div>
+                    <span>Failed</span>
+                  </div>
                 </div>
-                <div className="card">
-                  <div
-                    className="color3"
-                    style={{
-                      background: "#D94040",
-                    }}
-                  ></div>
-                  <span>Failed</span>
-                </div>
-              </div>
-              {isLoading || isFetching ? (
-                <Skeleton2 height="400px" />
-              ) : (
+
                 <TransactionsChartPayout apiData={transactions} />
-              )}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Transaction Chart Stamp */}
           <TransactionList data={transactionsList} />
