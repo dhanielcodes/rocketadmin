@@ -40,10 +40,12 @@ const BodyLayout = ({ children, active }) => {
       <Sider
         collapsed={collapsed}
         onCollapse={handleCollapsed}
-        style={{
-          width: "fit-content",
-        }}
+        collapsible
+        trigger={collapsed ? <IconCaretRight /> : <IconCaretLeft />}
         breakpoint="xl"
+        style={{
+          width: collapsed ? "0" : "fit-content",
+        }}
       >
         <NewNavBar />
       </Sider>
@@ -63,7 +65,6 @@ const BodyLayout = ({ children, active }) => {
           >
             {children}
           </div>
-          <Footer>Footer</Footer>
         </Layout>
       </Layout>
     </Layout>
