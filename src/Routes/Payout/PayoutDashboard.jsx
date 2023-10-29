@@ -278,7 +278,7 @@ function PayoutDashboard() {
             <div className="PaymentTypeChart">
               <div className="Payment">
                 <div className="type">
-                  <p>Payout Type</p>
+                  <p>Payout By Gateway</p>
                   <span>
                     Shows a snapshot of payment types of your business
                   </span>
