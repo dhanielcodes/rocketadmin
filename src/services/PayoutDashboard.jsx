@@ -22,6 +22,11 @@ export const getKYCProviders = async (userId = 0) => {
   return data;
 };
 
+export const getPaymentProviders = async (userId = 0) => {
+  const { data } = await Axios.get(`${baseurl}/getpaymentprovider`);
+  return data;
+};
+
 export const getPayoutProviders = async (userId = 0) => {
   const { data } = await Axios.get(`${baseurl}/getpayoutprovider`);
   return data;
@@ -48,6 +53,16 @@ export const processWalletLog = async (body) => {
     `${baseurl}/processwalletfundingrequest`,
     body
   );
+  return data;
+};
+
+export const createFundingRequest = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/walletfundingrequest`, body);
+  return data;
+};
+
+export const addClientCharges = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/addpayoutclientcharges`, body);
   return data;
 };
 

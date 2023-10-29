@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
+  createFundingRequest,
   getPayoutClientDashboard,
   updatePayoutClientStatus,
 } from "../../services/PayoutDashboard";
 import { isError, useMutation, useQuery } from "@tanstack/react-query";
 import BodyLayout from "../../reuseables/BodyLayout";
 import styled from "styled-components";
-import { BackTop, Button, Skeleton } from "@arco-design/web-react";
+import { BackTop, Button, Select, Skeleton } from "@arco-design/web-react";
 import phone from "../../assets/icons/phoneIcon.svg";
 import mail from "../../assets/icons/mailIcon.svg";
 import profile from "../../assets/images/profile.png";
@@ -16,6 +17,15 @@ import Documents from "./ClientDetailsTabs/Documents";
 import TransactionsList from "./ClientDetailsTabs/TransactionsList";
 import ChargesList from "./ClientDetailsTabs/ChargesList";
 import Skeleton2 from "../../reuseables/Skeleton2";
+import AppModal from "../../COMPONENTS/AppModal";
+import AppSelect from "../../reuseables/AppSelect";
+import GatewayDropdown from "../../reuseables/GatewayDropdown";
+import AppInput from "../../reuseables/AppInput";
+import MainDetailsBody from "./MainDetailsBody";
+import SuspendIcon from "../../assets/icons/SuspendIcon";
+import { TiPlus } from "react-icons/ti";
+import PlusIcon from "../../assets/icons/PlusIcon";
+import toast from "react-hot-toast";
 
 export default function ClientDetailsPage() {
   const [params] = useSearchParams();
@@ -53,6 +63,28 @@ export default function ClientDetailsPage() {
     },
   });
 
+  const { mutate: mutateFunding, isLoading: mutateLoadingFund } = useMutation({
+    mutationFn: createFundingRequest,
+    onSuccess: (data) => {
+      console.log(data);
+      if (data?.status) {
+        toast.success(data?.message);
+        setModal(false);
+      } else {
+        toast.error(data?.message);
+      }
+    },
+    onError: (data) => {
+      //setModal(true);
+      toast.error("Funding Request wasn't created");
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
+
   console.log(client);
   const clientUser = client?.data;
   const navigate = useNavigate();
@@ -60,6 +92,12 @@ export default function ClientDetailsPage() {
   const [active, setActive] = useState("Profile");
 
   const tab = ["Profile", "ID Documents", "Transactions", "Charges"];
+
+  const [modal, setModal] = useState(false);
+
+  const [gateway, setGateWay] = useState();
+  const [amount, setAmount] = useState();
+  const [description, setDescription] = useState();
 
   console.log();
 
@@ -117,22 +155,16 @@ export default function ClientDetailsPage() {
               </div>
 
               <div style={{ display: "flex" }}>
-                <button className="fund">
+                <button
+                  className="fund"
+                  onClick={() => {
+                    setModal(true);
+                  }}
+                >
                   {" "}
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M7.99999 2C8.4142 2 8.74999 2.33579 8.74999 2.75V7.25H13.25C13.6642 7.25 14 7.58579 14 8C14 8.41422 13.6642 8.75 13.25 8.75H8.74999V13.25C8.74999 13.6642 8.4142 14 7.99999 14C7.58578 14 7.24999 13.6642 7.24999 13.25V8.75H2.75C2.33579 8.75 2 8.41422 2 8C2 7.58579 2.33579 7.25 2.75 7.25H7.24999V2.75C7.24999 2.33579 7.58578 2 7.99999 2Z"
-                      fill="#5A6376"
-                    />
-                  </svg>
+                  {/*                   <TiPlus />
+                   */}{" "}
+                  <PlusIcon />
                   <span>Fund Wallet</span>
                 </button>
                 &nbsp; &nbsp;
@@ -143,28 +175,7 @@ export default function ClientDetailsPage() {
                     }}
                     className="suspend"
                   >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g clip-path="url(#clip0_2412_13671)">
-                        <path
-                          d="M5.3335 8.00016H10.6668M14.6668 8.00016C14.6668 11.6821 11.6821 14.6668 8.00016 14.6668C4.31826 14.6668 1.3335 11.6821 1.3335 8.00016C1.3335 4.31826 4.31826 1.3335 8.00016 1.3335C11.6821 1.3335 14.6668 4.31826 14.6668 8.00016Z"
-                          stroke="white"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_2412_13671">
-                          <rect width="16" height="16" fill="white" />
-                        </clipPath>
-                      </defs>
-                    </svg>
+                    <SuspendIcon />
 
                     {mutateLoading ? (
                       <span>Loading...</span>
@@ -190,271 +201,12 @@ export default function ClientDetailsPage() {
             </div>
 
             <div className="body">
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                }}
-              >
-                <div className="left_body">
-                  <div className="profile">PROFILE</div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        width: "80%",
-                      }}
-                    >
-                      <div
-                        className="rounded-full overflow-hidden w-[8vw] h-[8vw] rounded-fulls mr-[2%]"
-                        style={{
-                          borderRadius: "10000px",
-                          overflow: "hidden",
-                          width: "160px",
-                          height: "160px",
-                          marginRight: "2%",
-                        }}
-                      >
-                        <img
-                          className="w-full- h-full"
-                          style={{ width: "100%", height: "100%" }}
-                          src={profile}
-                          alt=""
-                        />
-                      </div>
-                      <div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontSize: "1.8vw",
-                              textTransform: "capitalize",
-                              marginRight: "10px",
-                            }}
-                          >
-                            {clientUser?.companyName}
-                          </div>
-                          <div
-                            style={{
-                              padding: "8px 16px",
-                              borderRadius: "10000px",
-                              background:
-                                clientUser?.status !== "Suspended"
-                                  ? "#63ff706c"
-                                  : "#ff63634b",
-                              color:
-                                clientUser?.status !== "Suspended"
-                                  ? "green"
-                                  : "red",
-                              width: "fit-content",
-                              fontWeight: "700",
-                            }}
-                          >
-                            {clientUser?.status !== "Suspended"
-                              ? "Active"
-                              : "Inactive"}
-                          </div>
-                        </div>
-
-                        <div
-                          style={{
-                            marginBottom: "10px",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontSize: "16px",
-                              color: "#63666A",
-                              marginBottom: "3%",
-                            }}
-                          >
-                            Client ID
-                          </div>
-                          <div
-                            style={{
-                              fontSize: "18px",
-                              color: "#333B4A",
-                              fontWeight: "700",
-                              marginBottom: "3%",
-                            }}
-                          >
-                            {clientUser?.clientKeys?.clientId}
-                          </div>
-                        </div>
-
-                        <div
-                          style={{
-                            marginBottom: "40px",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontSize: "16px",
-                              color: "#63666A",
-                              marginBottom: "3%",
-                            }}
-                          >
-                            Registration Date
-                          </div>
-                          <div
-                            style={{
-                              fontSize: "18px",
-                              color: "#333B4A",
-                              fontWeight: "700",
-                              marginBottom: "3%",
-                            }}
-                          >
-                            {clientUser?.dateRegistered}
-                          </div>
-                        </div>
-
-                        {/* <div
-                        style={{
-                          marginBottom: "10px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            fontSize: "16px",
-                            color: "#63666A",
-                            marginBottom: "3%",
-                          }}
-                        >
-                          DOB
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "18px",
-                            color: "#333B4A",
-                            fontWeight: "700",
-                            marginBottom: "3%",
-                          }}
-                        >
-                          {clientUser?.dateRegistered}
-                        </div>
-                      </div> */}
-                      </div>
-                    </div>
-                    <div>
-                      <div
-                        className="text-[1vw] text-[#909090] my-[2%]"
-                        style={{
-                          fontSize: "22px",
-                          color: "#909090",
-                          marginBottom: "2%",
-                          marginTop: "2%",
-                        }}
-                      >
-                        CONTACT INFORMATION
-                      </div>
-
-                      <div
-                        className="flex items-start my-[5%]"
-                        style={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          marginBottom: "5%",
-                          marginTop: "5%",
-                        }}
-                      >
-                        <img
-                          style={{
-                            width: "40px",
-                            height: "40px",
-                            marginRight: "4px",
-                          }}
-                          className="w-14 h-14 mr-1"
-                          src={mail}
-                          alt=""
-                        />
-                        <div
-                          className="ml-[4%]"
-                          style={{
-                            marginLeft: "4%",
-                          }}
-                        >
-                          <div
-                            className="text-[1vw] mb-[2%]"
-                            style={{
-                              fontSize: "18px",
-                              marginBottom: "2%",
-                            }}
-                          >
-                            Email
-                          </div>
-                          <div
-                            className="text-[1vw] text-[#63666A] mb-[3%]"
-                            style={{
-                              fontSize: "18px",
-                              color: "#63666A",
-                              marginBottom: "3%",
-                            }}
-                          >
-                            {clientUser?.email}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          marginBottom: "5%",
-                          marginTop: "5%",
-                        }}
-                      >
-                        <img
-                          style={{
-                            width: "40px",
-                            height: "40px",
-                            marginRight: "4px",
-                          }}
-                          src={phone}
-                          alt=""
-                        />
-                        <div
-                          className="ml-[4%]"
-                          style={{
-                            marginLeft: "4%",
-                          }}
-                        >
-                          <div
-                            className="text-[1vw] mb-[2%]"
-                            style={{
-                              fontSize: "18px",
-                              marginBottom: "2%",
-                            }}
-                          >
-                            Phone
-                          </div>
-                          <div
-                            className="text-[1vw] text-[#63666A] mb-[3%]"
-                            style={{
-                              fontSize: "18px",
-                              color: "#63666A",
-                              marginBottom: "3%",
-                            }}
-                          >
-                            {clientUser?.phone}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <MainDetailsBody
+                clientUser={clientUser}
+                profile={profile}
+                mail={mail}
+                phone={phone}
+              />
 
               <div
                 style={{
@@ -510,6 +262,115 @@ export default function ClientDetailsPage() {
             </div>
           </Client>
         ))}
+      <div
+        style={{
+          opacity: modal ? "1" : "0",
+          pointerEvents: modal ? "all" : "none",
+          transition: "all 0.3s",
+        }}
+      >
+        <AppModal
+          closeModal={() => {
+            setModal(false);
+            setAmount();
+            setDescription();
+          }}
+          heading="Fund Client"
+        >
+          <div className="name">
+            <label>Gateway</label>
+            <GatewayDropdown
+              value={gateway}
+              options={clientUser?.payOutClientWalletPayOutProviders?.map(
+                (item) => {
+                  return {
+                    name: item?.providerName,
+                    value: item?.wallet?.walletId,
+                  };
+                }
+              )}
+              onChange={(e) => {
+                setGateWay(e);
+              }}
+            />
+          </div>
+          <div
+            className="name"
+            style={{
+              marginTop: "20px",
+            }}
+          >
+            <label>Amount</label>
+            <AppInput
+              placeholder="How much"
+              type="number"
+              onChange={(e) => {
+                setAmount(e.target.value);
+              }}
+              width="96%"
+              name="username"
+              padding="12px"
+            />
+          </div>
+          <div
+            className="name"
+            style={{
+              marginTop: "20px",
+            }}
+          >
+            <label>Description</label>
+            <AppInput
+              placeholder="Type a narration"
+              type="text"
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              width="96%"
+              name="username"
+              padding="12px"
+            />
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gridGap: "10px",
+              marginTop: "30px",
+            }}
+          >
+            <div></div>
+            <button
+              onClick={() => {
+                setModal(false);
+                setAmount();
+                setDescription();
+              }}
+              className="cancel"
+            >
+              {" "}
+              <span>Cancel</span>
+            </button>
+            <button
+              onClick={() => {
+                mutateFunding({
+                  userId: params.get("userId"),
+                  amountRequested: amount,
+                  userWallet: {
+                    walletId: gateway?.value,
+                  },
+                  comment: description,
+                  astUpdatedBy: 0,
+                });
+              }}
+              className="confirm"
+            >
+              {" "}
+              <span>{mutateLoadingFund ? "creating..." : "Fund"}</span>
+            </button>
+          </div>
+        </AppModal>
+      </div>
     </BodyLayout>
   );
 }

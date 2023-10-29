@@ -38,6 +38,7 @@ import TransactionList from "../../TableComponent/TransactionList";
 import ClientWallLog from "../../TableComponent/ClientWallLog";
 import { Skeleton } from "@arco-design/web-react";
 import Skeleton2 from "../../reuseables/Skeleton2";
+import AppSelect from "../../reuseables/AppSelect";
 function PayoutDashboard() {
   const [userID, setUserID] = useState();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -54,7 +55,23 @@ function PayoutDashboard() {
 
   const id = userID;
 
-  const cardDetails = payoutDashboard?.data?.transactionVolume?.NGN;
+  const [currency, setCurrency] = useState(
+    payoutDashboard?.data?.transactionVolume?.map((item) => {
+      return {
+        ...item,
+        name: item?.currency,
+      };
+    })[0]
+  );
+
+  const cardDetails =
+    currency ||
+    payoutDashboard?.data?.transactionVolume?.map((item) => {
+      return {
+        ...item,
+        name: item?.currency,
+      };
+    })[0];
   const transactions =
     payoutDashboard?.data?.analyticByTransactionStatus?.October;
 
@@ -65,7 +82,7 @@ function PayoutDashboard() {
 
   console.log(transactions, providers);
 
-  console.log();
+  console.log(currency, "yuy");
 
   return (
     <>
@@ -74,38 +91,78 @@ function PayoutDashboard() {
           <div className="content1">
             <div className="contside2">
               {isLoading || isFetching ? (
+                <Skeleton2
+                  height="90px"
+                  style={{
+                    marginBottom: "20px",
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <div style={{}}>
+                    <div
+                      style={{
+                        fontSize: "26px",
+                        fontWeight: "600",
+                      }}
+                    >
+                      Payout Dashboard
+                    </div>
+                    <div>
+                      This overview provides a comprehensive snapshot of
+                      transactions on your system
+                    </div>
+                  </div>
+                  <div>
+                    <AppSelect
+                      value={
+                        currency ||
+                        payoutDashboard?.data?.transactionVolume?.map(
+                          (item) => {
+                            return {
+                              ...item,
+                              name: item?.currency,
+                            };
+                          }
+                        )[0]
+                      }
+                      onChange={(e) => {
+                        setCurrency(e);
+                      }}
+                      defaultValue={
+                        payoutDashboard?.data?.transactionVolume?.map(
+                          (item) => {
+                            return {
+                              ...item,
+                              name: item?.currency,
+                            };
+                          }
+                        )[0]
+                      }
+                      options={payoutDashboard?.data?.transactionVolume?.map(
+                        (item) => {
+                          return {
+                            ...item,
+                            name: item?.currency,
+                          };
+                        }
+                      )}
+                    />
+                  </div>
+                </div>
+              )}
+              {isLoading || isFetching ? (
                 <Skeleton2 height="200px" />
               ) : (
                 <div className="contside2down">
                   <div className="contside2childdown">
-                    {/* <div
-                    className=""
-                    style={{
-                      borderRight: "1px solid rgba(213, 219, 229, 1)",
-                      marginLeft: "20px",
-                    }}
-                  >
-                    <div
-                      className=""
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        transform: "translateX(-2px)",
-                      }}
-                    >
-                      <PersonIcon />
-                      <div
-                        style={{
-                          color: "#909090",
-                        }}
-                      >
-                        Total Giveaways
-                      </div>
-                    </div>
-                    <div style={{ fontSize: "40px", fontWeight: "600" }}>
-                      200
-                    </div>
-                  </div> */}
                     <div
                       className=""
                       style={{

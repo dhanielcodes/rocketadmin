@@ -4,50 +4,69 @@ import AppInput from "../../../reuseables/AppInput";
 
 export default function Details({ clientDetails }) {
   return (
-    <DetailsStyle>
-      <div className="name">
-        <label>Full Name</label>
-        <AppInput
-          placeholder="Enter name"
-          type="text"
-          width="95%"
-          name="firstName"
-          value={clientDetails?.companyName}
-        />
+    <>
+      <div
+        style={{
+          paddingBottom: "20px",
+          marginBottom: "20px",
+          borderBottom: "1px solid #EAECF0",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "18px",
+            fontWeight: "600",
+          }}
+        >
+          Personal Information
+        </div>
+        <div>View, edit and update personal info</div>
       </div>
-      <div className="name">
-        <label>Email</label>
-        <AppInput
-          placeholder="Enter name"
-          type="text"
-          width="95%"
-          name="firstName"
-          value={clientDetails?.email}
-        />
-      </div>
-      <div className="name">
-        <label>City</label>
-        <AppInput
-          placeholder="Enter name"
-          type="text"
-          width="95%"
-          name="firstName"
-          value={clientDetails?.city?.name}
-        />
-      </div>
-      <div className="name">
-        <label>Address</label>
-        <AppInput
-          placeholder="Enter name"
-          type="text"
-          width="95%"
-          name="firstName"
-          value={
-            clientDetails?.city?.name + ", " + clientDetails?.country?.name
-          }
-        />
-      </div>
-    </DetailsStyle>
+      <DetailsStyle>
+        <div className="name">
+          <label>Full Name</label>
+          <AppInput
+            placeholder="Enter name"
+            type="text"
+            width="95%"
+            name="firstName"
+            value={clientDetails?.companyName}
+          />
+        </div>
+        <div className="name">
+          <label>Email</label>
+          <AppInput
+            placeholder="Enter name"
+            type="text"
+            width="95%"
+            name="firstName"
+            value={clientDetails?.email}
+          />
+        </div>
+        <div className="name">
+          <label>City</label>
+          <AppInput
+            placeholder="Enter name"
+            type="text"
+            width="95%"
+            name="firstName"
+            value={clientDetails?.city?.name}
+          />
+        </div>
+        <div className="name">
+          <label>Address</label>
+          <AppInput
+            placeholder="Enter name"
+            type="text"
+            width="95%"
+            name="firstName"
+            value={
+              clientDetails?.city?.name + ", " + clientDetails?.country?.name
+            }
+          />
+        </div>
+      </DetailsStyle>
+    </>
   );
 }
 
