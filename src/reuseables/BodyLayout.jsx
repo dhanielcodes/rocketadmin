@@ -45,6 +45,7 @@ const BodyLayout = ({ children, active }) => {
         breakpoint="xl"
         style={{
           width: collapsed ? "0" : "fit-content",
+          paddingRight: "20px",
         }}
       >
         <NewNavBar />
