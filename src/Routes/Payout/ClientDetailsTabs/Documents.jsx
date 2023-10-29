@@ -3,8 +3,12 @@ import DownloadIcon from "../../../assets/icons/DownloadIcon";
 import { TiDelete, TiDownload, TiPen, TiPencil } from "react-icons/ti";
 import SmallDownload from "../../../assets/icons/Download";
 import MDeleteIcon from "../../../assets/icons/MDeleteIcon";
+import { saveAs } from "file-saver";
 
 export default function Documents({ clientDetails }) {
+  const downloadImage = (image_url, image) => {
+    saveAs(image_url, image); // Put your image URL here.
+  };
   return (
     <div>
       <div>
@@ -63,17 +67,34 @@ export default function Documents({ clientDetails }) {
                   }}
                 />
 
-                <div style={{ width: "50%", wordBreak: "break-all" }}>
-                  {clientDetails?.formCo2URL}
-                </div>
+                <a
+                  href={clientDetails?.formCo2URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                >
+                  <div
+                    style={{
+                      width: "100%",
+                      wordBreak: "break-all",
+                      color: "#3769b9",
+                    }}
+                  >
+                    FormCo2Url
+                  </div>
+                </a>
               </div>
 
               <div style={{ display: "flex", alignItems: "center" }}>
                 <TiPencil />
                 <SmallDownload
+                  onClick={() => {
+                    downloadImage(clientDetails?.formCo2URL, "formCo2URL.png");
+                  }}
                   style={{
                     marginLeft: "14px",
                     marginRight: "14px",
+                    cursor: "pointer",
                   }}
                 />
                 <MDeleteIcon />
@@ -98,7 +119,7 @@ export default function Documents({ clientDetails }) {
               }}
             >
               {" "}
-              Form Co2
+              Form Co7
             </span>
             <div
               style={{
@@ -123,17 +144,34 @@ export default function Documents({ clientDetails }) {
                   }}
                 />
 
-                <div style={{ width: "50%", wordBreak: "break-all" }}>
-                  {clientDetails?.formCo7URL}
-                </div>
+                <a
+                  href={clientDetails?.formCo7URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                >
+                  <div
+                    style={{
+                      width: "100%",
+                      wordBreak: "break-all",
+                      color: "#3769b9",
+                    }}
+                  >
+                    FormCo7Url
+                  </div>
+                </a>
               </div>
 
               <div style={{ display: "flex", alignItems: "center" }}>
                 <TiPencil />
                 <SmallDownload
+                  onClick={() => {
+                    downloadImage(clientDetails?.formCo7URL, "formCo7URL.png");
+                  }}
                   style={{
                     marginLeft: "14px",
                     marginRight: "14px",
+                    cursor: "pointer",
                   }}
                 />
                 <MDeleteIcon />
@@ -183,17 +221,32 @@ export default function Documents({ clientDetails }) {
                   }}
                 />
 
-                <div style={{ width: "50%", wordBreak: "break-all" }}>
-                  {clientDetails?.utilityBill}
-                </div>
+                <a href={clientDetails?.utilityBill} target="_blank">
+                  <div
+                    style={{
+                      width: "100%",
+                      wordBreak: "break-all",
+                      color: "#3769b9",
+                    }}
+                  >
+                    Utility Bill
+                  </div>
+                </a>
               </div>
 
               <div style={{ display: "flex", alignItems: "center" }}>
                 <TiPencil />
                 <SmallDownload
+                  onClick={() => {
+                    downloadImage(
+                      clientDetails?.utilityBill,
+                      "utility-bill.png"
+                    );
+                  }}
                   style={{
                     marginLeft: "14px",
                     marginRight: "14px",
+                    cursor: "pointer",
                   }}
                 />
                 <MDeleteIcon />

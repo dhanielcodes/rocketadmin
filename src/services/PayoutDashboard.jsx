@@ -43,6 +43,14 @@ export const updateClientWallet = async (body) => {
   return data;
 };
 
+export const processWalletLog = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/processwalletfundingrequest`,
+    body
+  );
+  return data;
+};
+
 export const updatePayoutClientWalletProvider = async (body) => {
   const { data } = await Axios.post(`${baseurl}/activatekycprovider/${body}`);
   return data;

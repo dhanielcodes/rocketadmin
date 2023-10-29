@@ -9,8 +9,11 @@ import {
   AiOutlineArrowLeft,
 } from "react-icons/ai";
 import CustomTable from "../reuseables/CustomTable";
-import { useQuery } from "@tanstack/react-query";
-import { getPayoutClientDashboard } from "../services/PayoutDashboard";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  getPayoutClientDashboard,
+  processWalletLog,
+} from "../services/PayoutDashboard";
 
 function ClientWallLog({ data }) {
   const [sortdate, setSortDate] = useState(0);
@@ -23,6 +26,7 @@ function ClientWallLog({ data }) {
     data: clients,
     isLoading,
     isFetching,
+    refetch,
     isError,
   } = useQuery({
     queryKey: ["clients"],
@@ -30,6 +34,22 @@ function ClientWallLog({ data }) {
   });
 
   console.log(clients);
+
+  const { mutate, isLoading: mutateLoading } = useMutation({
+    mutationFn: processWalletLog,
+    onSuccess: (data) => {
+      refetch();
+      setActive("");
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
 
   const columns = [
     {
@@ -42,13 +62,18 @@ function ClientWallLog({ data }) {
       width: 60,
     },
     {
+      title: "TRANSACTION STATUS",
+      dataIndex: "statusNew",
+      width: 160,
+    },
+    {
       title: "CLIENT ID",
       dataIndex: "userId",
       width: 100,
     },
     {
       title: "CLIENT",
-      dataIndex: "",
+      dataIndex: "SenderName",
       width: 130,
     },
     {
@@ -70,11 +95,7 @@ function ClientWallLog({ data }) {
       width: 120,
       //render: () => "Other 2",
     },
-    {
-      title: "TRANSACTION STATUS",
-      dataIndex: "statusNew",
-      width: 160,
-    },
+
     {
       title: "DATE",
       dataIndex: "dateCreated",
@@ -138,7 +159,13 @@ function ClientWallLog({ data }) {
               className="absolute border border-gray-200 rounded-lg text-left left-0 top-[160%] bg-white z-10"
             >
               <div
-                onClick={() => {}}
+                onClick={() => {
+                  mutate({
+                    updatedBy: userDetails?.userId,
+                    objectId: item?.id,
+                    action: 1,
+                  });
+                }}
                 style={{
                   padding: "10px",
                   display: "flex",
@@ -181,7 +208,13 @@ function ClientWallLog({ data }) {
                   cursor: "pointer",
                   color: "#F04438",
                 }}
-                onClick={() => {}}
+                onClick={() => {
+                  mutate({
+                    updatedBy: userDetails?.userId,
+                    objectId: item?.id,
+                    action: 0,
+                  });
+                }}
               >
                 <svg
                   width="16"
@@ -212,13 +245,13 @@ function ClientWallLog({ data }) {
               padding: "8px 16px",
               borderRadius: "10000px",
               background:
-                item?.status === "Successful"
+                item?.status === "Approved"
                   ? "#63ff706c"
                   : item?.status === "Pending"
                   ? "#FEF0C7"
                   : "#ff63634b",
               color:
-                item?.status === "Successful"
+                item?.status === "Approved"
                   ? "green"
                   : item?.status === "Pending"
                   ? "#DC6803"
@@ -249,7 +282,7 @@ function ClientWallLog({ data }) {
 
         <CustomTable
           noData={newData?.length}
-          loading={isLoading || isFetching}
+          loading={isLoading || isFetching || mutateLoading}
           Apidata={newData}
           tableColumns={columns}
         />
