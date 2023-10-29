@@ -58,11 +58,11 @@ const BodyLayout = ({ children, active }) => {
             <Breadcrumb.Item>List</Breadcrumb.Item>
             <Breadcrumb.Item>App</Breadcrumb.Item> */}
           </Breadcrumb>
-          <Content
+          <div
             style={{ overflowY: "scroll", background: "none", width: "100%" }}
           >
             {children}
-          </Content>
+          </div>
           <Footer>Footer</Footer>
         </Layout>
       </Layout>
