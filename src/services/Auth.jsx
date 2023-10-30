@@ -16,13 +16,23 @@ export const createUser = async (body) => {
   return data;
 };
 
-export const countries = async () => {
+export const getCountries = async () => {
   const { data } = await Axios.get(`${baseurl}/getcountries`);
+  return data;
+};
+
+export const getClientChargeTypes = async () => {
+  const { data } = await Axios.get(`${baseurl}/getpayoutchargetypes`);
   return data;
 };
 export const checkEmail = async (body) => {
   const { data } = await Axios.get(`${baseurl}/checkUserExistByEmail`, body);
   console.log("🚀 ~ file: Auth.jsx:37 ~ checkEmail ~ data:", data);
+  return data;
+};
+
+export const uploadFile = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/FileUploadAPI`, body);
   return data;
 };
 export const profession = async () => {

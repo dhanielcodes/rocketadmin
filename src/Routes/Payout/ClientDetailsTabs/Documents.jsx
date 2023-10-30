@@ -1,16 +1,175 @@
-import React from "react";
+import React, { useState } from "react";
 import DownloadIcon from "../../../assets/icons/DownloadIcon";
 import { TiDelete, TiDownload, TiPen, TiPencil } from "react-icons/ti";
 import SmallDownload from "../../../assets/icons/Download";
 import MDeleteIcon from "../../../assets/icons/MDeleteIcon";
+import { isError, useMutation, useQuery } from "@tanstack/react-query";
+import AppModal from "../../../COMPONENTS/AppModal";
+import AppInput from "../../../reuseables/AppInput";
 import { saveAs } from "file-saver";
+import FileUpload from "../../../services/FileUpload";
+import { uploadFile } from "../../../services/Auth";
+import toast from "react-hot-toast";
+import { useSearchParams } from "react-router-dom";
+import { updateFile } from "../../../services/PayoutDashboard";
 
 export default function Documents({ clientDetails }) {
   const downloadImage = (image_url, image) => {
     saveAs(image_url, image); // Put your image URL here.
   };
+
+  const [params] = useSearchParams();
+
+  const [modal, setModal] = useState(false);
+  const [modal2, setModal2] = useState(false);
+
+  const [image, setImage] = useState();
+  const [file, setFile] = useState();
+  const { mutate, isLoading: mutateLoading } = useMutation({
+    mutationFn: updateFile,
+    onSuccess: (data) => {
+      console.log(data);
+      if (data?.status) {
+        toast.success(data?.message);
+        setModal(false);
+      } else {
+        toast.error(data?.message);
+      }
+    },
+    onError: (data) => {
+      //setModal(true);
+      toast.error("Request wasn't created");
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
   return (
     <div>
+      <div
+        style={{
+          opacity: modal ? "1" : "0",
+          pointerEvents: modal ? "all" : "none",
+          transition: "all 0.3s",
+        }}
+      >
+        <AppModal
+          closeModal={() => {
+            setModal(false);
+            setFile();
+            setImage();
+          }}
+          heading="Edit Document"
+        >
+          <div style={{ width: "90%" }}>
+            <FileUpload
+              setValue={setImage}
+              value={image}
+              placeholder="Click to update file"
+            />
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gridGap: "10px",
+              marginTop: "30px",
+            }}
+          >
+            <div></div>
+            <button
+              onClick={() => {
+                setModal(false);
+                setFile();
+                setImage();
+              }}
+              className="cancel"
+            >
+              {" "}
+              <span>Cancel</span>
+            </button>
+            <button
+              onClick={() => {
+                mutate({
+                  objectId: params.get("userId"),
+                  action: 1,
+                  fileName: file,
+                  fileURL: image?.secure_url,
+                });
+              }}
+              className="confirm"
+            >
+              {" "}
+              <span>{mutateLoading ? "sending..." : "Submit"}</span>
+            </button>
+          </div>
+        </AppModal>
+      </div>
+
+      <div
+        style={{
+          opacity: modal2 ? "1" : "0",
+          pointerEvents: modal2 ? "all" : "none",
+          transition: "all 0.3s",
+        }}
+      >
+        <AppModal
+          closeModal={() => {
+            setModal2(false);
+            setFile();
+            setImage();
+          }}
+          heading="Delete Document"
+        >
+          <div style={{ width: "100%", textAlign: "center" }}>
+            <img
+              style={{
+                width: "130px",
+              }}
+              src={image}
+            />
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gridGap: "10px",
+              marginTop: "30px",
+            }}
+          >
+            <div></div>
+            <button
+              onClick={() => {
+                setModal2(false);
+                setFile();
+                setImage();
+              }}
+              className="cancel"
+            >
+              {" "}
+              <span>Cancel</span>
+            </button>
+            <button
+              onClick={() => {
+                mutate({
+                  objectId: params.get("userId"),
+                  action: 0,
+                  fileName: file,
+                  fileURL: image,
+                });
+              }}
+              className="confirm"
+            >
+              {" "}
+              <span>{mutateLoading ? "sending..." : "Submit"}</span>
+            </button>
+          </div>
+        </AppModal>
+      </div>
       <div>
         <div>
           <div
@@ -86,7 +245,17 @@ export default function Documents({ clientDetails }) {
               </div>
 
               <div style={{ display: "flex", alignItems: "center" }}>
-                <TiPencil />
+                <TiPencil
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setModal(true);
+                    setFile("formco2");
+                  }}
+                />
                 <SmallDownload
                   onClick={() => {
                     downloadImage(clientDetails?.formCo2URL, "formCo2URL.png");
@@ -97,7 +266,15 @@ export default function Documents({ clientDetails }) {
                     cursor: "pointer",
                   }}
                 />
-                <MDeleteIcon />
+                <MDeleteIcon
+                  onClick={() => {
+                    setModal2(true);
+                    setImage(clientDetails?.formCo2URL);
+                  }}
+                  style={{
+                    cursor: "pointer",
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -163,7 +340,17 @@ export default function Documents({ clientDetails }) {
               </div>
 
               <div style={{ display: "flex", alignItems: "center" }}>
-                <TiPencil />
+                <TiPencil
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setModal(true);
+                    setFile("formco7");
+                  }}
+                />
                 <SmallDownload
                   onClick={() => {
                     downloadImage(clientDetails?.formCo7URL, "formCo7URL.png");
@@ -174,7 +361,15 @@ export default function Documents({ clientDetails }) {
                     cursor: "pointer",
                   }}
                 />
-                <MDeleteIcon />
+                <MDeleteIcon
+                  onClick={() => {
+                    setModal2(true);
+                    setImage(clientDetails?.formCo7URL);
+                  }}
+                  style={{
+                    cursor: "pointer",
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -235,7 +430,17 @@ export default function Documents({ clientDetails }) {
               </div>
 
               <div style={{ display: "flex", alignItems: "center" }}>
-                <TiPencil />
+                <TiPencil
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setModal(true);
+                    setFile("utilitybill");
+                  }}
+                />
                 <SmallDownload
                   onClick={() => {
                     downloadImage(
@@ -249,7 +454,15 @@ export default function Documents({ clientDetails }) {
                     cursor: "pointer",
                   }}
                 />
-                <MDeleteIcon />
+                <MDeleteIcon
+                  onClick={() => {
+                    setModal2(true);
+                    setImage(clientDetails?.utilityBill);
+                  }}
+                  style={{
+                    cursor: "pointer",
+                  }}
+                />
               </div>
             </div>
           </div>

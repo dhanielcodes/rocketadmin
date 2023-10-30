@@ -5,10 +5,11 @@ import CountryDropdown2 from "../../../reuseables/CountryDropdown2";
 import AppModal from "../../../COMPONENTS/AppModal";
 import AppInput from "../../../reuseables/AppInput";
 import AppSelect from "../../../reuseables/AppSelect";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { addClientCharges } from "../../../services/PayoutDashboard";
 import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
+import { getClientChargeTypes, getCountries } from "../../../services/Auth";
 
 export default function ChargesList({ data }) {
   const columns = [
@@ -130,7 +131,21 @@ export default function ChargesList({ data }) {
     },
   });
 
+  const {
+    data: countries,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useQuery({
+    queryKey: ["countries"],
+    queryFn: () => getCountries(),
+  });
+  const { data: clientCharges } = useQuery({
+    queryKey: ["charges"],
+    queryFn: () => getClientChargeTypes(),
+  });
   console.log(type);
+  console.log(countries?.data);
   return (
     <div>
       <div>
@@ -187,13 +202,29 @@ export default function ChargesList({ data }) {
             <label>Country</label>
             <CountryDropdown2
               defaultValue={"NGN"}
+              option={
+                countries?.data?.map((item) => {
+                  return {
+                    label: item?.name + " - " + item?.currencyCode,
+                    value: item?.name,
+                    ...item,
+                  };
+                }) || []
+              }
               onChange={(e) => {
                 setCurrency(e);
               }}
             />
           </div>
+
           <AppSelect
-            options={[{ name: "hi", value: "hi" }]}
+            options={clientCharges?.data?.map((item) => {
+              return {
+                label: item?.typeName,
+                value: item?.typeName,
+                ...item,
+              };
+            })}
             label="Charge Type"
             onChange={(e) => {
               setType(e);
@@ -283,10 +314,10 @@ export default function ChargesList({ data }) {
                   clientId: params.get("userId"),
                   data: {
                     currency: {
-                      id: currency,
+                      id: currency?.id,
                     },
                     payoutChargeType: {
-                      id: 4,
+                      id: type?.id,
                     },
                     baseValue: base,
                     minimumFixedCapped: min,
@@ -297,7 +328,7 @@ export default function ChargesList({ data }) {
               className="confirm"
             >
               {" "}
-              <span>Create</span>
+              <span>{mutateLoading ? "creating..." : "Create"}</span>
             </button>
           </div>
         </AppModal>

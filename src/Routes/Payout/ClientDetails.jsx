@@ -285,7 +285,7 @@ export default function ClientDetailsPage() {
                 (item) => {
                   return {
                     name: item?.providerName,
-                    value: item?.wallet?.walletId,
+                    value: item?.providerName,
                   };
                 }
               )}
