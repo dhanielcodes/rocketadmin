@@ -245,14 +245,11 @@ export default function NewNavBar() {
                   style={{
                     borderLeft: "1px solid gray",
                     marginLeft: "20px",
-                    height: active || (mainActive === item.name && "auto"),
-                    maxHeight:
-                      active || mainActive !== item.name ? 0 : "1000px",
-                    overflow:
-                      active || mainActive === item.name ? "auto" : "hidden",
+                    height: active === item.name && "auto",
+                    maxHeight: active !== item.name ? 0 : "1000px",
+                    overflow: active === item.name ? "auto" : "hidden",
                     transition: "all 0.4s",
-                    marginBottom:
-                      active || (mainActive === item.name && "14px"),
+                    marginBottom: active === item.name && "14px",
                   }}
                 >
                   {item?.miniLinks?.map((link) => {
@@ -309,17 +306,10 @@ export default function NewNavBar() {
                             style={{
                               marginLeft: "60px",
 
-                              height:
-                                active2 ||
-                                (mainActive2 === link.name && "auto"),
-                              maxHeight:
-                                active2 || mainActive2 !== link.name
-                                  ? 0
-                                  : "1000px",
+                              height: active2 === link.name && "auto",
+                              maxHeight: active2 !== link.name ? 0 : "1000px",
                               overflow:
-                                active2 || mainActive2 === link.name
-                                  ? "auto"
-                                  : "hidden",
+                                active2 === link.name ? "auto" : "hidden",
                               transition: "all 0.4s",
                             }}
                           >
