@@ -19,7 +19,9 @@ export default function AppSelect({
         options={options}
         defaultValue={defaultValue}
         getOptionLabel={(provider) => (
-          <div style={{ fontSize: "16px" }}>{provider.name}</div>
+          <span className="countryName" style={{ fontSize: "16px" }}>
+            {provider.label}
+          </span>
         )}
         styles={{
           option: (styles) => ({

@@ -48,6 +48,11 @@ export const updateClientWallet = async (body) => {
   return data;
 };
 
+export const updateFile = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/updatepayoutclientfile`, body);
+  return data;
+};
+
 export const processWalletLog = async (body) => {
   const { data } = await Axios.post(
     `${baseurl}/processwalletfundingrequest`,

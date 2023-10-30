@@ -16,24 +16,9 @@ const CountryDropdown2 = ({ value, onChange, style, defaultValue, option }) => {
         options={options}
         defaultValue={defaultValue}
         getOptionLabel={(country) => (
-          <div
-            className="dropdown"
-            style={
-              { style } || {
-                display: "inline-flex",
-                gap: "2px",
-                alignItems: "center",
-                borderColor: "#dadada !important",
-                borderRadius: "8px",
-              }
-            }
-          >
-            <CountryFlag className="flag" countryCode={country.value} svg />{" "}
-            &nbsp;
-            <span className="countryName" style={{ fontSize: "10px" }}>
-              {country.label}
-            </span>
-          </div>
+          <span className="countryName" style={{ fontSize: "16px" }}>
+            {country.label}
+          </span>
         )}
         styles={{
           option: (styles) => ({

@@ -41,7 +41,7 @@ const BodyLayout = ({ children, active }) => {
         collapsed={collapsed}
         onCollapse={handleCollapsed}
         collapsible
-        trigger={collapsed ? <IconCaretRight /> : <IconCaretLeft />}
+        //trigger={collapsed ? <IconCaretRight /> : <IconCaretLeft />}
         breakpoint="xl"
         style={{
           width: collapsed ? "0" : "fit-content",
