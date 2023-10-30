@@ -141,8 +141,10 @@ export default function NewNavBar() {
     e.stopPropagation();
     if (payload === active) {
       setActive("");
+      localStorage.setItem("link", "");
     } else {
       setActive(payload);
+      localStorage.setItem("link", active);
     }
   };
   const navigateTo = (e, payload) => {
@@ -160,8 +162,10 @@ export default function NewNavBar() {
     e.stopPropagation();
     if (payload === active2) {
       setActive2("");
+      localStorage.setItem("link", "");
     } else {
       setActive2(payload);
+      localStorage.setItem("link2", active2);
     }
   };
   const navigateTo2 = (e, payload) => {
@@ -177,6 +181,9 @@ export default function NewNavBar() {
 
   console.log(active);
   console.log(active2);
+
+  const mainActive = localStorage.getItem("link");
+  const mainActive2 = localStorage.getItem("link2");
 
   return (
     <div style={{ width: "100%", padding: "10px 20px" }}>
@@ -238,11 +245,14 @@ export default function NewNavBar() {
                   style={{
                     borderLeft: "1px solid gray",
                     marginLeft: "20px",
-                    height: active === item.name && "auto",
-                    maxHeight: active !== item.name ? 0 : "1000px",
-                    overflow: active === item.name ? "auto" : "hidden",
+                    height: active || (mainActive === item.name && "auto"),
+                    maxHeight:
+                      active || mainActive !== item.name ? 0 : "1000px",
+                    overflow:
+                      active || mainActive === item.name ? "auto" : "hidden",
                     transition: "all 0.4s",
-                    marginBottom: active === item.name && "14px",
+                    marginBottom:
+                      active || (mainActive === item.name && "14px"),
                   }}
                 >
                   {item?.miniLinks?.map((link) => {
@@ -299,10 +309,17 @@ export default function NewNavBar() {
                             style={{
                               marginLeft: "60px",
 
-                              height: active2 === link.name && "auto",
-                              maxHeight: active2 !== link.name ? 0 : "1000px",
+                              height:
+                                active2 ||
+                                (mainActive2 === link.name && "auto"),
+                              maxHeight:
+                                active2 || mainActive2 !== link.name
+                                  ? 0
+                                  : "1000px",
                               overflow:
-                                active2 === link.name ? "auto" : "hidden",
+                                active2 || mainActive2 === link.name
+                                  ? "auto"
+                                  : "hidden",
                               transition: "all 0.4s",
                             }}
                           >

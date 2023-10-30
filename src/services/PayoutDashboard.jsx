@@ -71,6 +71,14 @@ export const addClientCharges = async (body) => {
   return data;
 };
 
+export const updateClientCharges = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updatepayoutclientcharges`,
+    body
+  );
+  return data;
+};
+
 export const updatePayoutClientWalletProvider = async (body) => {
   const { data } = await Axios.post(`${baseurl}/activatekycprovider/${body}`);
   return data;

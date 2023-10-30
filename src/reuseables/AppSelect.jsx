@@ -9,6 +9,7 @@ export default function AppSelect({
   options,
   defaultValue,
   optionLabel,
+  disabled,
 }) {
   return (
     <NewSelect className="name">
@@ -18,6 +19,7 @@ export default function AppSelect({
         onChange={onChange}
         options={options}
         defaultValue={defaultValue}
+        isDisabled={disabled}
         getOptionLabel={(provider) => (
           <span className="countryName" style={{ fontSize: "16px" }}>
             {provider.label}

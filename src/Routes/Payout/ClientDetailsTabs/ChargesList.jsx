@@ -6,20 +6,23 @@ import AppModal from "../../../COMPONENTS/AppModal";
 import AppInput from "../../../reuseables/AppInput";
 import AppSelect from "../../../reuseables/AppSelect";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { addClientCharges } from "../../../services/PayoutDashboard";
+import {
+  addClientCharges,
+  updateClientCharges,
+} from "../../../services/PayoutDashboard";
 import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 import { getClientChargeTypes, getCountries } from "../../../services/Auth";
 
-export default function ChargesList({ data }) {
+export default function ChargesList({ data, refetch }) {
   const columns = [
-    /*   {
+    {
       title: "ACTIONS",
       dataIndex: "action",
       fixed: "left",
-     
+
       width: 130,
-    }, */
+    },
     {
       title: "COUNTRY",
       dataIndex: "currency['name']",
@@ -66,9 +69,31 @@ export default function ChargesList({ data }) {
     },
   ];
 
+  const [charge, setCharge] = useState();
+
   const newData = data?.payOutClientCharges?.map((item) => {
     return {
       ...item,
+      action: (
+        <p
+          onClick={() => {
+            console.log(item?.userId);
+            setCharge(item);
+            setCurrency(item?.currency);
+            setType(item?.payoutChargeType);
+            setBase(item?.baseValue);
+            setMax(item?.maximumFixedCapped);
+            setMin(item?.minimumFixedCapped);
+            setModal2(true);
+          }}
+          style={{
+            color: "blue",
+            cursor: "pointer",
+          }}
+        >
+          Edit Charge
+        </p>
+      ),
       statusNew: (
         <>
           {" "}
@@ -100,6 +125,7 @@ export default function ChargesList({ data }) {
   });
 
   const [modal, setModal] = useState(false);
+  const [modal2, setModal2] = useState(false);
 
   const [currency, setCurrency] = useState();
   const [type, setType] = useState();
@@ -110,19 +136,20 @@ export default function ChargesList({ data }) {
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const { mutate, isLoading: mutateLoading } = useMutation({
-    mutationFn: addClientCharges,
+    mutationFn: modal2 ? updateClientCharges : addClientCharges,
     onSuccess: (data) => {
       console.log(data);
       if (data?.status) {
         toast.success(data?.message);
         setModal(false);
+        refetch();
       } else {
         toast.error(data?.message);
       }
     },
     onError: (data) => {
       //setModal(true);
-      toast.error("Funding Request wasn't created");
+      toast.error("Charge Request wasn't created");
 
       setTimeout(() => {
         //  seterr("")
@@ -135,7 +162,6 @@ export default function ChargesList({ data }) {
     data: countries,
     isLoading,
     isFetching,
-    refetch,
   } = useQuery({
     queryKey: ["countries"],
     queryFn: () => getCountries(),
@@ -146,6 +172,8 @@ export default function ChargesList({ data }) {
   });
   console.log(type);
   console.log(countries?.data);
+
+  console.log(charge);
   return (
     <div>
       <div>
@@ -193,8 +221,11 @@ export default function ChargesList({ data }) {
         <AppModal
           closeModal={() => {
             setModal(false);
-            setAmount();
-            setDescription();
+            setBase();
+            setCurrency();
+            setMax();
+            setMin();
+            setType();
           }}
           heading="Add New Charge"
         >
@@ -242,6 +273,10 @@ export default function ChargesList({ data }) {
               type="number"
               onChange={(e) => {
                 setBase(e.target.value);
+                if (type?.label === "Fixed") {
+                  setMin(e.target.value);
+                  setMax(e.target.value);
+                }
               }}
               width="96%"
               name="username"
@@ -257,6 +292,7 @@ export default function ChargesList({ data }) {
           >
             <label>Min. Fixed Capped Amount</label>
             <AppInput
+              disabled={type?.label === "Fixed"}
               placeholder="How much"
               type="number"
               onChange={(e) => {
@@ -265,6 +301,8 @@ export default function ChargesList({ data }) {
               width="96%"
               name="username"
               padding="12px"
+              defaultValue={min}
+              value={min}
             />
           </div>
 
@@ -276,6 +314,7 @@ export default function ChargesList({ data }) {
           >
             <label>Max. Fixed Capped Amount</label>
             <AppInput
+              disabled={type?.label === "Fixed"}
               placeholder="How much"
               type="number"
               onChange={(e) => {
@@ -284,6 +323,8 @@ export default function ChargesList({ data }) {
               width="96%"
               name="username"
               padding="12px"
+              value={max}
+              defaultValue={max}
             />
           </div>
 
@@ -299,8 +340,11 @@ export default function ChargesList({ data }) {
             <button
               onClick={() => {
                 setModal(false);
-                setAmount();
-                setDescription();
+                setBase();
+                setCurrency();
+                setMax();
+                setMin();
+                setType();
               }}
               className="cancel"
             >
@@ -332,6 +376,198 @@ export default function ChargesList({ data }) {
             </button>
           </div>
         </AppModal>
+      </div>
+
+      <div
+        style={{
+          opacity: modal2 ? "1" : "0",
+          pointerEvents: modal2 ? "all" : "none",
+          transition: "all 0.3s",
+        }}
+      >
+        {modal2 && (
+          <AppModal
+            closeModal={() => {
+              setModal2(false);
+              setBase();
+              setCurrency();
+              setMax();
+              setMin();
+              setType();
+            }}
+            heading="Edit Charge"
+          >
+            <div className="name">
+              <label>Country</label>
+              <CountryDropdown2
+                value={{
+                  label:
+                    charge?.currency?.name +
+                    " - " +
+                    charge?.currency?.currencyCode,
+                  value: charge?.currency?.name,
+                  regionId: charge?.currency?.regionId,
+                  subRegionId: charge?.currency?.subRegionId,
+                  telephoneCode: charge?.currency?.telephoneCode,
+                  currencyCode: charge?.currency?.currencyCode,
+                  emoji: charge?.currency?.emoji,
+                  status: charge?.currency?.status,
+                  id: charge?.currency?.id,
+                  longitude: charge?.currency?.longitude,
+                  latitude: charge?.currency?.latitude,
+                }}
+                disabled={true}
+                option={
+                  countries?.data?.map((item) => {
+                    return {
+                      label: item?.name + " - " + item?.currencyCode,
+                      value: item?.name,
+                      ...item,
+                    };
+                  }) || []
+                }
+                onChange={(e) => {
+                  setCurrency(e);
+                }}
+              />
+            </div>
+
+            <AppSelect
+              disabled={true}
+              options={clientCharges?.data?.map((item) => {
+                return {
+                  label: item?.typeName,
+                  value: item?.typeName,
+                  ...item,
+                };
+              })}
+              label="Charge Type"
+              onChange={(e) => {
+                setType(e);
+              }}
+              value={{
+                label: charge?.payoutChargeType?.typeName,
+                value: charge?.payoutChargeType?.typeName,
+                id: charge?.payoutChargeType?.id,
+                typeName: charge?.payoutChargeType?.typeName,
+                createdBy: charge?.payoutChargeType?.createdBy,
+                dateCreated: charge?.payoutChargeType?.dateCreated,
+                lastUpdated: charge?.payoutChargeType?.lastUpdated,
+                defaultType: charge?.payoutChargeType?.defaultType,
+              }}
+            />
+            <div
+              className="name"
+              style={{
+                marginTop: "20px",
+              }}
+            >
+              <label>Base Value</label>
+              <AppInput
+                placeholder="How much"
+                type="number"
+                onChange={(e) => {
+                  setBase(e.target.value);
+                  if (charge?.payoutChargeType?.typeName === "Fixed") {
+                    setMin(e.target.value);
+                    setMax(e.target.value);
+                  }
+                }}
+                width="96%"
+                name="username"
+                padding="12px"
+                defaultValue={charge?.baseValue}
+              />
+            </div>
+
+            <div
+              className="name"
+              style={{
+                marginTop: "20px",
+              }}
+            >
+              <label>Min. Fixed Capped Amount</label>
+              <AppInput
+                disabled={charge?.payoutChargeType?.typeName === "Fixed"}
+                placeholder="How much"
+                type="number"
+                onChange={(e) => {
+                  setMin(e.target.value);
+                }}
+                width="96%"
+                name="username"
+                padding="12px"
+                defaultValue={charge?.minimumFixedCapped}
+                value={min}
+              />
+            </div>
+
+            <div
+              className="name"
+              style={{
+                marginTop: "20px",
+              }}
+            >
+              <label>Max. Fixed Capped Amount</label>
+              <AppInput
+                disabled={charge?.payoutChargeType?.typeName === "Fixed"}
+                placeholder="How much"
+                type="number"
+                onChange={(e) => {
+                  setMax(e.target.value);
+                }}
+                width="96%"
+                name="username"
+                padding="12px"
+                defaultValue={charge?.maximumFixedCapped}
+                value={max}
+              />
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                gridGap: "10px",
+                marginTop: "30px",
+              }}
+            >
+              <div></div>
+              <button
+                onClick={() => {
+                  setModal2(false);
+                  setBase();
+                  setCurrency();
+                  setMax();
+                  setMin();
+                  setType();
+                }}
+                className="cancel"
+              >
+                {" "}
+                <span>Cancel</span>
+              </button>
+              <button
+                onClick={() => {
+                  mutate({
+                    adminId: userDetails?.userId,
+                    clientId: params.get("userId"),
+                    data: {
+                      id: charge?.id,
+                      baseValue: base,
+                      minimumFixedCapped: min,
+                      maximumFixedCapped: max,
+                    },
+                  });
+                }}
+                className="confirm"
+              >
+                {" "}
+                <span>{mutateLoading ? "editing..." : "Edit"}</span>
+              </button>
+            </div>
+          </AppModal>
+        )}
       </div>
     </div>
   );

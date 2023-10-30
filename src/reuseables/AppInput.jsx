@@ -10,6 +10,8 @@ function AppInput({
   type,
   name,
   padding,
+  disabled,
+  defaultValue,
 }) {
   const [ntype, setType] = useState("password");
   return (
@@ -22,6 +24,8 @@ function AppInput({
           value={value}
           onChange={onChange}
           name={name}
+          disabled={disabled}
+          defaultValue={defaultValue}
         />
       </div>
       {/* HELLO */}
