@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 import { updateFile } from "../../../services/PayoutDashboard";
 
-export default function Documents({ clientDetails }) {
+export default function Documents({ clientDetails, refetch }) {
   const downloadImage = (image_url, image) => {
     saveAs(image_url, image); // Put your image URL here.
   };
@@ -25,6 +25,7 @@ export default function Documents({ clientDetails }) {
 
   const [image, setImage] = useState();
   const [file, setFile] = useState();
+  const [type, setType] = useState();
   const { mutate, isLoading: mutateLoading } = useMutation({
     mutationFn: updateFile,
     onSuccess: (data) => {
@@ -32,6 +33,7 @@ export default function Documents({ clientDetails }) {
       if (data?.status) {
         toast.success(data?.message);
         setModal(false);
+        refetch();
       } else {
         toast.error(data?.message);
       }
@@ -122,7 +124,7 @@ export default function Documents({ clientDetails }) {
             setFile();
             setImage();
           }}
-          heading="Delete Document"
+          heading={type === "view" ? "" : "Delete Document"}
         >
           <div style={{ width: "100%", textAlign: "center" }}>
             <img
@@ -133,41 +135,43 @@ export default function Documents({ clientDetails }) {
             />
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr",
-              gridGap: "10px",
-              marginTop: "30px",
-            }}
-          >
-            <div></div>
-            <button
-              onClick={() => {
-                setModal2(false);
-                setFile();
-                setImage();
+          {type !== "view" && (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                gridGap: "10px",
+                marginTop: "30px",
               }}
-              className="cancel"
             >
-              {" "}
-              <span>Cancel</span>
-            </button>
-            <button
-              onClick={() => {
-                mutate({
-                  objectId: params.get("userId"),
-                  action: 0,
-                  fileName: file,
-                  fileURL: image,
-                });
-              }}
-              className="confirm"
-            >
-              {" "}
-              <span>{mutateLoading ? "sending..." : "Submit"}</span>
-            </button>
-          </div>
+              <div></div>
+              <button
+                onClick={() => {
+                  setModal2(false);
+                  setFile();
+                  setImage();
+                }}
+                className="cancel"
+              >
+                {" "}
+                <span>Cancel</span>
+              </button>
+              <button
+                onClick={() => {
+                  mutate({
+                    objectId: params.get("userId"),
+                    action: 0,
+                    fileName: file,
+                    fileURL: image,
+                  });
+                }}
+                className="confirm"
+              >
+                {" "}
+                <span>{mutateLoading ? "sending..." : "Submit"}</span>
+              </button>
+            </div>
+          )}
         </AppModal>
       </div>
       <div>
@@ -226,22 +230,21 @@ export default function Documents({ clientDetails }) {
                   }}
                 />
 
-                <a
-                  href={clientDetails?.formCo2URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  download
+                <div
+                  onClick={() => {
+                    setModal2(true);
+                    setType("view");
+                    setImage(clientDetails?.formCo2URL);
+                  }}
+                  style={{
+                    width: "100%",
+                    wordBreak: "break-all",
+                    color: "#3769b9",
+                    cursor: "pointer",
+                  }}
                 >
-                  <div
-                    style={{
-                      width: "100%",
-                      wordBreak: "break-all",
-                      color: "#3769b9",
-                    }}
-                  >
-                    FormCo2Url
-                  </div>
-                </a>
+                  FormCo2Url
+                </div>
               </div>
 
               <div style={{ display: "flex", alignItems: "center" }}>
@@ -269,6 +272,7 @@ export default function Documents({ clientDetails }) {
                 <MDeleteIcon
                   onClick={() => {
                     setModal2(true);
+                    setType();
                     setImage(clientDetails?.formCo2URL);
                   }}
                   style={{
@@ -321,22 +325,21 @@ export default function Documents({ clientDetails }) {
                   }}
                 />
 
-                <a
-                  href={clientDetails?.formCo7URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  download
+                <div
+                  onClick={() => {
+                    setModal2(true);
+                    setType("view");
+                    setImage(clientDetails?.formCo7URL);
+                  }}
+                  style={{
+                    width: "100%",
+                    wordBreak: "break-all",
+                    color: "#3769b9",
+                    cursor: "pointer",
+                  }}
                 >
-                  <div
-                    style={{
-                      width: "100%",
-                      wordBreak: "break-all",
-                      color: "#3769b9",
-                    }}
-                  >
-                    FormCo7Url
-                  </div>
-                </a>
+                  FormCo7Url
+                </div>
               </div>
 
               <div style={{ display: "flex", alignItems: "center" }}>
@@ -363,6 +366,8 @@ export default function Documents({ clientDetails }) {
                 />
                 <MDeleteIcon
                   onClick={() => {
+                    setType();
+
                     setModal2(true);
                     setImage(clientDetails?.formCo7URL);
                   }}
@@ -416,17 +421,21 @@ export default function Documents({ clientDetails }) {
                   }}
                 />
 
-                <a href={clientDetails?.utilityBill} target="_blank">
-                  <div
-                    style={{
-                      width: "100%",
-                      wordBreak: "break-all",
-                      color: "#3769b9",
-                    }}
-                  >
-                    Utility Bill
-                  </div>
-                </a>
+                <div
+                  onClick={() => {
+                    setModal2(true);
+                    setType("view");
+                    setImage(clientDetails?.utilityBill);
+                  }}
+                  style={{
+                    width: "100%",
+                    wordBreak: "break-all",
+                    color: "#3769b9",
+                    cursor: "pointer",
+                  }}
+                >
+                  Utility Bill
+                </div>
               </div>
 
               <div style={{ display: "flex", alignItems: "center" }}>
@@ -456,6 +465,8 @@ export default function Documents({ clientDetails }) {
                 />
                 <MDeleteIcon
                   onClick={() => {
+                    setType();
+
                     setModal2(true);
                     setImage(clientDetails?.utilityBill);
                   }}

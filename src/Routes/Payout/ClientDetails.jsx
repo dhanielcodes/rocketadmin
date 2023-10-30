@@ -251,13 +251,16 @@ export default function ClientDetailsPage() {
 
               {active === "Profile" && <Details clientDetails={clientUser} />}
               {active === "ID Documents" && (
-                <Documents clientDetails={clientUser} />
+                <Documents clientDetails={clientUser} refetch={refetch} />
               )}
               {active === "Transactions" && (
-                <TransactionsList data={clientUser}></TransactionsList>
+                <TransactionsList
+                  refetch={refetch}
+                  data={clientUser}
+                ></TransactionsList>
               )}
               {active === "Charges" && (
-                <ChargesList data={clientUser}></ChargesList>
+                <ChargesList refetch={refetch} data={clientUser}></ChargesList>
               )}
             </div>
           </Client>
