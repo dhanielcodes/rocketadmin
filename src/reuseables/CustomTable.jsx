@@ -91,6 +91,15 @@ const CustomTable = ({ Apidata, tableColumns, loading, noData }) => {
         onChange={(pagination, changedSorter) => {
           console.log(changedSorter);
         }}
+        pagination={{
+          showTotal: true,
+          total: Apidata?.length,
+          pageSize: 4,
+          pageSizeChangeResetCurrent: true,
+        }}
+        style={{
+          padding: "12px 0",
+        }}
         scroll={{
           x: 1600,
           y: 400,

@@ -84,6 +84,16 @@ function PayoutDashboard() {
 
   console.log(currency, "yuy");
 
+  console.log(
+    payoutDashboard?.data?.transactionVolume?.map((item) => {
+      return {
+        ...item,
+        name: item?.currency,
+      };
+    })[0],
+    "hhhh"
+  );
+
   return (
     <>
       <BodyLayout>
@@ -128,7 +138,7 @@ function PayoutDashboard() {
                           (item) => {
                             return {
                               ...item,
-                              name: item?.currency,
+                              label: item?.currency,
                             };
                           }
                         )[0]
@@ -141,7 +151,7 @@ function PayoutDashboard() {
                           (item) => {
                             return {
                               ...item,
-                              name: item?.currency,
+                              label: item?.currency,
                             };
                           }
                         )[0]
@@ -150,7 +160,7 @@ function PayoutDashboard() {
                         (item) => {
                           return {
                             ...item,
-                            name: item?.currency,
+                            label: item?.currency,
                           };
                         }
                       )}
