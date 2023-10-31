@@ -11,6 +11,7 @@ import UpdateIcon from "../assets/icons/UpdateIcon";
 import TransfersIcon from "../assets/icons/TransfersIcon";
 import ReportIcon from "../assets/icons/ReportIcon";
 import CustomersIcon from "../assets/icons/CustomersIcon";
+import { FiLogOut } from "react-icons/fi";
 
 export default function NewNavBar() {
   const links = [
@@ -365,6 +366,36 @@ export default function NewNavBar() {
           );
         })}
       </div>
+
+      <NavLink
+        onClick={() => {
+          localStorage.clear();
+          window.location = "/";
+        }}
+      >
+        <svg
+          width="26"
+          height="27"
+          viewBox="0 0 26 27"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M13 0.287598C5.82969 0.287598 0 6.11729 0 13.2876C0 20.4579 5.82969 26.2876 13 26.2876C20.1703 26.2876 26 20.4579 26 13.2876C26 6.11729 20.1703 0.287598 13 0.287598Z"
+            fill="#F34235"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M18.5859 14.2271C18.5859 17.3095 16.0773 19.813 13 19.813C9.91758 19.813 7.41406 17.3044 7.41406 14.2271C7.41406 12.3278 8.36367 10.5759 9.9582 9.54502C10.334 9.30127 10.8367 9.40791 11.0805 9.78369C11.3242 10.1595 11.2176 10.6622 10.8418 10.906C9.70938 11.6372 9.03906 12.8813 9.03906 14.2271C9.03906 16.4106 10.8164 18.188 13 18.188C15.1836 18.188 16.9609 16.4106 16.9609 14.2271C16.9609 12.8813 16.2855 11.6372 15.1582 10.906C14.7824 10.6622 14.6758 10.1595 14.9195 9.78369C15.1633 9.40791 15.666 9.30127 16.0418 9.54502C17.6363 10.5759 18.5859 12.3278 18.5859 14.2271ZM12.1875 11.3274V7.57471C12.1875 7.12783 12.5531 6.76221 13 6.76221C13.4469 6.76221 13.8125 7.12783 13.8125 7.57471V11.3274C13.8125 11.7743 13.4469 12.1399 13 12.1399C12.5531 12.1399 12.1875 11.7743 12.1875 11.3274Z"
+            fill="white"
+          />
+        </svg>
+
+        <p>Logout</p>
+      </NavLink>
     </div>
   );
 }
@@ -384,5 +415,19 @@ const NavTab = styled.div`
   span {
     font-size: 15px;
     font-weight: 500;
+  }
+`;
+const NavLink = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  margin-top: 60px;
+  border-radius: 10px;
+  cursor: pointer;
+
+  p {
+    font-size: 16px;
+    margin-left: 10px;
+    color: #000000;
   }
 `;

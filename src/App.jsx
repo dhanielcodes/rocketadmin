@@ -25,7 +25,10 @@ import ClientDetailsPage from "./Routes/Payout/ClientDetails";
 import KYCProvider from "./Routes/Payout/KYCProvider";
 import PayoutProvidersPage from "./Routes/Payout/PayoutProviders";
 import { Toaster } from "react-hot-toast";
+import AppLogout from "./reuseables/Logout";
 function App() {
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
   return (
     <Router>
       <Toaster
@@ -56,22 +59,115 @@ function App() {
         <Route>
           {/* Dashboard Routes */}
           {/* <Route element={<ProtectedRoute />}> */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard-payout" element={<PayoutDashboard />} />
-          <Route path="/kyc-providers" element={<KYCProvider />} />
-          <Route path="/payout-providers" element={<PayoutProvidersPage />} />
-          <Route path="/clients" element={<ClientsPage />} />
-          <Route path="/client-detail" element={<ClientDetailsPage />} />
-          <Route path="/agent" element={<Agent />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/actionrequired" element={<ActionRequired />} />
-          <Route
-            path="/incompleteregistration"
-            element={<IncompleteRegistration />}
-          />
-          <Route path="/sendmoney" element={<SendMoney />} />
-          <Route path="/beneficiary" element={<Beneficiary />} />
-          <Route path="/" element={<Login />} />
+          {userDetails && (
+            <>
+              <Route
+                path="/"
+                element={
+                  <AppLogout>
+                    <Dashboard />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <AppLogout>
+                    <Dashboard />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/dashboard-payout"
+                element={
+                  <AppLogout>
+                    <PayoutDashboard />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/kyc-providers"
+                element={
+                  <AppLogout>
+                    <KYCProvider />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/payout-providers"
+                element={
+                  <AppLogout>
+                    <PayoutProvidersPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/clients"
+                element={
+                  <AppLogout>
+                    <ClientsPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/client-detail"
+                element={
+                  <AppLogout>
+                    <ClientDetailsPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/agent"
+                element={
+                  <AppLogout>
+                    <Agent />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/customers"
+                element={
+                  <AppLogout>
+                    <Customers />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/actionrequired"
+                element={
+                  <AppLogout>
+                    <ActionRequired />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/incompleteregistration"
+                element={
+                  <AppLogout>
+                    <IncompleteRegistration />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/sendmoney"
+                element={
+                  <AppLogout>
+                    <SendMoney />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/beneficiary"
+                element={
+                  <AppLogout>
+                    <Beneficiary />
+                  </AppLogout>
+                }
+              />
+            </>
+          )}
+          {!userDetails && <Route path="/" element={<Login />} />}
 
           {/* </Route> */}
           <Route path="*" element={<h1>Error</h1>} />
