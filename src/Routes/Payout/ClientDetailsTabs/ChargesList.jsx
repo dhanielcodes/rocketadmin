@@ -170,10 +170,8 @@ export default function ChargesList({ data, refetch }) {
     queryKey: ["charges"],
     queryFn: () => getClientChargeTypes(),
   });
-  console.log(type);
   console.log(countries?.data);
 
-  console.log(charge);
   return (
     <div>
       <div>

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from "react";
+import ReactCountryFlag from "react-country-flag";
 import Select from "react-select";
 import countryList from "react-select-country-list";
 import CountryFlag from "react-country-flag";
@@ -24,7 +25,22 @@ const CountryDropdown2 = ({
         defaultValue={defaultValue}
         isDisabled={disabled}
         getOptionLabel={(country) => (
-          <span className="countryName" style={{ fontSize: "16px" }}>
+          <span
+            className="countryName"
+            style={{ fontSize: "16px", display: "flex", alignItems: "center" }}
+            onClick={() => {
+              console.log(country?.currencyCode);
+            }}
+          >
+            <ReactCountryFlag
+              countryCode={country.currencyCode}
+              title={country.currencyCode}
+              style={{
+                marginRight: "10px",
+              }}
+              svg
+            />{" "}
+            &nbsp;
             {country.label}
           </span>
         )}
