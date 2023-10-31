@@ -130,7 +130,8 @@ function Login() {
         return;
       }
       localStorage.setItem("userDetails", JSON.stringify(data?.data));
-      navigate("/dashboard");
+      //navigate("/dashboard");
+      window.location.reload();
     },
     onError: (data) => {
       setModal(true);
