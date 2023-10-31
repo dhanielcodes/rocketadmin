@@ -15,14 +15,19 @@ export default function TransactionsList({ data }) {
       width: 140,
     },
     {
+      title: "TRANSACTION STATUS",
+      dataIndex: "statusNew",
+      width: 200,
+    },
+    {
       title: "DATE",
       dataIndex: "dateCreated",
       width: 160,
     },
     {
       title: "GATEWAY",
-      dataIndex: "payOutProvider['name']",
-      width: 190,
+      dataIndex: "newGateWay",
+      width: 230,
 
       //render: () => "Other",
     },
@@ -58,16 +63,32 @@ export default function TransactionsList({ data }) {
       dataIndex: "transferFee",
       width: 120,
     },
-    {
-      title: "TRANSACTION STATUS",
-      dataIndex: "statusNew",
-      width: 200,
-    },
   ];
 
   const newData = data?.payOutTransactions?.map((item) => {
     return {
       ...item,
+      newGateWay: (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <img
+            style={{
+              width: "30px",
+              height: "30px",
+              borderRadius: "1000px",
+              marginRight: "10px",
+              objectFit: "cover",
+            }}
+            src={item?.payOutProvider["logo"]}
+            alt=""
+          />
+          {item?.payOutProvider["name"]}
+        </div>
+      ),
       statusNew: (
         <>
           {" "}

@@ -94,7 +94,7 @@ const CustomTable = ({ Apidata, tableColumns, loading, noData }) => {
         pagination={{
           showTotal: true,
           total: Apidata?.length,
-          pageSize: 4,
+          pageSize: 10,
           pageSizeChangeResetCurrent: true,
         }}
         style={{
