@@ -26,7 +26,7 @@ export default function ChargesList({ data, refetch }) {
     {
       title: "COUNTRY",
       dataIndex: "currency['name']",
-      width: 140,
+      width: 160,
     },
     {
       title: "CURRENCY",

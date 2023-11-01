@@ -8,15 +8,17 @@ export default function AppModal({
   closeModal,
   maxWidth,
   headingSize,
+  padding,
 }) {
   return (
-    <ModalLayout maxWidth={maxWidth} closeModal={closeModal}>
+    <ModalLayout maxWidth={maxWidth} padding={padding} closeModal={closeModal}>
       <AppModalStyle>
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            marginBottom: "20px",
           }}
         >
           <div className="heading">

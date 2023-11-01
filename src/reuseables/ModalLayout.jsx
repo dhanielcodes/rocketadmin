@@ -1,11 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function ModalLayout({ children, closeModal, maxWidth }) {
+export default function ModalLayout({
+  children,
+  closeModal,
+  maxWidth,
+  padding,
+}) {
   return (
     <ModalLayoutStyle onClick={closeModal}>
       <ModalBody
-        style={{ maxWidth: maxWidth }}
+        style={{ maxWidth: maxWidth, padding: padding }}
         onClick={(e) => {
           e.stopPropagation();
         }}

@@ -7,6 +7,7 @@ export default function MainDetailsBody({ clientUser, profile, mail, phone }) {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "flex-start",
+        width: "100%",
       }}
     >
       <div className="left_body">
