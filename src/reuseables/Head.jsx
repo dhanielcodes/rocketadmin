@@ -1,22 +1,17 @@
-import { Badge, Avatar, Space, Grid } from '@arco-design/web-react';
-import { IconClockCircle } from '@arco-design/web-react/icon';
-import { IconUser,IconNotification } from '@arco-design/web-react/icon';
-import { Breadcrumb } from '@arco-design/web-react';
-import styled from 'styled-components';
+import { Badge, Avatar, Space, Grid } from "@arco-design/web-react";
+import { IconClockCircle } from "@arco-design/web-react/icon";
+import { IconUser, IconNotification } from "@arco-design/web-react/icon";
+import { Breadcrumb } from "@arco-design/web-react";
+import styled from "styled-components";
 const BreadcrumbItem = Breadcrumb.Item;
 
 const App = () => {
   return (
     <Content>
-
-<Breadcrumb>
-        <BreadcrumbItem>Home</BreadcrumbItem>
-        <BreadcrumbItem href='#'>
-          Channel
-        </BreadcrumbItem>
-        <BreadcrumbItem>News</BreadcrumbItem>
+      <Breadcrumb>
+        <Breadcrumb.Item>Transfer Rocket</Breadcrumb.Item>
       </Breadcrumb>
-    {/* <Space size={30} style={{display:'inline-flex',float:'right',paddingRight:'5px'}}>
+      {/* <Space size={30} style={{display:'inline-flex',float:'right',paddingRight:'5px'}}>
       <Badge count={9} >
         <Avatar shape='circle' >
         <span>
@@ -53,7 +48,6 @@ const App = () => {
       </Badge>
        
     </Space> */}
-      
     </Content>
   );
 };
@@ -61,9 +55,6 @@ const App = () => {
 const Content = styled.div`
   display: flex;
   justify-content: space-between;
-
-
-
-`
+`;
 
 export default App;
