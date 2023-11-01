@@ -407,8 +407,8 @@ function PayoutDashboard() {
           )}
 
           {/* Transaction Chart Stamp */}
-          <TransactionList data={transactionsList} />
           <ClientWallLog data={walletLogs} />
+          <TransactionList data={transactionsList} />
           <ClientTable />
         </Content>
       </BodyLayout>
