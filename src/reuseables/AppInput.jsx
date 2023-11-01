@@ -26,6 +26,11 @@ function AppInput({
           name={name}
           disabled={disabled}
           defaultValue={defaultValue}
+          onKeyDown={(evt) => {
+            if (type === "number") {
+              ["e", "E", "+", "-"].includes(evt.key) && evt.preventDefault();
+            }
+          }}
         />
       </div>
       {/* HELLO */}
