@@ -62,7 +62,7 @@ function ClientWallLog({ data }) {
       width: 60,
     },
     {
-      title: "TRANSACTION STATUS",
+      title: "REQUEST STATUS",
       dataIndex: "statusNew",
       width: 160,
     },
