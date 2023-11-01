@@ -36,6 +36,6 @@ const ModalBody = styled.div`
   width: 90%;
   max-width: 450px;
   border-radius: 10px;
-  padding: 20px;
+  padding: 40px;
   margin-bottom: 80px;
 `;

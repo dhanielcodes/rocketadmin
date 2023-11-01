@@ -129,7 +129,7 @@ export default function Documents({ clientDetails, refetch }) {
           <div style={{ width: "100%", textAlign: "center" }}>
             <img
               style={{
-                width: "130px",
+                width: "100%",
               }}
               src={image}
             />
@@ -232,9 +232,13 @@ export default function Documents({ clientDetails, refetch }) {
 
                 <div
                   onClick={() => {
-                    setModal2(true);
-                    setType("view");
-                    setImage(clientDetails?.formCo2URL);
+                    if (clientDetails?.formCo2URL?.includes("https")) {
+                      setModal2(true);
+                      setType("view");
+                      setImage(clientDetails?.formCo2URL);
+                    } else {
+                      toast.error("Invalid file type, please edit this file");
+                    }
                   }}
                   style={{
                     width: "100%",
@@ -327,9 +331,13 @@ export default function Documents({ clientDetails, refetch }) {
 
                 <div
                   onClick={() => {
-                    setModal2(true);
-                    setType("view");
-                    setImage(clientDetails?.formCo7URL);
+                    if (clientDetails?.formCo7URL?.includes("https")) {
+                      setModal2(true);
+                      setType("view");
+                      setImage(clientDetails?.formCo7URL);
+                    } else {
+                      toast.error("Invalid file type, please edit this file");
+                    }
                   }}
                   style={{
                     width: "100%",
@@ -423,9 +431,13 @@ export default function Documents({ clientDetails, refetch }) {
 
                 <div
                   onClick={() => {
-                    setModal2(true);
-                    setType("view");
-                    setImage(clientDetails?.utilityBill);
+                    if (clientDetails?.utilityBill?.includes("https")) {
+                      setModal2(true);
+                      setType("view");
+                      setImage(clientDetails?.utilityBill);
+                    } else {
+                      toast.error("Invalid file type, please edit this file");
+                    }
                   }}
                   style={{
                     width: "100%",

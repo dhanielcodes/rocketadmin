@@ -17,6 +17,7 @@ export default function AppModal({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            marginBottom: "20px",
           }}
         >
           <div className="heading">
