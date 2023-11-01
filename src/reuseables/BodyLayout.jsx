@@ -61,7 +61,7 @@ const BodyLayout = ({ children, active }) => {
             <Breadcrumb.Item>List</Breadcrumb.Item>
             <Breadcrumb.Item>App</Breadcrumb.Item> */}
           </Breadcrumb>
-          <div style={{ background: "none", width: "97%" }}>{children}</div>
+          <div style={{ background: "none", width: "100%" }}>{children}</div>
         </Layout>
       </Layout>
     </Layout>
