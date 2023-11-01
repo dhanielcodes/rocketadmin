@@ -314,6 +314,7 @@ export default function ClientDetailsPage() {
                 options={clientUser?.payOutClientWalletPayOutProviders?.map(
                   (item) => {
                     return {
+                      ...item,
                       name: item?.providerName,
                       value: item?.providerName,
                     };
@@ -387,7 +388,7 @@ export default function ClientDetailsPage() {
                     userId: Number(params.get("userId")),
                     amountRequested: Number(amount),
                     userWallet: {
-                      walletId: gateway?.value,
+                      walletId: gateway?.wallet?.walletId,
                     },
                     comment: description,
                     astUpdatedBy: 0,
