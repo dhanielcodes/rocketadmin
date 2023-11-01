@@ -262,6 +262,10 @@ export default function ClientDetailsPage() {
               {active === "Charges" && (
                 <ChargesList refetch={refetch} data={clientUser}></ChargesList>
               )}
+
+              {active === "Gateways" && (
+                <ChargesList refetch={refetch} data={clientUser}></ChargesList>
+              )}
             </div>
           </Client>
         ))}
@@ -357,8 +361,8 @@ export default function ClientDetailsPage() {
             <button
               onClick={() => {
                 mutateFunding({
-                  userId: params.get("userId"),
-                  amountRequested: amount,
+                  userId: Number(params.get("userId")),
+                  amountRequested: Number(amount),
                   userWallet: {
                     walletId: gateway?.value,
                   },
