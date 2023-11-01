@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DropDown from "../assets/icons/DropDown";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -142,10 +142,12 @@ export default function NewNavBar() {
     e.stopPropagation();
     if (payload === active) {
       setActive("");
-      localStorage.setItem("link", "");
+      localStorage.setItem("link1", "");
+      navigate(window.location.pathname);
     } else {
       setActive(payload);
-      localStorage.setItem("link", active);
+      localStorage.setItem("link1", payload);
+      navigate(window.location.pathname);
     }
   };
   const navigateTo = (e, payload) => {
@@ -163,10 +165,12 @@ export default function NewNavBar() {
     e.stopPropagation();
     if (payload === active2) {
       setActive2("");
-      localStorage.setItem("link", "");
+      localStorage.setItem("link2", "");
+      navigate(window.location.pathname);
     } else {
       setActive2(payload);
-      localStorage.setItem("link2", active2);
+      localStorage.setItem("link2", payload);
+      navigate(window.location.pathname);
     }
   };
   const navigateTo2 = (e, payload) => {
@@ -180,11 +184,12 @@ export default function NewNavBar() {
     }
   };
 
-  console.log(active);
-  console.log(active2);
-
-  const mainActive = localStorage.getItem("link");
-  const mainActive2 = localStorage.getItem("link2");
+  useEffect(() => {
+    setActive(localStorage.getItem("link1"));
+    setActive2(localStorage.getItem("link2"));
+    console.log(active, active2);
+    //eslint-disable-next-line
+  }, [active, active2, window.location.pathname]);
 
   return (
     <div style={{ width: "100%", padding: "10px 20px" }}>
