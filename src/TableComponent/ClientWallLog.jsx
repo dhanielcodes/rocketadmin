@@ -105,7 +105,7 @@ function ClientWallLog({ data }) {
 
   const [active, setActive] = useState();
 
-  const newData = clients?.data?.walletFundindRequests?.map((item) => {
+  const newData = clients?.data?.walletFundindRequests?.map((item, index) => {
     return {
       ...item,
       action: (
@@ -151,7 +151,8 @@ function ClientWallLog({ data }) {
                 borderRadius: "10px",
                 textAlign: "left",
                 left: "20px",
-                bottom: "0",
+                bottom: index !== 0 && "0",
+                top: index === 0 && "0",
                 background: "#fff",
                 zIndex: "10000",
                 width: "160px",
