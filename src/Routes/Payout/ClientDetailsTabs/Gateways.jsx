@@ -19,17 +19,17 @@ export default function Gateways({ data }) {
     {
       title: "COUNTRY",
       dataIndex: "wallet['country']['name']",
-      width: 70,
+      width: 40,
     },
     {
       title: "STATUS",
       dataIndex: "statusNew",
-      width: 70,
+      width: 40,
     },
     {
       title: "PROVIDER",
       dataIndex: "providerName",
-      width: 70,
+      width: 40,
     },
     {
       title: "CURRENCY",
