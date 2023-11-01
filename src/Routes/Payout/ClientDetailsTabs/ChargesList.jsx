@@ -13,6 +13,7 @@ import {
 import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 import { getClientChargeTypes, getCountries } from "../../../services/Auth";
+import { kFormatter4 } from "../../../utils/format";
 
 export default function ChargesList({ data, refetch }) {
   const columns = [
@@ -43,19 +44,20 @@ export default function ChargesList({ data, refetch }) {
     {
       title: "AMOUNT",
       dataIndex: "baseValue",
-      //render: () => "Other 1",
+      render: (item) => kFormatter4(item),
       width: 220,
     },
     {
       title: "MIN FIXED CAPPED AMT",
       dataIndex: "minimumFixedCapped",
       width: 220,
-      //render: () => "Other 2",
+      render: (item) => kFormatter4(item),
     },
     {
       title: "MAX FIXED CAPPED AMT",
       dataIndex: "maximumFixedCapped",
       width: 220,
+      render: (item) => kFormatter4(item),
     },
     {
       title: "DATE ADDED",
