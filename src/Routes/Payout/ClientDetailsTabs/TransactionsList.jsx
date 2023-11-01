@@ -1,5 +1,6 @@
 import React from "react";
 import CustomTable from "../../../reuseables/CustomTable";
+import { kFormatter4 } from "../../../utils/format";
 
 export default function TransactionsList({ data }) {
   const columns = [
@@ -57,6 +58,7 @@ export default function TransactionsList({ data }) {
       title: "AMOUNT",
       dataIndex: "Amount",
       width: 120,
+      render: (item) => kFormatter4(item),
     },
     {
       title: "TRANSFER FEE",

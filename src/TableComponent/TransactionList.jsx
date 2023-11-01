@@ -11,6 +11,7 @@ import {
 import CustomTable from "../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { getPayoutClientDashboard } from "../services/PayoutDashboard";
+import { kFormatter4 } from "../utils/format";
 
 function TransactionList({ data }) {
   const [sortdate, setSortDate] = useState(0);
@@ -99,6 +100,7 @@ function TransactionList({ data }) {
       title: "AMOUNT",
       dataIndex: "Amount",
       width: 120,
+      render: (item) => kFormatter4(item),
     },
     {
       title: "TRANSFER FEE",

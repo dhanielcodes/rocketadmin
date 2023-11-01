@@ -14,6 +14,7 @@ import {
   getPayoutClientDashboard,
   processWalletLog,
 } from "../services/PayoutDashboard";
+import { kFormatter4 } from "../utils/format";
 
 function ClientWallLog({ data }) {
   const [sortdate, setSortDate] = useState(0);
@@ -93,7 +94,7 @@ function ClientWallLog({ data }) {
       title: "AMOUNT",
       dataIndex: "amountApproved",
       width: 120,
-      //render: () => "Other 2",
+      render: (item) => kFormatter4(item),
     },
 
     {

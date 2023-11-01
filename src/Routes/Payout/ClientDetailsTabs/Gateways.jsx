@@ -13,6 +13,7 @@ import {
 import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 import { getClientChargeTypes, getCountries } from "../../../services/Auth";
+import { kFormatter4 } from "../../../utils/format";
 
 export default function Gateways({ data }) {
   const columns = [
@@ -41,6 +42,7 @@ export default function Gateways({ data }) {
       title: "BALANCE",
       dataIndex: "wallet['balance']",
       width: 40,
+      render: (item) => kFormatter4(item),
     },
 
     {

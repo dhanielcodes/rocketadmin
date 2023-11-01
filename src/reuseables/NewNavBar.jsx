@@ -319,7 +319,6 @@ export default function NewNavBar() {
                                 <>
                                   <NavTab
                                     onClick={(e) => {
-                                      navigateTo(e, innerLink);
                                       navigateTo2(e, innerLink);
                                     }}
                                     $active={innerLink.path}
