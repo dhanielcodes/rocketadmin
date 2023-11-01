@@ -24,6 +24,7 @@ import Msg from "../reuseables/Msg";
 import { BASE_URL } from "../../config/config";
 import AppInput from "../reuseables/AppInput";
 import lock from "../assets/images/padlock.jpeg";
+import toast from "react-hot-toast";
 
 // Inside your component
 
