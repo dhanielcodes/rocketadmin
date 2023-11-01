@@ -388,6 +388,7 @@ const Client = styled.div`
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 10px;
+    width: 103%;
 
     .back_buttton {
       display: flex;

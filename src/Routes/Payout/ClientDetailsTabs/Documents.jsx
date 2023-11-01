@@ -119,6 +119,7 @@ export default function Documents({ clientDetails, refetch }) {
         }}
       >
         <AppModal
+          padding="40px"
           closeModal={() => {
             setModal2(false);
             setFile();

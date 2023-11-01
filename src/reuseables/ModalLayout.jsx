@@ -1,11 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function ModalLayout({ children, closeModal, maxWidth }) {
+export default function ModalLayout({
+  children,
+  closeModal,
+  maxWidth,
+  padding,
+}) {
   return (
     <ModalLayoutStyle onClick={closeModal}>
       <ModalBody
-        style={{ maxWidth: maxWidth }}
+        style={{ maxWidth: maxWidth, padding: padding }}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -36,6 +41,6 @@ const ModalBody = styled.div`
   width: 90%;
   max-width: 450px;
   border-radius: 10px;
-  padding: 40px;
+  padding: 20px;
   margin-bottom: 80px;
 `;
