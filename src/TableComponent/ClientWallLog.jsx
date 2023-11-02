@@ -279,7 +279,7 @@ function ClientWallLog({ data }) {
     >
       <div className="tablecontent">
         <div className="content">
-          <div className="heading">Client Wallet Log </div>
+          <div className="heading">Client Fund Request Log </div>
         </div>
 
         <CustomTable
