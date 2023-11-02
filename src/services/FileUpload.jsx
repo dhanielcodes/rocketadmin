@@ -13,9 +13,13 @@ export default function FileUpload({
   const { mutate, isLoading } = useMutation({
     mutationFn: uploadFile,
     onSuccess: (data) => {
-      console.log(data);
-      toast.success("Image Uploaded");
-      setValue(data);
+      if (data?.status === false) {
+        toast.error(data?.message);
+      } else {
+        console.log(data);
+        toast.success("Image Uploaded");
+        setValue(data);
+      }
     },
     onError: (data) => {
       //setModal(true);
@@ -106,6 +110,7 @@ export default function FileUpload({
               mutate(formData);
             }}
             placeholder="placeholder"
+            accept=".jpeg, .png, jpg"
           />
         </label>
       ) : (

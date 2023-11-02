@@ -188,7 +188,13 @@ export default function Documents({ clientDetails, refetch }) {
           <div>View, edit and update your company ID</div>
         </div>
 
-        <div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            gridGap: "20px",
+          }}
+        >
           <div
             style={{
               display: "flex",
@@ -197,23 +203,15 @@ export default function Documents({ clientDetails, refetch }) {
               paddingTop: "20px",
               marginTop: "20px",
               paddingBottom: "20px",
+              width: "100%",
             }}
           >
-            <span
-              style={{
-                width: "40%",
-                fontSize: "16px",
-              }}
-            >
-              {" "}
-              Form Co2
-            </span>
             <div
               style={{
                 padding: "14px",
                 border: "1px dashed #c1c1c1",
                 borderRadius: "10px",
-                width: "50%",
+                width: "100%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
@@ -296,23 +294,15 @@ export default function Documents({ clientDetails, refetch }) {
               paddingTop: "20px",
               marginTop: "20px",
               paddingBottom: "20px",
+              width: "100%",
             }}
           >
-            <span
-              style={{
-                width: "40%",
-                fontSize: "16px",
-              }}
-            >
-              {" "}
-              Form Co7
-            </span>
             <div
               style={{
                 padding: "14px",
                 border: "1px dashed #c1c1c1",
                 borderRadius: "10px",
-                width: "50%",
+                width: "100%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
@@ -396,23 +386,15 @@ export default function Documents({ clientDetails, refetch }) {
               paddingTop: "20px",
               marginTop: "20px",
               paddingBottom: "20px",
+              width: "100%",
             }}
           >
-            <span
-              style={{
-                width: "40%",
-                fontSize: "16px",
-              }}
-            >
-              {" "}
-              Utility Bill
-            </span>
             <div
               style={{
                 padding: "14px",
                 border: "1px dashed #c1c1c1",
                 borderRadius: "10px",
-                width: "50%",
+                width: "100%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
