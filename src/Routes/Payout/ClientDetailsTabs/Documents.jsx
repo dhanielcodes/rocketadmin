@@ -23,6 +23,8 @@ export default function Documents({ clientDetails, refetch }) {
   const [modal, setModal] = useState(false);
   const [modal2, setModal2] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   const [image, setImage] = useState();
   const [file, setFile] = useState();
   const [type, setType] = useState();
@@ -70,6 +72,7 @@ export default function Documents({ clientDetails, refetch }) {
               setValue={setImage}
               value={image}
               placeholder="Click to update file"
+              setLoading={setLoading}
             />
           </div>
 
@@ -94,6 +97,7 @@ export default function Documents({ clientDetails, refetch }) {
               <span>Cancel</span>
             </button>
             <button
+              disabled={mutateLoading || loading}
               onClick={() => {
                 mutate({
                   objectId: params.get("userId"),
@@ -105,7 +109,7 @@ export default function Documents({ clientDetails, refetch }) {
               className="confirm"
             >
               {" "}
-              <span>{mutateLoading ? "sending..." : "Submit"}</span>
+              <span>{mutateLoading || loading ? "sending..." : "Submit"}</span>
             </button>
           </div>
         </AppModal>
@@ -158,6 +162,7 @@ export default function Documents({ clientDetails, refetch }) {
                 <span>Cancel</span>
               </button>
               <button
+                disabled={loading || mutateLoading}
                 onClick={() => {
                   mutate({
                     objectId: params.get("userId"),
@@ -169,7 +174,9 @@ export default function Documents({ clientDetails, refetch }) {
                 className="confirm"
               >
                 {" "}
-                <span>{mutateLoading ? "sending..." : "Submit"}</span>
+                <span>
+                  {mutateLoading || loading ? "sending..." : "Submit"}
+                </span>
               </button>
             </div>
           )}

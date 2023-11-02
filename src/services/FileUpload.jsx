@@ -9,10 +9,12 @@ export default function FileUpload({
   setValue,
   className,
   placeholder = "Click to upload",
+  setLoading,
 }) {
   const { mutate, isLoading } = useMutation({
     mutationFn: uploadFile,
     onSuccess: (data) => {
+      setLoading(false);
       if (data?.status === false) {
         toast.error(data?.message);
       } else {
@@ -24,7 +26,7 @@ export default function FileUpload({
     onError: (data) => {
       //setModal(true);
       toast.error("Request wasn't created");
-
+      setLoading(false);
       setTimeout(() => {
         //  seterr("")
       }, 2000);
@@ -107,6 +109,7 @@ export default function FileUpload({
             onChange={(e) => {
               const formData = new FormData();
               formData.append("file", e.target.files[0]);
+              setLoading(true);
               mutate(formData);
             }}
             placeholder="placeholder"
