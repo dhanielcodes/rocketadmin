@@ -70,12 +70,12 @@ function ClientTable() {
       title: "ADDRESS",
       dataIndex: "address",
       //render: () => "Other 1",
-      width: 420,
+      width: 220,
     },
     {
       title: "EMAIL",
       dataIndex: "email",
-      width: 320,
+      width: 220,
       //render: () => "Other 2",
     },
     {

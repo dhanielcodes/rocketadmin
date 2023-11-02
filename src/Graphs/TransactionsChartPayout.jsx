@@ -9,6 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { kFormatter4 } from "../utils/format";
 
 function TransactionsChartPayout({ apiData }) {
   const data = [
@@ -49,6 +50,36 @@ function TransactionsChartPayout({ apiData }) {
       uv: apiData?.failedValue,
     },
   ];
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    return (
+      <div
+        style={{ background: "#e7e7e7", borderRadius: "10px", padding: "10px" }}
+        className="custom-tooltip"
+      >
+        <h2 className="label">{`${label}`}</h2>
+        <p>
+          Success:{" "}
+          <span style={{ color: payload[0]?.stroke }}>
+            {kFormatter4(payload[0]?.value)}
+          </span>
+        </p>
+        <p>
+          Pending:{" "}
+          <span style={{ color: payload[1]?.stroke }}>
+            {kFormatter4(payload[1]?.value)}
+          </span>
+        </p>
+
+        <p>
+          Failed:{" "}
+          <span style={{ color: payload[1]?.stroke }}>
+            {kFormatter4(payload[1]?.value)}
+          </span>
+        </p>
+      </div>
+    );
+  };
 
   return (
     <ResponsiveContainer width="100%" aspect={1.8}>
@@ -91,6 +122,7 @@ function TransactionsChartPayout({ apiData }) {
           }}
         />
         {/* <Tooltip /> */}
+        <Tooltip content={<CustomTooltip />} />
         {/* <Legend /> */}
         <Bar
           dataKey="pv"
