@@ -32,7 +32,10 @@ export const checkEmail = async (body) => {
 };
 
 export const uploadFile = async (body) => {
-  const { data } = await Axios.post(`${baseurl}/FileUploadAPI`, body);
+  const { data } = await Axios.post(
+    `${baseurl}/FileUploadAPI/${body.id}`,
+    body.file
+  );
   return data;
 };
 export const profession = async () => {

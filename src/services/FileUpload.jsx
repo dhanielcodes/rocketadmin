@@ -3,6 +3,7 @@ import React from "react";
 import { uploadFile } from "./Auth";
 import toast from "react-hot-toast";
 import MDeleteIcon from "../assets/icons/MDeleteIcon";
+import { useSearchParams } from "react-router-dom";
 
 export default function FileUpload({
   value,
@@ -11,6 +12,10 @@ export default function FileUpload({
   placeholder = "Click to upload",
   setLoading,
 }) {
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [params] = useSearchParams();
+  const userId = params.get("userId");
+
   const { mutate, isLoading } = useMutation({
     mutationFn: uploadFile,
     onSuccess: (data) => {
@@ -33,6 +38,7 @@ export default function FileUpload({
       return;
     },
   });
+
   return (
     <div
       style={{
@@ -110,7 +116,7 @@ export default function FileUpload({
               const formData = new FormData();
               formData.append("file", e.target.files[0]);
               setLoading(true);
-              mutate(formData);
+              mutate({ file: formData, id: userId });
             }}
             placeholder="placeholder"
             accept=".jpeg, .png, jpg"
