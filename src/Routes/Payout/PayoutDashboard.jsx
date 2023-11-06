@@ -203,7 +203,7 @@ function PayoutDashboard() {
                         {kFormatter4(
                           cardDetails?.successful +
                             cardDetails?.pendingAmount +
-                            cardDetails?.failedAmount
+                            cardDetails?.failedAmount || 0
                         )}
                       </div>
                     </div>
@@ -233,7 +233,7 @@ function PayoutDashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter4(cardDetails?.successful)}
+                        {kFormatter4(cardDetails?.successful || 0)}
                       </div>
                     </div>
                     <div
@@ -262,7 +262,7 @@ function PayoutDashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter4(cardDetails?.pendingAmount)}
+                        {kFormatter4(cardDetails?.pendingAmount || 0)}
                       </div>
                     </div>
                     <div
@@ -290,7 +290,7 @@ function PayoutDashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter4(cardDetails?.failedAmount)}
+                        {kFormatter4(cardDetails?.failedAmount || 0)}
                       </div>
                     </div>
                   </div>

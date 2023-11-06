@@ -23,21 +23,21 @@ function PayoutChart({ apiData }) {
         <h2 className="label">{`${label}`}</h2>
         <p>
           Success:{" "}
-          <span style={{ color: payload[0]?.stroke }}>
-            {kFormatter4(payload[0]?.value)}
+          <span style={{ color: payload?.[0]?.stroke }}>
+            {kFormatter4(payload?.[0]?.value)}
           </span>
         </p>
         <p>
           Pending:{" "}
-          <span style={{ color: payload[1]?.stroke }}>
-            {kFormatter4(payload[1]?.value)}
+          <span style={{ color: payload?.[1]?.stroke }}>
+            {kFormatter4(payload?.[1]?.value)}
           </span>
         </p>
 
         <p>
           Failed:{" "}
-          <span style={{ color: payload[1]?.stroke }}>
-            {kFormatter4(payload[1]?.value)}
+          <span style={{ color: payload?.[1]?.stroke }}>
+            {kFormatter4(payload?.[1]?.value)}
           </span>
         </p>
       </div>
