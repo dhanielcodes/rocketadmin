@@ -1,4 +1,5 @@
 import React from "react";
+import logo from "../../images/logo.svg";
 
 export default function MainDetailsBody({ clientUser, profile, mail, phone }) {
   return (
@@ -36,12 +37,33 @@ export default function MainDetailsBody({ clientUser, profile, mail, phone }) {
                 marginRight: "2%",
               }}
             >
-              <img
+              {/* <img
                 className="w-full- h-full"
                 style={{ width: "100%", height: "100%" }}
-                src={profile}
+                src="https://img.icons8.com/user"
                 alt=""
-              />
+              /> */}
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  background: "#e1e1e14f",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <img
+                  src={logo}
+                  style={{
+                    width: "50%",
+                    height: "50%",
+                    opacity: 0.3,
+                    mixBlendMode: "hard-light",
+                  }}
+                  alt=""
+                />
+              </div>
             </div>
             <div>
               <div
