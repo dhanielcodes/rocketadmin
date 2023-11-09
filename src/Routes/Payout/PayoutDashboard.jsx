@@ -73,7 +73,7 @@ function PayoutDashboard() {
       };
     })[0];
   const transactions =
-    payoutDashboard?.data?.analyticByTransactionStatus?.October;
+    payoutDashboard?.data?.analyticByTransactionStatus;
 
   const providers = payoutDashboard?.data?.analyticByProvider;
 
