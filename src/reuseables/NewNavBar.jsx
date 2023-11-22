@@ -111,7 +111,7 @@ export default function NewNavBar() {
     },
     {
       name: "Updates and Rates",
-      path: "/update",
+      path: "/update-rates",
       icon: UpdateIcon,
     },
     {

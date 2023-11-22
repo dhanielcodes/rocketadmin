@@ -26,6 +26,7 @@ import KYCProvider from "./Routes/Payout/KYCProvider";
 import PayoutProvidersPage from "./Routes/Payout/PayoutProviders";
 import { Toaster } from "react-hot-toast";
 import AppLogout from "./reuseables/Logout";
+import UpdateRatesPage from "./Routes/UpdateRates";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -130,6 +131,14 @@ function App() {
                 element={
                   <AppLogout>
                     <Customers />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/update-rates"
+                element={
+                  <AppLogout>
+                    <UpdateRatesPage />
                   </AppLogout>
                 }
               />

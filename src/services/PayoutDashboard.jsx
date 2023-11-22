@@ -17,6 +17,28 @@ export const getPayoutClientDashboard = async (userId = 0) => {
   return data;
 };
 
+export const getRatesList = async (userId = 0) => {
+  const { data } = await Axios.get(`${baseurl}/getallrates`);
+  return data;
+};
+
+export const getOurRates = async (userId = 0) => {
+  const { data } = await Axios.get(`${baseurl}/getratelogs`);
+  return data;
+};
+
+export const getAgentRates = async (userId = 0) => {
+  const { data } = await Axios.get(
+    `${baseurl}/agentgetrate?agentId=0&rateId=0`
+  );
+  return data;
+};
+
+export const updateRate = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/updaterate`, body);
+  return data;
+};
+
 export const getKYCProviders = async (userId = 0) => {
   const { data } = await Axios.get(`${baseurl}/getkycprovider`);
   return data;

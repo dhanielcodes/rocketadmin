@@ -59,6 +59,13 @@ function AppInput({
 export default AppInput;
 const Content = styled.div`
   position: relative;
+  width: 100%;
+
+  .top {
+    width: 100%;
+    padding: 0;
+  }
+
   .top input {
     padding: 12px;
     width: 100%;
@@ -66,6 +73,7 @@ const Content = styled.div`
     border: 1px solid gainsboro;
     font-size: 14px;
     font-weight: 500;
+    margin-top: 10px;
   }
   .top ::placeholder {
     font-size: 14px;

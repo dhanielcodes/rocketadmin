@@ -33,10 +33,11 @@ const CountryDropdown2 = ({
             }}
           >
             <ReactCountryFlag
-              countryCode={country.currencyCode}
+              countryCode={country.currencyCode?.slice(0, 2)}
               title={country.currencyCode}
               style={{
                 marginRight: "10px",
+                borderRadius: "10000000px",
               }}
               svg
             />{" "}
