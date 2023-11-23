@@ -54,6 +54,13 @@ export const Payoutchannel = async () => {
   return data;
 };
 
+export const getRoleMeta = async () => {
+  const { data } = await Axios.get(
+    `${baseurl}/getuseraccountcategory?role=0&rateMetaDataId=0`
+  );
+  return data;
+};
+
 export const GetDetails = async (id) => {
   console.log(
     "🚀 ~ file: Dashboard.jsx:57 ~ GetDetails ~ id:",

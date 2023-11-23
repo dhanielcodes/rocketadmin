@@ -1,29 +1,32 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { updateRate } from "../services/PayoutDashboard";
+import { createRate } from "../services/PayoutDashboard";
 import AppModal from "../COMPONENTS/AppModal";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
 import { getCountries } from "../services/Auth";
 import AppInput from "../reuseables/AppInput";
 import ReactCountryFlag from "react-country-flag";
 import styled from "styled-components";
+import AppSelect from "../reuseables/AppSelect";
+import { getRoleMeta } from "../services/Dashboard";
 
-export default function UpdateRatesModal({ rateItem, modal, setModal }) {
+export default function CreateRateModal({ rateItem, modal, setModal }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   const [rate, setRate] = useState();
+  const [rateMeta, setRateMeta] = useState();
   const [send, setSend] = useState();
   const [receive, setReceive] = useState();
 
   console.log(rateItem);
 
   const { mutate, isLoading: mutateLoading } = useMutation({
-    mutationFn: updateRate,
+    mutationFn: createRate,
     onSuccess: (data) => {
       console.log(data);
       if (data?.status) {
-        toast.success("Rate Updated Successfully");
+        toast.success("Rate Created Successfully");
         setModal(false);
         //refetch();
       } else {
@@ -50,7 +53,12 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
     queryFn: () => getCountries(),
   });
 
-  console.log(countries?.data);
+  const { data: rateMetas } = useQuery({
+    queryKey: ["getRoleMeta"],
+    queryFn: () => getRoleMeta(),
+  });
+
+  console.log(rateMetas?.data);
   return (
     <div
       style={{
@@ -64,20 +72,34 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
           closeModal={() => {
             setModal(false);
           }}
-          heading="Update Rate"
+          heading="Create Rate"
         >
+          <div
+            className="name"
+            style={{
+              marginBottom: "20px",
+            }}
+          >
+            <label>Rate Metadata</label>
+            <AppSelect
+              options={rateMetas?.data?.map((item) => {
+                return {
+                  ...item,
+                  label: item?.name,
+                  value: item?.name,
+                };
+              })}
+              label="Charge Type"
+              onChange={(e) => {
+                setRateMeta(e);
+              }}
+            />
+          </div>
+
           <div className="name">
             <label>Sending Country</label>
             <CountryDropdown2
-              disabled={true}
-              value={{
-                ...rateItem,
-                label:
-                  rateItem?.fromCountryCurrency?.name +
-                  " - " +
-                  rateItem?.fromCountryCurrency?.currencyCode,
-                value: rateItem?.fromCountryCurrency?.name,
-              }}
+              value={send}
               option={
                 countries?.data?.map((item) => {
                   return {
@@ -100,15 +122,7 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
           >
             <label>Receiving Country</label>
             <CountryDropdown2
-              disabled={true}
-              value={{
-                label:
-                  rateItem?.toCountryCurrency?.name +
-                  " - " +
-                  rateItem?.toCountryCurrency?.currencyCode,
-                value: rateItem?.toCountryCurrency?.name,
-                ...rateItem,
-              }}
+              value={receive}
               option={
                 countries?.data?.map((item) => {
                   return {
@@ -139,7 +153,6 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              defaultValue={rateItem?.conversionRate}
               //defaultValue={charge?.baseValue}
             />
           </div>
@@ -148,10 +161,7 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
             <div className="rates">
               <div className="pri">
                 <ReactCountryFlag
-                  countryCode={rateItem?.fromCountryCurrency?.currencyCode.slice(
-                    0,
-                    2
-                  )}
+                  countryCode={send?.currencyCode.slice(0, 2)}
                   style={{
                     width: "40px",
                     height: "40px",
@@ -164,10 +174,7 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
               <div style={{ color: "#000" }}>=</div>
               <div className="sec">
                 <ReactCountryFlag
-                  countryCode={rateItem?.toCountryCurrency?.currencyCode.slice(
-                    0,
-                    2
-                  )}
+                  countryCode={receive?.currencyCode.slice(0, 2)}
                   svg
                 />
               </div>
@@ -195,24 +202,29 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
             <button
               onClick={() => {
                 mutate({
-                  id: rateItem?.id,
+                  currencyRateMetaData: {
+                    id: rateMeta?.id,
+                    role: {
+                      id: rateMeta?.role?.id,
+                    },
+                  },
                   updatedBy: {
                     userId: userDetails?.userId,
                     firstName: "Admin",
                   },
                   conversionRate: rate,
                   fromCountryCurrency: {
-                    id: rateItem?.fromCountryCurrency?.id,
+                    id: send?.id,
                   },
                   toCountryCurrency: {
-                    id: rateItem?.toCountryCurrency?.id,
+                    id: receive?.id,
                   },
                 });
               }}
               className="confirm"
             >
               {" "}
-              <span>{mutateLoading ? "editing..." : "Edit"}</span>
+              <span>{mutateLoading ? "creating..." : "Create"}</span>
             </button>
           </div>
         </AppModal>

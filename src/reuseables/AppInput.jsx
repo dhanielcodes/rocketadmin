@@ -62,7 +62,6 @@ const Content = styled.div`
   width: 100%;
 
   .top {
-    width: 100%;
     padding: 0;
   }
 
@@ -73,7 +72,6 @@ const Content = styled.div`
     border: 1px solid gainsboro;
     font-size: 14px;
     font-weight: 500;
-    margin-top: 10px;
   }
   .top ::placeholder {
     font-size: 14px;

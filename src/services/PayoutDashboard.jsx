@@ -39,6 +39,11 @@ export const updateRate = async (body) => {
   return data;
 };
 
+export const createRate = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/addnewrate`, body);
+  return data;
+};
+
 export const getKYCProviders = async (userId = 0) => {
   const { data } = await Axios.get(`${baseurl}/getkycprovider`);
   return data;
