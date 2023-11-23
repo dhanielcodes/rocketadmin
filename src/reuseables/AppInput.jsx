@@ -59,6 +59,12 @@ function AppInput({
 export default AppInput;
 const Content = styled.div`
   position: relative;
+  width: 100%;
+
+  .top {
+    padding: 0;
+  }
+
   .top input {
     padding: 12px;
     width: 100%;
