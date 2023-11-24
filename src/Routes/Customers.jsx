@@ -1,14 +1,86 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import BodyLayout from "../reuseables/BodyLayout";
 import { styled } from "styled-components";
-import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
-import SearchInput from "../reuseables/SearchInput";
+//import SearchInput from "../reuseables/SearchInput";
 import CustomerFilter from "../COMPONENTS/CustomerFilter";
+import CustomTable from "../reuseables/CustomTable";
+import { kFormatter } from "../utils/format";
+import { getUsers } from "../services/Dashboard";
+import { useQuery } from "@tanstack/react-query";
 
 function Customers() {
   const [filter, setFilter] = useState(false);
   const AppData = JSON.parse(localStorage?.getItem("AppData"));
   console.log(AppData);
+
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
+  console.log(userDetails);
+
+  const {
+    data: customers,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ["getUsers"],
+    queryFn: () => getUsers(),
+  });
+
+  console.log(customers);
+
+  const columns = [
+    {
+      title: "ACTIONS",
+      dataIndex: "action",
+      fixed: "left",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "SENDING CURRENCY",
+      dataIndex: "sending",
+      width: 190,
+    },
+    {
+      title: "RECEIVING COUNTRY",
+      dataIndex: "receiving",
+      width: 190,
+    },
+    {
+      title: "CURRENCY CODE",
+      dataIndex: "currencyCode",
+      width: 160,
+    },
+    {
+      title: "CATEGORY",
+      dataIndex: "currencyRateMetaData['name']",
+      width: 190,
+
+      //render: () => "Other",
+    },
+    {
+      title: "RATE",
+      dataIndex: "conversionRate",
+      render: (ire) => kFormatter(ire),
+      width: 120,
+    },
+    {
+      title: "ENTRY DATE",
+      dataIndex: "dateCreated",
+      width: 220,
+      //render: () => "Other 2",
+    },
+  ];
+  const newData = customers?.data?.map((item) => {
+    return {
+      ...item,
+    };
+  });
+
+  console.log(newData);
 
   return (
     <>
@@ -20,7 +92,7 @@ function Customers() {
               <p>Customers</p>
               <span>This page allows you to manage customers</span>
             </div>
-            <div className="btn">
+            {/* <div className="btn">
               <button
                 style={{
                   backgroundColor: "white",
@@ -66,7 +138,6 @@ function Customers() {
                   color: "white",
                 }}
               >
-                {/* <AiOutlinePlus size={18} style={{ color: "white" }} /> */}
                 <svg
                   width="16"
                   height="16"
@@ -83,11 +154,11 @@ function Customers() {
                 </svg>
                 New Customers
               </button>
-            </div>
+            </div> */}
           </div>
 
           <div className="main">
-            <div className="head">
+            {/*  <div className="head">
               <SearchInput placeholder="Search" style={{ width: "30vw" }} />
               <button onClick={() => setFilter(true)}>
                 <svg
@@ -118,59 +189,43 @@ function Customers() {
                 </svg>
                 Filter
               </button>
-            </div>
+            </div> */}
 
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>DATE CREATED</th>
-                  <th>S/N </th>
-                  <th>COUNTRY </th>
-                  <th>EMAIL </th>
-                  <th>COMPLIANCE</th>
-                  <th>NAME</th>
-                  <th>ADDRESS</th>
-                  <th>EMAIL ID</th>
-                  <th>MOBILE NO</th>
-                </tr>
-              </thead>
-              <tbody>
-                {AppData?.data?.users.map((a) => {
-                  return (
-                    <tr className="tabledata">
-                      <td >{a?.dateCreated}</td>
-                      <td>{a?.agentId}</td>
-                      <td>{a?.country?.name}</td>
-                      <td>{a?.email}</td>
-                      <td>{a?.email}</td>
-                      <td>{a?.firstName}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            <div className="row">
-              <span>Showing 1-5 of entries</span>
-              <div className="pagins">
-                <p>Rows per page:</p>
-                <select>
-                  <option>5</option>
-                </select>
-                <div className="arrow">
-                  <button
-                    onClick={() => {
-                      // setSortDate(sortdate - 1);
-                      // setEnd((prev) => prev - end);
-                    }}
-                  >
-                    <AiOutlineLeft />
-                  </button>
-                  <button>0</button>
-                  <button>
-                    <AiOutlineRight />
-                  </button>
-                </div>
-              </div>
+            <div className="tablecontent">
+              {/*   <div className="top">
+          <SearchInput placeholder="Search Records" className="SearchRecords" />
+        </div> */}
+
+              <CustomTable
+                noData={customers?.data?.length}
+                loading={isLoading || isFetching}
+                Apidata={newData}
+                tableColumns={columns}
+              />
+
+              {/* <div className="row">
+          <span>Showing 1-5 of entries</span>
+          <div className="pagins">
+            <p>Rows per page:</p>
+            <select>
+              <option>5</option>
+            </select>
+            <div className="arrow">
+              <button
+                onClick={() => {
+                  // setSortDate(sortdate - 1);
+                  // setEnd((prev) => prev - end);
+                }}
+              >
+                <AiOutlineLeft />
+              </button>
+              <button>{sortdate}</button>
+              <button>
+                <AiOutlineRight />
+              </button>
+            </div>
+          </div>
+        </div> */}
             </div>
           </div>
         </Content>
@@ -274,8 +329,8 @@ const Content = styled.div`
     align-items: center;
     gap: 10px;
   }
-  .tabledata{
-    td{
+  .tabledata {
+    td {
       font-size: small;
       font-weight: 400;
     }
