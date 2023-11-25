@@ -7,6 +7,7 @@ import CustomTable from "../reuseables/CustomTable";
 import { kFormatter } from "../utils/format";
 import { getUsers } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 
 function Customers() {
   const [filter, setFilter] = useState(false);
@@ -30,46 +31,52 @@ function Customers() {
 
   const columns = [
     {
-      title: "ACTIONS",
+      title: "CUSTOMER REF",
+      dataIndex: "userId",
+      width: 190,
+    },
+    {
+      title: "ID VERIFICATION",
+      dataIndex: "idNumber",
+      width: 190,
+    },
+    {
+      title: "EMAIL",
+      dataIndex: "email",
+      width: 260,
+    },
+
+    {
+      title: "NAME",
       dataIndex: "action",
-      fixed: "left",
       /*   sorter: {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
       }, */
-      width: 130,
+      width: 200,
     },
     {
-      title: "SENDING CURRENCY",
-      dataIndex: "sending",
-      width: 190,
+      title: "ADDRESS",
+      dataIndex: "address",
+      width: 280,
     },
+
     {
-      title: "RECEIVING COUNTRY",
-      dataIndex: "receiving",
-      width: 190,
-    },
-    {
-      title: "CURRENCY CODE",
-      dataIndex: "currencyCode",
+      title: "MOBILE NO",
+      dataIndex: "phone",
       width: 160,
     },
     {
-      title: "CATEGORY",
-      dataIndex: "currencyRateMetaData['name']",
+      title: "DATE CREATED",
+      dataIndex: "dateCreated",
       width: 190,
 
       //render: () => "Other",
     },
+
     {
-      title: "RATE",
-      dataIndex: "conversionRate",
-      render: (ire) => kFormatter(ire),
-      width: 120,
-    },
-    {
-      title: "ENTRY DATE",
-      dataIndex: "dateCreated",
+      title: "EMAIL VERIFIED",
+      dataIndex: "status",
       width: 220,
       //render: () => "Other 2",
     },
@@ -77,6 +84,57 @@ function Customers() {
   const newData = customers?.data?.map((item) => {
     return {
       ...item,
+      action: (
+        <div
+          style={{
+            textDecoration: "none",
+          }}
+          to={`/client-detail?userId=${item?.userId}`}
+        >
+          <p
+            onClick={() => {
+              console.log(item?.userId);
+            }}
+            style={{
+              color: "blue",
+              cursor: "pointer",
+            }}
+          >
+            {item?.firstName}
+          </p>
+        </div>
+      ),
+      idNumber: (
+        <div
+          style={{
+            padding: "8px 16px",
+            borderRadius: "10000px",
+            background: item?.isKYCCompleted ? "#63ff706c" : "#ff63634b",
+            color: item?.isKYCCompleted ? "green" : "red",
+            width: "fit-content",
+            fontWeight: "700",
+          }}
+        >
+          {item?.isKYCCompleted ? "Verified" : "Not Verified"}
+        </div>
+      ),
+      status: (
+        <>
+          {" "}
+          <div
+            style={{
+              padding: "8px 16px",
+              borderRadius: "10000px",
+              background: item?.status ? "#63ff706c" : "#ff63634b",
+              color: item?.status ? "green" : "red",
+              width: "fit-content",
+              fontWeight: "700",
+            }}
+          >
+            {item?.status ? "True" : "False"}
+          </div>
+        </>
+      ),
     };
   });
 
@@ -92,7 +150,8 @@ function Customers() {
               <p>Customers</p>
               <span>This page allows you to manage customers</span>
             </div>
-            {/* <div className="btn">
+            <div className="btn">
+              {/*
               <button
                 style={{
                   backgroundColor: "white",
@@ -154,7 +213,8 @@ function Customers() {
                 </svg>
                 New Customers
               </button>
-            </div> */}
+             */}
+            </div>
           </div>
 
           <div className="main">

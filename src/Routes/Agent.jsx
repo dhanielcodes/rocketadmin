@@ -6,6 +6,7 @@ import InviteAgent from "../COMPONENTS/InviteAgent";
 import { getAgents } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import CustomTable from "../reuseables/CustomTable";
+import { Link } from "react-router-dom";
 
 // hhhhhhh
 function Agent() {
@@ -38,63 +39,42 @@ function Agent() {
       width: 190,
     },
     {
-      title: "COMPLIANCE",
-      dataIndex: "sending",
-      width: 190,
+      title: "EMAIL",
+      dataIndex: "email",
+      width: 220,
     },
 
     {
       title: "NAME",
       dataIndex: "action",
-      fixed: "left",
       /*   sorter: {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
       }, */
-      width: 130,
+      width: 200,
     },
     {
       title: "ADDRESS",
-      dataIndex: "sending",
+      dataIndex: "address",
       width: 190,
     },
-    {
-      title: "EMAIL ID",
-      dataIndex: "receiving",
-      width: 190,
-    },
+
     {
       title: "MOBILE NO",
-      dataIndex: "currencyCode",
+      dataIndex: "phone",
       width: 160,
     },
     {
-      title: "DATE",
-      dataIndex: "currencyRateMetaData['name']",
+      title: "DATE CREATED",
+      dataIndex: "dateCreated",
       width: 190,
 
       //render: () => "Other",
     },
+
     {
-      title: "BRANCH",
-      dataIndex: "conversionRate",
-      width: 120,
-    },
-    {
-      title: "STATUS",
-      dataIndex: "dateCreated",
-      width: 220,
-      //render: () => "Other 2",
-    },
-    {
-      title: "USERS",
-      dataIndex: "dateCreated",
-      width: 220,
-      //render: () => "Other 2",
-    },
-    {
-      title: "ACTIONS",
-      dataIndex: "dateCreated",
+      title: "EMAIL VERIFIED",
+      dataIndex: "status",
       width: 220,
       //render: () => "Other 2",
     },
@@ -102,6 +82,26 @@ function Agent() {
   const newData = agents?.data?.map((item) => {
     return {
       ...item,
+      action: (
+        <div
+          style={{
+            textDecoration: "none",
+          }}
+          to={`/client-detail?userId=${item?.userId}`}
+        >
+          <p
+            onClick={() => {
+              console.log(item?.userId);
+            }}
+            style={{
+              color: "blue",
+              cursor: "pointer",
+            }}
+          >
+            {item?.firstName}
+          </p>
+        </div>
+      ),
       idNumber: (
         <div
           style={{
@@ -115,6 +115,23 @@ function Agent() {
         >
           {item?.isKYCCompleted ? "Verified" : "Not Verified"}
         </div>
+      ),
+      status: (
+        <>
+          {" "}
+          <div
+            style={{
+              padding: "8px 16px",
+              borderRadius: "10000px",
+              background: item?.isEmailVerified ? "#63ff706c" : "#ff63634b",
+              color: item?.isEmailVerified ? "green" : "red",
+              width: "fit-content",
+              fontWeight: "700",
+            }}
+          >
+            {item?.isEmailVerified ? "True" : "False"}
+          </div>
+        </>
       ),
     };
   });

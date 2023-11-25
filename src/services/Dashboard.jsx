@@ -40,19 +40,11 @@ export const Tranx = async (userId) => {
   return data;
 };
 export const getUsers = async (id = 5) => {
-  console.log(
-    "🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:",
-    userId?.queryKey[0]
-  );
-  const { data } = await Axios.get(`${baseurl}/getuserbyrole/5`);
+  const { data } = await Axios.get(`${baseurl}/getuserbyrole/6`);
   return data;
 };
 export const getAgents = async (id = 5) => {
-  console.log(
-    "🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:",
-    userId?.queryKey[0]
-  );
-  const { data } = await Axios.get(`${baseurl}/getuserbyrole/6`);
+  const { data } = await Axios.get(`${baseurl}/getuserbyrole/${id}`);
   return data;
 };
 export const TransferPurpose = async () => {
