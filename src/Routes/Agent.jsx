@@ -1,36 +1,142 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import BodyLayout from "../reuseables/BodyLayout";
 import { styled } from "styled-components";
-import {
-  AiOutlineDown,
-  AiOutlinePlus,
-  AiOutlineRight,
-  AiOutlineLeft,
-} from "react-icons/ai";
-import { TiArrowUnsorted } from "react-icons/ti";
-import { FiDownloadCloud } from "react-icons/fi";
-import { GoFilter } from "react-icons/go";
-import SearchInput from "../reuseables/SearchInput";
+//import SearchInput from "../reuseables/SearchInput";
 import InviteAgent from "../COMPONENTS/InviteAgent";
-import { sendAgentInvite } from "../services/Dashboard";
-import { useMutation } from "@tanstack/react-query";
+import { getAgents } from "../services/Dashboard";
+import { useQuery } from "@tanstack/react-query";
+import CustomTable from "../reuseables/CustomTable";
+import { Link } from "react-router-dom";
 
 // hhhhhhh
 function Agent() {
   const [inviteAgent, setInviteAgent] = useState(false);
 
-  const { mutate, isLoading, isError } = useMutation({
-    mutationFn: sendAgentInvite,
-    onSuccess: (data) => {},
-    onError: (data) => {
-      setModal(true);
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
-      setTimeout(() => {
-        //  seterr("")
-      }, 2000);
-      return;
-    },
+  console.log(userDetails);
+
+  const {
+    data: agents,
+    isLoading: mutateLoading,
+    isFetching: mutateFetching,
+  } = useQuery({
+    queryKey: ["getAgents"],
+    queryFn: () => getAgents(),
   });
+
+  console.log(agents);
+
+  const columns = [
+    {
+      title: "CUSTOMER REF",
+      dataIndex: "userId",
+      width: 190,
+    },
+    {
+      title: "ID VERIFICATION",
+      dataIndex: "idNumber",
+      width: 190,
+    },
+    {
+      title: "EMAIL",
+      dataIndex: "email",
+      width: 220,
+    },
+
+    {
+      title: "NAME",
+      dataIndex: "action",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 200,
+    },
+    {
+      title: "ADDRESS",
+      dataIndex: "address",
+      width: 190,
+    },
+
+    {
+      title: "MOBILE NO",
+      dataIndex: "phone",
+      width: 160,
+    },
+    {
+      title: "DATE CREATED",
+      dataIndex: "dateCreated",
+      width: 190,
+
+      //render: () => "Other",
+    },
+
+    {
+      title: "EMAIL VERIFIED",
+      dataIndex: "status",
+      width: 220,
+      //render: () => "Other 2",
+    },
+  ];
+  const newData = agents?.data?.map((item) => {
+    return {
+      ...item,
+      action: (
+        <div
+          style={{
+            textDecoration: "none",
+          }}
+          to={`/client-detail?userId=${item?.userId}`}
+        >
+          <p
+            onClick={() => {
+              console.log(item?.userId);
+            }}
+            style={{
+              color: "blue",
+              cursor: "pointer",
+            }}
+          >
+            {item?.firstName}
+          </p>
+        </div>
+      ),
+      idNumber: (
+        <div
+          style={{
+            padding: "8px 16px",
+            borderRadius: "10000px",
+            background: item?.isKYCCompleted ? "#63ff706c" : "#ff63634b",
+            color: item?.isKYCCompleted ? "green" : "red",
+            width: "fit-content",
+            fontWeight: "700",
+          }}
+        >
+          {item?.isKYCCompleted ? "Verified" : "Not Verified"}
+        </div>
+      ),
+      status: (
+        <>
+          {" "}
+          <div
+            style={{
+              padding: "8px 16px",
+              borderRadius: "10000px",
+              background: item?.isEmailVerified ? "#63ff706c" : "#ff63634b",
+              color: item?.isEmailVerified ? "green" : "red",
+              width: "fit-content",
+              fontWeight: "700",
+            }}
+          >
+            {item?.isEmailVerified ? "True" : "False"}
+          </div>
+        </>
+      ),
+    };
+  });
+
+  console.log(newData);
 
   return (
     <>
@@ -43,7 +149,7 @@ function Agent() {
               <span>This page allows you to manage agents</span>
             </div>
             <div className="btn">
-              <button
+              {/*   <button
                 style={{
                   backgroundColor: "white",
                   color: "#464F60",
@@ -81,7 +187,7 @@ function Agent() {
                     stroke-linejoin="round"
                   />
                 </svg>
-              </button>
+              </button> */}
               <button
                 style={{
                   backgroundColor: "#00A85A",
@@ -100,8 +206,8 @@ function Agent() {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M7.99999 2C8.4142 2 8.74999 2.33579 8.74999 2.75V7.25H13.25C13.6642 7.25 14 7.58579 14 8C14 8.41422 13.6642 8.75 13.25 8.75H8.74999V13.25C8.74999 13.6642 8.4142 14 7.99999 14C7.58578 14 7.24999 13.6642 7.24999 13.25V8.75H2.75C2.33579 8.75 2 8.41422 2 8C2 7.58579 2.33579 7.25 2.75 7.25H7.24999V2.75C7.24999 2.33579 7.58578 2 7.99999 2Z"
                     fill="white"
                   />
@@ -112,8 +218,9 @@ function Agent() {
           </div>
           <div className="main">
             <div className="head">
-              <SearchInput placeholder="Search" style={{ width: "30vw" }} />
-              <button>
+              {/*               <SearchInput placeholder="Search" style={{ width: "30vw" }} />
+               */}{" "}
+              {/*  <button>
                 <svg
                   width="20"
                   height="20"
@@ -141,45 +248,15 @@ function Agent() {
                   />
                 </svg>
                 Filter
-              </button>
+              </button> */}
             </div>
 
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>CUSTOMER REF </th>
-                  <th>ID VERIFICATION </th>
-                  <th>COMPLIANCE</th>
-                  <th>NAME</th>
-                  <th>ADDRESS</th>
-                  <th>EMAIL ID</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-            <div className="row">
-              <span>Showing 1-5 of entries</span>
-              <div className="pagins">
-                <p>Rows per page:</p>
-                <select>
-                  <option>5</option>
-                </select>
-                <div className="arrow">
-                  <button
-                    onClick={() => {
-                      // setSortDate(sortdate - 1);
-                      // setEnd((prev) => prev - end);
-                    }}
-                  >
-                    <AiOutlineLeft />
-                  </button>
-                  <button>0</button>
-                  <button>
-                    <AiOutlineRight />
-                  </button>
-                </div>
-              </div>
-            </div>
+            <CustomTable
+              noData={agents?.data?.length}
+              loading={mutateLoading || mutateFetching}
+              Apidata={newData}
+              tableColumns={columns}
+            />
           </div>
         </Content>
       </BodyLayout>

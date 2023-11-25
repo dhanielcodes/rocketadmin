@@ -28,6 +28,10 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
       if (data?.status) {
         toast.success("Rate Created Successfully");
         setModal(false);
+        setRateMeta();
+        setRate();
+        setSend();
+        setReceive();
         //refetch();
       } else {
         toast.error(data?.message);
@@ -71,6 +75,10 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
         <AppModal
           closeModal={() => {
             setModal(false);
+            setRateMeta();
+            setRate();
+            setSend();
+            setReceive();
           }}
           heading="Create Rate"
         >

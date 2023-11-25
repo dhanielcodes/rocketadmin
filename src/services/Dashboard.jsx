@@ -39,6 +39,14 @@ export const Tranx = async (userId) => {
   );
   return data;
 };
+export const getUsers = async (id = 5) => {
+  const { data } = await Axios.get(`${baseurl}/getuserbyrole/6`);
+  return data;
+};
+export const getAgents = async (id = 5) => {
+  const { data } = await Axios.get(`${baseurl}/getuserbyrole/${id}`);
+  return data;
+};
 export const TransferPurpose = async () => {
   const { data } = await Axios.get(`${baseurl}/gettransferpurpose`);
   return data;

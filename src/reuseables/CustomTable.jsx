@@ -102,7 +102,7 @@ const CustomTable = ({ Apidata, tableColumns, loading, noData }) => {
         }}
         scroll={{
           x: 1600,
-          y: 400,
+          y: 800,
         }}
       />
     </Content>
