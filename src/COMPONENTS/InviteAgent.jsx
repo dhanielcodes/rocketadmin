@@ -6,6 +6,7 @@ import AppButton from "../reuseables/AppButton";
 import { AiOutlineDown } from "react-icons/ai";
 import { useMutation } from "@tanstack/react-query";
 import { sendAgentInvite } from "../services/Dashboard";
+import toast from "react-hot-toast";
 function InviteAgent({ closeinviteAgent }) {
   const [firstName, setFirstname] = useState();
   const [surName, setSurname] = useState();
@@ -37,15 +38,23 @@ function InviteAgent({ closeinviteAgent }) {
   };
 
   async function AgentInvitationHandler() {
-    mutate(sendInvite);
+    if (sendInvite?.firstName && sendInvite?.email) {
+      mutate(sendInvite);
+    } else {
+      toast.error("Fill all fields");
+    }
   }
 
   const { mutate, isLoading, isError } = useMutation({
     mutationFn: sendAgentInvite,
     onSuccess: (data) => {
       console.log(data);
+      toast.success(data?.message);
+      closeinviteAgent(false);
     },
-    onError: (data) => {},
+    onError: (data) => {
+      toast.error(data?.message);
+    },
   });
 
   return (
@@ -84,7 +93,8 @@ function InviteAgent({ closeinviteAgent }) {
             onClick={() => closeinviteAgent(false)}
           />
           <AppButton
-            placeholder="Invite Agent"
+            placeholder={isLoading ? "Sending Invite..." : "Invite Agent"}
+            disabled={isLoading}
             style={{
               backgroundColor: "#00A85A",
               color: "white",
