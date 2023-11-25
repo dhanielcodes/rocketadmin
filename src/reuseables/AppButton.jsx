@@ -1,11 +1,13 @@
 import React from "react";
 import { styled } from "styled-components";
 
-function AppButton({ placeholder, onClick, style }) {
+function AppButton({ placeholder, onClick, style, disabled }) {
   return (
     <Content>
       <div className="btn" onClick={onClick}>
-        <button style={style}>{placeholder}</button>
+        <button disabled={disabled} style={style}>
+          {placeholder}
+        </button>
       </div>
     </Content>
   );
