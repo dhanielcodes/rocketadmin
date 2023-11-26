@@ -44,6 +44,14 @@ export const createRate = async (body) => {
   return data;
 };
 
+export const createRateMetadata = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/addnewcurrencyratemetadata`,
+    body
+  );
+  return data;
+};
+
 export const getKYCProviders = async (userId = 0) => {
   const { data } = await Axios.get(`${baseurl}/getkycprovider`);
   return data;

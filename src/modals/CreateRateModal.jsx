@@ -59,7 +59,7 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
 
   const { data: rateMetas } = useQuery({
     queryKey: ["getRoleMeta"],
-    queryFn: () => getRoleMeta(),
+    queryFn: () => getRoleMeta("basic"),
   });
 
   console.log(rateMetas?.data);
@@ -88,7 +88,6 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
               marginBottom: "20px",
             }}
           >
-            <label>Rate Metadata</label>
             <AppSelect
               options={rateMetas?.data?.map((item) => {
                 return {
@@ -97,7 +96,7 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
                   value: item?.name,
                 };
               })}
-              label="Charge Type"
+              label="Rate Metadata"
               onChange={(e) => {
                 setRateMeta(e);
               }}

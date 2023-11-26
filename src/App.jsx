@@ -27,6 +27,10 @@ import PayoutProvidersPage from "./Routes/Payout/PayoutProviders";
 import { Toaster } from "react-hot-toast";
 import AppLogout from "./reuseables/Logout";
 import UpdateRatesPage from "./Routes/UpdateRates";
+import CustomerDetailsPage from "./Routes/CustometsDetails/CustomerDetails";
+import PayoutProcessors from "./Routes/PayoutProcessors";
+import PaymentProcessors from "./Routes/PaymentProcessors";
+import RateMetadata from "./Routes/RateMetadata";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -135,10 +139,44 @@ function App() {
                 }
               />
               <Route
+                path="/customers-details"
+                element={
+                  <AppLogout>
+                    <CustomerDetailsPage />
+                  </AppLogout>
+                }
+              />
+
+              <Route
+                path="/payout-processors"
+                element={
+                  <AppLogout>
+                    <PayoutProcessors />
+                  </AppLogout>
+                }
+              />
+
+              <Route
+                path="/payment-processors"
+                element={
+                  <AppLogout>
+                    <PaymentProcessors />
+                  </AppLogout>
+                }
+              />
+              <Route
                 path="/update-rates"
                 element={
                   <AppLogout>
                     <UpdateRatesPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/rate-metadata"
+                element={
+                  <AppLogout>
+                    <RateMetadata />
                   </AppLogout>
                 }
               />

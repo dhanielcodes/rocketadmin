@@ -2,53 +2,52 @@ import { useState } from "react";
 import BodyLayout from "../reuseables/BodyLayout";
 import { styled } from "styled-components";
 //import SearchInput from "../reuseables/SearchInput";
-import CustomerFilter from "../COMPONENTS/CustomerFilter";
-import CustomTable from "../reuseables/CustomTable";
-import { kFormatter } from "../utils/format";
-import { getUsers } from "../services/Dashboard";
+import InviteAgent from "../COMPONENTS/InviteAgent";
+import {
+  getAgents,
+  getPaymentProcessors,
+  getPayoutProcessors,
+} from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
+import CustomTable from "../reuseables/CustomTable";
 import { Link } from "react-router-dom";
+import ReactCountryFlag from "react-country-flag";
 
-function Customers() {
-  const [filter, setFilter] = useState(false);
-  const AppData = JSON.parse(localStorage?.getItem("AppData"));
-  console.log(AppData);
+// hhhhhhh
+function PaymentProcessors() {
+  const [inviteAgent, setInviteAgent] = useState(false);
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
 
   const {
-    data: customers,
-    isLoading,
-    isFetching,
+    data: payouts,
+    isLoading: mutateLoading,
+    isFetching: mutateFetching,
   } = useQuery({
-    queryKey: ["getUsers"],
-    queryFn: () => getUsers(),
+    queryKey: ["getPaymentProcessors"],
+    queryFn: () => getPaymentProcessors(),
   });
 
-  console.log(customers);
+  console.log(payouts);
 
   const columns = [
     {
-      title: "CUSTOMER REF",
-      dataIndex: "userId",
+      title: "CHANNEL ID",
+      dataIndex: "id",
       width: 190,
-    },
-    {
-      title: "ID VERIFICATION",
-      dataIndex: "idNumber",
-      width: 190,
-    },
-    {
-      title: "EMAIL",
-      dataIndex: "email",
-      width: 260,
     },
 
     {
-      title: "NAME",
-      dataIndex: "action",
+      title: "COUNTRY",
+      dataIndex: "sending",
+      width: 220,
+    },
+
+    {
+      title: "PAYOUT CHANNEL",
+      dataIndex: "payoutChannel['name']",
       /*   sorter: {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
@@ -56,40 +55,72 @@ function Customers() {
       width: 200,
     },
     {
-      title: "ADDRESS",
-      dataIndex: "address",
-      width: 280,
+      title: "PAYOUT PROCESSOR",
+      dataIndex: "newGateWay",
+      width: 240,
     },
 
     {
-      title: "MOBILE NO",
-      dataIndex: "phone",
-      width: 160,
-    },
-    {
-      title: "DATE CREATED",
-      dataIndex: "dateCreated",
-      width: 190,
-
-      //render: () => "Other",
+      title: "PAYOUT DESCRIPTION",
+      dataIndex: "payoutProvider['description']",
+      width: 260,
     },
 
     {
-      title: "EMAIL VERIFIED",
+      title: "STATUS",
       dataIndex: "status",
       width: 220,
       //render: () => "Other 2",
     },
   ];
-  const newData = customers?.data?.map((item) => {
+  const newData = payouts?.data?.map((item) => {
     return {
       ...item,
+      newGateWay: (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <img
+            style={{
+              width: "30px",
+              height: "30px",
+              borderRadius: "1000px",
+              marginRight: "10px",
+              objectFit: "cover",
+            }}
+            src={item?.payoutProvider["logo"]}
+            alt=""
+          />
+          {item?.payoutProvider["name"]}
+        </div>
+      ),
+      sending: (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <ReactCountryFlag
+            style={{
+              borderRadius: "10000000px",
+              marginRight: "10px",
+            }}
+            countryCode={item?.country?.currencyCode?.slice(0, 2)}
+            svg
+          />
+          {item?.country["name"]}
+        </div>
+      ),
       action: (
-        <Link
+        <div
           style={{
             textDecoration: "none",
           }}
-          to={`/customers-details?userId=${JSON.stringify(item)}`}
+          to={`/client-detail?userId=${item?.userId}`}
         >
           <p
             onClick={() => {
@@ -102,22 +133,9 @@ function Customers() {
           >
             {item?.firstName}
           </p>
-        </Link>
-      ),
-      idNumber: (
-        <div
-          style={{
-            padding: "8px 16px",
-            borderRadius: "10000px",
-            background: item?.isKYCCompleted ? "#63ff706c" : "#ff63634b",
-            color: item?.isKYCCompleted ? "green" : "red",
-            width: "fit-content",
-            fontWeight: "700",
-          }}
-        >
-          {item?.isKYCCompleted ? "Verified" : "Not Verified"}
         </div>
       ),
+
       status: (
         <>
           {" "}
@@ -131,7 +149,7 @@ function Customers() {
               fontWeight: "700",
             }}
           >
-            {item?.status ? "True" : "False"}
+            {item?.status ? "Active" : "Inactive"}
           </div>
         </>
       ),
@@ -142,17 +160,16 @@ function Customers() {
 
   return (
     <>
-      {filter && <CustomerFilter closeCustomer={setFilter} />}
-      <BodyLayout>
+      {inviteAgent && <InviteAgent closeinviteAgent={setInviteAgent} />}
+      <BodyLayout active={window.location.pathname}>
         <Content>
           <div className="header">
             <div className="top">
-              <p>Customers</p>
-              <span>This page allows you to manage customers</span>
+              <p>Payout Channel Providers</p>
+              <span>This page allows you to manage payout channels</span>
             </div>
             <div className="btn">
-              {/*
-              <button
+              {/*   <button
                 style={{
                   backgroundColor: "white",
                   color: "#464F60",
@@ -190,13 +207,17 @@ function Customers() {
                     stroke-linejoin="round"
                   />
                 </svg>
-              </button>
+              </button> */}
               <button
                 style={{
                   backgroundColor: "#00A85A",
                   color: "white",
                 }}
+                onClick={() => {
+                  setInviteAgent(true);
+                }}
               >
+                {/* <AiOutlinePlus size={18} style={{ color: "white" }} /> */}
                 <svg
                   width="16"
                   height="16"
@@ -205,22 +226,21 @@ function Customers() {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M7.99999 2C8.4142 2 8.74999 2.33579 8.74999 2.75V7.25H13.25C13.6642 7.25 14 7.58579 14 8C14 8.41422 13.6642 8.75 13.25 8.75H8.74999V13.25C8.74999 13.6642 8.4142 14 7.99999 14C7.58578 14 7.24999 13.6642 7.24999 13.25V8.75H2.75C2.33579 8.75 2 8.41422 2 8C2 7.58579 2.33579 7.25 2.75 7.25H7.24999V2.75C7.24999 2.33579 7.58578 2 7.99999 2Z"
                     fill="white"
                   />
                 </svg>
-                New Customers
+                New Processor
               </button>
-             */}
             </div>
           </div>
-
           <div className="main">
-            {/*  <div className="head">
-              <SearchInput placeholder="Search" style={{ width: "30vw" }} />
-              <button onClick={() => setFilter(true)}>
+            <div className="head">
+              {/*               <SearchInput placeholder="Search" style={{ width: "30vw" }} />
+               */}{" "}
+              {/*  <button>
                 <svg
                   width="20"
                   height="20"
@@ -248,45 +268,15 @@ function Customers() {
                   />
                 </svg>
                 Filter
-              </button>
-            </div> */}
-
-            <div className="tablecontent">
-              {/*   <div className="top">
-          <SearchInput placeholder="Search Records" className="SearchRecords" />
-        </div> */}
-
-              <CustomTable
-                noData={customers?.data?.length}
-                loading={isLoading || isFetching}
-                Apidata={newData}
-                tableColumns={columns}
-              />
-
-              {/* <div className="row">
-          <span>Showing 1-5 of entries</span>
-          <div className="pagins">
-            <p>Rows per page:</p>
-            <select>
-              <option>5</option>
-            </select>
-            <div className="arrow">
-              <button
-                onClick={() => {
-                  // setSortDate(sortdate - 1);
-                  // setEnd((prev) => prev - end);
-                }}
-              >
-                <AiOutlineLeft />
-              </button>
-              <button>{sortdate}</button>
-              <button>
-                <AiOutlineRight />
-              </button>
+              </button> */}
             </div>
-          </div>
-        </div> */}
-            </div>
+
+            <CustomTable
+              noData={payouts?.data?.length}
+              loading={mutateLoading || mutateFetching}
+              Apidata={newData}
+              tableColumns={columns}
+            />
           </div>
         </Content>
       </BodyLayout>
@@ -294,8 +284,35 @@ function Customers() {
   );
 }
 
-export default Customers;
+export default PaymentProcessors;
+
 const Content = styled.div`
+  .head {
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .head button {
+    background-color: transparent;
+    border: 1px solid gainsboro;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+  .search {
+    display: flex;
+    justify-content: space-between;
+  }
+  .main {
+    background-color: white;
+    width: 100%;
+    margin-top: 30px;
+    border-radius: 10px;
+  }
   .header {
     display: flex;
     justify-content: space-between;
@@ -325,28 +342,6 @@ const Content = styled.div`
     cursor: pointer;
     font-size: 16px;
   }
-  .head {
-    padding: 30px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .head button {
-    background-color: transparent;
-    border: 1px solid gainsboro;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 5px;
-  }
-  .main {
-    background-color: white;
-    width: 100%;
-    margin-top: 30px;
-    border-radius: 10px;
-  }
   .table {
     border-collapse: collapse;
     font-size: 11.5px;
@@ -373,7 +368,6 @@ const Content = styled.div`
     font-weight: 400;
     color: #667085;
   }
-
   .row {
     display: flex;
     justify-content: space-between;
@@ -384,24 +378,7 @@ const Content = styled.div`
     font-size: 15px;
     color: #687182;
   }
-  .arrow {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .tabledata {
-    td {
-      font-size: small;
-      font-weight: 400;
-    }
-  }
-  .arrow button {
-    width: 28.8px;
-    height: 24px;
-    background-color: transparent;
-    border: 1px solid gainsboro;
-    border-radius: 3px;
-  }
+
   .pagins {
     display: flex;
     gap: 7px;
@@ -419,6 +396,20 @@ const Content = styled.div`
     background-color: transparent;
     border: 1px solid gainsboro;
     padding: 2px;
+    border-radius: 3px;
+  }
+
+  .arrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .arrow button {
+    width: 28.8px;
+    height: 24px;
+    background-color: transparent;
+    border: 1px solid gainsboro;
     border-radius: 3px;
   }
 `;

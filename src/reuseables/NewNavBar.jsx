@@ -93,21 +93,26 @@ export default function NewNavBar() {
       icon: BeneficiaryIcon,
     },
     {
-      name: "Transfers",
+      name: "Transfers Processors",
       path: "//",
       icon: TransfersIcon,
       miniLinks: [
         {
-          name: "Menu 1",
-          path: "/transfers",
-          parentName: "Manage Customers",
+          name: "Payment Channel Processors",
+          path: "/payment-processors",
+          parentName: "Transfers Processors",
         },
-        {
-          name: "Menu 1",
-          path: "/transfers",
-          parentName: "Manage Customers",
-        },
+        /*      {
+          name: "Payout Channel Processors",
+          path: "/payout-processors",
+          parentName: "Transfers Processors",
+        }, */
       ],
+    },
+    {
+      name: "Currency Rate Metadata",
+      path: "/rate-metadata",
+      icon: UpdateIcon,
     },
     {
       name: "Updates and Rates",
