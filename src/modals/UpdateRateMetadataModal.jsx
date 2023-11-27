@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { createRate, createRateMetadata } from "../services/PayoutDashboard";
+import { createRate, updateRateMetadata } from "../services/PayoutDashboard";
 import AppModal from "../COMPONENTS/AppModal";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
 import { getCountries } from "../services/Auth";
@@ -34,7 +34,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
   console.log(rateItem);
 
   const { mutate, isLoading: mutateLoading } = useMutation({
-    mutationFn: createRateMetadata,
+    mutationFn: updateRateMetadata,
     onSuccess: (data) => {
       console.log(data);
       if (data?.status) {
@@ -63,7 +63,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
     },
     onError: (data) => {
       //setModal(true);
-      toast.error("Rate Request wasn't created");
+      toast.error(data?.message);
 
       setTimeout(() => {
         //  seterr("")
@@ -118,7 +118,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
             setSelectedCountry();
             setTransferBonusThresh();
           }}
-          heading="Create Currency Rate Metadata"
+          heading="Update Currency Rate Metadata"
         >
           <div
             className="name"
@@ -128,7 +128,14 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
           >
             <label>Country</label>
             <CountryDropdown2
-              value={selectedCountry}
+              value={{
+                label:
+                  rateItem?.country?.name +
+                  " - " +
+                  rateItem?.country?.currencyCode,
+                value: rateItem?.country?.name,
+              }}
+              disabled={true}
               option={
                 countries?.data?.map((item) => {
                   return {
@@ -152,14 +159,13 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
           >
             <label>Name</label>
             <AppInput
-              placeholder="How much"
               type="text"
               onChange={(e) => {
                 setName(e.target.value);
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.name}
             />
           </div>
 
@@ -178,7 +184,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.description}
             />
           </div>
 
@@ -199,6 +205,11 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
                   value: 6,
                 },
               ]}
+              disabled={true}
+              value={{
+                label: rateItem?.role?.name,
+                value: rateItem?.role?.id,
+              }}
               label="Rate Metadata"
               onChange={(e) => {
                 setRateMeta(e);
@@ -220,7 +231,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.minimumTransferLimit}
             />
           </div>
 
@@ -239,7 +250,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.maximumTransferLimit}
             />
           </div>
           <div
@@ -257,7 +268,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.dailyLimit}
             />
           </div>
           <div
@@ -275,7 +286,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.weeklyLimit}
             />
           </div>
           <div
@@ -293,7 +304,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.monthlyLimit}
             />
           </div>
           <div
@@ -311,7 +322,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.annualLimit}
             />
           </div>
           <div
@@ -329,7 +340,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.proofOfPaymentAmountThreshold}
             />
           </div>
           <div
@@ -347,7 +358,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.sourceOfFundAmountThreshold}
             />
           </div>
           <div
@@ -365,7 +376,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.transferBelowMinimumAllowed}
             />
           </div>
           <div
@@ -383,7 +394,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.transferBelowMinimumCharges}
             />
           </div>
           <div
@@ -401,7 +412,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.transferBonusThreshold}
             />
           </div>
 
@@ -420,7 +431,7 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
               }}
               width="95%"
               name="username"
-              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.transferBonusRateValue}
             />
           </div>
 
@@ -444,54 +455,35 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
             </button>
             <button
               onClick={() => {
-                if (
-                  selectedCountry &&
-                  name &&
-                  desc &&
-                  minTransfer &&
-                  maxTransfer &&
-                  dailyTransfer &&
-                  weeklyTransfer &&
-                  monthlyTransfer &&
-                  annualTransfer &&
-                  popThresh &&
-                  sofThresh &&
-                  allowBelow &&
-                  belowMinCharges &&
-                  transferBonusThresh &&
-                  bonusRate
-                ) {
-                  mutate({
-                    updatedBy: userDetails?.userId,
-                    country: {
-                      id: selectedCountry?.id,
-                    },
-                    role: {
-                      id: rateMeta?.value,
-                    },
-                    name: name,
-                    description: desc,
-                    minTransferLimit: minTransfer,
-                    maxTransferLimit: maxTransfer,
-                    dailyLimit: dailyTransfer,
-                    weeklyLimit: weeklyTransfer,
-                    monthlyLimit: monthlyTransfer,
-                    annualLimit: annualTransfer,
-                    proofOfPaymentThresholdAmount: popThresh,
-                    sourceOfFundThresholdAmount: sofThresh,
-                    allowBelowMinimum: allowBelow,
-                    belowMinimumCharges: belowMinCharges,
-                    transferBonusThreshold: transferBonusThresh,
-                    bonusRateValue: bonusRate,
-                  });
-                } else {
-                  toast.error("Fill all fields");
-                }
+                mutate({
+                  id: rateItem?.id,
+                  updatedBy: userDetails?.userId,
+                  name: name || rateItem?.name,
+                  description: desc || rateItem?.description,
+                  minTransferLimit: minTransfer || rateItem?.minTransferLimit,
+                  maxTransferLimit: maxTransfer || rateItem?.maxTransferLimit,
+                  dailyLimit: dailyTransfer || rateItem?.dailyLimit,
+                  weeklyLimit: weeklyTransfer || rateItem?.weeklyLimit,
+                  monthlyLimit: monthlyTransfer || rateItem?.monthlyLimit,
+                  annualLimit: annualTransfer || rateItem?.annualLimit,
+                  proofOfPaymentThresholdAmount:
+                    popThresh || rateItem?.proofOfPaymentThresholdAmount,
+                  sourceOfFundThresholdAmount:
+                    sofThresh || rateItem?.sourceOfFundThresholdAmount,
+                  transferBelowMinimumAllowed:
+                    allowBelow || rateItem?.transferBelowMinimumAllowed,
+                  transferBelowMinimumCharges:
+                    belowMinCharges || rateItem?.transferBelowMinimumCharges,
+                  transferBonusThreshold:
+                    transferBonusThresh || rateItem?.transferBonusThreshold,
+                  transferBonusRateValue:
+                    bonusRate || rateItem?.transferBonusRateValue,
+                });
               }}
               className="confirm"
             >
               {" "}
-              <span>{mutateLoading ? "creating..." : "Create"}</span>
+              <span>{mutateLoading ? "updating..." : "Update"}</span>
             </button>
           </div>
         </AppModal>

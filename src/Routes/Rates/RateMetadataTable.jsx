@@ -10,6 +10,8 @@ import { kFormatter } from "../../utils/format";
 import { useState } from "react";
 import UpdateRatesModal from "../../modals/UpdateRatesModal";
 import { getRoleMeta } from "../../services/Dashboard";
+import CreateRateMetadataModal from "../../modals/CreateRateMetadataModal";
+import UpdateRateMetadataModal from "../../modals/UpdateRateMetadataModal";
 
 function RateMetadataTable() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -28,13 +30,13 @@ function RateMetadataTable() {
   console.log(rates);
 
   const columns = [
-    /*     {
+    {
       title: "ACTIONS",
       dataIndex: "action",
       fixed: "left",
-   
+
       width: 100,
-    }, */
+    },
     {
       title: "CATEGORY",
       dataIndex: "categoryRate",
@@ -78,7 +80,6 @@ function RateMetadataTable() {
           style={{
             textDecoration: "none",
           }}
-          to={`/client-detail?userId=${item?.userId}`}
         >
           <p
             onClick={() => {
@@ -99,27 +100,31 @@ function RateMetadataTable() {
   console.log(newData);
 
   return (
-    <Content>
-      <div className="tablecontent">
-        <div className="content">
-          <div className="heading">Existing Rates </div>
-          <div className="sub">
-            This page allows you edit and update clients{" "}
+    <>
+      <UpdateRateMetadataModal
+        modal={modal}
+        setModal={setModal}
+        rateItem={rate}
+      />
+
+      <Content>
+        <div className="tablecontent">
+          <div className="content">
+            <div className="heading"> </div>
+            <div className="sub"></div>
           </div>
-        </div>
-        {/*   <div className="top">
+          {/*   <div className="top">
           <SearchInput placeholder="Search Records" className="SearchRecords" />
         </div> */}
 
-        <UpdateRatesModal modal={modal} setModal={setModal} rateItem={rate} />
-        <CustomTable
-          noData={rates?.data?.length}
-          loading={isLoading || isFetching}
-          Apidata={newData}
-          tableColumns={columns}
-        />
+          <CustomTable
+            noData={rates?.data?.length}
+            loading={isLoading || isFetching}
+            Apidata={newData}
+            tableColumns={columns}
+          />
 
-        {/* <div className="row">
+          {/* <div className="row">
           <span>Showing 1-5 of entries</span>
           <div className="pagins">
             <p>Rows per page:</p>
@@ -142,8 +147,9 @@ function RateMetadataTable() {
             </div>
           </div>
         </div> */}
-      </div>
-    </Content>
+        </div>
+      </Content>
+    </>
   );
 }
 
