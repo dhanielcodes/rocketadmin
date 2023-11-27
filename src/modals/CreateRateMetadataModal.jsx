@@ -479,10 +479,10 @@ export default function CreateRateMetadataModal({ rateItem, modal, setModal }) {
                     annualLimit: annualTransfer,
                     proofOfPaymentThresholdAmount: popThresh,
                     sourceOfFundThresholdAmount: sofThresh,
-                    allowBelowMinimum: allowBelow,
-                    belowMinimumCharges: belowMinCharges,
+                    transferBelowMinimumAllowed: allowBelow,
+                    transferBelowMinimumCharges: belowMinCharges,
                     transferBonusThreshold: transferBonusThresh,
-                    bonusRateValue: bonusRate,
+                    transferBonusRateValue: bonusRate,
                   });
                 } else {
                   toast.error("Fill all fields");
