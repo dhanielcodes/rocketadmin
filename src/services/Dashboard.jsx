@@ -69,6 +69,15 @@ export const getRoleMeta = async () => {
   return data;
 };
 
+export const getPaymentProcessors = async () => {
+  const { data } = await Axios.get(`${baseurl}/getpaymentchannelprocessor`);
+  return data;
+};
+export const getPayoutProcessors = async () => {
+  const { data } = await Axios.get(`${baseurl}/getpayoutchannelprocessor`);
+  return data;
+};
+
 export const GetDetails = async (id) => {
   console.log(
     "🚀 ~ file: Dashboard.jsx:57 ~ GetDetails ~ id:",
