@@ -102,11 +102,11 @@ export default function NewNavBar() {
           path: "/payment-processors",
           parentName: "Transfers Processors",
         },
-        /*      {
+        {
           name: "Payout Channel Processors",
           path: "/payout-processors",
           parentName: "Transfers Processors",
-        }, */
+        },
       ],
     },
     {

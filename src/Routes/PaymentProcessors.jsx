@@ -46,8 +46,8 @@ function PaymentProcessors() {
     },
 
     {
-      title: "PAYOUT CHANNEL",
-      dataIndex: "payoutChannel['name']",
+      title: "PAYMENT CHANNEL",
+      dataIndex: "paymentChannel['name']",
       /*   sorter: {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
@@ -55,14 +55,14 @@ function PaymentProcessors() {
       width: 200,
     },
     {
-      title: "PAYOUT PROCESSOR",
+      title: "PAYMENT PROCESSOR",
       dataIndex: "newGateWay",
       width: 240,
     },
 
     {
-      title: "PAYOUT DESCRIPTION",
-      dataIndex: "payoutProvider['description']",
+      title: "PAYMENT DESCRIPTION",
+      dataIndex: "paymentChannel['description']",
       width: 260,
     },
 
@@ -91,10 +91,10 @@ function PaymentProcessors() {
               marginRight: "10px",
               objectFit: "cover",
             }}
-            src={item?.payoutProvider["logo"]}
+            src={item?.paymentChannel["logo"]}
             alt=""
           />
-          {item?.payoutProvider["name"]}
+          {item?.paymentChannel["name"]}
         </div>
       ),
       sending: (
@@ -120,7 +120,6 @@ function PaymentProcessors() {
           style={{
             textDecoration: "none",
           }}
-          to={`/client-detail?userId=${item?.userId}`}
         >
           <p
             onClick={() => {
@@ -165,8 +164,8 @@ function PaymentProcessors() {
         <Content>
           <div className="header">
             <div className="top">
-              <p>Payout Channel Providers</p>
-              <span>This page allows you to manage payout channels</span>
+              <p>Payment Channel Providers</p>
+              <span>This page allows you to manage payment channels</span>
             </div>
             <div className="btn">
               {/*   <button
