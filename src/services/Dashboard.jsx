@@ -39,9 +39,7 @@ export const Tranx = async (userId) => {
     "🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:",
     userId?.queryKey[0]
   );
-  const { data } = await Axios.get(
-    `${baseurl}/getuserlog/${userId?.queryKey[0]}`
-  );
+  const { data } = await Axios.get(`${baseurl}/getuserlog/0`);
   return data;
 };
 export const getUsers = async (id = 5) => {

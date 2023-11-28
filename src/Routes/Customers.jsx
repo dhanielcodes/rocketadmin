@@ -85,7 +85,7 @@ function Customers() {
     return {
       ...item,
       action: (
-        <Link
+        <div
           style={{
             textDecoration: "none",
           }}
@@ -102,7 +102,7 @@ function Customers() {
           >
             {item?.firstName}
           </p>
-        </Link>
+        </div>
       ),
       idNumber: (
         <div

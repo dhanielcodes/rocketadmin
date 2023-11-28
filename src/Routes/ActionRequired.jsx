@@ -8,7 +8,161 @@ import SearchInput from "../reuseables/SearchInput";
 import UpcomingExpiredID from "../COMPONENTS/UpcomingExpiredID";
 import SendMoney_inactiveCustomers from "../COMPONENTS/SendMoney_inactiveCustomers";
 
+import { useState } from "react";
+//import SearchInput from "../reuseables/SearchInput";
+import CustomerFilter from "../COMPONENTS/CustomerFilter";
+import CustomTable from "../reuseables/CustomTable";
+import { kFormatter } from "../utils/format";
+import { getUsers } from "../services/Dashboard";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
+
 function ActionRequired() {
+  const [filter, setFilter] = useState(false);
+  const AppData = JSON.parse(localStorage?.getItem("AppData"));
+  console.log(AppData);
+
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
+  console.log(userDetails);
+
+  const {
+    data: customers,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ["getUserfs"],
+    queryFn: () => getUsers(),
+  });
+
+  console.log(customers);
+
+  const columns = [
+    {
+      title: "CUSTOMER REF",
+      dataIndex: "userId",
+      width: 190,
+    },
+    {
+      title: "ID VERIFICATION",
+      dataIndex: "idNumber",
+      width: 190,
+    },
+    {
+      title: "EMAIL",
+      dataIndex: "email",
+      width: 260,
+    },
+
+    {
+      title: "NAME",
+      dataIndex: "action",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 200,
+    },
+    {
+      title: "ADDRESS",
+      dataIndex: "address",
+      width: 280,
+    },
+
+    {
+      title: "MOBILE NO",
+      dataIndex: "phone",
+      width: 160,
+    },
+    {
+      title: "DATE CREATED",
+      dataIndex: "dateCreated",
+      width: 190,
+
+      //render: () => "Other",
+    },
+
+    {
+      title: "EMAIL VERIFIED",
+      dataIndex: "status",
+      width: 220,
+      //render: () => "Other 2",
+    },
+  ];
+
+  console.log(
+    customers?.data?.filter(
+      (item) =>
+        item?.isKYCCompleted === false ||
+        item?.isEmailVerified === false ||
+        item?.status === "Suspended"
+    )
+  );
+  const newData = customers?.data
+    ?.filter(
+      (item) =>
+        item?.isKYCCompleted === false ||
+        item?.isEmailVerified === false ||
+        item?.status === "Suspended"
+    )
+    ?.map((item) => {
+      return {
+        ...item,
+        action: (
+          <div
+            style={{
+              textDecoration: "none",
+            }}
+            to={`/customers-details?userId=${JSON.stringify(item)}`}
+          >
+            <p
+              onClick={() => {
+                console.log(item?.userId);
+              }}
+              style={{
+                color: "blue",
+                cursor: "pointer",
+              }}
+            >
+              {item?.firstName}
+            </p>
+          </div>
+        ),
+        idNumber: (
+          <div
+            style={{
+              padding: "8px 16px",
+              borderRadius: "10000px",
+              background: item?.isKYCCompleted ? "#63ff706c" : "#ff63634b",
+              color: item?.isKYCCompleted ? "green" : "red",
+              width: "fit-content",
+              fontWeight: "700",
+            }}
+          >
+            {item?.isKYCCompleted ? "Verified" : "Not Verified"}
+          </div>
+        ),
+        status: (
+          <>
+            {" "}
+            <div
+              style={{
+                padding: "8px 16px",
+                borderRadius: "10000px",
+                background: item?.status ? "#63ff706c" : "#ff63634b",
+                color: item?.status ? "green" : "red",
+                width: "fit-content",
+                fontWeight: "700",
+              }}
+            >
+              {item?.status ? "True" : "False"}
+            </div>
+          </>
+        ),
+      };
+    });
+
+  console.log(newData);
   return (
     <BodyLayout>
       <Content>
@@ -129,46 +283,12 @@ function ActionRequired() {
               </button>
             </div>
           </div>
-          <div className="TableGrid">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>S/N </th>
-                  <th>CUSTOMER REF </th>
-                  <th>ID VERIFICATION </th>
-                  <th>COMPLIANCE</th>
-                  <th>NAME</th>
-                  <th>ADDRESS</th>
-                  <th>EMAIL ID</th>
-                  <th>MOBILE NO</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-          <div className="row">
-            <span>Showing 1-5 of entries</span>
-            <div className="pagins">
-              <p>Rows per page:</p>
-              <select>
-                <option>5</option>
-              </select>
-              <div className="arrow">
-                <button
-                  onClick={() => {
-                    // setSortDate(sortdate - 1);
-                    // setEnd((prev) => prev - end);
-                  }}
-                >
-                  <AiOutlineLeft />
-                </button>
-                <button>0</button>
-                <button>
-                  <AiOutlineRight />
-                </button>
-              </div>
-            </div>
-          </div>
+          <CustomTable
+            noData={customers?.data?.length}
+            loading={isLoading || isFetching}
+            Apidata={newData}
+            tableColumns={columns}
+          />
         </div>
         <div className="main">
           <div className="head">

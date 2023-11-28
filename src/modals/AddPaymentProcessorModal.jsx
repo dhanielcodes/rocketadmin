@@ -69,9 +69,13 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
   const { mutate, isLoading } = useMutation({
     mutationFn: addPaymentProcessor,
     onSuccess: (data) => {
-      console.log(data);
-      toast.success(data?.message);
-      closeinviteAgent(false);
+      if (data.status) {
+        console.log(data);
+        toast.success(data?.message);
+        closeinviteAgent(false);
+      } else {
+        toast.success(data?.message);
+      }
     },
     onError: (data) => {
       toast.error(data?.message);

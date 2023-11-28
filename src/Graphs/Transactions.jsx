@@ -9,6 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { kFormatter4 } from "../utils/format";
 
 function Transactions({ apiData }) {
   const data = [
@@ -86,6 +87,36 @@ function Transactions({ apiData }) {
     },
   ];
 
+  const CustomTooltip = ({ active, payload, label }) => {
+    return (
+      <div
+        style={{ background: "#e7e7e7", borderRadius: "10px", padding: "10px" }}
+        className="custom-tooltip"
+      >
+        <h2 className="label">{`${label}`}</h2>
+        <p>
+          Success:{" "}
+          <span style={{ color: payload?.[0]?.stroke }}>
+            {kFormatter4(payload?.[0]?.value)}
+          </span>
+        </p>
+        <p>
+          Pending:{" "}
+          <span style={{ color: payload?.[1]?.stroke }}>
+            {kFormatter4(payload?.[1]?.value)}
+          </span>
+        </p>
+
+        <p>
+          Failed:{" "}
+          <span style={{ color: payload?.[2]?.stroke }}>
+            {kFormatter4(payload?.[2]?.value)}
+          </span>
+        </p>
+      </div>
+    );
+  };
+
   return (
     <ResponsiveContainer width="100%" aspect={1.8}>
       <BarChart
@@ -107,18 +138,35 @@ function Transactions({ apiData }) {
           fontSize={16.5}
           dy={10}
         />
-        <YAxis axisLine={false} tickLine={false} />
-        {/* <Tooltip /> */}
+        <YAxis
+          axisLine={false}
+          tickLine={false}
+          tickFormatter={function (val) {
+            return Math.abs(val) > 999999999
+              ? `${("amount" === "amount" && "₦") || ""}${
+                  Math.sign(val) * (Math.abs(val) / 1000000000).toFixed(1)
+                }B`
+              : Math.abs(val) > 999999
+              ? `${("amount" === "amount" && "₦") || ""}${
+                  Math.sign(val) * (Math.abs(val) / 1000000).toFixed(1)
+                }M`
+              : Math.abs(val) > 999
+              ? `${("amount" === "amount" && "₦") || ""}${
+                  Math.sign(val) * (Math.abs(val) / 1000).toFixed(1)
+                }k`
+              : Math.sign(val) * Math.abs(val);
+          }}
+        />
+        {/* <Tooltip /> */} <Tooltip content={<CustomTooltip />} />
         {/* <Legend /> */}
         <Bar
-          dataKey="pv"
+          dataKey="amt"
           stackId="a"
           fill="#12B76A"
           barSize={10}
           radius={[3, 3, 0, 0]}
         />
-        <Bar dataKey="uv" fill="#4945C4" barSize={10} radius={[3, 3, 0, 0]} />
-        <Bar dataKey="uv" fill="#E0BE2D" barSize={10} radius={[3, 3, 0, 0]} />
+        <Bar dataKey="pv" fill="#E0BE2D" barSize={10} radius={[3, 3, 0, 0]} />
         <Bar dataKey="uv" fill="#D94040" barSize={10} radius={[3, 3, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
