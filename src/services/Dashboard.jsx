@@ -5,6 +5,11 @@ import { BASE_URL } from "../../config/config";
 
 const baseurl = BASE_URL;
 
+export const getAdminDashboard = async (userId = 0) => {
+  const { data } = await Axios.get(`${baseurl}/getuserdashboard/${userId}`);
+  return data;
+};
+
 export const beneficiaries = async (userId, bid) => {
   const { data } = await Axios.get(
     `${baseurl}/getuserbeneficiaries?userId=${
