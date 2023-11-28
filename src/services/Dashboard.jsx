@@ -78,6 +78,22 @@ export const getPayoutProcessors = async () => {
   return data;
 };
 
+export const addPayoutProcessor = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/addpayoutchannelprocessor`,
+    body
+  );
+  return data;
+};
+
+export const addPaymentProcessor = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/addpaymentchannelprocessor`,
+    body
+  );
+  return data;
+};
+
 export const GetDetails = async (id) => {
   console.log(
     "🚀 ~ file: Dashboard.jsx:57 ~ GetDetails ~ id:",

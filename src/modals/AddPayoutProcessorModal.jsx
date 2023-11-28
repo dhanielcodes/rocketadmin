@@ -5,7 +5,7 @@ import { styled } from "styled-components";
 import AppButton from "../reuseables/AppButton";
 import { AiOutlineDown } from "react-icons/ai";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { addPaymentProcessor, sendAgentInvite } from "../services/Dashboard";
+import { addPayoutProcessor, sendAgentInvite } from "../services/Dashboard";
 import toast from "react-hot-toast";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
 import { countries } from "../../config/Test";
@@ -14,7 +14,7 @@ import {
   getPayoutProviders,
 } from "../services/PayoutDashboard";
 import GatewayDropdown from "../reuseables/GatewayDropdown";
-function AddPaymentProcessorModal({ closeinviteAgent }) {
+function AddPayoutProcessorModal({ closeinviteAgent }) {
   const { data: providersP } = useQuery({
     queryKey: ["providersP"],
     queryFn: () => getPayoutProviders(),
@@ -26,8 +26,8 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
   });
 
   const [selectedCountry, setSelectedCountry] = useState();
-  const [payment, setPayment] = useState();
   const [payout, setPayout] = useState();
+  const [payment, setPayment] = useState();
 
   const [processor, setProcessor] = useState({
     name: "",
@@ -52,7 +52,7 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
     console.log(processor);
   };
 
-  async function AppPaymentProcessor() {
+  async function AppPayoutProcessor() {
     if (
       processor?.name &&
       processor?.description &&
@@ -67,7 +67,7 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
   }
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: addPaymentProcessor,
+    mutationFn: addPayoutProcessor,
     onSuccess: (data) => {
       console.log(data);
       toast.success(data?.message);
@@ -82,7 +82,7 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
   return (
     <Content>
       <Modal
-        title="Add Payment Processor"
+        title="Add Payout Processor"
         onClick={() => closeinviteAgent(false)}
       >
         <div className="flexout">
@@ -138,9 +138,9 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
           />
         </div>
         <div className="name">
-          <label>Payment Channel</label>
+          <label>Payout Channel</label>
           <GatewayDropdown
-            value={payment}
+            value={payout}
             options={paymentP?.data?.map((item) => {
               return {
                 ...item,
@@ -202,7 +202,7 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
               color: "white",
               border: "1px solid #00A85A",
             }}
-            onClick={AppPaymentProcessor}
+            onClick={AppPayoutProcessor}
           />
         </div>
       </Modal>
@@ -210,7 +210,7 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
   );
 }
 
-export default AddPaymentProcessorModal;
+export default AddPayoutProcessorModal;
 const Content = styled.div`
   .flexout {
     display: grid;

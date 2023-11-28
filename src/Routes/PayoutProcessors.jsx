@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import CustomTable from "../reuseables/CustomTable";
 import { Link } from "react-router-dom";
 import ReactCountryFlag from "react-country-flag";
+import AddPayoutProcessorModal from "../modals/AddPayoutProcessorModal";
 
 // hhhhhhh
 function PayoutProcessors() {
@@ -156,7 +157,9 @@ function PayoutProcessors() {
 
   return (
     <>
-      {inviteAgent && <InviteAgent closeinviteAgent={setInviteAgent} />}
+      {inviteAgent && (
+        <AddPayoutProcessorModal closeinviteAgent={setInviteAgent} />
+      )}{" "}
       <BodyLayout active={window.location.pathname}>
         <Content>
           <div className="header">
