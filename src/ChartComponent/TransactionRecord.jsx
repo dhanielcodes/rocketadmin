@@ -10,7 +10,7 @@ function TransactionRecord({ apidata }) {
           <p>Transactions</p>
           <span>Shows a snapshot of payment types on your system</span>
         </div>
-        <div className="paymentmethod">
+        {/*     <div className="paymentmethod">
           <div className="card">
             <div className="color1"></div>
             <span>Deposited</span>
@@ -31,7 +31,7 @@ function TransactionRecord({ apidata }) {
             <div className="color5"></div>
             <span>Hold</span>
           </div>
-        </div>
+        </div> */}
         <Transactions apiData={apidata} />
       </div>
     </Content>
