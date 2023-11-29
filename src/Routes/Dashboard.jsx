@@ -385,7 +385,7 @@ function Dashboard() {
                     Shows a snapshot of payment types of your business
                   </span>
                 </div>
-                <div className="paymentmethod">
+                {/*  <div className="paymentmethod">
                   <div className="card">
                     <div className="color1"></div>
                     <span>Pay By Card</span>
@@ -402,7 +402,7 @@ function Dashboard() {
                     <div className="color4"></div>
                     <span>Pay By Bank</span>
                   </div>
-                </div>
+                </div> */}
                 <PaymentType apiData={paymentTypes} />
               </div>
             )}

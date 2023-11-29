@@ -15,7 +15,7 @@ function PaymentTypeRecord({ apiData }) {
           <p>Channel Types</p>
           <span>Shows a snapshot of payment types on your system</span>
         </div>
-        <div className="paymentmethod">
+        {/*      <div className="paymentmethod">
           <div className="card">
             <div className="color1"></div>
             <span>Bank Office</span>
@@ -28,7 +28,7 @@ function PaymentTypeRecord({ apiData }) {
             <div className="color3"></div>
             <span>App</span>
           </div>
-        </div>
+        </div> */}
         <PaymentType2 apiData={apiData} />
       </div>
     </Content>
