@@ -29,12 +29,15 @@ const CountryDropdown2 = ({
             className="countryName"
             style={{ fontSize: "16px", display: "flex", alignItems: "center" }}
             onClick={() => {
-              console.log(country?.currencyCode);
+              console.log(country?.currencyCode || country.currency);
             }}
           >
             <ReactCountryFlag
-              countryCode={country.currencyCode?.slice(0, 2)}
-              title={country.currencyCode}
+              countryCode={
+                country.currencyCode?.slice(0, 2) ||
+                country.currency?.slice(0, 2)
+              }
+              title={country.currencyCode || country.currency}
               style={{
                 marginRight: "10px",
                 borderRadius: "10000000px",

@@ -9,49 +9,116 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { kFormatter4 } from "../utils/format";
 
-function PaymentType() {
+function PaymentType({ apiData }) {
   const data = [
     {
+      name: "Jan",
+      amt: apiData?.January?.ManualBankTransferValue,
+      pv: apiData?.January?.PayWithBankValue,
+      uv: apiData?.January?.WalletValue,
+    },
+    {
+      name: "Feb",
+      amt: apiData?.February?.ManualBankTransferValue,
+      pv: apiData?.February?.PayWithBankValue,
+      uv: apiData?.February?.WalletValue,
+    },
+    {
+      name: "Mar",
+      amt: apiData?.March?.ManualBankTransferValue,
+      pv: apiData?.March?.PayWithBankValue,
+      uv: apiData?.March?.WalletValue,
+    },
+    {
       name: "Apr",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
+      amt: apiData?.April?.ManualBankTransferValue,
+      pv: apiData?.April?.PayWithBankValue,
+      uv: apiData?.April?.WalletValue,
     },
     {
       name: "May",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
+      amt: apiData?.May?.ManualBankTransferValue,
+      pv: apiData?.May?.PayWithBankValue,
+      uv: apiData?.May?.WalletValue,
     },
     {
       name: "June",
-      uv: 2000,
-      pv: 4000,
-      amt: 2290,
+      amt: apiData?.June?.ManualBankTransferValue,
+      pv: apiData?.June?.PayWithBankValue,
+      uv: apiData?.June?.WalletValue,
     },
     {
       name: "July",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
+      amt: apiData?.July?.ManualBankTransferValue,
+      pv: apiData?.July?.PayWithBankValue,
+      uv: apiData?.July?.WalletValue,
     },
     {
       name: "Aug",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
+      amt: apiData?.August?.ManualBankTransferValue,
+      pv: apiData?.August?.PayWithBankValue,
+      uv: apiData?.August?.WalletValue,
     },
     {
-      name: "Sept",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
+      name: "Sep",
+      amt: apiData?.September?.ManualBankTransferValue,
+      pv: apiData?.September?.PayWithBankValue,
+      uv: apiData?.September?.WalletValue,
+    },
+    {
+      name: "Oct",
+      amt: apiData?.October?.ManualBankTransferValue,
+      pv: apiData?.October?.PayWithBankValue,
+      uv: apiData?.October?.WalletValue,
+    },
+    {
+      name: "Nov",
+      amt: apiData?.November?.ManualBankTransferValue,
+      pv: apiData?.November?.PayWithBankValue,
+      uv: apiData?.November?.WalletValue,
+    },
+    {
+      name: "Dec",
+      amt: apiData?.December?.ManualBankTransferValue,
+      pv: apiData?.December?.PayWithBankValue,
+      uv: apiData?.December?.WalletValue,
     },
   ];
 
+  const CustomTooltip = ({ active, payload, label }) => {
+    return (
+      <div
+        style={{ background: "#e7e7e7", borderRadius: "10px", padding: "10px" }}
+        className="custom-tooltip"
+      >
+        <h2 className="label">{`${label}`}</h2>
+        <p>
+          Manual Bank Transfer:{" "}
+          <span style={{ color: payload?.[0]?.stroke }}>
+            {kFormatter4(payload?.[0]?.value)}
+          </span>
+        </p>
+        <p>
+          Pay With Bank:{" "}
+          <span style={{ color: payload?.[1]?.stroke }}>
+            {kFormatter4(payload?.[1]?.value)}
+          </span>
+        </p>
+
+        <p>
+          Wallet:{" "}
+          <span style={{ color: payload?.[2]?.stroke }}>
+            {kFormatter4(payload?.[2]?.value)}
+          </span>
+        </p>
+      </div>
+    );
+  };
+
   return (
-    <ResponsiveContainer width="100%" aspect={1.8}>
+    <ResponsiveContainer width="100%" aspect={3}>
       <BarChart
         width={100}
         height={100}
@@ -71,8 +138,26 @@ function PaymentType() {
           fontSize={16.5}
           dy={10}
         />
-        <YAxis axisLine={false} tickLine={false} />
-        {/* <Tooltip /> */}
+        <YAxis
+          axisLine={false}
+          tickLine={false}
+          tickFormatter={function (val) {
+            return Math.abs(val) > 999999999
+              ? `${("amount" === "amount" && "₦") || ""}${
+                  Math.sign(val) * (Math.abs(val) / 1000000000).toFixed(1)
+                }B`
+              : Math.abs(val) > 999999
+              ? `${("amount" === "amount" && "₦") || ""}${
+                  Math.sign(val) * (Math.abs(val) / 1000000).toFixed(1)
+                }M`
+              : Math.abs(val) > 999
+              ? `${("amount" === "amount" && "₦") || ""}${
+                  Math.sign(val) * (Math.abs(val) / 1000).toFixed(1)
+                }k`
+              : Math.sign(val) * Math.abs(val);
+          }}
+        />
+        <Tooltip content={<CustomTooltip />} /> {/* <Tooltip /> */}
         {/* <Legend /> */}
         <Bar
           dataKey="pv"
@@ -81,8 +166,7 @@ function PaymentType() {
           barSize={10}
           radius={[3, 3, 0, 0]}
         />
-        <Bar dataKey="uv" fill="#B9B6FA" barSize={10} radius={[3, 3, 0, 0]} />
-        <Bar dataKey="uv" fill="#2A278F" barSize={10} radius={[3, 3, 0, 0]} />
+        <Bar dataKey="amt" fill="#2A278F" barSize={10} radius={[3, 3, 0, 0]} />
         <Bar dataKey="uv" fill="#2A278F" barSize={10} radius={[3, 3, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>

@@ -2,7 +2,7 @@ import React from "react";
 import Transactions from "../Graphs/Transactions";
 import { styled } from "styled-components";
 
-function TransactionRecord() {
+function TransactionRecord({ apidata }) {
   return (
     <Content>
       <div className="Payment">
@@ -32,7 +32,7 @@ function TransactionRecord() {
             <span>Hold</span>
           </div>
         </div>
-        <Transactions />
+        <Transactions apiData={apidata} />
       </div>
     </Content>
   );

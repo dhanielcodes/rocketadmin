@@ -5,6 +5,11 @@ import { BASE_URL } from "../../config/config";
 
 const baseurl = BASE_URL;
 
+export const getAdminDashboard = async (userId = 0) => {
+  const { data } = await Axios.get(`${baseurl}/getuserdashboard/${userId}`);
+  return data;
+};
+
 export const beneficiaries = async (userId, bid) => {
   const { data } = await Axios.get(
     `${baseurl}/getuserbeneficiaries?userId=${
@@ -34,9 +39,7 @@ export const Tranx = async (userId) => {
     "🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:",
     userId?.queryKey[0]
   );
-  const { data } = await Axios.get(
-    `${baseurl}/getuserlog/${userId?.queryKey[0]}`
-  );
+  const { data } = await Axios.get(`${baseurl}/getuserlog/0`);
   return data;
 };
 export const getUsers = async (id = 5) => {
@@ -75,6 +78,22 @@ export const getPaymentProcessors = async () => {
 };
 export const getPayoutProcessors = async () => {
   const { data } = await Axios.get(`${baseurl}/getpayoutchannelprocessor`);
+  return data;
+};
+
+export const addPayoutProcessor = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/addpayoutchannelprocessor`,
+    body
+  );
+  return data;
+};
+
+export const addPaymentProcessor = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/addpaymentchannelprocessor`,
+    body
+  );
   return data;
 };
 
