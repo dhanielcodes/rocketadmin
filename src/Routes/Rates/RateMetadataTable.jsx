@@ -48,15 +48,16 @@ function RateMetadataTable({ recall, setRecall }) {
       width: 100,
     },
     {
-      title: "DESCRIPTION",
-      dataIndex: "description",
-      width: 300,
-    },
-    {
       title: "NAME",
       dataIndex: "name",
       width: 160,
     },
+    {
+      title: "DESCRIPTION",
+      dataIndex: "description",
+      width: 300,
+    },
+
     {
       title: "TRANSFER BONUS THRESHOLD",
       dataIndex: "transferBonusThreshold",
