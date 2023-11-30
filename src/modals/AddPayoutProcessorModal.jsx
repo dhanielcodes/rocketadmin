@@ -7,6 +7,7 @@ import { AiOutlineDown } from "react-icons/ai";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Paymentchannel,
+  Payoutchannel,
   addPayoutProcessor,
   sendAgentInvite,
 } from "../services/Dashboard";
@@ -21,7 +22,7 @@ import GatewayDropdown from "../reuseables/GatewayDropdown";
 function AddPayoutProcessorModal({ closeinviteAgent }) {
   const { data: paymentChannels } = useQuery({
     queryKey: ["paymentChannels"],
-    queryFn: () => Paymentchannel(),
+    queryFn: () => Payoutchannel(),
   });
 
   const { data: paymentP } = useQuery({
@@ -146,7 +147,7 @@ function AddPayoutProcessorModal({ closeinviteAgent }) {
           />
         </div>
         <div className="name">
-          <label>Payment Channel</label>
+          <label>Payout Channel</label>
 
           <GatewayDropdown
             value={payment}
@@ -169,20 +170,14 @@ function AddPayoutProcessorModal({ closeinviteAgent }) {
           />
         </div>
         <div className="name">
-          <label>Provider Channel</label>
+          <label>Provider</label>
           <GatewayDropdown
             value={payout}
             options={paymentP?.data?.map((item) => {
               return {
                 ...item,
-                name: `${item?.name} - [${
-                  item?.payOutProviderSupportedCurrency?.[0]?.currencyCode ||
-                  "--"
-                }]`,
-                value: `${item?.name} - [${
-                  item?.payOutProviderSupportedCurrency?.[0]?.currencyCode ||
-                  "--"
-                }]`,
+                name: `${item?.name} - [${item?.description || "--"}]`,
+                value: `${item?.name} - [${item?.description || "--"}]`,
               };
             })}
             onChange={(e) => {
