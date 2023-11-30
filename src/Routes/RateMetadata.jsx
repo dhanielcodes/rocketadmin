@@ -6,9 +6,15 @@ import { useState } from "react";
 
 export default function RateMetadata() {
   const [modal, setModal] = useState();
+  const [recall, setRecall] = useState(false);
   return (
     <>
-      <CreateRateMetadataModal modal={modal} setModal={setModal} />
+      <CreateRateMetadataModal
+        recall={recall}
+        setRecall={setRecall}
+        modal={modal}
+        setModal={setModal}
+      />
 
       <BodyLayout>
         <Header>
@@ -28,7 +34,7 @@ export default function RateMetadata() {
             <span>Create Metadata</span>
           </button>
         </Header>
-        <RateMetadataTable />
+        <RateMetadataTable recall={recall} setRecall={setRecall} />
       </BodyLayout>
     </>
   );

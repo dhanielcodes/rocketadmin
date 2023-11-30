@@ -5,7 +5,11 @@ import { styled } from "styled-components";
 import AppButton from "../reuseables/AppButton";
 import { AiOutlineDown } from "react-icons/ai";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { addPayoutProcessor, sendAgentInvite } from "../services/Dashboard";
+import {
+  Paymentchannel,
+  addPayoutProcessor,
+  sendAgentInvite,
+} from "../services/Dashboard";
 import toast from "react-hot-toast";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
 import { countries } from "../../config/Test";
@@ -15,14 +19,14 @@ import {
 } from "../services/PayoutDashboard";
 import GatewayDropdown from "../reuseables/GatewayDropdown";
 function AddPayoutProcessorModal({ closeinviteAgent }) {
-  const { data: providersP } = useQuery({
-    queryKey: ["providersP"],
-    queryFn: () => getPayoutProviders(),
+  const { data: paymentChannels } = useQuery({
+    queryKey: ["paymentChannels"],
+    queryFn: () => Paymentchannel(),
   });
 
   const { data: paymentP } = useQuery({
     queryKey: ["paymentP"],
-    queryFn: () => getPaymentProviders(),
+    queryFn: () => getPayoutProviders(),
   });
 
   const [selectedCountry, setSelectedCountry] = useState();
@@ -35,10 +39,10 @@ function AddPayoutProcessorModal({ closeinviteAgent }) {
     country: {
       id: selectedCountry?.id,
     },
-    paymentChannel: {
+    payoutChannel: {
       id: payment?.id,
     },
-    paymentProvider: {
+    payoutProvider: {
       id: payout?.id,
     },
   });
@@ -57,8 +61,8 @@ function AddPayoutProcessorModal({ closeinviteAgent }) {
       processor?.name &&
       processor?.description &&
       processor?.country?.id &&
-      processor?.paymentChannel?.id &&
-      processor?.paymentProvider?.id
+      processor?.payoutChannel?.id &&
+      processor?.payoutProvider?.id
     ) {
       mutate(processor);
     } else {
@@ -74,7 +78,7 @@ function AddPayoutProcessorModal({ closeinviteAgent }) {
         toast.success(data?.message);
         closeinviteAgent(false);
       } else {
-        toast.success(data?.message);
+        toast.error(data?.message);
       }
     },
     onError: (data) => {
@@ -142,21 +146,22 @@ function AddPayoutProcessorModal({ closeinviteAgent }) {
           />
         </div>
         <div className="name">
-          <label>Payout Channel</label>
+          <label>Payment Channel</label>
+
           <GatewayDropdown
-            value={payout}
-            options={paymentP?.data?.map((item) => {
+            value={payment}
+            options={paymentChannels?.data?.map((item) => {
               return {
                 ...item,
-                name: `${item?.name} - [${item?.paymentProviderSupportedCurrency[0]?.currencyCode}]`,
-                value: `${item?.name} - [${item?.paymentProviderSupportedCurrency[0]?.currencyCode}]`,
+                name: `${item?.name} - [${item?.description || "--"}]`,
+                value: `${item?.name} - [${item?.description || "--"}]`,
               };
             })}
             onChange={(e) => {
               setPayment(e);
               setProcessor({
                 ...processor,
-                paymentChannel: {
+                payoutChannel: {
                   id: e?.id,
                 },
               });
@@ -167,14 +172,16 @@ function AddPayoutProcessorModal({ closeinviteAgent }) {
           <label>Provider Channel</label>
           <GatewayDropdown
             value={payout}
-            options={providersP?.data?.map((item) => {
+            options={paymentP?.data?.map((item) => {
               return {
                 ...item,
                 name: `${item?.name} - [${
-                  item?.payOutProviderSupportedCurrency[0]?.currencyCode || "--"
+                  item?.payOutProviderSupportedCurrency?.[0]?.currencyCode ||
+                  "--"
                 }]`,
                 value: `${item?.name} - [${
-                  item?.payOutProviderSupportedCurrency[0]?.currencyCode || "--"
+                  item?.payOutProviderSupportedCurrency?.[0]?.currencyCode ||
+                  "--"
                 }]`,
               };
             })}
@@ -182,7 +189,7 @@ function AddPayoutProcessorModal({ closeinviteAgent }) {
               setPayout(e);
               setProcessor({
                 ...processor,
-                paymentProvider: {
+                payoutProvider: {
                   id: e?.id,
                 },
               });

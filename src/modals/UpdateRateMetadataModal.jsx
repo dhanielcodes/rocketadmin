@@ -11,7 +11,13 @@ import styled from "styled-components";
 import AppSelect from "../reuseables/AppSelect";
 import { getRoleMeta } from "../services/Dashboard";
 
-export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
+export default function UpdateRateMetadataModal({
+  rateItem,
+  modal,
+  setModal,
+  recall,
+  setRecall,
+}) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   const [name, setName] = useState();
@@ -38,7 +44,9 @@ export default function UpdateRateMetadataModal({ rateItem, modal, setModal }) {
     onSuccess: (data) => {
       console.log(data);
       if (data?.status) {
-        toast.success("Rate Created Successfully");
+        toast.success("Rate Updated Successfully");
+        setRecall(!recall);
+
         setModal(false);
         setRateMeta();
         setName();
