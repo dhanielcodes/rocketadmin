@@ -42,11 +42,11 @@ function RateMetadataTable({ recall, setRecall }) {
 
       width: 100,
     },
-    {
+    /*  {
       title: "CATEGORY",
       dataIndex: "categoryRate",
       width: 100,
-    },
+    }, */
     {
       title: "NAME",
       dataIndex: "name",
