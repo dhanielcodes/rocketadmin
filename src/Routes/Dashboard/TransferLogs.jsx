@@ -39,6 +39,13 @@ function TransferLogsTable() {
       //render: () => "Other",
     },
     {
+      title: "COLLECTION STATUS",
+      dataIndex: "status2",
+      width: 160,
+
+      //render: () => "Other",
+    },
+    {
       title: "TRANSACTION REF",
       dataIndex: "paymentRef",
       width: 140,
@@ -153,6 +160,38 @@ function TransferLogsTable() {
             }}
           >
             {item?.paymentStatus}
+          </div>
+        </>
+      ),
+
+      status2: (
+        <>
+          {" "}
+          <div
+            style={{
+              padding: "8px 16px",
+              borderRadius: "10000px",
+              background:
+                item?.collectStatus === "Received"
+                  ? "#63ff706c"
+                  : item?.collectStatus === "Pending"
+                  ? "#ffe06357"
+                  : item?.collectStatus === ""
+                  ? "#93939383"
+                  : "#ff63634b",
+              color:
+                item?.collectStatus === "Received"
+                  ? "#63ff70"
+                  : item?.collectStatus === "Pending"
+                  ? "#ffe063"
+                  : item?.collectStatus === ""
+                  ? "#939393"
+                  : "#ff6363",
+              width: "fit-content",
+              fontWeight: "700",
+            }}
+          >
+            {item?.collectStatus || "Pending"}
           </div>
         </>
       ),
