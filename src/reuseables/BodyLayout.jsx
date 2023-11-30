@@ -22,7 +22,7 @@ import NewNavBar from "./NewNavBar";
 const { Sider, Header, Footer, Content } = Layout;
 const { Item: MenuItem, SubMenu } = Menu;
 
-const BodyLayout = ({ children, active }) => {
+const BodyLayout = ({ children, active, onClick }) => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
 
@@ -36,7 +36,11 @@ const BodyLayout = ({ children, active }) => {
   };
 
   return (
-    <Layout className="layout-collapse-demo" style={{ display: "flex" }}>
+    <Layout
+      onClick={onClick}
+      className="layout-collapse-demo"
+      style={{ display: "flex" }}
+    >
       <Sider
         collapsed={collapsed}
         onCollapse={handleCollapsed}

@@ -145,7 +145,7 @@ function PayoutChannels() {
                   />
                 </svg>
               </button> */}
-              <button
+              {/*  <button
                 style={{
                   backgroundColor: "#00A85A",
                   color: "white",
@@ -154,7 +154,6 @@ function PayoutChannels() {
                   //setInviteAgent(true);
                 }}
               >
-                {/* <AiOutlinePlus size={18} style={{ color: "white" }} /> */}
                 <svg
                   width="16"
                   height="16"
@@ -170,7 +169,7 @@ function PayoutChannels() {
                   />
                 </svg>
                 New Processor
-              </button>
+              </button> */}
             </div>
           </div>
           <div className="main">
