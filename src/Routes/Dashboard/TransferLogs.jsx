@@ -172,22 +172,26 @@ function TransferLogsTable() {
               padding: "8px 16px",
               borderRadius: "10000px",
               background:
-                item?.collectStatus === "Deposited"
+                item?.collectStatus === "Received"
                   ? "#63ff706c"
                   : item?.collectStatus === "Pending"
                   ? "#ffe06357"
+                  : item?.collectStatus === ""
+                  ? "#93939383"
                   : "#ff63634b",
               color:
-                item?.collectStatus === "Deposited"
+                item?.collectStatus === "Received"
                   ? "#63ff70"
                   : item?.collectStatus === "Pending"
                   ? "#ffe063"
+                  : item?.collectStatus === ""
+                  ? "#939393"
                   : "#ff6363",
               width: "fit-content",
               fontWeight: "700",
             }}
           >
-            {item?.collectStatus}
+            {item?.collectStatus || "Pending"}
           </div>
         </>
       ),
