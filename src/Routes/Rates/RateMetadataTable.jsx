@@ -7,13 +7,13 @@ import { useQuery } from "@tanstack/react-query";
 import { getRatesList } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
 import { kFormatter } from "../../utils/format";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UpdateRatesModal from "../../modals/UpdateRatesModal";
 import { getRoleMeta } from "../../services/Dashboard";
 import CreateRateMetadataModal from "../../modals/CreateRateMetadataModal";
 import UpdateRateMetadataModal from "../../modals/UpdateRateMetadataModal";
 
-function RateMetadataTable() {
+function RateMetadataTable({ recall }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
@@ -22,12 +22,17 @@ function RateMetadataTable() {
     data: rates,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery({
     queryKey: ["getRoleMetaa"],
     queryFn: () => getRoleMeta(),
   });
 
   console.log(rates);
+  useEffect(() => {
+    refetch();
+    //eslint-disable-next-line
+  }, [recall]);
 
   const columns = [
     {
