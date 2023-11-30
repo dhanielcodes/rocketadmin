@@ -13,7 +13,10 @@ import {
 import toast from "react-hot-toast";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
 import { countries } from "../../config/Test";
-import { getPayoutProviders } from "../services/PayoutDashboard";
+import {
+  getPaymentProviders,
+  getPayoutProviders,
+} from "../services/PayoutDashboard";
 import GatewayDropdown from "../reuseables/GatewayDropdown";
 function AddPaymentProcessorModal({ closeinviteAgent }) {
   const { data: paymentChannels } = useQuery({
@@ -23,7 +26,7 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
 
   const { data: paymentP } = useQuery({
     queryKey: ["paymentP"],
-    queryFn: () => getPayoutProviders(),
+    queryFn: () => getPaymentProviders(),
   });
 
   const [selectedCountry, setSelectedCountry] = useState();
@@ -166,20 +169,14 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
           />
         </div>
         <div className="name">
-          <label>Provider Channel</label>
+          <label>Provider</label>
           <GatewayDropdown
             value={payout}
             options={paymentP?.data?.map((item) => {
               return {
                 ...item,
-                name: `${item?.name} - [${
-                  item?.payOutProviderSupportedCurrency?.[0]?.currencyCode ||
-                  "--"
-                }]`,
-                value: `${item?.name} - [${
-                  item?.payOutProviderSupportedCurrency?.[0]?.currencyCode ||
-                  "--"
-                }]`,
+                name: `${item?.name} - [${item?.description || "--"}]`,
+                value: `${item?.name} - [${item?.description || "--"}]`,
               };
             })}
             onChange={(e) => {
