@@ -65,6 +65,35 @@ export const Payoutchannel = async () => {
   return data;
 };
 
+export const updatePaymentChannel = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updatepaymentprovidersupportcurrencies`,
+    body
+  );
+  return data;
+};
+export const updatePaymentProvider = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updatepaymentprovidersupportcurrencies`,
+    body
+  );
+  return data;
+};
+export const updatePayoutChannel = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updatepaymentprovidersupportcurrencies`,
+    body
+  );
+  return data;
+};
+export const updatePayoutProvider = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updatepayoutprovidersupportcurrencies`,
+    body
+  );
+  return data;
+};
+
 export const getRoleMeta = async () => {
   const { data } = await Axios.get(
     `${baseurl}/getuseraccountcategory?role=0&rateMetaDataId=0`
