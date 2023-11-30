@@ -4,11 +4,15 @@ import { styled } from "styled-components";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import SearchInput from "../reuseables/SearchInput";
 import BeneficiaryComponent from "../COMPONENTS/BeneficiaryComponent";
+import SendMoneyCustomersTableList from "./SendMoney/SendMoneyCustomersTableList";
 function SendMoney() {
   const [selectSender, setSelectSender] = useState(true);
   const [beneficiary, setBeneficiary] = useState();
   const [sendmoney, setSendMoney] = useState();
   const [reviewTransfer, setReviewTransfer] = useState();
+  const [userSelected, setUserSelected] = useState("");
+
+  const [step, setStep] = useState(1);
 
   const [Noteinfo, setNoteinfo] = useState(true);
 
@@ -150,102 +154,16 @@ function SendMoney() {
                 </p>
               </div>
             </div>
-            <div className="head">
-              <SearchInput placeholder="Search" style={{ width: "30vw" }} />
-              {/* <button onClick={() => setFilter(true)}>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M2.5 5.83301H17.5"
-                  stroke="#344054"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-                <path
-                  d="M5 10H15"
-                  stroke="#344054"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-                <path
-                  d="M8.33337 14.167H11.6667"
-                  stroke="#344054"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-              </svg>
-              Filter
-            </button> */}
-            </div>
 
-            <div className="TableGrid">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>CUSTOMER REF </th>
-                    <th>ID VERIFICATIONS</th>
-                    <th>REFRERENCE NO</th>
-                    <th>COMPLIANCE</th>
-                    <th>NAME</th>
-                    <th>EMAIL ID</th>
-                    <th>ADDRESS </th>
-                    <th>MOBILE NO</th>
-                    <th>DATE</th>
-                    <th>BRANCH</th>
-                    <th>STATUS</th>
-                    <th>FILE REF</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td
-                      style={{ color: "#417CD4" }}
-                      onClick={() => setBeneficiaryComponent(true)}
-                    >
-                      Send Money
-                    </td>
-                    <td>Verified</td>
-                    <td>TRO8357383</td>
-                    <td>0 Alert</td>
-                    <td>Saheed Albert</td>
-                    <td>Olamide@gmail.com</td>
-                    <td>42 Avoca Court</td>
-                    <td>44-88888</td>
-                    <td>23/08/2021</td>
-                    <td>Web Branch</td>
-                    <td>Active</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="row">
-              <span>Showing 1-5 of entries</span>
-              <div className="pagins">
-                <p>Rows per page:</p>
-                <select>
-                  <option>5</option>
-                </select>
-                <div className="arrow">
-                  <button
-                    onClick={() => {
-                      // setSortDate(sortdate - 1);
-                      // setEnd((prev) => prev - end);
-                    }}
-                  >
-                    <AiOutlineLeft />
-                  </button>
-                  <button>0</button>
-                  <button>
-                    <AiOutlineRight />
-                  </button>
-                </div>
-              </div>
-            </div>
+            {step === 1 && (
+              <SendMoneyCustomersTableList
+                setStep={setStep}
+                setUserSelected={setUserSelected}
+                userSelected={userSelected}
+              />
+            )}
+            {step === 2 && <SendMoneyCustomersTableList />}
+            {step === 3 && <SendMoneyCustomersTableList />}
           </div>
         </Content>
       )}

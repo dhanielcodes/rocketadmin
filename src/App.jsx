@@ -31,6 +31,11 @@ import CustomerDetailsPage from "./Routes/CustometsDetails/CustomerDetails";
 import PayoutProcessors from "./Routes/PayoutProcessors";
 import PaymentProcessors from "./Routes/PaymentProcessors";
 import RateMetadata from "./Routes/RateMetadata";
+import PaymentChannels from "./Routes/PaymentChannels";
+import PayoutChannels from "./Routes/PayoutChannels";
+import PaymentProviders from "./Routes/PaymentProviders";
+import PayoutProviders from "./Routes/PayoutProviders";
+import PayoutProvidersList from "./Routes/PayoutProviders";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -98,14 +103,7 @@ function App() {
                   </AppLogout>
                 }
               />
-              <Route
-                path="/payout-providers"
-                element={
-                  <AppLogout>
-                    <PayoutProvidersPage />
-                  </AppLogout>
-                }
-              />
+
               <Route
                 path="/clients"
                 element={
@@ -161,6 +159,41 @@ function App() {
                 element={
                   <AppLogout>
                     <PaymentProcessors />
+                  </AppLogout>
+                }
+              />
+
+              <Route
+                path="/payment-channels"
+                element={
+                  <AppLogout>
+                    <PaymentChannels />
+                  </AppLogout>
+                }
+              />
+
+              <Route
+                path="/payment-providers"
+                element={
+                  <AppLogout>
+                    <PaymentProviders />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/payout-channels"
+                element={
+                  <AppLogout>
+                    <PayoutChannels />
+                  </AppLogout>
+                }
+              />
+
+              <Route
+                path="/payout-providers"
+                element={
+                  <AppLogout>
+                    <PayoutProvidersList />
                   </AppLogout>
                 }
               />

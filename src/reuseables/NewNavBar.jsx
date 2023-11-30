@@ -119,6 +119,34 @@ export default function NewNavBar() {
       path: "/update-rates",
       icon: UpdateIcon,
     },
+
+    {
+      name: "Masters",
+      path: "//",
+      icon: CustomersIcon,
+      miniLinks: [
+        {
+          name: "Payment Channels",
+          path: "/payment-channels",
+          parentName: "Masters",
+        },
+        {
+          name: "Payment Providers",
+          path: "/payment-providers",
+          parentName: "Masters",
+        },
+        {
+          name: "Payout Channels",
+          path: "/payout-channels",
+          parentName: "Masters",
+        },
+        {
+          name: "Payout Providers",
+          path: "/payout-providers",
+          parentName: "Masters",
+        },
+      ],
+    },
     {
       name: "Reports",
       path: "//",
