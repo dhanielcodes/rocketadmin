@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BodyLayout from "../reuseables/BodyLayout";
 import { styled } from "styled-components";
 //import SearchInput from "../reuseables/SearchInput";
@@ -22,12 +22,18 @@ function PayoutProcessors() {
     data: payouts,
     isLoading: mutateLoading,
     isFetching: mutateFetching,
+    refetch,
   } = useQuery({
     queryKey: ["getPayoutProcessors"],
     queryFn: () => getPayoutProcessors(),
   });
 
   console.log(payouts);
+
+  useEffect(() => {
+    refetch();
+    //eslint-disable-next-line
+  }, [inviteAgent]);
 
   const columns = [
     {

@@ -13,7 +13,7 @@ import { getRoleMeta } from "../../services/Dashboard";
 import CreateRateMetadataModal from "../../modals/CreateRateMetadataModal";
 import UpdateRateMetadataModal from "../../modals/UpdateRateMetadataModal";
 
-function RateMetadataTable({ recall }) {
+function RateMetadataTable({ recall, setRecall }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
@@ -110,6 +110,8 @@ function RateMetadataTable({ recall }) {
         modal={modal}
         setModal={setModal}
         rateItem={rate}
+        recall={recall}
+        setRecall={setRecall}
       />
 
       <Content>

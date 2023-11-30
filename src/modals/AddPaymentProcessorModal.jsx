@@ -5,24 +5,25 @@ import { styled } from "styled-components";
 import AppButton from "../reuseables/AppButton";
 import { AiOutlineDown } from "react-icons/ai";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { addPaymentProcessor, sendAgentInvite } from "../services/Dashboard";
+import {
+  Paymentchannel,
+  addPaymentProcessor,
+  sendAgentInvite,
+} from "../services/Dashboard";
 import toast from "react-hot-toast";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
 import { countries } from "../../config/Test";
-import {
-  getPaymentProviders,
-  getPayoutProviders,
-} from "../services/PayoutDashboard";
+import { getPayoutProviders } from "../services/PayoutDashboard";
 import GatewayDropdown from "../reuseables/GatewayDropdown";
 function AddPaymentProcessorModal({ closeinviteAgent }) {
-  const { data: providersP } = useQuery({
-    queryKey: ["providersP"],
-    queryFn: () => getPayoutProviders(),
+  const { data: paymentChannels } = useQuery({
+    queryKey: ["paymentChannels"],
+    queryFn: () => Paymentchannel(),
   });
 
   const { data: paymentP } = useQuery({
     queryKey: ["paymentP"],
-    queryFn: () => getPaymentProviders(),
+    queryFn: () => getPayoutProviders(),
   });
 
   const [selectedCountry, setSelectedCountry] = useState();
@@ -74,7 +75,7 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
         toast.success(data?.message);
         closeinviteAgent(false);
       } else {
-        toast.success(data?.message);
+        toast.error(data?.message);
       }
     },
     onError: (data) => {
@@ -143,13 +144,14 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
         </div>
         <div className="name">
           <label>Payment Channel</label>
+
           <GatewayDropdown
             value={payment}
-            options={paymentP?.data?.map((item) => {
+            options={paymentChannels?.data?.map((item) => {
               return {
                 ...item,
-                name: `${item?.name} - [${item?.paymentProviderSupportedCurrency[0]?.currencyCode}]`,
-                value: `${item?.name} - [${item?.paymentProviderSupportedCurrency[0]?.currencyCode}]`,
+                name: `${item?.name} - [${item?.description || "--"}]`,
+                value: `${item?.name} - [${item?.description || "--"}]`,
               };
             })}
             onChange={(e) => {
@@ -167,14 +169,16 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
           <label>Provider Channel</label>
           <GatewayDropdown
             value={payout}
-            options={providersP?.data?.map((item) => {
+            options={paymentP?.data?.map((item) => {
               return {
                 ...item,
                 name: `${item?.name} - [${
-                  item?.payOutProviderSupportedCurrency[0]?.currencyCode || "--"
+                  item?.payOutProviderSupportedCurrency?.[0]?.currencyCode ||
+                  "--"
                 }]`,
                 value: `${item?.name} - [${
-                  item?.payOutProviderSupportedCurrency[0]?.currencyCode || "--"
+                  item?.payOutProviderSupportedCurrency?.[0]?.currencyCode ||
+                  "--"
                 }]`,
               };
             })}

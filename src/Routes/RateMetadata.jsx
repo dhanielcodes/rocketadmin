@@ -34,7 +34,7 @@ export default function RateMetadata() {
             <span>Create Metadata</span>
           </button>
         </Header>
-        <RateMetadataTable recall={recall} />
+        <RateMetadataTable recall={recall} setRecall={setRecall} />
       </BodyLayout>
     </>
   );
