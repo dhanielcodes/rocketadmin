@@ -101,6 +101,7 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
             <label>Receiving Country</label>
             <CountryDropdown2
               disabled={true}
+              collectionStatus
               value={{
                 label:
                   rateItem?.toCountryCurrency?.name +
