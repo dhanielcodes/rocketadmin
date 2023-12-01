@@ -130,6 +130,7 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
             <label>Receiving Country</label>
             <CountryDropdown2
               value={receive}
+              collectionStatus
               option={
                 countries?.data?.map((item) => {
                   return {

@@ -6,6 +6,8 @@ import Select from "react-select";
 import countryList from "react-select-country-list";
 import CountryFlag from "react-country-flag";
 import { styled } from "styled-components";
+import { useQuery } from "@tanstack/react-query";
+import { getCountries } from "../services/Auth";
 const CountryDropdown2 = ({
   value,
   onChange,
@@ -13,15 +15,55 @@ const CountryDropdown2 = ({
   defaultValue,
   option,
   disabled,
+  collectionStatus = false,
 }) => {
   const options = option || countryList().getData();
+  const { data: newOptions } = useQuery({
+    queryKey: ["getCategoriess"],
+    queryFn: getCountries,
+    onSuccess: (data) => {
+      //setCountries(data?.data);
+    },
+    // refetchInterval: 10000, // fetch data every 10 seconds
+    onError: (err) => {
+      //   setMessage(err.response.data.detail || err.message);
+      //   setOpen(true);
+      console.log(err);
+    },
+  });
 
   return (
     <CountyCont>
       <Select
         value={value}
         onChange={onChange}
-        options={options}
+        options={
+          newOptions?.data
+            ? collectionStatus
+              ? newOptions?.data
+                  ?.map((item) => {
+                    return {
+                      code: item?.currencyCode,
+                      value: item?.name,
+                      label: item?.name,
+                      id: item?.id,
+                      ...item,
+                    };
+                  })
+                  ?.filter((item) => item.isCollectionCurrency)
+              : newOptions?.data
+                  ?.map((item) => {
+                    return {
+                      code: item?.currencyCode,
+                      value: item?.name,
+                      label: item?.name,
+                      id: item?.id,
+                      ...item,
+                    };
+                  })
+                  ?.filter((item) => !item.isCollectionCurrency)
+            : options
+        }
         defaultValue={defaultValue}
         isDisabled={disabled}
         getOptionLabel={(country) => (
