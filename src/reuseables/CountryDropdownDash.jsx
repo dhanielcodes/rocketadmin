@@ -8,7 +8,7 @@ import CountryFlag from "react-country-flag";
 import { styled } from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { getCountries } from "../services/Auth";
-const CountryDropdown = ({
+const CountryDropdownDash = ({
   value,
   onChange,
   style,
@@ -37,33 +37,7 @@ const CountryDropdown = ({
       <Select
         value={value}
         onChange={onChange}
-        options={
-          newOptions?.data
-            ? collectionStatus
-              ? newOptions?.data
-                  ?.map((item) => {
-                    return {
-                      code: item?.currencyCode,
-                      value: item?.name,
-                      label: item?.name,
-                      id: item?.id,
-                      ...item,
-                    };
-                  })
-                  ?.filter((item) => item.isCollectionCurrency)
-              : newOptions?.data
-                  ?.map((item) => {
-                    return {
-                      code: item?.currencyCode,
-                      value: item?.name,
-                      label: item?.name,
-                      id: item?.id,
-                      ...item,
-                    };
-                  })
-                  ?.filter((item) => !item.isCollectionCurrency)
-            : options
-        }
+        options={options}
         defaultValue={defaultValue}
         isDisabled={disabled}
         getOptionLabel={(country) => (
@@ -148,4 +122,4 @@ const CountyCont = styled.div`
   }
 `;
 
-export default CountryDropdown;
+export default CountryDropdownDash;

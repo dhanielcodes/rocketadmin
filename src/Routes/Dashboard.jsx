@@ -27,6 +27,7 @@ import PersonIcon from "../assets/icons/PersonIcon";
 import { Link } from "react-router-dom";
 import TransferLogsTable from "./Dashboard/TransferLogs";
 import NewCustomerList from "./Dashboard/NewCustomersTableList";
+import CountryDropdownDash from "../reuseables/CountryDropdownDash";
 function Dashboard() {
   const [count, setCount] = useState(0);
 
@@ -90,7 +91,7 @@ function Dashboard() {
                           width: "120px",
                         }}
                       >
-                        <CountryDropdown2
+                        <CountryDropdownDash
                           value={
                             selectedVolume ||
                             dashboard?.data?.transactionVolumeByCurrency?.map(
