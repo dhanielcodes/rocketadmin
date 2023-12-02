@@ -8,6 +8,8 @@ import CountryFlag from "react-country-flag";
 import { styled } from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { getCountries } from "../services/Auth";
+import { countryObjectsArray } from "../../config/CountryCodes";
+
 const CountryDropdown = ({
   value,
   onChange,
@@ -28,6 +30,7 @@ const CountryDropdown = ({
     onError: (err) => {
       //   setMessage(err.response.data.detail || err.message);
       //   setOpen(true);
+
       console.log(err);
     },
   });
@@ -47,6 +50,7 @@ const CountryDropdown = ({
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
+                      slug: countryObjectsArray(item?.name),
                       ...item,
                     };
                   })
@@ -58,6 +62,7 @@ const CountryDropdown = ({
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
+                      slug: countryObjectsArray(item?.name),
                       ...item,
                     };
                   })
@@ -79,7 +84,7 @@ const CountryDropdown = ({
                 country.currencyCode?.slice(0, 2) ||
                 country.currency?.slice(0, 2)
               }
-              title={country.currencyCode || country.currency}
+              title={country.slug || country.currencyCode || country.currency}
               style={{
                 marginRight: "10px",
                 borderRadius: "10000000px",

@@ -18,6 +18,7 @@ import {
   getPayoutProviders,
 } from "../services/PayoutDashboard";
 import UpdatePayoutProvider from "../modals/UpdatePayoutProvider";
+import { countryObjectsArray } from "../../config/CountryCodes";
 
 // hhhhhhh
 function PayoutProvidersList() {
@@ -242,7 +243,7 @@ function PayoutProvidersList() {
                       borderRadius: "10000000px",
                       marginRight: "10px",
                     }}
-                    countryCode={item?.currencyCode?.slice(0, 2)}
+                    countryCode={countryObjectsArray(item?.name)}
                     svg
                   />
                   {item["currencyCode"]}

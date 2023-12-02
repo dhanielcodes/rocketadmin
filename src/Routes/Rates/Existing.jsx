@@ -9,6 +9,7 @@ import CountryFlag from "react-country-flag";
 import { kFormatter } from "../../utils/format";
 import { useState } from "react";
 import UpdateRatesModal from "../../modals/UpdateRatesModal";
+import { countryObjectsArray } from "../../../config/CountryCodes";
 
 function ExistingRatesTable() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -115,10 +116,10 @@ function ExistingRatesTable() {
               borderRadius: "10000000px",
               marginRight: "10px",
             }}
-            countryCode={item?.fromCountryCurrency?.currencyCode?.slice(0, 2)}
+            countryCode={countryObjectsArray(item?.fromCountryCurrency?.name)}
             svg
           />
-          {item?.fromCountryCurrency["name"]}
+          {item?.fromCountryCurrency["currencyCode"]}
         </div>
       ),
       receiving: (
@@ -133,10 +134,10 @@ function ExistingRatesTable() {
               marginRight: "10px",
               borderRadius: "10000000px",
             }}
-            countryCode={item?.toCountryCurrency?.currencyCode?.slice(0, 2)}
+            countryCode={countryObjectsArray(item?.toCountryCurrency?.name)}
             svg
           />
-          {item?.toCountryCurrency["name"]}
+          {item?.toCountryCurrency["currencyCode"]}
         </div>
       ),
 
@@ -152,13 +153,12 @@ function ExistingRatesTable() {
               marginRight: "10px",
               borderRadius: "10000000px",
             }}
-            countryCode={item?.currencyRateMetaData?.country?.currencyCode?.slice(
-              0,
-              2
+            countryCode={countryObjectsArray(
+              item?.currencyRateMetaData?.country?.name
             )}
             svg
           />
-          {item?.currencyRateMetaData?.country["name"]}
+          {item?.currencyRateMetaData?.country["currencyCode"]}
         </div>
       ),
     };

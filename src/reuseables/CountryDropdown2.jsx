@@ -7,6 +7,7 @@ import countryList from "react-select-country-list";
 import CountryFlag from "react-country-flag";
 import { styled } from "styled-components";
 import { useQuery } from "@tanstack/react-query";
+import { countryObjectsArray } from "../../config/CountryCodes";
 import { getCountries } from "../services/Auth";
 const CountryDropdown2 = ({
   value,
@@ -47,6 +48,7 @@ const CountryDropdown2 = ({
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
+                      slug: countryObjectsArray(item?.name),
                       ...item,
                     };
                   })
@@ -58,6 +60,7 @@ const CountryDropdown2 = ({
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
+                      slug: countryObjectsArray(item?.name),
                       ...item,
                     };
                   })
@@ -76,6 +79,7 @@ const CountryDropdown2 = ({
           >
             <ReactCountryFlag
               countryCode={
+                country.slug ||
                 country.currencyCode?.slice(0, 2) ||
                 country.currency?.slice(0, 2)
               }

@@ -21,6 +21,7 @@ import {
 } from "../services/PayoutDashboard";
 import GatewayDropdown from "../reuseables/GatewayDropdown";
 import ReactCountryFlag from "react-country-flag";
+import { countryObjectsArray } from "../../config/CountryCodes";
 function UpdatePaymentProvider({ closeinviteAgent, item }) {
   console.log(item?.paymentProviderSupportedCurrency);
 
@@ -123,8 +124,7 @@ function UpdatePaymentProvider({ closeinviteAgent, item }) {
                 }}
               >
                 <ReactCountryFlag
-                  countryCode={item?.currencyCode?.slice(0, 2)}
-                  title={item.currencyCode}
+                  countryCode={countryObjectsArray(item?.name)}
                   style={{
                     marginRight: "10px",
                     width: "20px",
