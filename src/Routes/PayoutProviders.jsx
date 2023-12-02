@@ -245,7 +245,7 @@ function PayoutProvidersList() {
                     countryCode={item?.currencyCode?.slice(0, 2)}
                     svg
                   />
-                  {item["name"]}
+                  {item["currencyCode"]}
                 </div>
               </>
             );
