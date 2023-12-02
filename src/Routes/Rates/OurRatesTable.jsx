@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getOurRates } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
 import { kFormatter } from "../../utils/format";
+import { countryObjectsArray } from "../../../config/CountryCodes";
 
 function OurRatesTable() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -85,10 +86,10 @@ function OurRatesTable() {
               borderRadius: "10000000px",
               marginRight: "10px",
             }}
-            countryCode={item?.fromCurrency?.slice(0, 2)}
+            countryCode={countryObjectsArray(item?.fromCountry)}
             svg
           />
-          {item?.fromCountry}
+          {item?.fromCurrency}
         </div>
       ),
       receiving: (
@@ -103,10 +104,10 @@ function OurRatesTable() {
               marginRight: "10px",
               borderRadius: "10000000px",
             }}
-            countryCode={item?.toCurrency?.slice(0, 2)}
+            countryCode={countryObjectsArray(item?.toCountry)}
             svg
           />
-          {item?.toCountry}
+          {item?.toCurrency}
         </div>
       ),
     };

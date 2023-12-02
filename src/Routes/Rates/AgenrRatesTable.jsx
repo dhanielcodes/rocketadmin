@@ -12,6 +12,7 @@ import {
   kFormatter3,
   kFormatter4,
 } from "../../utils/format";
+import { countryObjectsArray } from "../../../config/CountryCodes";
 
 function AgentRatesTable() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -91,10 +92,10 @@ function AgentRatesTable() {
               borderRadius: "10000000px",
               marginRight: "10px",
             }}
-            countryCode={item?.fromCountryCurrency?.currencyCode?.slice(0, 2)}
+            countryCode={countryObjectsArray(item?.fromCountryCurrency?.name)}
             svg
           />
-          {item?.fromCountryCurrency["name"]}
+          {item?.fromCountryCurrency["currencyCode"]}
         </div>
       ),
       receiving: (
@@ -109,10 +110,10 @@ function AgentRatesTable() {
               marginRight: "10px",
               borderRadius: "10000000px",
             }}
-            countryCode={item?.toCountryCurrency?.currencyCode?.slice(0, 2)}
+            countryCode={countryObjectsArray(item?.toCountryCurrency?.name)}
             svg
           />
-          {item?.toCountryCurrency["name"]}
+          {item?.toCountryCurrency["currencyCode"]}
         </div>
       ),
 
@@ -134,7 +135,7 @@ function AgentRatesTable() {
             )}
             svg
           />
-          {item?.currencyRateMetaData?.country["name"]}
+          {item?.currencyRateMetaData?.country["currencyCode"]}
         </div>
       ),
     };

@@ -15,6 +15,7 @@ import ReactCountryFlag from "react-country-flag";
 import AddPaymentProcessorModal from "../modals/AddPaymentProcessorModal";
 import { getPaymentProviders } from "../services/PayoutDashboard";
 import UpdatePaymentProvider from "../modals/UpdatePaymentProvider";
+import { countryObjectsArray } from "../../config/CountryCodes";
 
 // hhhhhhh
 function PaymentProviders() {
@@ -236,7 +237,7 @@ function PaymentProviders() {
                       borderRadius: "10000000px",
                       marginRight: "10px",
                     }}
-                    countryCode={item?.currencyCode?.slice(0, 2)}
+                    countryCode={countryObjectsArray(item?.name)}
                     svg
                   />
                   {item["currencyCode"]}
