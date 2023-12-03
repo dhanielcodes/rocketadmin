@@ -110,6 +110,11 @@ export default function NewNavBar() {
       ],
     },
     {
+      name: "Transfer List",
+      path: "/transfers",
+      icon: TransfersIcon,
+    },
+    {
       name: "Currency Rate Metadata",
       path: "/rate-metadata",
       icon: UpdateIcon,
@@ -125,6 +130,18 @@ export default function NewNavBar() {
       path: "//",
       icon: CustomersIcon,
       miniLinks: [
+        {
+          name: "Location",
+          path: "//",
+          parentName: "Masters",
+          miniLinks: [
+            {
+              name: "Countries",
+              path: "/countries",
+              parentName: "Location",
+            },
+          ],
+        },
         {
           name: "Payment Channels",
           path: "/payment-channels",

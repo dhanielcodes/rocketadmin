@@ -36,6 +36,9 @@ import PayoutChannels from "./Routes/PayoutChannels";
 import PaymentProviders from "./Routes/PaymentProviders";
 import PayoutProviders from "./Routes/PayoutProviders";
 import PayoutProvidersList from "./Routes/PayoutProviders";
+import CountriesPage from "./Routes/Countries";
+import CitiesPage from "./Routes/Cities";
+import TransfersListPage from "./Routes/Transfers";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -242,6 +245,31 @@ function App() {
                 element={
                   <AppLogout>
                     <Beneficiary />
+                  </AppLogout>
+                }
+              />
+
+              <Route
+                path="/countries"
+                element={
+                  <AppLogout>
+                    <CountriesPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/cities"
+                element={
+                  <AppLogout>
+                    <CitiesPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/transfers"
+                element={
+                  <AppLogout>
+                    <TransfersListPage />
                   </AppLogout>
                 }
               />

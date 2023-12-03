@@ -68,11 +68,9 @@ export const states = async (cid, sid) => {
   return data;
 };
 
-export const cities = async (cid, sid, ciid) => {
+export const getCities = async (cid) => {
   const { data } = await Axios.get(
-    `${baseurl}/getcities?countryId=${cid || 0}&stateId=${sid || 0}&citiId=${
-      ciid || 0
-    }`
+    `${baseurl}/getcities?countryId=${cid || 0}`
   );
   return data;
 };

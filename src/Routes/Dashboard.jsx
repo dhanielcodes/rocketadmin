@@ -76,12 +76,12 @@ function Dashboard() {
             />
           ) : (
             <div className="content1">
-              <div className="contside1">
+              <Link className="contside1" to="/transfers">
                 <div className="contside1Text">
-                  <h1>21</h1>
+                  <h1>{newVolume?.todayTransferCount || 0}</h1>
                   <p>Today’s transfer</p>
                 </div>
-              </div>
+              </Link>
               <div className="contside2">
                 <div className="contside22">
                   <div className="contside2up">

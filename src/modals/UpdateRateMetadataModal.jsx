@@ -36,8 +36,14 @@ export default function UpdateRateMetadataModal({
   const [bonusRate, setBonusRate] = useState();
   const [selectedCountry, setSelectedCountry] = useState();
   const [rateMeta, setRateMeta] = useState();
-
+  const [allowKyc, setAllowKyc] = useState();
+  const [kycThreshold, setKycThreshold] = useState();
   console.log(rateItem);
+
+  const newKyc = allowKyc || {
+    label: rateItem?.allowTransferPreKCY ? "True" : "False",
+    value: rateItem?.allowTransferPreKCY,
+  };
 
   const { mutate, isLoading: mutateLoading } = useMutation({
     mutationFn: updateRateMetadata,
@@ -64,6 +70,8 @@ export default function UpdateRateMetadataModal({
         setBonusRate();
         setSelectedCountry();
         setTransferBonusThresh();
+        setAllowKyc();
+        setKycThreshold();
         //refetch();
       } else {
         toast.error(data?.message);
@@ -125,6 +133,8 @@ export default function UpdateRateMetadataModal({
             setBonusRate();
             setSelectedCountry();
             setTransferBonusThresh();
+            setAllowKyc();
+            setKycThreshold();
           }}
           heading="Update Currency Rate Metadata"
         >
@@ -222,6 +232,50 @@ export default function UpdateRateMetadataModal({
               onChange={(e) => {
                 setRateMeta(e);
               }}
+            />
+          </div>
+          <div
+            className="name"
+            style={{
+              marginBottom: "20px",
+            }}
+          >
+            <AppSelect
+              options={[
+                {
+                  label: "True",
+                  value: true,
+                },
+                {
+                  label: "False",
+                  value: false,
+                },
+              ]}
+              label="Allow KYC Threshold"
+              value={newKyc}
+              onChange={(e) => {
+                setAllowKyc(e);
+              }}
+            />
+          </div>
+
+          <div
+            className="name"
+            style={{
+              marginTop: "20px",
+            }}
+          >
+            <label>KYC Threshold</label>
+            <AppInput
+              placeholder=""
+              type="number"
+              onChange={(e) => {
+                setKycThreshold(e.target.value);
+              }}
+              width="95%"
+              name="username"
+              //defaultValue={charge?.baseValue}
+              defaultValue={rateItem?.kycThreshold}
             />
           </div>
           <div
@@ -486,6 +540,9 @@ export default function UpdateRateMetadataModal({
                     transferBonusThresh || rateItem?.transferBonusThreshold,
                   transferBonusRateValue:
                     bonusRate || rateItem?.transferBonusRateValue,
+                  allowTransferPreKCY:
+                    allowKyc?.value || rateItem?.allowTransferPreKCY,
+                  kycThreshold: kycThreshold || rateItem?.kycThreshold,
                 });
               }}
               className="confirm"
