@@ -34,14 +34,14 @@ function TransferLogsTable() {
     {
       title: "TRANSACTION STATUS",
       dataIndex: "status",
-      width: 160,
+      width: 190,
 
       //render: () => "Other",
     },
     {
       title: "COLLECTION STATUS",
       dataIndex: "status2",
-      width: 160,
+      width: 190,
 
       //render: () => "Other",
     },
@@ -125,7 +125,7 @@ function TransferLogsTable() {
       //render: () => "Other",
     },
     {
-      title: "ADMIN LAST UPDATED DATE",
+      title: "PAYMENT DATE",
       dataIndex: "paymentDate",
       width: 260,
       //render: () => "Other 2",

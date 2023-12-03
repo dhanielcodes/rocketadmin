@@ -36,6 +36,8 @@ export default function CreateRateMetadataModal({
   const [bonusRate, setBonusRate] = useState();
   const [selectedCountry, setSelectedCountry] = useState();
   const [rateMeta, setRateMeta] = useState();
+  const [allowKyc, setAllowKyc] = useState();
+  const [kycThreshold, setKycThreshold] = useState();
 
   console.log(rateItem);
 
@@ -63,6 +65,8 @@ export default function CreateRateMetadataModal({
         setBonusRate();
         setSelectedCountry();
         setTransferBonusThresh();
+        setAllowKyc();
+        setKycThreshold();
         //refetch();
       } else {
         toast.error(data?.message);
@@ -124,6 +128,8 @@ export default function CreateRateMetadataModal({
             setBonusRate();
             setSelectedCountry();
             setTransferBonusThresh();
+            setAllowKyc();
+            setKycThreshold();
           }}
           heading="Create Currency Rate Metadata"
         >
@@ -159,7 +165,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Name</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="text"
               onChange={(e) => {
                 setName(e.target.value);
@@ -178,7 +184,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Description</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="text"
               onChange={(e) => {
                 setDesc(e.target.value);
@@ -212,6 +218,50 @@ export default function CreateRateMetadataModal({
               }}
             />
           </div>
+
+          <div
+            className="name"
+            style={{
+              marginBottom: "20px",
+            }}
+          >
+            <AppSelect
+              options={[
+                {
+                  label: "True",
+                  value: true,
+                },
+                {
+                  label: "False",
+                  value: false,
+                },
+              ]}
+              label="Allow KYC Threshold"
+              onChange={(e) => {
+                setAllowKyc(e);
+              }}
+            />
+          </div>
+
+          <div
+            className="name"
+            style={{
+              marginTop: "20px",
+            }}
+          >
+            <label>KYC Threshold</label>
+            <AppInput
+              placeholder=""
+              type="number"
+              onChange={(e) => {
+                setKycThreshold(e.target.value);
+              }}
+              width="95%"
+              name="username"
+              //defaultValue={charge?.baseValue}
+            />
+          </div>
+
           <div
             className="name"
             style={{
@@ -220,7 +270,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Minimum Transfer Limit</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="number"
               onChange={(e) => {
                 setMinTransfer(e.target.value);
@@ -239,7 +289,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Maximu Transfer Limit</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="number"
               onChange={(e) => {
                 setMaxTransfer(e.target.value);
@@ -257,7 +307,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Daily Limit</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="number"
               onChange={(e) => {
                 setDailyTransfer(e.target.value);
@@ -275,7 +325,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Weekly Limit</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="number"
               onChange={(e) => {
                 setWeeklyTransfer(e.target.value);
@@ -293,7 +343,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Monthly Limit</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="number"
               onChange={(e) => {
                 setMonthlyTransfer(e.target.value);
@@ -311,7 +361,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Annual Limit</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="number"
               onChange={(e) => {
                 setAnnualTransfer(e.target.value);
@@ -329,7 +379,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Proof of Payment Threshold</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="number"
               onChange={(e) => {
                 setPopThresh(e.target.value);
@@ -347,7 +397,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Source of Funds Threshold</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="number"
               onChange={(e) => {
                 setSofThresh(e.target.value);
@@ -365,7 +415,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Allow Below Minimum</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="number"
               onChange={(e) => {
                 setAllowBelow(e.target.value);
@@ -383,7 +433,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Below Minimum Charges</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="number"
               onChange={(e) => {
                 setBelowMinCharges(e.target.value);
@@ -401,7 +451,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Transfer Bonus Threshold</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="number"
               onChange={(e) => {
                 setTransferBonusThresh(e.target.value);
@@ -420,7 +470,7 @@ export default function CreateRateMetadataModal({
           >
             <label>Bonus Rate Value</label>
             <AppInput
-              placeholder="How much"
+              placeholder=""
               type="number"
               onChange={(e) => {
                 setBonusRate(e.target.value);
@@ -466,6 +516,8 @@ export default function CreateRateMetadataModal({
                   allowBelow &&
                   belowMinCharges &&
                   transferBonusThresh &&
+                  allowKyc &&
+                  kycThreshold &&
                   bonusRate
                 ) {
                   mutate({
@@ -489,7 +541,9 @@ export default function CreateRateMetadataModal({
                     transferBelowMinimumAllowed: allowBelow,
                     transferBelowMinimumCharges: belowMinCharges,
                     transferBonusThreshold: transferBonusThresh,
+                    allowTransferPreKCY: allowKyc?.value,
                     transferBonusRateValue: bonusRate,
+                    kycThreshold: kycThreshold || 0,
                   });
                 } else {
                   toast.error("Fill all fields");
