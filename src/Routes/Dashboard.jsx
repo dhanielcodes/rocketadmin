@@ -122,12 +122,6 @@ function Dashboard() {
                     <div className="contside2child2">
                       <div className="box">
                         <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                          {kFormatter4(newVolume?.lastOneTwentyDays || 0)}
-                        </div>{" "}
-                        <span>Last 20 Days</span>
-                      </div>
-                      <div className="box">
-                        <div style={{ fontSize: "2vw", fontWeight: "600" }}>
                           {kFormatter4(newVolume?.lastSixtyDays || 0)}
                         </div>{" "}
                         <span>Last 60 Days</span>
@@ -137,6 +131,12 @@ function Dashboard() {
                           {kFormatter4(newVolume?.lastNinetyDays || 0)}
                         </div>{" "}
                         <span>Last 90 Days</span>
+                      </div>
+                      <div className="box">
+                        <div style={{ fontSize: "2vw", fontWeight: "600" }}>
+                          {kFormatter4(newVolume?.lastOneTwentyDays || 0)}
+                        </div>{" "}
+                        <span>Last 120 Days</span>
                       </div>
                     </div>
                   </div>
