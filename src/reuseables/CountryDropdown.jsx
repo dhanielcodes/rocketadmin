@@ -7,7 +7,7 @@ import countryList from "react-select-country-list";
 import CountryFlag from "react-country-flag";
 import { styled } from "styled-components";
 import { useQuery } from "@tanstack/react-query";
-import { getCountries } from "../services/Auth";
+import { getCurrencies } from "../services/Auth";
 import { countryObjectsArray } from "../../config/CountryCodes";
 
 const CountryDropdown = ({
@@ -22,7 +22,7 @@ const CountryDropdown = ({
   const options = option || countryList().getData();
   const { data: newOptions } = useQuery({
     queryKey: ["getCategoriess"],
-    queryFn: getCountries,
+    queryFn: getCurrencies,
     onSuccess: (data) => {
       //setCountries(data?.data);
     },
@@ -54,7 +54,7 @@ const CountryDropdown = ({
                       ...item,
                     };
                   })
-                  ?.filter((item) => item.isCollectionCurrency)
+                  ?.filter((item) => item.isReceiving)
               : newOptions?.data
                   ?.map((item) => {
                     return {
@@ -66,7 +66,7 @@ const CountryDropdown = ({
                       ...item,
                     };
                   })
-                  ?.filter((item) => !item.isCollectionCurrency)
+                  ?.filter((item) => !item.isReceiving)
             : options
         }
         defaultValue={defaultValue}
@@ -84,7 +84,12 @@ const CountryDropdown = ({
                 country.currencyCode?.slice(0, 2) ||
                 country.currency?.slice(0, 2)
               }
-              title={country.slug || country.currencyCode || country.currency}
+              title={
+                country?.code ||
+                country?.code?.slice(0, 2) ||
+                country.currencyCode ||
+                country.currency
+              }
               style={{
                 marginRight: "10px",
                 borderRadius: "10000000px",

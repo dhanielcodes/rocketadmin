@@ -12,7 +12,7 @@ import {
 } from "../../../services/PayoutDashboard";
 import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
-import { getClientChargeTypes, getCountries } from "../../../services/Auth";
+import { getClientChargeTypes, getCurrencies } from "../../../services/Auth";
 import { kFormatter4 } from "../../../utils/format";
 
 export default function Gateways({ data }) {
