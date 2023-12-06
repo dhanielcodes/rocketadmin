@@ -8,7 +8,7 @@ import CountryFlag from "react-country-flag";
 import { styled } from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { countryObjectsArray } from "../../config/CountryCodes";
-import { getCountries } from "../services/Auth";
+import { getCountries, getCurrencies } from "../services/Auth";
 const CountryDropdown2 = ({
   value,
   onChange,
@@ -20,8 +20,8 @@ const CountryDropdown2 = ({
 }) => {
   const options = option || countryList().getData();
   const { data: newOptions } = useQuery({
-    queryKey: ["getCategoriess"],
-    queryFn: getCountries,
+    queryKey: ["getCategoriessop"],
+    queryFn: getCurrencies,
     onSuccess: (data) => {
       //setCountries(data?.data);
     },
@@ -44,27 +44,23 @@ const CountryDropdown2 = ({
               ? newOptions?.data
                   ?.map((item) => {
                     return {
-                      code: item?.currencyCode,
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
-                      slug: countryObjectsArray(item?.name),
                       ...item,
                     };
                   })
-                  ?.filter((item) => item.isCollectionCurrency)
+                  ?.filter((item) => item.isReceiving)
               : newOptions?.data
                   ?.map((item) => {
                     return {
-                      code: item?.currencyCode,
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
-                      slug: countryObjectsArray(item?.name),
                       ...item,
                     };
                   })
-                  ?.filter((item) => !item.isCollectionCurrency)
+                  ?.filter((item) => !item.isReceiving)
             : options
         }
         defaultValue={defaultValue}
@@ -74,15 +70,11 @@ const CountryDropdown2 = ({
             className="countryName"
             style={{ fontSize: "16px", display: "flex", alignItems: "center" }}
             onClick={() => {
-              console.log(country?.currencyCode || country.currency);
+              console.log(country?.code || country.currency);
             }}
           >
             <ReactCountryFlag
-              countryCode={
-                country.slug ||
-                country.currencyCode?.slice(0, 2) ||
-                country.currency?.slice(0, 2)
-              }
+              countryCode={country.code?.slice(0, 2)}
               title={country.currencyCode || country.currency}
               style={{
                 marginRight: "10px",

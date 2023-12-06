@@ -144,20 +144,18 @@ export default function UpdateRateMetadataModal({
               marginTop: "20px",
             }}
           >
-            <label>Country</label>
+            <label>Currency</label>
             <CountryDropdown2
               value={{
                 label:
-                  rateItem?.country?.name +
-                  " - " +
-                  rateItem?.country?.currencyCode,
-                value: rateItem?.country?.name,
+                  rateItem?.currency?.name + " - " + rateItem?.currency?.code,
+                value: rateItem?.currency?.name,
               }}
               disabled={true}
               option={
                 countries?.data?.map((item) => {
                   return {
-                    label: item?.name + " - " + item?.currencyCode,
+                    label: item?.name + " - " + item?.code,
                     value: item?.name,
                     ...item,
                   };

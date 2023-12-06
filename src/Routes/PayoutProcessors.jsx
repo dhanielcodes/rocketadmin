@@ -112,7 +112,7 @@ function PayoutProcessors() {
               borderRadius: "10000000px",
               marginRight: "10px",
             }}
-            countryCode={item?.country?.currencyCode?.slice(0, 2)}
+            countryCode={item?.country?.code?.slice(0, 2)}
             svg
           />
           {item?.country["name"]}

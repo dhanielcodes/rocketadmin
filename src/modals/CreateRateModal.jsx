@@ -104,13 +104,13 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
           </div>
 
           <div className="name">
-            <label>Sending Country</label>
+            <label>Sending Currency</label>
             <CountryDropdown2
               value={send}
               option={
                 countries?.data?.map((item) => {
                   return {
-                    label: item?.name + " - " + item?.currencyCode,
+                    label: item?.name + " - " + item?.code,
                     value: item?.name,
                     ...item,
                   };
@@ -127,14 +127,14 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
               marginTop: "20px",
             }}
           >
-            <label>Receiving Country</label>
+            <label>Receiving Currency</label>
             <CountryDropdown2
               value={receive}
               collectionStatus
               option={
                 countries?.data?.map((item) => {
                   return {
-                    label: item?.name + " - " + item?.currencyCode,
+                    label: item?.name + " - " + item?.code,
                     value: item?.name,
                     ...item,
                   };
@@ -169,7 +169,7 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
             <div className="rates">
               <div className="pri">
                 <ReactCountryFlag
-                  countryCode={send?.currencyCode.slice(0, 2)}
+                  countryCode={send?.code.slice(0, 2)}
                   style={{
                     width: "40px",
                     height: "40px",
@@ -181,10 +181,7 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
               </div>
               <div style={{ color: "#000" }}>=</div>
               <div className="sec">
-                <ReactCountryFlag
-                  countryCode={receive?.currencyCode.slice(0, 2)}
-                  svg
-                />
+                <ReactCountryFlag countryCode={receive?.code.slice(0, 2)} svg />
               </div>
             </div>
           </Container>
@@ -221,10 +218,10 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
                     firstName: "Admin",
                   },
                   conversionRate: rate,
-                  fromCountryCurrency: {
+                  fromCurrency: {
                     id: send?.id,
                   },
-                  toCountryCurrency: {
+                  toCurrency: {
                     id: receive?.id,
                   },
                 });

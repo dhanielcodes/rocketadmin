@@ -16,12 +16,17 @@ export const createUser = async (body) => {
   return data;
 };
 
-export const getCountries = async () => {
+/* export const getCountries = async () => {
   const { data } = await Axios.get(`${baseurl}/getactivecountries`);
+  return data;
+}; */
+
+export const getCurrencies = async () => {
+  const { data } = await Axios.get(`${baseurl}/getcurrency`);
   return data;
 };
 
-export const getAllCountries = async () => {
+export const getCountries = async () => {
   const { data } = await Axios.get(`${baseurl}/getcountries`);
   return data;
 };

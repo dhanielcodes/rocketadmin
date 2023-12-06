@@ -7,7 +7,7 @@ import countryList from "react-select-country-list";
 import CountryFlag from "react-country-flag";
 import { styled } from "styled-components";
 import { useQuery } from "@tanstack/react-query";
-import { getCountries } from "../services/Auth";
+import { getCountries, getCurrencies } from "../services/Auth";
 import { countryObjectsArray } from "../../config/CountryCodes";
 
 const CountryDropdown = ({
@@ -21,8 +21,8 @@ const CountryDropdown = ({
 }) => {
   const options = option || countryList().getData();
   const { data: newOptions } = useQuery({
-    queryKey: ["getCategoriess"],
-    queryFn: getCountries,
+    queryKey: ["getCategoriessdsa"],
+    queryFn: getCurrencies,
     onSuccess: (data) => {
       //setCountries(data?.data);
     },
@@ -46,27 +46,23 @@ const CountryDropdown = ({
               ? newOptions?.data
                   ?.map((item) => {
                     return {
-                      code: item?.currencyCode,
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
-                      slug: countryObjectsArray(item?.name),
                       ...item,
                     };
                   })
-                  ?.filter((item) => item.isCollectionCurrency)
+                  ?.filter((item) => item.isReceiving)
               : newOptions?.data
                   ?.map((item) => {
                     return {
-                      code: item?.currencyCode,
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
-                      slug: countryObjectsArray(item?.name),
                       ...item,
                     };
                   })
-                  ?.filter((item) => !item.isCollectionCurrency)
+                  ?.filter((item) => !item.isReceiving)
             : options
         }
         defaultValue={defaultValue}
@@ -80,11 +76,8 @@ const CountryDropdown = ({
             }}
           >
             <ReactCountryFlag
-              countryCode={
-                country.currencyCode?.slice(0, 2) ||
-                country.currency?.slice(0, 2)
-              }
-              title={country.slug || country.currencyCode || country.currency}
+              countryCode={country.code?.slice(0, 2)}
+              title={country.code}
               style={{
                 marginRight: "10px",
                 borderRadius: "10000000px",

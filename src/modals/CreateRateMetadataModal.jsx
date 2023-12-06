@@ -139,7 +139,7 @@ export default function CreateRateMetadataModal({
               marginTop: "20px",
             }}
           >
-            <label>Country</label>
+            <label>Currency</label>
             <CountryDropdown2
               value={selectedCountry}
               option={
@@ -522,7 +522,7 @@ export default function CreateRateMetadataModal({
                 ) {
                   mutate({
                     updatedBy: userDetails?.userId,
-                    country: {
+                    currency: {
                       id: selectedCountry?.id,
                     },
                     role: {

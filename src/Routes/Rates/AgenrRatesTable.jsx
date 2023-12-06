@@ -92,10 +92,10 @@ function AgentRatesTable() {
               borderRadius: "10000000px",
               marginRight: "10px",
             }}
-            countryCode={countryObjectsArray(item?.fromCountryCurrency?.name)}
+            countryCode={item?.fromCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.fromCountryCurrency["currencyCode"]}
+          {item?.fromCurrency["name"]}
         </div>
       ),
       receiving: (
@@ -110,10 +110,10 @@ function AgentRatesTable() {
               marginRight: "10px",
               borderRadius: "10000000px",
             }}
-            countryCode={countryObjectsArray(item?.toCountryCurrency?.name)}
+            countryCode={item?.toCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.toCountryCurrency["currencyCode"]}
+          {item?.toCurrency["name"]}
         </div>
       ),
 
@@ -129,13 +129,13 @@ function AgentRatesTable() {
               marginRight: "10px",
               borderRadius: "10000000px",
             }}
-            countryCode={item?.currencyRateMetaData?.country?.currencyCode?.slice(
+            countryCode={item?.currencyRateMetaData?.currency?.code?.slice(
               0,
               2
             )}
             svg
           />
-          {item?.currencyRateMetaData?.country["currencyCode"]}
+          {item?.currencyRateMetaData?.currency?.["code"]}
         </div>
       ),
     };
