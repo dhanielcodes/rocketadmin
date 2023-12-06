@@ -155,7 +155,7 @@ function ExistingRatesTable() {
             }}
             countryCode={item?.currencyRateMetaData?.currency?.code?.slice(
               0,
-              9
+              2
             )}
             svg
           />

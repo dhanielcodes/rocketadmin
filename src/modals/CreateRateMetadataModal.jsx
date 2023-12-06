@@ -142,6 +142,7 @@ export default function CreateRateMetadataModal({
             <label>Currency</label>
             <CountryDropdown2
               value={selectedCountry}
+              collectionStatus
               option={
                 countries?.data?.map((item) => {
                   return {

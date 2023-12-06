@@ -62,7 +62,7 @@ function PaymentProcessors() {
       width: 200,
     },
     {
-      title: "PAYMENT PROCESSOR",
+      title: "PAYMENT PROVIDER",
       dataIndex: "newGateWay",
       width: 240,
     },
@@ -100,10 +100,10 @@ function PaymentProcessors() {
                   marginRight: "10px",
                   objectFit: "cover",
                 }}
-                src={item?.paymentChannel["logo"]}
+                src={item?.paymentProvider["logo"]}
                 alt=""
               />
-              {item?.paymentChannel["name"]}
+              {item?.paymentProvider["name"]}
             </div>
           ),
           sending: (
@@ -118,10 +118,10 @@ function PaymentProcessors() {
                   borderRadius: "10000000px",
                   marginRight: "10px",
                 }}
-                countryCode={item?.country?.code?.slice(0, 2)}
+                countryCode={item?.currency?.code?.slice(0, 2)}
                 svg
               />
-              {item?.country["name"]}
+              {item?.currency["name"]}
             </div>
           ),
           action: (
