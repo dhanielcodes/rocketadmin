@@ -82,15 +82,6 @@ function UpdatePayoutProvider({ closeinviteAgent, item }) {
           <label>Country</label>
           <CountryDropdown2
             value={selectedCountry}
-            option={
-              countries?.data?.map((item) => {
-                return {
-                  label: item?.name + " - " + item?.currencyCode,
-                  value: item?.name,
-                  ...item,
-                };
-              }) || []
-            }
             onChange={(e) => {
               setSelectedCountry(e);
               setArray([
@@ -123,7 +114,7 @@ function UpdatePayoutProvider({ closeinviteAgent, item }) {
                 }}
               >
                 <ReactCountryFlag
-                  countryCode={countryObjectsArray(item?.name)}
+                  countryCode={item?.code?.slice(0, 2)}
                   style={{
                     marginRight: "10px",
                     width: "20px",
@@ -132,7 +123,7 @@ function UpdatePayoutProvider({ closeinviteAgent, item }) {
                   }}
                   svg
                 />
-                <p>{item?.currencyCode}</p>
+                <p>{item?.code}</p>
                 <svg
                   onClick={() => {
                     handleRemove(item);

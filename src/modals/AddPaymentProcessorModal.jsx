@@ -36,7 +36,7 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
   const [processor, setProcessor] = useState({
     name: "",
     description: "",
-    country: {
+    currency: {
       id: selectedCountry?.id,
     },
     paymentChannel: {
@@ -60,7 +60,7 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
     if (
       processor?.name &&
       processor?.description &&
-      processor?.country?.id &&
+      processor?.currency?.id &&
       processor?.paymentChannel?.id &&
       processor?.paymentProvider?.id
     ) {
@@ -122,23 +122,14 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
             marginTop: "20px",
           }}
         >
-          <label>Country</label>
+          <label>Currency</label>
           <CountryDropdown2
             value={selectedCountry}
-            option={
-              countries?.data?.map((item) => {
-                return {
-                  label: item?.name + " - " + item?.currencyCode,
-                  value: item?.name,
-                  ...item,
-                };
-              }) || []
-            }
             onChange={(e) => {
               setSelectedCountry(e);
               setProcessor({
                 ...processor,
-                country: {
+                currency: {
                   id: e?.id,
                 },
               });

@@ -14,7 +14,7 @@ import CustomTable from "../reuseables/CustomTable";
 import { Link } from "react-router-dom";
 import ReactCountryFlag from "react-country-flag";
 import AddPaymentProcessorModal from "../modals/AddPaymentProcessorModal";
-import { getAllCountries, getCountries } from "../services/Auth";
+import { getCountries } from "../services/Auth";
 import { countryObjectsArray } from "../../config/CountryCodes";
 
 // hhhhhhh
@@ -31,7 +31,7 @@ function CountriesPage() {
     isFetching: mutateFetching,
     refetch,
   } = useQuery({
-    queryKey: ["getAllCountries"],
+    queryKey: ["getCountriesmk"],
     queryFn: () => getCountries(),
   });
 

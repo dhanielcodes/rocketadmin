@@ -44,7 +44,7 @@ function ExistingRatesTable() {
       width: 190,
     },
     {
-      title: "RECEIVING COUNTRY",
+      title: "Receiving Currency",
       dataIndex: "receiving",
       width: 190,
     },
@@ -116,10 +116,10 @@ function ExistingRatesTable() {
               borderRadius: "10000000px",
               marginRight: "10px",
             }}
-            countryCode={countryObjectsArray(item?.fromCountryCurrency?.name)}
+            countryCode={item?.fromCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.fromCountryCurrency["currencyCode"]}
+          {item?.fromCurrency["code"]}
         </div>
       ),
       receiving: (
@@ -134,10 +134,10 @@ function ExistingRatesTable() {
               marginRight: "10px",
               borderRadius: "10000000px",
             }}
-            countryCode={countryObjectsArray(item?.toCountryCurrency?.name)}
+            countryCode={item?.toCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.toCountryCurrency["currencyCode"]}
+          {item?.toCurrency["code"]}
         </div>
       ),
 
@@ -153,12 +153,13 @@ function ExistingRatesTable() {
               marginRight: "10px",
               borderRadius: "10000000px",
             }}
-            countryCode={countryObjectsArray(
-              item?.currencyRateMetaData?.country?.name
+            countryCode={item?.currencyRateMetaData?.currency?.code?.slice(
+              0,
+              2
             )}
             svg
           />
-          {item?.currencyRateMetaData?.country["currencyCode"]}
+          {item?.currencyRateMetaData?.currency?.["code"]}
         </div>
       ),
     };

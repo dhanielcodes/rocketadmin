@@ -62,7 +62,7 @@ function PaymentProcessors() {
       width: 200,
     },
     {
-      title: "PAYMENT PROCESSOR",
+      title: "PAYMENT PROVIDER",
       dataIndex: "newGateWay",
       width: 240,
     },
@@ -80,87 +80,89 @@ function PaymentProcessors() {
       //render: () => "Other 2",
     },
   ];
-  const newData = payouts?.data?.map((item) => {
-    return {
-      ...item,
-      newGateWay: (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <img
-            style={{
-              width: "30px",
-              height: "30px",
-              borderRadius: "1000px",
-              marginRight: "10px",
-              objectFit: "cover",
-            }}
-            src={item?.paymentChannel["logo"]}
-            alt=""
-          />
-          {item?.paymentChannel["name"]}
-        </div>
-      ),
-      sending: (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <ReactCountryFlag
-            style={{
-              borderRadius: "10000000px",
-              marginRight: "10px",
-            }}
-            countryCode={item?.country?.currencyCode?.slice(0, 2)}
-            svg
-          />
-          {item?.country["name"]}
-        </div>
-      ),
-      action: (
-        <div
-          style={{
-            textDecoration: "none",
-          }}
-        >
-          <p
-            onClick={() => {
-              console.log(item?.userId);
-            }}
-            style={{
-              color: "blue",
-              cursor: "pointer",
-            }}
-          >
-            {item?.firstName}
-          </p>
-        </div>
-      ),
+  const newData = !payouts?.data
+    ? []
+    : payouts?.data?.map((item) => {
+        return {
+          ...item,
+          newGateWay: (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <img
+                style={{
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "1000px",
+                  marginRight: "10px",
+                  objectFit: "cover",
+                }}
+                src={item?.paymentProvider["logo"]}
+                alt=""
+              />
+              {item?.paymentProvider["name"]}
+            </div>
+          ),
+          sending: (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <ReactCountryFlag
+                style={{
+                  borderRadius: "10000000px",
+                  marginRight: "10px",
+                }}
+                countryCode={item?.currency?.code?.slice(0, 2)}
+                svg
+              />
+              {item?.currency["name"]}
+            </div>
+          ),
+          action: (
+            <div
+              style={{
+                textDecoration: "none",
+              }}
+            >
+              <p
+                onClick={() => {
+                  console.log(item?.userId);
+                }}
+                style={{
+                  color: "blue",
+                  cursor: "pointer",
+                }}
+              >
+                {item?.firstName}
+              </p>
+            </div>
+          ),
 
-      status: (
-        <>
-          {" "}
-          <div
-            style={{
-              padding: "8px 16px",
-              borderRadius: "10000px",
-              background: item?.status ? "#63ff706c" : "#ff63634b",
-              color: item?.status ? "green" : "red",
-              width: "fit-content",
-              fontWeight: "700",
-            }}
-          >
-            {item?.status ? "Active" : "Inactive"}
-          </div>
-        </>
-      ),
-    };
-  });
+          status: (
+            <>
+              {" "}
+              <div
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: "10000px",
+                  background: item?.status ? "#63ff706c" : "#ff63634b",
+                  color: item?.status ? "green" : "red",
+                  width: "fit-content",
+                  fontWeight: "700",
+                }}
+              >
+                {item?.status ? "Active" : "Inactive"}
+              </div>
+            </>
+          ),
+        };
+      });
 
   console.log(newData);
 
