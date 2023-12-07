@@ -24,3 +24,29 @@ export const kFormatter2 = (num) => {
       ? `₦${Math.sign(val) * (Math.abs(val) / 1000).toFixed(1)}k`
       : Math.sign(val) * Math.abs(val);
   }
+
+
+export const removeDup = (array) => {
+  if(array){
+    return array
+    .filter(
+      (ele, ind) =>
+        ind ===
+        array
+          .findIndex(
+            (elem) => elem.value === ele.value && elem.text === ele.text
+          )
+    )
+  }else{
+    return []
+    .filter(
+      (ele, ind) =>
+        ind ===
+        []
+          .findIndex(
+            (elem) => elem?.value === ele?.value && elem?.text === ele?.text
+          )
+    )
+  }
+
+  }

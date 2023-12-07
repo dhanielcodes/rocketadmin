@@ -13,6 +13,7 @@ import CustomTable from "../reuseables/CustomTable";
 import { Link } from "react-router-dom";
 import ReactCountryFlag from "react-country-flag";
 import AddPaymentProcessorModal from "../modals/AddPaymentProcessorModal";
+import { removeDup } from "../utils/format";
 
 // hhhhhhh
 function PaymentProcessors() {
@@ -47,9 +48,20 @@ function PaymentProcessors() {
     },
 
     {
-      title: "COUNTRY",
+      title: "CURRENCY",
       dataIndex: "sending",
       width: 220,
+      filters: removeDup(
+        payouts?.data?.map((item) => {
+          return {
+            text: item?.currency["name"],
+            value: item?.currency["name"],
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row.currency["name"].indexOf(value) > -1,
+      filterMultiple: true,
     },
 
     {
@@ -59,12 +71,35 @@ function PaymentProcessors() {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
       }, */
+      filters: removeDup(
+        payouts?.data?.map((item) => {
+          return {
+            text: item?.paymentChannel["name"],
+            value: item?.paymentChannel["name"],
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row.userWallet["name"].indexOf(value) > -1,
+      filterMultiple: true,
       width: 200,
     },
     {
       title: "PAYMENT PROVIDER",
       dataIndex: "newGateWay",
       width: 240,
+
+      filters: removeDup(
+        payouts?.data?.map((item) => {
+          return {
+            text: item?.paymentProvider["name"],
+            value: item?.paymentProvider["name"],
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row.userWallet["name"].indexOf(value) > -1,
+      filterMultiple: true,
     },
 
     {

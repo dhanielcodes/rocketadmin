@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { styled } from "styled-components";
 import BodyLayout from "../reuseables/BodyLayout";
 import AppInput from "../reuseables/AppInput";
@@ -16,6 +16,8 @@ import { kFormatter } from "../utils/format";
 import { getUsers } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { IconSearch } from "@arco-design/web-react/icon";
+import { Input } from "@arco-design/web-react";
 
 function ActionRequired() {
   const [filter, setFilter] = useState(false);
@@ -36,6 +38,7 @@ function ActionRequired() {
   });
 
   console.log(customers);
+  const inputRef = useRef(null);
 
   const columns = [
     {
@@ -52,6 +55,7 @@ function ActionRequired() {
       title: "EMAIL",
       dataIndex: "email",
       width: 260,
+      sorter: (a, b) => a.email.length - b.email.length,
     },
 
     {
@@ -61,12 +65,51 @@ function ActionRequired() {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
       }, */
+      sorter: (a, b) => a.firstName.length - b.firstName.length,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Please enter name"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value
+          ? row.firstName.toUpperCase().indexOf(value.toUpperCase()) !== -1
+          : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
+
       width: 200,
     },
     {
       title: "ADDRESS",
       dataIndex: "address",
       width: 280,
+      filters: customers?.data?.map((item) => {
+        return {
+          text: item?.city?.name + ", " + item?.country?.name,
+          value: item?.city?.name + ", " + item?.country?.name,
+        };
+      }),
+
+      onFilter: (value, row) => row.address.indexOf(value) > -1,
+      filterMultiple: true,
     },
 
     {
@@ -86,6 +129,7 @@ function ActionRequired() {
       title: "EMAIL VERIFIED",
       dataIndex: "status",
       width: 220,
+
       //render: () => "Other 2",
     },
   ];
@@ -290,7 +334,7 @@ function ActionRequired() {
             tableColumns={columns}
           />
         </div>
-        <div className="main">
+        {/*   <div className="main">
           <div className="head">
             <div className="status">
               <h2>Expired IDs</h2>
@@ -379,9 +423,9 @@ function ActionRequired() {
               </div>
             </div>
           </div>
-        </div>
-        <UpcomingExpiredID />
-        <SendMoney_inactiveCustomers />
+        </div> */}
+        {/*      <UpcomingExpiredID />
+        <SendMoney_inactiveCustomers /> */}
       </Content>
     </BodyLayout>
   );

@@ -107,7 +107,7 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
                   rateItem?.toCurrency?.name +
                   " - " +
                   rateItem?.toCurrency?.code,
-                value: rateItem?.toCountryCurrency?.name,
+                value: rateItem?.toCurrency?.name,
                 ...rateItem,
               }}
               option={

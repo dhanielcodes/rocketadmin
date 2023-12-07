@@ -1,3 +1,4 @@
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
@@ -12,7 +13,8 @@ import UpdateRatesModal from "../../modals/UpdateRatesModal";
 import { getRoleMeta } from "../../services/Dashboard";
 import CreateRateMetadataModal from "../../modals/CreateRateMetadataModal";
 import UpdateRateMetadataModal from "../../modals/UpdateRateMetadataModal";
-
+import { IconSearch } from "@arco-design/web-react/icon";
+import { Input } from "@arco-design/web-react";
 function RateMetadataTable({ recall, setRecall }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -33,6 +35,7 @@ function RateMetadataTable({ recall, setRecall }) {
     refetch();
     //eslint-disable-next-line
   }, [recall]);
+  const inputRef = useRef(null);
 
   const columns = [
     {
@@ -51,6 +54,35 @@ function RateMetadataTable({ recall, setRecall }) {
       title: "NAME",
       dataIndex: "name",
       width: 160,
+      sorter: (a, b) => a.name.length - b.name.length,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Please enter name"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value
+          ? row.name.toUpperCase().indexOf(value.toUpperCase()) !== -1
+          : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
     },
     {
       title: "DESCRIPTION",

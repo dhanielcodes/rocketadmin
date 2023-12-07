@@ -14,7 +14,7 @@ import {
   getPayoutClientDashboard,
   processWalletLog,
 } from "../services/PayoutDashboard";
-import { kFormatter4 } from "../utils/format";
+import { kFormatter3, kFormatter4, removeDup } from "../utils/format";
 
 function ClientWallLog({ data }) {
   const [sortdate, setSortDate] = useState(0);
@@ -66,6 +66,17 @@ function ClientWallLog({ data }) {
       title: "REQUEST STATUS",
       dataIndex: "statusNew",
       width: 160,
+      filters: removeDup(
+        clients?.data?.walletFundindRequests?.map((item) => {
+          return {
+            text: item?.status,
+            value: item?.status,
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row.status.indexOf(value) > -1,
+      filterMultiple: true,
     },
     {
       title: "CLIENT ID",
@@ -76,12 +87,33 @@ function ClientWallLog({ data }) {
       title: "CLIENT",
       dataIndex: "clientName",
       width: 130,
+      filters: removeDup(
+        clients?.data?.walletFundindRequests?.map((item) => {
+          return {
+            text: item?.clientName,
+            value: item?.clientName,
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row.clientName.indexOf(value) > -1,
+      filterMultiple: true,
     },
     {
       title: "GATEWAY",
       dataIndex: "userWallet['name']",
       width: 160,
+      filters: removeDup(
+        clients?.data?.walletFundindRequests?.map((item) => {
+          return {
+            text: item?.userWallet["name"],
+            value: item?.userWallet["name"],
+          };
+        })
+      ),
 
+      onFilter: (value, row) => row.userWallet["name"].indexOf(value) > -1,
+      filterMultiple: true,
       //render: () => "Other",
     },
     {
@@ -94,7 +126,11 @@ function ClientWallLog({ data }) {
       title: "AMOUNT",
       dataIndex: "amountApproved",
       width: 120,
-      render: (item) => kFormatter4(item),
+      render: (item) => kFormatter3(item),
+      sorter: {
+        compare: (a, b) => a.amountApproved - b.amountApproved,
+        multiple: 3,
+      },
     },
 
     {
