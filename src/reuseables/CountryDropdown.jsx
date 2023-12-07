@@ -7,7 +7,7 @@ import countryList from "react-select-country-list";
 import CountryFlag from "react-country-flag";
 import { styled } from "styled-components";
 import { useQuery } from "@tanstack/react-query";
-import { getCountries, getCurrencies } from "../services/Auth";
+import { getCurrencies } from "../services/Auth";
 import { countryObjectsArray } from "../../config/CountryCodes";
 
 const CountryDropdown = ({
@@ -21,7 +21,7 @@ const CountryDropdown = ({
 }) => {
   const options = option || countryList().getData();
   const { data: newOptions } = useQuery({
-    queryKey: ["getCategoriessdsa"],
+    queryKey: ["getCategoriess"],
     queryFn: getCurrencies,
     onSuccess: (data) => {
       //setCountries(data?.data);
@@ -76,8 +76,16 @@ const CountryDropdown = ({
             }}
           >
             <ReactCountryFlag
-              countryCode={country.code?.slice(0, 2)}
-              title={country.code}
+              countryCode={
+                country.currencyCode?.slice(0, 2) ||
+                country.currency?.slice(0, 2)
+              }
+              title={
+                country?.code ||
+                country?.code?.slice(0, 2) ||
+                country.currencyCode ||
+                country.currency
+              }
               style={{
                 marginRight: "10px",
                 borderRadius: "10000000px",

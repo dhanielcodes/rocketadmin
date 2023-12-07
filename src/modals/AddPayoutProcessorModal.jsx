@@ -126,15 +126,6 @@ function AddPayoutProcessorModal({ closeinviteAgent }) {
           <label>Currency</label>
           <CountryDropdown2
             value={selectedCountry}
-            option={
-              countries?.data?.map((item) => {
-                return {
-                  label: item?.name + " - " + item?.code,
-                  value: item?.name,
-                  ...item,
-                };
-              }) || []
-            }
             onChange={(e) => {
               setSelectedCountry(e);
               setProcessor({

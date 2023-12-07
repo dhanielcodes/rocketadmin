@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { createRate } from "../services/PayoutDashboard";
 import AppModal from "../COMPONENTS/AppModal";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
-import { getCountries } from "../services/Auth";
+import { getCurrencies } from "../services/Auth";
 import AppInput from "../reuseables/AppInput";
 import ReactCountryFlag from "react-country-flag";
 import styled from "styled-components";
@@ -54,7 +54,7 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
     isFetching,
   } = useQuery({
     queryKey: ["countrie3s"],
-    queryFn: () => getCountries(),
+    queryFn: () => getCurrencies(),
   });
 
   const { data: rateMetas } = useQuery({
@@ -107,6 +107,7 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
             <label>Sending Currency</label>
             <CountryDropdown2
               value={send}
+              collectionStatus={true}
               option={
                 countries?.data?.map((item) => {
                   return {
@@ -130,7 +131,6 @@ export default function CreateRateModal({ rateItem, modal, setModal }) {
             <label>Receiving Currency</label>
             <CountryDropdown2
               value={receive}
-              collectionStatus
               option={
                 countries?.data?.map((item) => {
                   return {

@@ -12,7 +12,7 @@ import {
 } from "../../../services/PayoutDashboard";
 import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
-import { getClientChargeTypes, getCountries } from "../../../services/Auth";
+import { getClientChargeTypes, getCurrencies } from "../../../services/Auth";
 import { kFormatter4 } from "../../../utils/format";
 
 export default function ChargesList({ data, refetch }) {
@@ -166,7 +166,7 @@ export default function ChargesList({ data, refetch }) {
     isFetching,
   } = useQuery({
     queryKey: ["countries"],
-    queryFn: () => getCountries(),
+    queryFn: () => getCurrencies(),
   });
   const { data: clientCharges } = useQuery({
     queryKey: ["charges"],

@@ -44,7 +44,7 @@ function ExistingRatesTable() {
       width: 190,
     },
     {
-      title: "RECEIVING COUNTRY",
+      title: "Receiving Currency",
       dataIndex: "receiving",
       width: 190,
     },
@@ -119,7 +119,7 @@ function ExistingRatesTable() {
             countryCode={item?.fromCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.fromCurrency["name"]}
+          {item?.fromCurrency["code"]}
         </div>
       ),
       receiving: (
@@ -137,7 +137,7 @@ function ExistingRatesTable() {
             countryCode={item?.toCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.toCurrency["name"]}
+          {item?.toCurrency["code"]}
         </div>
       ),
 

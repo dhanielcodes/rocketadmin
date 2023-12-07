@@ -44,7 +44,7 @@ function AgentRatesTable() {
       width: 190,
     },
     {
-      title: "RECEIVING COUNTRY",
+      title: "Receiving Currency",
       dataIndex: "receiving",
       width: 190,
     },
@@ -95,7 +95,7 @@ function AgentRatesTable() {
             countryCode={item?.fromCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.fromCurrency["name"]}
+          {item?.fromCurrency["code"]}
         </div>
       ),
       receiving: (
@@ -113,7 +113,7 @@ function AgentRatesTable() {
             countryCode={item?.toCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.toCurrency["name"]}
+          {item?.toCurrency["code"]}
         </div>
       ),
 

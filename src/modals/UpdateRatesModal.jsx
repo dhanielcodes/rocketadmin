@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { updateRate } from "../services/PayoutDashboard";
 import AppModal from "../COMPONENTS/AppModal";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
-import { getCountries } from "../services/Auth";
+import { getCurrencies } from "../services/Auth";
 import AppInput from "../reuseables/AppInput";
 import ReactCountryFlag from "react-country-flag";
 import styled from "styled-components";
@@ -47,7 +47,7 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
     isFetching,
   } = useQuery({
     queryKey: ["countrie3s"],
-    queryFn: () => getCountries(),
+    queryFn: () => getCurrencies(),
   });
 
   console.log(countries?.data);
@@ -67,7 +67,7 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
           heading="Update Rate"
         >
           <div className="name">
-            <label>Sending Country</label>
+            <label>Sending Currency</label>
             <CountryDropdown2
               disabled={true}
               value={{
@@ -98,7 +98,7 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
               marginTop: "20px",
             }}
           >
-            <label>Receiving Country</label>
+            <label>Receiving Currency</label>
             <CountryDropdown2
               disabled={true}
               collectionStatus

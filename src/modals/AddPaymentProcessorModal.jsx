@@ -60,7 +60,7 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
     if (
       processor?.name &&
       processor?.description &&
-      processor?.country?.id &&
+      processor?.currency?.id &&
       processor?.paymentChannel?.id &&
       processor?.paymentProvider?.id
     ) {

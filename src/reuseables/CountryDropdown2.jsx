@@ -8,7 +8,7 @@ import CountryFlag from "react-country-flag";
 import { styled } from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { countryObjectsArray } from "../../config/CountryCodes";
-import { getCountries, getCurrencies } from "../services/Auth";
+import { getCurrencies } from "../services/Auth";
 const CountryDropdown2 = ({
   value,
   onChange,
@@ -20,7 +20,7 @@ const CountryDropdown2 = ({
 }) => {
   const options = option || countryList().getData();
   const { data: newOptions } = useQuery({
-    queryKey: ["getCategoriessop"],
+    queryKey: ["getCategoriess"],
     queryFn: getCurrencies,
     onSuccess: (data) => {
       //setCountries(data?.data);
@@ -50,7 +50,7 @@ const CountryDropdown2 = ({
                       ...item,
                     };
                   })
-                  ?.filter((item) => item.isReceiving)
+                  ?.filter((item) => item.isSending)
               : newOptions?.data
                   ?.map((item) => {
                     return {
@@ -60,7 +60,7 @@ const CountryDropdown2 = ({
                       ...item,
                     };
                   })
-                  ?.filter((item) => !item.isReceiving)
+                  ?.filter((item) => !item.isSending)
             : options
         }
         defaultValue={defaultValue}
@@ -74,7 +74,11 @@ const CountryDropdown2 = ({
             }}
           >
             <ReactCountryFlag
-              countryCode={country.code?.slice(0, 2)}
+              countryCode={
+                country?.code?.slice(0, 2) ||
+                country.currencyCode?.slice(0, 2) ||
+                country.currency?.slice(0, 2)
+              }
               title={country.currencyCode || country.currency}
               style={{
                 marginRight: "10px",

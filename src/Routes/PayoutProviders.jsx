@@ -243,10 +243,10 @@ function PayoutProvidersList() {
                       borderRadius: "10000000px",
                       marginRight: "10px",
                     }}
-                    countryCode={countryObjectsArray(item?.name)}
+                    countryCode={item?.code?.slice(0, 2)}
                     svg
                   />
-                  {item["currencyCode"]}
+                  {item["code"]}
                 </div>
               </>
             );

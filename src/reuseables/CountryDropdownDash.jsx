@@ -7,7 +7,7 @@ import countryList from "react-select-country-list";
 import CountryFlag from "react-country-flag";
 import { styled } from "styled-components";
 import { useQuery } from "@tanstack/react-query";
-import { getCountries } from "../services/Auth";
+import { getCurrencies } from "../services/Auth";
 const CountryDropdownDash = ({
   value,
   onChange,
@@ -20,7 +20,7 @@ const CountryDropdownDash = ({
   const options = option || countryList().getData();
   const { data: newOptions } = useQuery({
     queryKey: ["getCategoriess"],
-    queryFn: getCountries,
+    queryFn: getCurrencies,
     onSuccess: (data) => {
       //setCountries(data?.data);
     },

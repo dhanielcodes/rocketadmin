@@ -31,7 +31,7 @@ function CountriesPage() {
     isFetching: mutateFetching,
     refetch,
   } = useQuery({
-    queryKey: ["getAllCountries"],
+    queryKey: ["getCountriesmk"],
     queryFn: () => getCountries(),
   });
 

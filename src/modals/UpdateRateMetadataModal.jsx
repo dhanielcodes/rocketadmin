@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { createRate, updateRateMetadata } from "../services/PayoutDashboard";
 import AppModal from "../COMPONENTS/AppModal";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
-import { getCountries } from "../services/Auth";
+import { getCurrencies } from "../services/Auth";
 import AppInput from "../reuseables/AppInput";
 import ReactCountryFlag from "react-country-flag";
 import styled from "styled-components";
@@ -96,7 +96,7 @@ export default function UpdateRateMetadataModal({
     isFetching,
   } = useQuery({
     queryKey: ["countrie3s"],
-    queryFn: () => getCountries(),
+    queryFn: () => getCurrencies(),
   });
 
   const { data: rateMetas } = useQuery({
