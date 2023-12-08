@@ -6,7 +6,7 @@ import CustomTable from "../../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { getOurRates } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
-import { kFormatter } from "../../utils/format";
+import { kFormatter, kFormatter3, removeDup } from "../../utils/format";
 import { countryObjectsArray } from "../../../config/CountryCodes";
 
 function OurRatesTable() {
@@ -49,18 +49,45 @@ function OurRatesTable() {
       title: "SENDING CURRENCY",
       dataIndex: "sending",
       width: 190,
+      filters: removeDup(
+        rates?.data?.map((item) => {
+          return {
+            text: item?.fromCurrency,
+            value: item?.fromCurrency,
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row?.fromCurrency.indexOf(value) > -1,
+      filterMultiple: true,
     },
     {
       title: "RECEIVING CURRENCY",
       dataIndex: "receiving",
       width: 190,
+      filters: removeDup(
+        rates?.data?.map((item) => {
+          return {
+            text: item?.toCurrency,
+            value: item?.toCurrency,
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row?.toCurrency.indexOf(value) > -1,
+      filterMultiple: true,
     },
 
     {
       title: "RATE",
       dataIndex: "rate",
-      render: (ire) => kFormatter(ire),
+      render: (ire) => kFormatter3(ire),
       width: 120,
+
+      sorter: {
+        compare: (a, b) => a.rate - b.rate,
+        multiple: 3,
+      },
     },
     {
       title: "CREATED DATE",

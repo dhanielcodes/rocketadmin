@@ -11,9 +11,12 @@ import {
   kFormatter2,
   kFormatter3,
   kFormatter4,
+  removeDup,
 } from "../../utils/format";
 import { Tranx, getUsers } from "../../services/Dashboard";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Input } from "@arco-design/web-react";
+import { IconSearch } from "@arco-design/web-react/icon";
 
 function NewCustomerList() {
   const [filter, setFilter] = useState(false);
@@ -35,6 +38,8 @@ function NewCustomerList() {
 
   console.log(customers);
 
+  const inputRef = useRef(null);
+
   const columns = [
     {
       title: "CUSTOMER REF",
@@ -50,6 +55,7 @@ function NewCustomerList() {
       title: "EMAIL",
       dataIndex: "email",
       width: 260,
+      sorter: (a, b) => a.email.length - b.email.length,
     },
 
     {
@@ -59,12 +65,53 @@ function NewCustomerList() {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
       }, */
+      sorter: (a, b) => a.firstName.length - b.firstName.length,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Please enter name"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value
+          ? row.firstName.toUpperCase().indexOf(value.toUpperCase()) !== -1
+          : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
+
       width: 200,
     },
     {
       title: "ADDRESS",
       dataIndex: "address",
       width: 280,
+      filters: removeDup(
+        customers?.data?.map((item) => {
+          return {
+            text: item?.city?.name + ", " + item?.country?.name,
+            value: item?.city?.name + ", " + item?.country?.name,
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row.address.indexOf(value) > -1,
+      filterMultiple: true,
     },
 
     {
@@ -84,6 +131,7 @@ function NewCustomerList() {
       title: "EMAIL VERIFIED",
       dataIndex: "status",
       width: 220,
+
       //render: () => "Other 2",
     },
   ];

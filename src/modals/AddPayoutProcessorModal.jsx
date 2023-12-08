@@ -123,7 +123,7 @@ function AddPayoutProcessorModal({ closeinviteAgent }) {
             marginTop: "20px",
           }}
         >
-          <label>Country</label>
+          <label>Currency</label>
           <CountryDropdown2
             value={selectedCountry}
             onChange={(e) => {

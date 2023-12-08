@@ -11,7 +11,7 @@ import {
 import CustomTable from "../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { getPayoutClientDashboard } from "../services/PayoutDashboard";
-import { kFormatter4 } from "../utils/format";
+import { kFormatter4, removeDup } from "../utils/format";
 
 function TransactionList({ data }) {
   const [sortdate, setSortDate] = useState(0);
@@ -55,7 +55,18 @@ function TransactionList({ data }) {
     {
       title: "TRANSACTION STATUS",
       dataIndex: "statusNew",
-      width: 180,
+      width: 200,
+      filters: removeDup(
+        clients?.data?.payOutTransactions?.map((item) => {
+          return {
+            text: item?.status,
+            value: item?.status,
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row.status.indexOf(value) > -1,
+      filterMultiple: true,
     },
     {
       title: "DATE",
@@ -65,13 +76,34 @@ function TransactionList({ data }) {
     {
       title: "CLIENT",
       dataIndex: "payoutClientApp['appName']",
-      width: 190,
+      width: 200,
+      filters: removeDup(
+        clients?.data?.payOutTransactions?.map((item) => {
+          return {
+            text: item?.payoutClientApp?.["appName"],
+            value: item?.payoutClientApp?.["appName"],
+          };
+        })
+      ),
+      onFilter: (value, row) =>
+        row?.payoutClientApp?.["appName"].indexOf(value) > -1,
+      filterMultiple: true,
     },
     {
       title: "GATEWAY",
       dataIndex: "newGateWay",
       width: 230,
-
+      filters: removeDup(
+        clients?.data?.payOutTransactions?.map((item) => {
+          return {
+            text: item?.payOutProvider?.["name"],
+            value: item?.payOutProvider?.["name"],
+          };
+        })
+      ),
+      onFilter: (value, row) =>
+        row?.payOutProvider?.["name"].indexOf(value) > -1,
+      filterMultiple: true,
       //render: () => "Other",
     },
     {
@@ -93,14 +125,28 @@ function TransactionList({ data }) {
     },
     {
       title: "CURRENCY",
-      dataIndex: "country['currencyCode']",
-      width: 100,
+      dataIndex: "currency['code']",
+      width: 120,
+      filters: removeDup(
+        clients?.data?.payOutTransactions?.map((item) => {
+          return {
+            text: item?.currency?.["code"],
+            value: item?.currency?.["code"],
+          };
+        })
+      ),
+      onFilter: (value, row) => row?.currency?.["code"].indexOf(value) > -1,
+      filterMultiple: true,
     },
     {
       title: "AMOUNT",
       dataIndex: "Amount",
       width: 120,
       render: (item) => kFormatter4(item),
+      sorter: {
+        compare: (a, b) => a.Amount - b.Amount,
+        multiple: 3,
+      },
     },
     {
       title: "TRANSFER FEE",

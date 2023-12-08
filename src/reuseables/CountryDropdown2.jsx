@@ -44,11 +44,9 @@ const CountryDropdown2 = ({
               ? newOptions?.data
                   ?.map((item) => {
                     return {
-                      code: item?.currencyCode,
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
-                      slug: countryObjectsArray(item?.name),
                       ...item,
                     };
                   })
@@ -56,11 +54,9 @@ const CountryDropdown2 = ({
               : newOptions?.data
                   ?.map((item) => {
                     return {
-                      code: item?.currencyCode,
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
-                      slug: countryObjectsArray(item?.name),
                       ...item,
                     };
                   })
@@ -74,7 +70,7 @@ const CountryDropdown2 = ({
             className="countryName"
             style={{ fontSize: "16px", display: "flex", alignItems: "center" }}
             onClick={() => {
-              console.log(country?.currencyCode || country.currency);
+              console.log(country?.code || country.currency);
             }}
           >
             <ReactCountryFlag

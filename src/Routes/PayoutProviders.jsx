@@ -19,6 +19,7 @@ import {
 } from "../services/PayoutDashboard";
 import UpdatePayoutProvider from "../modals/UpdatePayoutProvider";
 import { countryObjectsArray } from "../../config/CountryCodes";
+import { removeDup } from "../utils/format";
 
 // hhhhhhh
 function PayoutProvidersList() {
@@ -75,6 +76,17 @@ function PayoutProvidersList() {
       title: "PAYMENT PROCESSOR",
       dataIndex: "newGateWay",
       width: 240,
+      filters: removeDup(
+        payouts?.data?.map((item) => {
+          return {
+            text: item?.["name"],
+            value: item?.["name"],
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row?.["name"].indexOf(value) > -1,
+      filterMultiple: true,
     },
 
     {

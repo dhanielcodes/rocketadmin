@@ -10,6 +10,9 @@ import { kFormatter } from "../../utils/format";
 import { useState } from "react";
 import UpdateRatesModal from "../../modals/UpdateRatesModal";
 import { countryObjectsArray } from "../../../config/CountryCodes";
+import { IconSearch } from "@arco-design/web-react/icon";
+import { Input } from "@arco-design/web-react";
+import { removeDup, kFormatter3 } from "../../utils/format";
 
 function ExistingRatesTable() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -42,16 +45,50 @@ function ExistingRatesTable() {
       title: "SENDING CURRENCY",
       dataIndex: "sending",
       width: 190,
+      filters: removeDup(
+        rates?.data?.map((item) => {
+          return {
+            text: item?.fromCurrency?.["code"],
+            value: item?.fromCurrency?.["code"],
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row?.fromCurrency?.["code"].indexOf(value) > -1,
+      filterMultiple: true,
     },
     {
-      title: "Receiving Currency",
+      title: "RECEIVING CURRENCY",
       dataIndex: "receiving",
       width: 190,
+      filters: removeDup(
+        rates?.data?.map((item) => {
+          return {
+            text: item?.toCurrency?.["code"],
+            value: item?.toCurrency?.["code"],
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row?.toCurrency?.["code"].indexOf(value) > -1,
+      filterMultiple: true,
     },
     {
       title: "CURRENCY CODE",
       dataIndex: "currencyCode",
       width: 160,
+      filters: removeDup(
+        rates?.data?.map((item) => {
+          return {
+            text: item?.currencyRateMetaData?.currency["code"],
+            value: item?.currencyRateMetaData?.currency["code"],
+          };
+        })
+      ),
+
+      onFilter: (value, row) =>
+        row?.currencyRateMetaData?.currency["code"].indexOf(value) > -1,
+      filterMultiple: true,
     },
     {
       title: "CATEGORY",
@@ -63,8 +100,13 @@ function ExistingRatesTable() {
     {
       title: "RATE",
       dataIndex: "conversionRate",
-      render: (ire) => kFormatter(ire),
+      render: (ire) => kFormatter3(ire),
       width: 120,
+
+      sorter: {
+        compare: (a, b) => a.conversionRate - b.conversionRate,
+        multiple: 3,
+      },
     },
     {
       title: "ENTRY DATE",

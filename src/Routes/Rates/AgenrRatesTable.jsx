@@ -11,6 +11,7 @@ import {
   kFormatter2,
   kFormatter3,
   kFormatter4,
+  removeDup,
 } from "../../utils/format";
 import { countryObjectsArray } from "../../../config/CountryCodes";
 
@@ -42,31 +43,68 @@ function AgentRatesTable() {
       title: "SENDING CURRENCY",
       dataIndex: "sending",
       width: 190,
+      filters: removeDup(
+        rates?.data?.map((item) => {
+          return {
+            text: item?.fromCurrency["code"],
+            value: item?.fromCurrency["code"],
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row?.fromCurrency["code"].indexOf(value) > -1,
+      filterMultiple: true,
     },
     {
-      title: "Receiving Currency",
+      title: "RECEIVING CURRENCY",
       dataIndex: "receiving",
       width: 190,
+      filters: removeDup(
+        rates?.data?.map((item) => {
+          return {
+            text: item?.toCurrency["code"],
+            value: item?.toCurrency["code"],
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row?.toCurrency["code"].indexOf(value) > -1,
+      filterMultiple: true,
     },
 
     {
-      title: "RATE CATEGORY",
-      dataIndex: "rateUpdateOption",
-      width: 140,
-
+      title: "AGENT FEE THRESHOLD",
+      dataIndex: "agentTransactionFeeThreshold",
+      render: (ire) => kFormatter3(ire),
+      width: 170,
+      sorter: {
+        compare: (a, b) =>
+          a.agentTransactionFeeThreshold - b.agentTransactionFeeThreshold,
+        multiple: 3,
+      },
       //render: () => "Other",
     },
     {
       title: "INITIAL RATE",
       dataIndex: "conversionRate",
-      render: (ire) => kFormatter(ire),
+      render: (ire) => kFormatter3(ire),
       width: 120,
+
+      sorter: {
+        compare: (a, b) => a.conversionRate - b.conversionRate,
+        multiple: 3,
+      },
     },
     {
-      title: "UPDATED RATE",
-      dataIndex: "rateUpdateValue",
-      render: (ire) => kFormatter4(ire),
+      title: "AGENT RATE",
+      dataIndex: "agentRate",
+      render: (ire) => kFormatter3(ire),
       width: 120,
+
+      sorter: {
+        compare: (a, b) => a.agentRate - b.agentRate,
+        multiple: 3,
+      },
     },
     {
       title: "ADMIN LAST UPDATED DATE",

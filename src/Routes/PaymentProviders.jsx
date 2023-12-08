@@ -16,6 +16,7 @@ import AddPaymentProcessorModal from "../modals/AddPaymentProcessorModal";
 import { getPaymentProviders } from "../services/PayoutDashboard";
 import UpdatePaymentProvider from "../modals/UpdatePaymentProvider";
 import { countryObjectsArray } from "../../config/CountryCodes";
+import { removeDup } from "../utils/format";
 
 // hhhhhhh
 function PaymentProviders() {
@@ -60,7 +61,7 @@ function PaymentProviders() {
     },
 
     {
-      title: "COUNTRY",
+      title: "CURRENCY",
       dataIndex: "sending",
       width: 220,
     },
@@ -69,6 +70,17 @@ function PaymentProviders() {
       title: "PAYMENT PROCESSOR",
       dataIndex: "newGateWay",
       width: 240,
+      filters: removeDup(
+        payouts?.data?.map((item) => {
+          return {
+            text: item?.["name"],
+            value: item?.["name"],
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row?.["name"].indexOf(value) > -1,
+      filterMultiple: true,
     },
 
     {

@@ -46,11 +46,9 @@ const CountryDropdown = ({
               ? newOptions?.data
                   ?.map((item) => {
                     return {
-                      code: item?.currencyCode,
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
-                      slug: countryObjectsArray(item?.name),
                       ...item,
                     };
                   })
@@ -58,11 +56,9 @@ const CountryDropdown = ({
               : newOptions?.data
                   ?.map((item) => {
                     return {
-                      code: item?.currencyCode,
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
-                      slug: countryObjectsArray(item?.name),
                       ...item,
                     };
                   })
