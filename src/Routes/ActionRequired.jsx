@@ -12,7 +12,7 @@ import { useState } from "react";
 //import SearchInput from "../reuseables/SearchInput";
 import CustomerFilter from "../COMPONENTS/CustomerFilter";
 import CustomTable from "../reuseables/CustomTable";
-import { kFormatter } from "../utils/format";
+import { kFormatter, removeDup } from "../utils/format";
 import { getUsers } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -101,12 +101,14 @@ function ActionRequired() {
       title: "ADDRESS",
       dataIndex: "address",
       width: 280,
-      filters: customers?.data?.map((item) => {
-        return {
-          text: item?.city?.name + ", " + item?.country?.name,
-          value: item?.city?.name + ", " + item?.country?.name,
-        };
-      }),
+      filters: removeDup(
+        customers?.data?.map((item) => {
+          return {
+            text: item?.city?.name + ", " + item?.country?.name,
+            value: item?.city?.name + ", " + item?.country?.name,
+          };
+        })
+      ),
 
       onFilter: (value, row) => row.address.indexOf(value) > -1,
       filterMultiple: true,

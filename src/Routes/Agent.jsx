@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import BodyLayout from "../reuseables/BodyLayout";
 import { styled } from "styled-components";
 //import SearchInput from "../reuseables/SearchInput";
@@ -7,6 +7,9 @@ import { getAgents } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import CustomTable from "../reuseables/CustomTable";
 import { Link } from "react-router-dom";
+import { removeDup } from "../utils/format";
+import { Input } from "@arco-design/web-react";
+import { IconSearch } from "@arco-design/web-react/icon";
 
 // hhhhhhh
 function Agent() {
@@ -26,6 +29,7 @@ function Agent() {
   });
 
   console.log(agents);
+  const inputRef = useRef(null);
 
   const columns = [
     {
@@ -51,12 +55,52 @@ function Agent() {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
       }, */
+
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Please enter name"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value
+          ? row.firstName.toUpperCase().indexOf(value.toUpperCase()) !== -1
+          : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
+
       width: 200,
     },
     {
       title: "ADDRESS",
       dataIndex: "address",
       width: 190,
+      filters: removeDup(
+        agents?.data?.map((item) => {
+          return {
+            text: item?.country?.name,
+            value: item?.country?.name,
+          };
+        })
+      ),
+      onFilter: (value, row) => row.address.indexOf(value) > -1,
+      filterMultiple: true,
     },
 
     {
