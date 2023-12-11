@@ -8,9 +8,72 @@ import { kFormatter } from "../utils/format";
 import { getUsers } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { IconSearch } from "@arco-design/web-react/icon";
-import { Input } from "@arco-design/web-react";
-
+import { IconMoreVertical, IconSearch } from "@arco-design/web-react/icon";
+import { Dropdown, Input, Menu } from "@arco-design/web-react";
+import UpdateAgentCustomerRates from "../modals/UpdateAgentCustomerRates";
+const Droplist = ({ id, name, setModal }) => (
+  //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
+  <Menu
+    style={{
+      borderRadius: "10px",
+      paddingTop: "6px",
+      width: "150px",
+    }}
+  >
+    <Menu.Item
+      onClick={() => setModal()}
+      key="3"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M5.83398 4.16797V16.668"
+          stroke="#464F60"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M14.168 15.834L14.168 3.33398"
+          stroke="#464F60"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M3.33398 5.83398L5.24473 3.78155C5.52251 3.48317 5.6614 3.33398 5.83398 3.33398C6.00657 3.33398 6.14546 3.48317 6.42324 3.78155L8.33398 5.83398"
+          stroke="#464F60"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M11.668 14.168L13.5787 16.2204C13.8565 16.5188 13.9954 16.668 14.168 16.668C14.3406 16.668 14.4794 16.5188 14.7572 16.2204L16.668 14.168"
+          stroke="#464F60"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Update Rate
+      </span>
+    </Menu.Item>
+  </Menu>
+);
 function Customers() {
   const [filter, setFilter] = useState(false);
   const AppData = JSON.parse(localStorage?.getItem("AppData"));
@@ -33,6 +96,12 @@ function Customers() {
   const inputRef = useRef(null);
 
   const columns = [
+    {
+      title: "ACTION",
+      dataIndex: "action2",
+      width: 70,
+      //render: () => "Other 2",
+    },
     {
       title: "CUSTOMER REF",
       dataIndex: "userId",
@@ -125,6 +194,8 @@ function Customers() {
       //render: () => "Other 2",
     },
   ];
+  const [rate, setRate] = useState();
+
   const newData = customers?.data?.map((item) => {
     return {
       ...item,
@@ -145,6 +216,51 @@ function Customers() {
             }}
           >
             {item?.firstName}
+          </p>
+        </div>
+      ),
+      action2: (
+        <div
+          style={{
+            textDecoration: "none",
+          }}
+          onClick={() => {
+            setRate(item);
+          }}
+        >
+          <p
+            onClick={() => {
+              console.log(item?.userId);
+            }}
+            style={{
+              color: "blue",
+              cursor: "pointer",
+            }}
+          >
+            <Dropdown
+              droplist={
+                <Droplist
+                  id={item?.userId}
+                  name={item?.firstName + " " + item?.surName}
+                  setModal={() => {
+                    setModal(true);
+                  }}
+                />
+              }
+              position="bl"
+              on
+            >
+              {" "}
+              <Link style={{ marginRight: 40 }}>
+                <IconMoreVertical
+                  style={{
+                    fontSize: 15,
+                    marginLeft: 6,
+                    color: "#000",
+                  }}
+                />
+              </Link>
+            </Dropdown>
           </p>
         </div>
       ),
@@ -183,10 +299,16 @@ function Customers() {
   });
 
   console.log(newData);
+  const [modal, setModal] = useState(false);
 
   return (
     <>
       {filter && <CustomerFilter closeCustomer={setFilter} />}
+      <UpdateAgentCustomerRates
+        modal={modal}
+        setModal={setModal}
+        rateItem={rate}
+      />
       <BodyLayout>
         <Content>
           <div className="header">

@@ -31,8 +31,8 @@ export default function UpdateAgentCustomerRates({
 
   const handleRates = (e) => {
     setSelectedCountry(e);
-    setRate(e?.conversionRate);
-    setFee(e?.currencyRateMetaData?.transferBelowMinimumCharges);
+    setRate(e?.currencyRate?.conversionRate);
+    setFee(e?.currencyRate?.charge);
     console.log(e, "kdksdsdsd");
   };
 
@@ -113,7 +113,7 @@ export default function UpdateAgentCustomerRates({
             <div className="name" style={{}}>
               <label>Currency</label>
               <CountryListAgent
-                agentRates={newOptions?.data?.currencyRates}
+                agentRates={rateItem?.specialRates}
                 value={selectedCountry}
                 setValue={setSelectedCountry}
                 onChange={handleRates}
@@ -134,7 +134,7 @@ export default function UpdateAgentCustomerRates({
                 }}
                 width="92%"
                 name="username"
-                defaultValue={rate}
+                value={selectedCountry?.specialRate}
               />
             </div>
             <div
@@ -152,7 +152,7 @@ export default function UpdateAgentCustomerRates({
                 }}
                 width="92%"
                 name="username"
-                defaultValue={fee}
+                value={selectedCountry?.charge}
               />
             </div>
           </div>
@@ -161,7 +161,10 @@ export default function UpdateAgentCustomerRates({
             <div className="rates">
               <div className="pri">
                 <ReactCountryFlag
-                  countryCode={selectedCountry?.fromCurrency?.code.slice(0, 2)}
+                  countryCode={selectedCountry?.currencyRate?.fromCurrency?.code.slice(
+                    0,
+                    2
+                  )}
                   style={{
                     width: "40px",
                     height: "40px",
@@ -169,7 +172,7 @@ export default function UpdateAgentCustomerRates({
                   svg
                 />
                 <AmountFormatter
-                  currency={selectedCountry?.fromCurrency?.code}
+                  currency={selectedCountry?.currencyRate?.fromCurrency?.code}
                   value={1}
                 />
 
@@ -178,12 +181,15 @@ export default function UpdateAgentCustomerRates({
               <div style={{ color: "#000" }}>=</div>
               <div className="sec">
                 <ReactCountryFlag
-                  countryCode={selectedCountry?.toCurrency?.code.slice(0, 2)}
+                  countryCode={selectedCountry?.currencyRate?.toCurrency?.code.slice(
+                    0,
+                    2
+                  )}
                   svg
                 />
                 <AmountFormatter
-                  currency={selectedCountry?.toCurrency?.code}
-                  value={selectedCountry?.conversionRate || 0}
+                  currency={selectedCountry?.currencyRate?.toCurrency?.code}
+                  value={selectedCountry?.currencyRate?.conversionRate || 0}
                 />
               </div>
             </div>

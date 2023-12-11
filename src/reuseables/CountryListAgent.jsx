@@ -30,15 +30,15 @@ const CountryListAgent = ({
     return {
       ...item,
       label:
-        item?.fromCurrency?.name +
+        item?.currencyRate?.fromCurrency?.name +
         " to " +
-        item?.toCurrency?.name +
+        item?.currencyRate?.toCurrency?.name +
         " " +
         item?.id,
       value:
-        item?.fromCurrency?.name +
+        item?.currencyRate?.fromCurrency?.name +
         " to " +
-        item?.toCurrency?.name +
+        item?.currencyRate?.toCurrency?.name +
         " " +
         item?.id,
     };
@@ -59,11 +59,16 @@ const CountryListAgent = ({
             <div>
               <CountryFlag
                 className="flag"
-                countryCode={country.fromCurrency?.code?.slice(0, 2)}
+                countryCode={country?.currencyRate?.fromCurrency?.code?.slice(
+                  0,
+                  2
+                )}
                 svg
               />{" "}
               &nbsp;
-              <span className="countryName">{country.fromCurrency?.name}</span>
+              <span className="countryName">
+                {country?.currencyRate?.fromCurrency?.name}
+              </span>
             </div>
             &nbsp; &nbsp;
             <span className="countryName" style={{ fontWeight: "bold" }}>
@@ -73,11 +78,16 @@ const CountryListAgent = ({
             <div>
               <CountryFlag
                 className="flag"
-                countryCode={country.toCurrency?.code?.slice(0, 2)}
+                countryCode={country?.currencyRate?.toCurrency?.code?.slice(
+                  0,
+                  2
+                )}
                 svg
               />{" "}
               &nbsp;
-              <span className="countryName">{country.toCurrency?.name}</span>
+              <span className="countryName">
+                {country?.currencyRate?.toCurrency?.name}
+              </span>
             </div>
           </div>
         )}
