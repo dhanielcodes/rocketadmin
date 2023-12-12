@@ -67,7 +67,11 @@ export default function AppSelect({
 }
 
 const NewSelect = styled.div`
-  margin-top: 20px;
+  width: 100%;
+  .css-13cymwt-control {
+    border-radius: 8px;
+    padding: 3px;
+  }
   .select {
     padding: 20px;
   }

@@ -56,7 +56,12 @@ const CountryListAgent = ({
             className="dropdown"
             style={{ fontSize: "16px", display: "flex", alignItems: "center" }}
           >
-            <div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <CountryFlag
                 className="flag"
                 countryCode={country?.currencyRate?.fromCurrency?.code?.slice(
@@ -75,7 +80,13 @@ const CountryListAgent = ({
               to
             </span>{" "}
             &nbsp;&nbsp;
-            <div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {" "}
               <CountryFlag
                 className="flag"
                 countryCode={country?.currencyRate?.toCurrency?.code?.slice(

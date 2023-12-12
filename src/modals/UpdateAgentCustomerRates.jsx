@@ -134,7 +134,8 @@ export default function UpdateAgentCustomerRates({
                 }}
                 width="92%"
                 name="username"
-                value={selectedCountry?.specialRate}
+                //value={selectedCountry?.specialRate}
+                defaultValue={selectedCountry?.specialRate}
               />
             </div>
             <div
@@ -152,7 +153,8 @@ export default function UpdateAgentCustomerRates({
                 }}
                 width="92%"
                 name="username"
-                value={selectedCountry?.charge}
+                //value={selectedCountry?.charge}
+                defaultValue={selectedCountry?.charge}
               />
             </div>
           </div>
@@ -198,11 +200,13 @@ export default function UpdateAgentCustomerRates({
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr",
+              gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
               gridGap: "10px",
               marginTop: "30px",
             }}
           >
+            <div></div>
+            <div></div>
             <div></div>
             <button
               onClick={() => {
