@@ -15,6 +15,8 @@ import SectionHeader from "../reuseables/SectionHeader";
 import AppSelect from "../reuseables/AppSelect";
 import AppInput from "../reuseables/AppInput";
 import { useSearchParams } from "react-router-dom";
+import { Switch } from "@arco-design/web-react";
+import AppSelect2 from "../reuseables/AppSelect2";
 function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
   const [selectSender, setSelectSender] = useState(true);
   const [beneficiary, setBeneficiary] = useState();
@@ -49,6 +51,15 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
   const [rateMeta, setRateMeta] = useState();
   const [allowKyc, setAllowKyc] = useState();
   const [kycThreshold, setKycThreshold] = useState();
+
+  const [allowMin, setAllowMin] = useState(false);
+  const [allowMax, setAllowMax] = useState(false);
+
+  const [allowMinTf, setAllowMinTf] = useState(false);
+  const [allowMaxTf, setAllowMaxTf] = useState(false);
+
+  const [allowMinFee, setAllowMinFee] = useState(false);
+  const [allowMaxFee, setAllowMaxFee] = useState(false);
 
   const [params] = useSearchParams();
 
@@ -268,7 +279,7 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                     marginTop: "20px",
                     opacity: "0.4",
                   }}
-                ></hr>
+                ></hr>{" "}
                 <div
                   style={{
                     display: "grid",
@@ -289,6 +300,82 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       //defaultValue={charge?.baseValue}
                     />
                   </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div>
+                      <div>Allow Below Minimum Transfer</div>
+                      <div style={{ color: "#6b6b6b", fontSize: "12px" }}>
+                        All Users in this category are to transfer lower than
+                        the minimum category
+                      </div>
+                    </div>
+                    <Switch
+                      onClick={() => {
+                        setAllowMin(!allowMin);
+                      }}
+                      checked={allowMin}
+                    />
+                  </div>
+                  {allowMin && (
+                    <div>
+                      <label>Min. Transfer Fee (%)</label>
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "3fr 4fr",
+                        }}
+                      >
+                        <AppSelect2
+                          cut
+                          options={[
+                            {
+                              label: "Fixed",
+                              value: "Fixed",
+                            },
+                            {
+                              label: "Percentage",
+                              value: "Percentage",
+                            },
+                          ]}
+                          onChange={(e) => {
+                            setAllowMinTf(e.value);
+                          }}
+                        />
+                        <AppInput
+                          placeholder=""
+                          type="number"
+                          cut
+                          removeCutBorder
+                          onChange={(e) => {
+                            setAllowMinFee(e.target.value);
+                          }}
+                          width="90%"
+                          name="username"
+                          //defaultValue={charge?.baseValue}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <hr
+                  style={{
+                    marginBottom: "20px",
+                    marginTop: "20px",
+                    opacity: "0.4",
+                  }}
+                ></hr>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr 1fr",
+                    gridGap: "40px",
+                  }}
+                >
                   <div className="name" style={{}}>
                     <label>Maximum Transfer Limit</label>
                     <AppInput
@@ -297,11 +384,71 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       onChange={(e) => {
                         setMaxTransfer(e.target.value);
                       }}
-                      width="95%"
+                      width="93%"
                       name="username"
                       //defaultValue={charge?.baseValue}
                     />
                   </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div>
+                      <div>Allow Below Maximum Transfer</div>
+                      <div style={{ color: "#6b6b6b", fontSize: "12px" }}>
+                        All Users in this category are to transfer above the the
+                        maximum category
+                      </div>
+                    </div>
+                    <Switch
+                      onClick={() => {
+                        setAllowMax(!allowMax);
+                      }}
+                      checked={allowMax}
+                    />
+                  </div>
+                  {allowMax && (
+                    <div>
+                      <label>Max. Transfer Fee (%)</label>
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "3fr 4fr",
+                        }}
+                      >
+                        <AppSelect2
+                          cut
+                          options={[
+                            {
+                              label: "Fixed",
+                              value: "Fixed",
+                            },
+                            {
+                              label: "Percentage",
+                              value: "Percentage",
+                            },
+                          ]}
+                          onChange={(e) => {
+                            setAllowMaxTf(e.value);
+                          }}
+                        />
+                        <AppInput
+                          placeholder=""
+                          type="number"
+                          cut
+                          removeCutBorder
+                          onChange={(e) => {
+                            setAllowMaxFee(e.target.value);
+                          }}
+                          width="90%"
+                          name="username"
+                          //defaultValue={charge?.baseValue}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <hr
                   style={{
@@ -666,6 +813,15 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                         transferBonusThreshold: transferBonusThresh,
                         allowTransferPreKCY: allowKyc?.value,
                         transferBonusRateValue: bonusRate,
+
+                        allowBelowMinimum: allowMin,
+                        belowMinimumChargeType: allowMinTf || "",
+                        belowMinimumCharges: allowMinFee || "",
+
+                        allowAboveMaximum: allowMax,
+                        aboveMaximumChargeType: allowMaxTf || "",
+                        aboveMaximumLimitCharges: allowMaxFee || "",
+
                         kycThreshold: kycThreshold || 0,
                       });
                     }

@@ -75,3 +75,7 @@
 .cancel  span {
   font-size: 16px;
 }
+
+.arco-switch-checked{
+  background-color: #00a85a !important;
+}
