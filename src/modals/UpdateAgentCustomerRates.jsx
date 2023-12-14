@@ -229,7 +229,7 @@ export default function UpdateAgentCustomerRates({
                   agentId: 0,
                   customerId: rateItem?.userId,
                   specialRate: {
-                    currencyRateId: selectedCountry?.id,
+                    currencyRateId: selectedCountry?.currencyRate?.id,
                     specialRate: Number(rate), //Agent new rate
                     charge: Number(fee), //Percetange of the sending amount if upto or equal to threshold
                   },
