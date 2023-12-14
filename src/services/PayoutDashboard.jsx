@@ -38,6 +38,13 @@ export const updateRate = async (body) => {
   const { data } = await Axios.post(`${baseurl}/updaterate`, body);
   return data;
 };
+export const updateSpecialRate = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updatecustomerspeacialrate`,
+    body
+  );
+  return data;
+};
 
 export const createRate = async (body) => {
   const { data } = await Axios.post(`${baseurl}/addnewrate`, body);

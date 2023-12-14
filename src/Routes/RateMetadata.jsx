@@ -3,6 +3,7 @@ import styled from "styled-components";
 import RateMetadataTable from "./Rates/RateMetadataTable";
 import CreateRateMetadataModal from "../modals/CreateRateMetadataModal";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function RateMetadata() {
   const [modal, setModal] = useState();
@@ -24,15 +25,11 @@ export default function RateMetadata() {
               This page allows you to manage and update transfer rates and fee{" "}
             </div>
           </div>
-          <button
-            onClick={() => {
-              setModal(true);
-            }}
-            className="confirm"
-          >
+
+          <Link to="/create-meta" className="confirm">
             {" "}
             <span>Create Metadata</span>
-          </button>
+          </Link>
         </Header>
         <RateMetadataTable recall={recall} setRecall={setRecall} />
       </BodyLayout>

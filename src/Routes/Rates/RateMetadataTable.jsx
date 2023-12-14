@@ -110,11 +110,11 @@ function RateMetadataTable({ recall, setRecall }) {
     return {
       ...item,
       action: (
-        <div
+        <Link
           onClick={() => {
-            setModal(true);
-            setRate(item);
+            localStorage.setItem("rateMetadata", JSON.stringify(item));
           }}
+          to={`/create-meta?item=${JSON.stringify(item)}`}
           style={{
             textDecoration: "none",
           }}
@@ -130,7 +130,7 @@ function RateMetadataTable({ recall, setRecall }) {
           >
             Update Metadata
           </p>
-        </div>
+        </Link>
       ),
     };
   });

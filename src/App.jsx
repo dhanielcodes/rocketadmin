@@ -39,6 +39,7 @@ import PayoutProvidersList from "./Routes/PayoutProviders";
 import CountriesPage from "./Routes/Countries";
 import CitiesPage from "./Routes/Cities";
 import TransfersListPage from "./Routes/Transfers";
+import CreateNewMetadata from "./Routes/CreateNewMetadata";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -136,6 +137,14 @@ function App() {
                 element={
                   <AppLogout>
                     <Customers />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/create-meta"
+                element={
+                  <AppLogout>
+                    <CreateNewMetadata />
                   </AppLogout>
                 }
               />
