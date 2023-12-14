@@ -10,11 +10,14 @@ import { getRoleMeta } from "../services/Dashboard";
 import { getCurrencies } from "../services/Auth";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { createRateMetadata } from "../services/PayoutDashboard";
+import {
+  createRateMetadata,
+  updateRateMetadata,
+} from "../services/PayoutDashboard";
 import SectionHeader from "../reuseables/SectionHeader";
 import AppSelect from "../reuseables/AppSelect";
 import AppInput from "../reuseables/AppInput";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Switch } from "@arco-design/web-react";
 import AppSelect2 from "../reuseables/AppSelect2";
 function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
@@ -23,6 +26,9 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
   const [sendmoney, setSendMoney] = useState();
   const [reviewTransfer, setReviewTransfer] = useState();
   const [userSelected, setUserSelected] = useState("");
+  const [params] = useSearchParams();
+
+  const rateItem = JSON.parse(params.get("item"));
 
   const [step, setStep] = useState(1);
 
@@ -52,8 +58,12 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
   const [allowKyc, setAllowKyc] = useState();
   const [kycThreshold, setKycThreshold] = useState();
 
-  const [allowMin, setAllowMin] = useState(false);
-  const [allowMax, setAllowMax] = useState(false);
+  const [allowMin, setAllowMin] = useState(
+    rateItem?.allowBelowMinimum || false
+  );
+  const [allowMax, setAllowMax] = useState(
+    rateItem?.allowAboveMaximum || false
+  );
 
   const [allowMinTf, setAllowMinTf] = useState(false);
   const [allowMaxTf, setAllowMaxTf] = useState(false);
@@ -61,37 +71,18 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
   const [allowMinFee, setAllowMinFee] = useState(false);
   const [allowMaxFee, setAllowMaxFee] = useState(false);
 
-  const [params] = useSearchParams();
+  const navigate = useNavigate();
 
-  const rateItem = JSON.parse(params.get("item"));
   console.log(rateItem);
 
   const { mutate, isLoading: mutateLoading } = useMutation({
-    mutationFn: createRateMetadata,
+    mutationFn: rateItem ? updateRateMetadata : createRateMetadata,
     onSuccess: (data) => {
       console.log(data);
       if (data?.status) {
-        toast.success("Rate Created Successfully");
+        toast.success(`Rate ${rateItem ? "Updated" : "Created"} Successfully`);
+        navigate("/rate-metadata");
         setRecall(!recall);
-        setModal(false);
-        setRateMeta();
-        setName();
-        setDesc();
-        setMinTransfer();
-        setMaxTransfer();
-        setDailyTransfer();
-        setWeeklyTransfer();
-        setMonthlyTransfer();
-        setAnnualTransfer();
-        setAllowBelow();
-        setBelowMinCharges();
-        setPopThresh();
-        setSofThresh();
-        setBonusRate();
-        setSelectedCountry();
-        setTransferBonusThresh();
-        setAllowKyc();
-        setKycThreshold();
         //refetch();
       } else {
         toast.error(data?.message);
@@ -99,7 +90,7 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
     },
     onError: (data) => {
       //setModal(true);
-      toast.error("Rate Request wasn't created");
+      //toast.error("Rate Request wasn't created");
 
       setTimeout(() => {
         //  seterr("")
@@ -133,7 +124,7 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
       ) : (
         <Content>
           <div className="top">
-            <p>Create Currency Rate Metadata</p>
+            <p>{rateItem ? "Update" : "Create"} Currency Rate Metadata</p>
           </div>
 
           <div className="main">
@@ -172,17 +163,15 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                     Currency
                   </label>
                   <CountryDropdown2
-                    value={selectedCountry}
-                    collectionStatus
-                    option={
-                      countries?.data?.map((item) => {
-                        return {
-                          label: item?.name + " - " + item?.currencyCode,
-                          value: item?.name,
-                          ...item,
-                        };
-                      }) || []
+                    defaultValue={
+                      selectedCountry || {
+                        label: rateItem?.currency?.name,
+                        value: rateItem?.currency?.name,
+                        id: rateItem?.currency?.id,
+                        ...rateItem?.currency,
+                      }
                     }
+                    collectionStatus
                     onChange={(e) => {
                       setSelectedCountry(e);
                     }}
@@ -222,9 +211,49 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                         value: 6,
                       },
                     ]}
+                    defaultValue={{
+                      label: rateItem?.role?.name,
+                      value: rateItem?.role?.id,
+                    }}
                     onChange={(e) => {
                       setRateMeta(e);
                     }}
+                  />
+                </div>
+                <hr
+                  style={{
+                    marginBottom: "20px",
+                    marginTop: "20px",
+                    opacity: "0.4",
+                  }}
+                ></hr>
+                <div
+                  className="name"
+                  style={{
+                    marginTop: "20px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "70%",
+                  }}
+                >
+                  <label
+                    style={{
+                      width: "60%",
+                      display: "block",
+                      fontSize: "16px",
+                    }}
+                  >
+                    Name
+                  </label>
+                  <AppInput
+                    placeholder=""
+                    type="text"
+                    onChange={(e) => {
+                      setName(e.target.value);
+                    }}
+                    width="95%"
+                    name="username"
+                    defaultValue={rateItem?.name}
                   />
                 </div>
                 <hr
@@ -260,7 +289,7 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                     }}
                     width="95%"
                     name="username"
-                    //defaultValue={charge?.baseValue}
+                    defaultValue={rateItem?.description}
                   />
                 </div>
               </div>
@@ -297,7 +326,9 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       }}
                       width="95%"
                       name="username"
-                      //defaultValue={charge?.baseValue}
+                      defaultValue={
+                        minTransfer || rateItem?.minimumTransferLimit
+                      }
                     />
                   </div>
 
@@ -308,12 +339,13 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                     }}
                   >
                     <div>
-                      <div>Allow Below Minimum Transfer</div>
+                      <div>Allow below Minimum Transfer</div>
                       <div style={{ color: "#6b6b6b", fontSize: "12px" }}>
                         All Users in this category are to transfer lower than
                         the minimum category
                       </div>
                     </div>
+
                     <Switch
                       onClick={() => {
                         setAllowMin(!allowMin);
@@ -345,6 +377,10 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                           onChange={(e) => {
                             setAllowMinTf(e.value);
                           }}
+                          defaultValue={{
+                            label: rateItem?.belowMinimumChargeType,
+                            value: rateItem?.belowMinimumChargeType,
+                          }}
                         />
                         <AppInput
                           placeholder=""
@@ -356,7 +392,9 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                           }}
                           width="90%"
                           name="username"
-                          //defaultValue={charge?.baseValue}
+                          defaultValue={
+                            allowMinFee || rateItem?.transferBelowMinimumCharges
+                          }
                         />
                       </div>
                     </div>
@@ -386,7 +424,9 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       }}
                       width="93%"
                       name="username"
-                      //defaultValue={charge?.baseValue}
+                      defaultValue={
+                        maxTransfer || rateItem?.maximumTransferLimit
+                      }
                     />
                   </div>
                   <div
@@ -396,7 +436,7 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                     }}
                   >
                     <div>
-                      <div>Allow Below Maximum Transfer</div>
+                      <div>Allow above Maximum Transfer</div>
                       <div style={{ color: "#6b6b6b", fontSize: "12px" }}>
                         All Users in this category are to transfer above the the
                         maximum category
@@ -433,6 +473,10 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                           onChange={(e) => {
                             setAllowMaxTf(e.value);
                           }}
+                          defaultValue={{
+                            label: rateItem?.aboveMaximumChargeType,
+                            value: rateItem?.aboveMaximumChargeType,
+                          }}
                         />
                         <AppInput
                           placeholder=""
@@ -444,7 +488,9 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                           }}
                           width="90%"
                           name="username"
-                          //defaultValue={charge?.baseValue}
+                          defaultValue={
+                            allowMaxFee || rateItem?.transferAboveMaximumCharges
+                          }
                         />
                       </div>
                     </div>
@@ -474,7 +520,7 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       }}
                       width="95%"
                       name="username"
-                      //defaultValue={charge?.baseValue}
+                      defaultValue={dailyTransfer || rateItem?.dailyLimit}
                     />
                   </div>
                   <div className="name" style={{}}>
@@ -487,7 +533,7 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       }}
                       width="95%"
                       name="username"
-                      //defaultValue={charge?.baseValue}
+                      defaultValue={weeklyTransfer || rateItem?.weeklyLimit}
                     />
                   </div>
                 </div>
@@ -508,7 +554,7 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       }}
                       width="95%"
                       name="username"
-                      //defaultValue={charge?.baseValue}
+                      defaultValue={monthlyTransfer || rateItem?.monthlyLimit}
                     />
                   </div>
                   <div className="name" style={{}}>
@@ -521,7 +567,7 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       }}
                       width="95%"
                       name="username"
-                      //defaultValue={charge?.baseValue}
+                      defaultValue={annualTransfer || rateItem?.annualLimit}
                     />
                   </div>
                 </div>
@@ -549,7 +595,9 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       }}
                       width="95%"
                       name="username"
-                      //defaultValue={charge?.baseValue}
+                      defaultValue={
+                        transferBonusThresh || rateItem?.transferBonusThreshold
+                      }
                     />
                   </div>
 
@@ -563,7 +611,9 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       }}
                       width="95%"
                       name="username"
-                      //defaultValue={charge?.baseValue}
+                      defaultValue={
+                        bonusRate || rateItem?.transferBonusRateValue
+                      }
                     />
                   </div>
                 </div>
@@ -603,7 +653,9 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       }}
                       width="95%"
                       name="username"
-                      //defaultValue={charge?.baseValue}
+                      defaultValue={
+                        popThresh || rateItem?.proofOfPaymentAmountThreshold
+                      }
                     />
                   </div>
                   <div className="name" style={{}}>
@@ -616,20 +668,9 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       }}
                       width="95%"
                       name="username"
-                      //defaultValue={charge?.baseValue}
-                    />
-                  </div>
-                  <div className="name" style={{}}>
-                    <label>Below Minimum Charges</label>
-                    <AppInput
-                      placeholder=""
-                      type="number"
-                      onChange={(e) => {
-                        setBelowMinCharges(e.target.value);
-                      }}
-                      width="95%"
-                      name="username"
-                      //defaultValue={charge?.baseValue}
+                      defaultValue={
+                        sofThresh || rateItem?.sourceOfFundAmountThreshold
+                      }
                     />
                   </div>
                 </div>
@@ -657,26 +698,9 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       }}
                       width="95%"
                       name="username"
-                      //defaultValue={charge?.baseValue}
-                    />
-                  </div>
-
-                  <div className="name" style={{}}>
-                    <label>Allow Below Minimum</label>
-                    <AppSelect
-                      options={[
-                        {
-                          label: "True",
-                          value: true,
-                        },
-                        {
-                          label: "False",
-                          value: false,
-                        },
-                      ]}
-                      onChange={(e) => {
-                        setAllowBelow(e.value);
-                      }}
+                      defaultValue={
+                        transferBonusThresh || rateItem?.transferBonusThreshold
+                      }
                     />
                   </div>
                 </div>
@@ -704,25 +728,26 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       }}
                       width="95%"
                       name="username"
-                      //defaultValue={charge?.baseValue}
+                      defaultValue={kycThreshold || rateItem?.kycThreshold}
                     />
                   </div>
-                  <div className="name" style={{}}>
-                    <label>Allow KYC Threshold</label>
-                    <AppSelect
-                      options={[
-                        {
-                          label: "True",
-                          value: true,
-                        },
-                        {
-                          label: "False",
-                          value: false,
-                        },
-                      ]}
-                      onChange={(e) => {
-                        setAllowKyc(e);
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div>
+                      <div>Allow KYC Threshold</div>
+                      <div style={{ color: "#6b6b6b", fontSize: "12px" }}>
+                        All Users in this category are to transfer pre KYC
+                      </div>
+                    </div>
+                    <Switch
+                      onClick={() => {
+                        setAllowKyc(!allowKyc);
                       }}
+                      checked={allowKyc || rateItem?.allowTransferPreKCY}
                     />
                   </div>
                 </div>
@@ -775,11 +800,6 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                           popThresh || rateItem?.proofOfPaymentThresholdAmount,
                         sourceOfFundThresholdAmount:
                           sofThresh || rateItem?.sourceOfFundThresholdAmount,
-                        transferBelowMinimumAllowed:
-                          allowBelow || rateItem?.transferBelowMinimumAllowed,
-                        transferBelowMinimumCharges:
-                          belowMinCharges ||
-                          rateItem?.transferBelowMinimumCharges,
                         transferBonusThreshold:
                           transferBonusThresh ||
                           rateItem?.transferBonusThreshold,
@@ -788,6 +808,25 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                         allowTransferPreKCY:
                           allowKyc?.value || rateItem?.allowTransferPreKCY,
                         kycThreshold: kycThreshold || rateItem?.kycThreshold,
+                        currency: {
+                          id: selectedCountry?.id || rateItem?.currency?.id,
+                        },
+                        role: {
+                          id: rateMeta?.value || rateItem?.role?.id,
+                        },
+                        allowBelowMinimum:
+                          allowMin || rateItem?.allowBelowMinimum,
+                        belowMinimumChargeType:
+                          allowMinTf || rateItem?.belowMinimumChargeType,
+                        belowMinimumCharges:
+                          allowMinFee || rateItem?.belowMinimumCharges,
+                        allowAboveMaximum:
+                          allowMax || rateItem?.allowAboveMaximum,
+                        aboveMaximumChargeType:
+                          allowMaxTf || rateItem?.aboveMaximumChargeType,
+                        aboveMaximumLimitCharges:
+                          allowMaxFee || rateItem?.aboveMaximumLimitCharges,
+                        bonusRateValue: bonusRate || rateItem?.bonusRateValue,
                       });
                     } else {
                       mutate({
@@ -800,29 +839,30 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                         },
                         name: name,
                         description: desc,
-                        minTransferLimit: minTransfer,
-                        maxTransferLimit: maxTransfer,
+
                         dailyLimit: dailyTransfer,
                         weeklyLimit: weeklyTransfer,
                         monthlyLimit: monthlyTransfer,
                         annualLimit: annualTransfer,
+
                         proofOfPaymentThresholdAmount: popThresh,
                         sourceOfFundThresholdAmount: sofThresh,
-                        transferBelowMinimumAllowed: allowBelow,
-                        transferBelowMinimumCharges: belowMinCharges,
+
                         transferBonusThreshold: transferBonusThresh,
                         allowTransferPreKCY: allowKyc?.value,
-                        transferBonusRateValue: bonusRate,
 
+                        minTransferLimit: minTransfer,
                         allowBelowMinimum: allowMin,
                         belowMinimumChargeType: allowMinTf || "",
                         belowMinimumCharges: allowMinFee || "",
 
+                        maxTransferLimit: maxTransfer,
                         allowAboveMaximum: allowMax,
                         aboveMaximumChargeType: allowMaxTf || "",
                         aboveMaximumLimitCharges: allowMaxFee || "",
 
                         kycThreshold: kycThreshold || 0,
+                        bonusRateValue: bonusRate || 0,
                       });
                     }
                   } else {
@@ -835,9 +875,13 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                 {" "}
                 <span>
                   {mutateLoading
-                    ? "creating..."
+                    ? rateItem
+                      ? "updating..."
+                      : "creating..."
                     : step === 3
-                    ? "Create"
+                    ? rateItem
+                      ? "Update"
+                      : "Create"
                     : "Continue"}
                 </span>
               </button>

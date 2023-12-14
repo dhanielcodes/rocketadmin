@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { createRate } from "../services/PayoutDashboard";
+import { createRate, updateSpecialRate } from "../services/PayoutDashboard";
 import AppModal from "../COMPONENTS/AppModal";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
 import { getCurrencies } from "../services/Auth";
@@ -37,7 +37,7 @@ export default function UpdateAgentCustomerRates({
   };
 
   const { mutate, isLoading: mutateLoading } = useMutation({
-    mutationFn: createRate,
+    mutationFn: updateSpecialRate,
     onSuccess: (data) => {
       console.log(data);
       if (data?.status) {
@@ -99,6 +99,7 @@ export default function UpdateAgentCustomerRates({
             setRate();
             setSend();
             setReceive();
+            setSelectedCountry();
           }}
           maxWidth="1100px"
           heading="Update Rate"
@@ -211,6 +212,11 @@ export default function UpdateAgentCustomerRates({
             <button
               onClick={() => {
                 setModal(false);
+                setSelectedCountry();
+                setRateMeta();
+                setRate();
+                setSend();
+                setReceive();
               }}
               className="cancel"
             >
@@ -220,22 +226,12 @@ export default function UpdateAgentCustomerRates({
             <button
               onClick={() => {
                 mutate({
-                  currencyRateMetaData: {
-                    id: rateMeta?.id,
-                    role: {
-                      id: rateMeta?.role?.id,
-                    },
-                  },
-                  updatedBy: {
-                    userId: userDetails?.userId,
-                    firstName: "Admin",
-                  },
-                  conversionRate: rate,
-                  fromCurrency: {
-                    id: send?.id,
-                  },
-                  toCurrency: {
-                    id: receive?.id,
+                  agentId: 0,
+                  customerId: rateItem?.userId,
+                  specialRate: {
+                    currencyRateId: selectedCountry?.id,
+                    specialRate: Number(rate), //Agent new rate
+                    charge: Number(fee), //Percetange of the sending amount if upto or equal to threshold
                   },
                 });
               }}

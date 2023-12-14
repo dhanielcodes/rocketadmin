@@ -28,6 +28,7 @@ import { Link } from "react-router-dom";
 import TransferLogsTable from "./Dashboard/TransferLogs";
 import NewCustomerList from "./Dashboard/NewCustomersTableList";
 import CountryDropdownDash from "../reuseables/CountryDropdownDash";
+import TodayLogs from "./Dashboard/TodayLogs";
 function Dashboard() {
   const [count, setCount] = useState(0);
 
@@ -76,12 +77,12 @@ function Dashboard() {
             />
           ) : (
             <div className="content1">
-              <Link className="contside1" to="/transfers">
+              <a className="contside1" href="#logs">
                 <div className="contside1Text">
                   <h1>{newVolume?.todayTransferCount || 0}</h1>
                   <p>Today’s transfer</p>
                 </div>
-              </Link>
+              </a>
               <div className="contside2">
                 <div className="contside22">
                   <div className="contside2up">
@@ -482,7 +483,9 @@ function Dashboard() {
             <BranchWise />
             <CountryRates />
           </div> */}
-          <TransferLogsTable />
+          <div id="logs">
+            <TodayLogs />
+          </div>
           <NewCustomerList />
         </Content>
       </BodyLayout>
