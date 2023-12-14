@@ -49,13 +49,13 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
   const [annualTransfer, setAnnualTransfer] = useState();
   const [popThresh, setPopThresh] = useState();
   const [sofThresh, setSofThresh] = useState();
-  const [allowBelow, setAllowBelow] = useState();
-  const [belowMinCharges, setBelowMinCharges] = useState();
   const [transferBonusThresh, setTransferBonusThresh] = useState();
   const [bonusRate, setBonusRate] = useState();
   const [selectedCountry, setSelectedCountry] = useState();
   const [rateMeta, setRateMeta] = useState();
-  const [allowKyc, setAllowKyc] = useState();
+  const [allowKyc, setAllowKyc] = useState(
+    rateItem?.allowTransferPreKCY || false
+  );
   const [kycThreshold, setKycThreshold] = useState();
 
   const [allowMin, setAllowMin] = useState(
@@ -718,19 +718,6 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                     gridGap: "40px",
                   }}
                 >
-                  <div className="name" style={{}}>
-                    <label>KYC Threshold</label>
-                    <AppInput
-                      placeholder=""
-                      type="number"
-                      onChange={(e) => {
-                        setKycThreshold(e.target.value);
-                      }}
-                      width="95%"
-                      name="username"
-                      defaultValue={kycThreshold || rateItem?.kycThreshold}
-                    />
-                  </div>
                   <div
                     style={{
                       display: "flex",
@@ -747,9 +734,24 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                       onClick={() => {
                         setAllowKyc(!allowKyc);
                       }}
-                      checked={allowKyc || rateItem?.allowTransferPreKCY}
+                      checked={allowKyc}
                     />
                   </div>
+                  {allowKyc && (
+                    <div className="name" style={{}}>
+                      <label>KYC Threshold</label>
+                      <AppInput
+                        placeholder=""
+                        type="number"
+                        onChange={(e) => {
+                          setKycThreshold(e.target.value);
+                        }}
+                        width="95%"
+                        name="username"
+                        defaultValue={kycThreshold || rateItem?.kycThreshold}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -781,6 +783,28 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
 
               <button
                 onClick={() => {
+                  if (step === 1) {
+                    if (selectedCountry && rateMeta && name && desc) {
+                      setStep((prev) => prev + 1);
+                    } else {
+                      toast.error("Fill required fields");
+                    }
+                  }
+                  if (step === 2) {
+                    if (
+                      minTransfer &&
+                      maxTransfer &&
+                      dailyTransfer &&
+                      monthlyTransfer &&
+                      weeklyTransfer &&
+                      monthlyTransfer &&
+                      annualTransfer
+                    ) {
+                      setStep((prev) => prev + 1);
+                    } else {
+                      toast.error("Fill required fields");
+                    }
+                  }
                   if (step === 3) {
                     if (rateItem) {
                       mutate({
@@ -865,8 +889,6 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                         bonusRateValue: bonusRate || 0,
                       });
                     }
-                  } else {
-                    setStep((prev) => prev + 1);
                   }
                 }}
                 className="confirm"
