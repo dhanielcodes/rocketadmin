@@ -19,7 +19,7 @@ import { getAdminDashboard } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import Skeleton2 from "../reuseables/Skeleton2";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
-import { kFormatter4 } from "../utils/format";
+import { kFormatter2 } from "../utils/format";
 import DeleteIcon from "../assets/icons/DeleteIcon";
 import YellowCardIcon from "../assets/icons/YellowCardIcon";
 import GreenCardIcon from "../assets/icons/GreenCard";
@@ -123,19 +123,19 @@ function Dashboard() {
                     <div className="contside2child2">
                       <div className="box">
                         <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                          {kFormatter4(newVolume?.lastSixtyDays || 0)}
+                          {kFormatter2(newVolume?.lastSixtyDays || 0)}
                         </div>{" "}
                         <span>Last 60 Days</span>
                       </div>
                       <div className="box">
                         <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                          {kFormatter4(newVolume?.lastNinetyDays || 0)}
+                          {kFormatter2(newVolume?.lastNinetyDays || 0)}
                         </div>{" "}
                         <span>Last 90 Days</span>
                       </div>
                       <div className="box">
                         <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                          {kFormatter4(newVolume?.lastOneTwentyDays || 0)}
+                          {kFormatter2(newVolume?.lastOneTwentyDays || 0)}
                         </div>{" "}
                         <span>Last 120 Days</span>
                       </div>
@@ -184,7 +184,7 @@ function Dashboard() {
                         <p>View Rates</p>
                       </div>
                     </Link>
-                    <Link className="smallcard" to="/payment-processors">
+                    <Link className="smallcard" to="/transfers">
                       <div className="smallcard">
                         <svg
                           width="20"
@@ -272,7 +272,7 @@ function Dashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter4(
+                        {kFormatter2(
                           newVolume?.cancelledAmount +
                             newVolume?.pendingAmount +
                             newVolume?.failedAmount || 0
@@ -305,7 +305,7 @@ function Dashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter4(newVolume?.cancelledAmount || 0)}
+                        {kFormatter2(newVolume?.cancelledAmount || 0)}
                       </div>
                     </div>
                     <div
@@ -334,7 +334,7 @@ function Dashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter4(newVolume?.pendingAmount || 0)}
+                        {kFormatter2(newVolume?.pendingAmount || 0)}
                       </div>
                     </div>
                     <div
@@ -362,7 +362,7 @@ function Dashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter4(newVolume?.failedAmount || 0)}
+                        {kFormatter2(newVolume?.failedAmount || 0)}
                       </div>
                     </div>
                   </div>
