@@ -170,7 +170,7 @@ export const Tranx = async (userId) => {
     userId?.queryKey[0]
   );
   const { data } = await Axios.get(
-    `${baseurl}/getuserlog/${userId?.queryKey[0]}`
+    `${baseurl}/getusertransactionlog/${userId?.queryKey[0]}`
   );
   return data;
 };
