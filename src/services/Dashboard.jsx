@@ -12,9 +12,9 @@ export const getAdminDashboard = async (userId = 0) => {
 
 export const beneficiaries = async (userId, bid) => {
   const { data } = await Axios.get(
-    `${baseurl}/getuserbeneficiaries?userId=${
-      userId || 68059751
-    }&beneficiaryId=${bid || 0}`
+    `${baseurl}/getuserbeneficiaries?userId=${userId || 0}&beneficiaryId=${
+      bid || 0
+    }`
   );
   return data;
 };
