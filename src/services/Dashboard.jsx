@@ -18,6 +18,10 @@ export const beneficiaries = async (userId, bid) => {
   );
   return data;
 };
+export const getCurrencies = async () => {
+  const { data } = await Axios.get(`${baseurl}/getcurrency`);
+  return data;
+};
 
 export const getBanks = async (userId, bid) => {
   const { data } = await Axios.get(`${baseurl}/getbanks`);

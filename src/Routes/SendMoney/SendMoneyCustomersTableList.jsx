@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
 import SearchInput from "../../reuseables/SearchInput";
@@ -21,6 +21,8 @@ function SendMoneyCustomersTableList({
   userSelected,
 }) {
   const [filter, setFilter] = useState(false);
+
+  const navigate = useNavigate();
   const AppData = JSON.parse(localStorage?.getItem("AppData"));
   console.log(AppData);
 
@@ -129,6 +131,7 @@ function SendMoneyCustomersTableList({
             console.log(item?.userId);
             setUserSelected(item);
             setStep(2);
+            navigate(`/sendmoney?id=${item?.userId}&step=2`);
           }}
           style={{
             color: "blue",

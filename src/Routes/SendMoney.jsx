@@ -5,16 +5,23 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import SearchInput from "../reuseables/SearchInput";
 import BeneficiaryComponent from "../COMPONENTS/BeneficiaryComponent";
 import SendMoneyCustomersTableList from "./SendMoney/SendMoneyCustomersTableList";
+import SelectBeneficiary from "./SendMoney/SelectBeneficiary";
+import SendDetails from "./SendMoney/SendDetails";
+import { useNavigate, useSearchParams } from "react-router-dom";
 function SendMoney() {
   const [selectSender, setSelectSender] = useState(true);
   const [beneficiary, setBeneficiary] = useState();
   const [sendmoney, setSendMoney] = useState();
   const [reviewTransfer, setReviewTransfer] = useState();
   const [userSelected, setUserSelected] = useState("");
+  const [params] = useSearchParams();
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(Number(params.get("step")) || 1);
 
   const [Noteinfo, setNoteinfo] = useState(true);
+  const navigate = useNavigate();
+
+  const [active, setActive] = useState("");
 
   //   Component useState
   const [beneficiaryComponent, setBeneficiaryComponent] = useState(false);
@@ -30,131 +37,13 @@ function SendMoney() {
       ) : (
         <Content>
           <div className="top">
-            <p>Incomplete Registrations</p>
+            <p>Send Money</p>
             <span>
-              This page shows you customers with incomplete registrations
+              This page let's you send money to customer beneficiaries
             </span>
           </div>
-          {Noteinfo && (
-            <div className="info">
-              <div className="note">
-                <svg
-                  width="20"
-                  height="19"
-                  viewBox="0 0 20 19"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10.0001 12.8327V9.49935M10.0001 6.16602H10.0084M18.3334 9.49935C18.3334 14.1017 14.6025 17.8327 10.0001 17.8327C5.39771 17.8327 1.66675 14.1017 1.66675 9.49935C1.66675 4.89698 5.39771 1.16602 10.0001 1.16602C14.6025 1.16602 18.3334 4.89698 18.3334 9.49935Z"
-                    stroke="#417CD4"
-                    stroke-width="1.66667"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
 
-                <p>
-                  Note, Click on{" "}
-                  <span style={{ color: "#417CD4" }}>Send Money</span> from the
-                  table list below to send money to a customer.
-                </p>
-              </div>
-              <svg
-                onClick={() => setNoteinfo(false)}
-                cursor="pointer"
-                width="36"
-                height="37"
-                viewBox="0 0 36 37"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M23 13.5L13 23.5M13 13.5L23 23.5"
-                  stroke="#344054"
-                  stroke-width="1.67"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-          )}
           <div className="main">
-            <div className="selection">
-              <div
-                className="sender"
-                onClick={() => {
-                  setSelectSender(true);
-                  setBeneficiary(false);
-                  setSendMoney(false);
-                  setReviewTransfer(false);
-                }}
-              >
-                <span
-                  style={{ border: selectSender ? "8px solid #00a85a24" : "" }}
-                >
-                  1
-                </span>
-                <p style={{ color: selectSender ? "#00A85A" : "" }}>
-                  Select Sender
-                </p>
-              </div>
-              <div
-                className="sender"
-                onClick={() => {
-                  setSelectSender(false);
-                  setBeneficiary(true);
-                  setSendMoney(false);
-                  setReviewTransfer(false);
-                }}
-              >
-                <span
-                  style={{ border: beneficiary ? "8px solid #00a85a24" : "" }}
-                >
-                  2
-                </span>
-                <p style={{ color: beneficiary ? "#00A85A" : "" }}>
-                  Beneficiary
-                </p>
-              </div>
-              <div
-                className="sender"
-                onClick={() => {
-                  setSelectSender(false);
-                  setBeneficiary(false);
-                  setSendMoney(true);
-                  setReviewTransfer(false);
-                }}
-              >
-                <span
-                  style={{ border: sendmoney ? "8px solid #00a85a24" : "" }}
-                >
-                  3
-                </span>
-                <p style={{ color: sendmoney ? "#00A85A" : "" }}>Send Money</p>
-              </div>
-              <div
-                className="sender"
-                onClick={() => {
-                  setSelectSender(false);
-                  setBeneficiary(false);
-                  setSendMoney(false);
-                  setReviewTransfer(true);
-                }}
-              >
-                <span
-                  style={{
-                    border: reviewTransfer ? "8px solid #00a85a24" : "",
-                  }}
-                >
-                  4
-                </span>
-                <p style={{ color: reviewTransfer ? "#00A85A" : "" }}>
-                  Review Transfer
-                </p>
-              </div>
-            </div>
-
             {step === 1 && (
               <SendMoneyCustomersTableList
                 setStep={setStep}
@@ -162,8 +51,67 @@ function SendMoney() {
                 userSelected={userSelected}
               />
             )}
-            {step === 2 && <SendMoneyCustomersTableList />}
-            {step === 3 && <SendMoneyCustomersTableList />}
+            {params.get("step") === "2" && (
+              <SelectBeneficiary active={active} setActive={setActive} />
+            )}
+            {params.get("step") === "3" && <SendDetails />}
+          </div>
+          <div
+            style={{
+              display: "grid",
+              width: "28%",
+              gridTemplateColumns: "1fr 1fr",
+              gridGap: "10px",
+              marginTop: "30px",
+              marginLeft: "auto",
+              paddingBottom: "20px",
+              paddingRight: "20px",
+            }}
+          >
+            {step === 1 ? (
+              <div></div>
+            ) : (
+              <button
+                onClick={() => {
+                  setStep((prev) => prev - 1);
+                }}
+                className="cancel"
+              >
+                {" "}
+                <span>Previous</span>
+              </button>
+            )}
+
+            {step === 1 ? (
+              ""
+            ) : (
+              <button
+                onClick={() => {
+                  setStep((prev) => prev + 1);
+                  if (step === 1) {
+                    navigate(`/sendmoney?id=${params.get("id")}&step=${2}`);
+                  }
+                  if (step === 2) {
+                    navigate(
+                      `/sendmoney?id=${params.get(
+                        "id"
+                      )}&beneficiary=${JSON.stringify(active)}&step=${3}`
+                    );
+                  }
+                  if (step === 3) {
+                    navigate(
+                      `/sendmoney?id=${params.get(
+                        "id"
+                      )}&beneficiary=${JSON.stringify(active)}&step=${4}`
+                    );
+                  }
+                }}
+                className="confirm"
+              >
+                {" "}
+                <span>Continue</span>
+              </button>
+            )}
           </div>
         </Content>
       )}
