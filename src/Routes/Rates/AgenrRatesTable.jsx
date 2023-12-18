@@ -14,6 +14,9 @@ import {
   removeDup,
 } from "../../utils/format";
 import { countryObjectsArray } from "../../../config/CountryCodes";
+import { useRef } from "react";
+import { IconSearch } from "@arco-design/web-react/icon";
+import { Input } from "@arco-design/web-react";
 
 function AgentRatesTable() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -30,12 +33,56 @@ function AgentRatesTable() {
   });
 
   console.log(rates);
+  const inputRef = useRef(null);
 
   const columns = [
     {
       title: "RATE ID",
       dataIndex: "id",
       width: 140,
+
+      //render: () => "Other",
+    },
+    {
+      title: "AGENT ID",
+      dataIndex: "agentId",
+      width: 140,
+
+      //render: () => "Other",
+    },
+    {
+      title: "AGENT",
+      dataIndex: "agentName",
+      width: 140,
+      sorter: (a, b) => a.agentName.length - b.agentName.length,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Please enter name"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value
+          ? row.agentName.toUpperCase().indexOf(value.toUpperCase()) !== -1
+          : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
 
       //render: () => "Other",
     },

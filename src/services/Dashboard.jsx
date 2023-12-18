@@ -38,6 +38,33 @@ export const nameEnquiry = async (query) => {
   return data;
 };
 
+export const agentCustomerGetRate = async (
+  q1,
+  q2,
+  userId,
+  agentId,
+  roleId,
+  fromAmount
+) => {
+  const { data } = await Axios.get(
+    `${baseurl}//agentcustomersgetrate?fromCurrencyId=${q1 || 0}&toCurrencyId=${
+      q2 || 0
+    }&fromAmount=${
+      fromAmount || 0
+    }&toAmount=${0}&roleId=${roleId}&agentId=${agentId}&userId=${userId}`
+  );
+  return data;
+};
+export const customerRates = async (q1, q2, userId, roleId, fromAmount) => {
+  const { data } = await Axios.get(
+    `${baseurl}/getrate?fromCurrencyId=${q1 || 0}&toCurrencyId=${
+      q2 || 0
+    }&fromAmount=${
+      fromAmount || 0
+    }&toAmount=${0}&roleId=${roleId}&userId=${userId}`
+  );
+  return data;
+};
 export const Tranx = async (userId) => {
   console.log(
     "🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:",

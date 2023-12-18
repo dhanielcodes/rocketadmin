@@ -14,14 +14,42 @@ function SendMoney() {
   const [sendmoney, setSendMoney] = useState();
   const [reviewTransfer, setReviewTransfer] = useState();
   const [userSelected, setUserSelected] = useState("");
-  const [params] = useSearchParams();
 
-  const [step, setStep] = useState(Number(params.get("step")) || 1);
+  const [rate, setRate] = useState("");
+
+  const [params] = useSearchParams();
+  const user = JSON.parse(params.get("user"));
+
+  const bene = JSON.parse(params.get("beneficiary"));
+
+  const [details, setDetails] = useState({
+    userId: params.get("id"),
+    userBeneficiaryId: bene?.id,
+    fromCurrencyId: "",
+    toCurrencyId: "",
+    amount: "",
+    paymentChannelId: "",
+    walletId: 0,
+    payoutChannelId: "",
+    purpose: "",
+    note: "",
+    transactionSource: "Web",
+    promoCode: "",
+    redirectURL: `${window.location.origin}/sendmoney?step=1`,
+    source: "web",
+  });
+
+  const [step, setStep] = useState(params.get("step"));
+
+  console.log(params.get("step") ? true : false);
 
   const [Noteinfo, setNoteinfo] = useState(true);
   const navigate = useNavigate();
 
   const [active, setActive] = useState("");
+  useEffect(() => {
+    navigate("/sendmoney?step=1");
+  }, []);
 
   //   Component useState
   const [beneficiaryComponent, setBeneficiaryComponent] = useState(false);
@@ -44,7 +72,7 @@ function SendMoney() {
           </div>
 
           <div className="main">
-            {step === 1 && (
+            {params.get("step") === "1" && (
               <SendMoneyCustomersTableList
                 setStep={setStep}
                 setUserSelected={setUserSelected}
@@ -54,7 +82,14 @@ function SendMoney() {
             {params.get("step") === "2" && (
               <SelectBeneficiary active={active} setActive={setActive} />
             )}
-            {params.get("step") === "3" && <SendDetails />}
+            {params.get("step") === "3" && (
+              <SendDetails
+                details={details}
+                setDetails={setDetails}
+                setRate={setRate}
+              />
+            )}
+            {params.get("step") === "4" && <SendDetails />}
           </div>
           <div
             style={{
@@ -68,12 +103,44 @@ function SendMoney() {
               paddingRight: "20px",
             }}
           >
-            {step === 1 ? (
+            {params.get("step") === "1" ? (
               <div></div>
             ) : (
               <button
                 onClick={() => {
                   setStep((prev) => prev - 1);
+                  if (step === 1) {
+                    navigate(`/sendmoney?id=${params.get("id")}&step=${1}`);
+                  }
+                  if (step === 2) {
+                    navigate(
+                      `/sendmoney?id=${params.get(
+                        "id"
+                      )}&beneficiary=${JSON.stringify(
+                        active
+                      )}&user=${JSON.stringify(userSelected)}&step=${1}`
+                    );
+                  }
+                  if (step === 3) {
+                    navigate(
+                      `/sendmoney?id=${params.get(
+                        "id"
+                      )}&beneficiary=${JSON.stringify(
+                        active
+                      )}&user=${JSON.stringify(userSelected)}&step=${2}`
+                    );
+                  }
+                  if (step === 4) {
+                    navigate(
+                      `/sendmoney?id=${params.get(
+                        "id"
+                      )}&beneficiary=${JSON.stringify(
+                        active
+                      )}&user=${JSON.stringify(
+                        userSelected
+                      )}&fullDetails=${JSON.stringify(details)}&step=${3}`
+                    );
+                  }
                 }}
                 className="cancel"
               >
@@ -82,7 +149,7 @@ function SendMoney() {
               </button>
             )}
 
-            {step === 1 ? (
+            {params.get("step") === "1" ? (
               ""
             ) : (
               <button
@@ -95,14 +162,20 @@ function SendMoney() {
                     navigate(
                       `/sendmoney?id=${params.get(
                         "id"
-                      )}&beneficiary=${JSON.stringify(active)}&step=${3}`
+                      )}&beneficiary=${JSON.stringify(
+                        active
+                      )}&user=${JSON.stringify(userSelected)}&step=${3}`
                     );
                   }
                   if (step === 3) {
                     navigate(
                       `/sendmoney?id=${params.get(
                         "id"
-                      )}&beneficiary=${JSON.stringify(active)}&step=${4}`
+                      )}&beneficiary=${JSON.stringify(
+                        active
+                      )}&user=${JSON.stringify(
+                        userSelected
+                      )}&fullDetails=${JSON.stringify(details)}&step=${4}`
                     );
                   }
                 }}

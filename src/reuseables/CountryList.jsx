@@ -129,7 +129,10 @@ const CountryList = ({
 
 const CountyCont = styled.div`
   width: 100%;
-
+  .css-13cymwt-control {
+    border-radius: 8px;
+    padding: 3px;
+  }
   .flag {
     @media screen and (max-width: 40em) {
       font-size: 20px;

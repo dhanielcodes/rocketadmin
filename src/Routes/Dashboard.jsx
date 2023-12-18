@@ -142,7 +142,7 @@ function Dashboard() {
                     </div>
                   </div>
                   <div className="smallbox">
-                    <Link className="smallcard" to="/dashboard">
+                    <Link className="smallcard" to="/sendmoney?step=1">
                       <div className="smallcard">
                         <svg
                           width="24"
@@ -273,7 +273,7 @@ function Dashboard() {
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
                         {kFormatter2(
-                          newVolume?.cancelledAmount +
+                          newVolume?.depositedAmount +
                             newVolume?.pendingAmount +
                             newVolume?.failedAmount || 0
                         )}
@@ -301,11 +301,11 @@ function Dashboard() {
                             fontSize: "0.8vw",
                           }}
                         >
-                          Cancelled
+                          Deposited
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter2(newVolume?.cancelledAmount || 0)}
+                        {kFormatter2(newVolume?.depositedAmount || 0)}
                       </div>
                     </div>
                     <div
