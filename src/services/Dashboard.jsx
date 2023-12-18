@@ -62,11 +62,9 @@ export const customerRates = async (query) => {
   return data;
 };
 export const Tranx = async (userId) => {
-  console.log(
-    "🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:",
-    userId?.queryKey[0]
+  const { data } = await Axios.get(
+    `${baseurl}/getusertransactionlog/${userId || 0}`
   );
-  const { data } = await Axios.get(`${baseurl}/getusertransactionlog/0`);
   return data;
 };
 export const TodayLogss = async (userId) => {

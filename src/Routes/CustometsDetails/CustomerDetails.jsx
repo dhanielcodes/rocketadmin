@@ -27,6 +27,7 @@ import { TiPlus } from "react-icons/ti";
 import PlusIcon from "../../assets/icons/PlusIcon";
 import toast from "react-hot-toast";
 import Gateways from "./ClientDetailsTabs/Gateways";
+import CustomerDetailsTop from "./MainDetailsBody";
 
 export default function CustomerDetailsPage() {
   const [params] = useSearchParams();
@@ -43,17 +44,9 @@ export default function CustomerDetailsPage() {
 
   const navigate = useNavigate();
 
-  const [active, setActive] = useState("Profile");
+  const [active, setActive] = useState("Overview");
 
-  const tab = [
-    "Profile",
-    "ID Documents",
-    "Transactions",
-    "Charges",
-    "Gateways",
-    "Discounts",
-    "Edit Req",
-  ];
+  const tab = ["Overview", "Transfer List", "Beneficiary List"];
 
   const [modal, setModal] = useState(false);
 
@@ -117,45 +110,11 @@ export default function CustomerDetailsPage() {
 
                     <span>Back to Customers</span>
                   </div>
-
-                  <div className="top_name">{clientUser?.companyName}</div>
-                </div>
-
-                <div style={{ display: "flex" }}>
-                  <button
-                    className="fund"
-                    onClick={() => {
-                      setModal(true);
-                    }}
-                  >
-                    {" "}
-                    {/*                   <TiPlus />
-                     */}{" "}
-                    <PlusIcon />
-                    <span>Fund Wallet</span>
-                  </button>
-                  &nbsp; &nbsp;
-                  {clientUser?.status !== "Suspended" ? (
-                    <button className="suspend">
-                      <SuspendIcon />
-
-                      {false ? <span>Loading...</span> : <span>Suspend</span>}
-                    </button>
-                  ) : (
-                    <button className="active">
-                      {false ? <span>Loading...</span> : <span>Activate</span>}
-                    </button>
-                  )}
                 </div>
               </div>
 
               <div className="body">
-                <MainDetailsBody
-                  clientUser={clientUser}
-                  profile={profile}
-                  mail={mail}
-                  phone={phone}
-                />
+                <CustomerDetailsTop />
 
                 <div
                   style={{
@@ -203,17 +162,19 @@ export default function CustomerDetailsPage() {
                     })}
                   </div>
 
-                  {active === "Profile" && (
+                  {active === "Overview" && (
                     <Details clientDetails={clientUser} />
                   )}
                   {active === "ID Documents" && (
                     <Documents clientDetails={clientUser} />
                   )}
-                  {active === "Transactions" && (
-                    <TransactionsList data={clientUser}></TransactionsList>
+                  {active === "Transfer List" && (
+                    <TransactionsList
+                      data={clientUser?.userId}
+                    ></TransactionsList>
                   )}
-                  {active === "Charges" && (
-                    <ChargesList data={clientUser}></ChargesList>
+                  {active === "Beneficiary List" && (
+                    <ChargesList data={clientUser?.userId}></ChargesList>
                   )}
 
                   {active === "Gateways" && (

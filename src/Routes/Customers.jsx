@@ -202,7 +202,7 @@ function Customers() {
     return {
       ...item,
       action: (
-        <div
+        <Link
           style={{
             textDecoration: "none",
           }}
@@ -219,7 +219,7 @@ function Customers() {
           >
             {item?.firstName}
           </p>
-        </div>
+        </Link>
       ),
       action2: (
         <div
