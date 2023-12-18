@@ -17,26 +17,24 @@ import CountryDropdown from "../../reuseables/CountryList";
 import InputNumber from "rc-input-number";
 import AppSelect from "../../reuseables/AppSelect";
 import AppInput from "../../reuseables/AppInput";
+import AmountFormatter from "../../reuseables/AmountFormatter";
 
-export default function SendDetails({ details, setDetails, setRate }) {
-  const [active, setActive] = useState("");
-
+export default function SendDetails({
+  details,
+  setDetails,
+  setRate,
+  newPurpose,
+  setPurpose,
+  payout,
+  setPayout,
+  payment,
+  setPayment,
+  selectedCountry,
+  setSelectedCountry,
+  selectedCountry2,
+  setSelectedCountry2,
+}) {
   const [params] = useSearchParams();
-
-  const [newPurpose, setPurpose] = useState();
-  const [payout, setPayout] = useState();
-  const [payment, setPayment] = useState();
-  const [selectedCountry, setSelectedCountry] = useState();
-  const [selectedCountry2, setSelectedCountry2] = useState();
-
-  const {
-    data: benelist,
-    isLoading,
-    isFetching,
-  } = useQuery({
-    queryKey: ["beneficiariess"],
-    queryFn: () => beneficiaries(params.get("id")),
-  });
 
   const { data: purpose } = useQuery({
     queryKey: ["TransferPurposed"],
@@ -56,30 +54,18 @@ export default function SendDetails({ details, setDetails, setRate }) {
   const user = JSON.parse(params.get("user"));
 
   const { data: rates } = useQuery({
-    queryKey: ["getRatedts"],
-    queryFn: user?.agentId
-      ? agentCustomerGetRate(
-          selectedCountry?.id,
-          selectedCountry2?.id,
-          user?.userId,
-          user?.agentId,
-          user?.role?.id,
-          details?.amount
-        )
-      : customerRates(
-          selectedCountry?.id,
-          selectedCountry2?.id,
-          user?.userId,
-          user?.role?.id,
-          details?.amount
-        ),
+    queryKey: [
+      selectedCountry?.id,
+      selectedCountry2?.id,
+      details?.amount,
+      0,
+      user?.role?.id,
+      user?.agentId,
+      user?.userId,
+    ],
+    queryFn: user?.agentId ? agentCustomerGetRate : customerRates,
     onSuccess: (data) => {
-      console.log(data, "jklssds");
-      if (data?.data === "") {
-        return;
-      } else {
-        setRate(data);
-      }
+      setRate(data);
     },
     // refetchInterval: 10000, // fetch data every 10 seconds
     onError: (err) => {
@@ -89,7 +75,7 @@ export default function SendDetails({ details, setDetails, setRate }) {
     },
   });
   console.log(details);
-  console.log(rates);
+  console.log(rates, "jklssds");
   return (
     <Content>
       <div className="tablecontent">
@@ -257,6 +243,7 @@ export default function SendDetails({ details, setDetails, setRate }) {
                 formatter={(value) => {
                   return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }}
+                value={rates?.data?.computedToAmount}
                 disabled
               />
             </div>
@@ -304,8 +291,9 @@ export default function SendDetails({ details, setDetails, setRate }) {
               type="number"
               width="92%"
               name="username"
+              disabled
               //value={selectedCountry?.charge}
-              defaultValue={selectedCountry?.charge}
+              value={rates?.data?.transitionFee || 0}
             />
           </div>
           <div>
@@ -315,9 +303,28 @@ export default function SendDetails({ details, setDetails, setRate }) {
               type="number"
               width="92%"
               name="username"
+              disabled
               //value={selectedCountry?.charge}
-              defaultValue={selectedCountry?.charge}
+              value={rates?.data?.conversionRate || 0}
             />
+          </div>
+        </div>
+        <hr
+          style={{
+            marginBottom: "20px",
+            marginTop: "20px",
+            opacity: "0.4",
+          }}
+        ></hr>
+        <div className="box_bank">
+          <div className="box_bank_card">
+            <div>Total amount you will be paying</div>
+            <div className="box_data">
+              <AmountFormatter
+                currency={selectedCountry?.code}
+                value={rates?.data?.totalAmountToPay || 0}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -332,6 +339,25 @@ const Content = styled.div`
     border-radius: 10px;
 
     padding: 20px;
+  }
+
+  .box_bank {
+    border: 1px solid #c7c7c7;
+    width: 100%;
+    border-radius: 14px;
+    padding: 40px 0px;
+    text-align: center;
+    .box_bank_card {
+      border-right: 1px solid #c7c7c7;
+      padding: 0 26px;
+      .box_data {
+        font-size: 26px;
+        margin-top: 10px;
+      }
+    }
+    .box_bank_card:last-child {
+      border-right: none;
+    }
   }
   .rc-input-number-input {
     background: #fff;

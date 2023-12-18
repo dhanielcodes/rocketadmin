@@ -38,30 +38,26 @@ export const nameEnquiry = async (query) => {
   return data;
 };
 
-export const agentCustomerGetRate = async (
-  q1,
-  q2,
-  userId,
-  agentId,
-  roleId,
-  fromAmount
-) => {
+export const agentCustomerGetRate = async (query) => {
+  const q = query?.queryKey;
   const { data } = await Axios.get(
-    `${baseurl}//agentcustomersgetrate?fromCurrencyId=${q1 || 0}&toCurrencyId=${
-      q2 || 0
-    }&fromAmount=${
-      fromAmount || 0
-    }&toAmount=${0}&roleId=${roleId}&agentId=${agentId}&userId=${userId}`
+    `${baseurl}//agentcustomersgetrate?fromCurrencyId=${
+      q[0] || 0
+    }&toCurrencyId=${q[1] || 0}&fromAmount=${q[2] || 0}&toAmount=${
+      q[3] || 0
+    }&roleId=${q[4]}&agentId=${q[5]}&userId=${q[6]}`
   );
   return data;
 };
-export const customerRates = async (q1, q2, userId, roleId, fromAmount) => {
+
+export const customerRates = async (query) => {
+  const q = query?.queryKey;
   const { data } = await Axios.get(
-    `${baseurl}/getrate?fromCurrencyId=${q1 || 0}&toCurrencyId=${
-      q2 || 0
-    }&fromAmount=${
-      fromAmount || 0
-    }&toAmount=${0}&roleId=${roleId}&userId=${userId}`
+    `${baseurl}/getrate?fromCurrencyId=${q[0] || 0}&toCurrencyId=${
+      q[1] || 0
+    }&fromAmount=${q[2] || 0}&toAmount=${q[3] || 0}&roleId=${q[4]}&userId=${
+      q[6]
+    }`
   );
   return data;
 };

@@ -8,17 +8,26 @@ import SendMoneyCustomersTableList from "./SendMoney/SendMoneyCustomersTableList
 import SelectBeneficiary from "./SendMoney/SelectBeneficiary";
 import SendDetails from "./SendMoney/SendDetails";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import SendDetailsFinal from "./SendMoney/SendDetailsFinal";
+import { useMutation } from "@tanstack/react-query";
+import { sendMoney } from "../services/Dashboard";
+import ReusableModal from "../reuseables/ReusableModal";
+import Msg from "../reuseables/Msg";
+import Btn from "../reuseables/Btn";
 function SendMoney() {
-  const [selectSender, setSelectSender] = useState(true);
-  const [beneficiary, setBeneficiary] = useState();
-  const [sendmoney, setSendMoney] = useState();
-  const [reviewTransfer, setReviewTransfer] = useState();
   const [userSelected, setUserSelected] = useState("");
+
+  const [newPurpose, setPurpose] = useState();
+  const [payout, setPayout] = useState();
+  const [payment, setPayment] = useState();
+  const [selectedCountry, setSelectedCountry] = useState();
+  const [selectedCountry2, setSelectedCountry2] = useState();
 
   const [rate, setRate] = useState("");
 
   const [params] = useSearchParams();
   const user = JSON.parse(params.get("user"));
+  const statusCode = params.get("statusCode");
 
   const bene = JSON.parse(params.get("beneficiary"));
 
@@ -33,10 +42,10 @@ function SendMoney() {
     payoutChannelId: "",
     purpose: "",
     note: "",
-    transactionSource: "Web",
+    transactionSource: "backOffice",
     promoCode: "",
     redirectURL: `${window.location.origin}/sendmoney?step=1`,
-    source: "web",
+    source: "backOffice",
   });
 
   const [step, setStep] = useState(params.get("step"));
@@ -51,14 +60,121 @@ function SendMoney() {
     navigate("/sendmoney?step=1");
   }, []);
 
+  useEffect(() => {
+    setDetails({
+      ...details,
+      userId: params.get("id"),
+      userBeneficiaryId: bene?.id,
+    });
+
+    //eslint-disable-next-line
+  }, [params.get("step")]);
+
   //   Component useState
   const [beneficiaryComponent, setBeneficiaryComponent] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const [getmsg, setmsg] = useState("");
+  const [getlink, setlink] = useState("");
+  const [showBtn, setShowBtn] = useState(false);
+  const [status, setStatus] = useState(false);
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: sendMoney,
+    onSuccess: (data) => {
+      console.log("🚀 ~ file: Login.jsx:61 ~ Login ~ data:", data?.data);
+      setStep(1);
+      navigate("/sendmoney?step=1");
+      if (!data.status) {
+        setOpen(true);
+        setmsg(data?.message);
+      } else {
+        setlink(data?.data);
+        setOpen(true);
+        setmsg(data?.message);
+
+        if (
+          new RegExp(
+            "([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?"
+          ).test(data?.data)
+        ) {
+          setShowBtn(true);
+        } else {
+          setShowBtn(false);
+        }
+
+        setStatus(true);
+      }
+    },
+    onError: (data) => {
+      console.log("🚀 ~ file: SendMoney.jsx:286 ~ SendMoney ~ data:", data);
+
+      // setShow(true)
+      // setInfo(data)
+      // setTimeout(() => {
+      //     //  seterr("")
+      // }, 2000)
+      return;
+    },
+  });
   return (
     <BodyLayout>
       {beneficiaryComponent && (
         <BeneficiaryComponent
           closeBeneficiaryComponent={setBeneficiaryComponent}
         />
+      )}
+      {open && (
+        <ReusableModal
+          isOpen={open}
+          onClose={() => {
+            setOpen(!open);
+            setSelectedCountry(null);
+            setSelectedCountry2(null);
+            setShowBtn(false);
+          }}
+        >
+          {status === true ? (
+            <>
+              <Msg type={true}>{getmsg}</Msg>
+
+              {showBtn && (
+                <Btn
+                  clicking={() => {
+                    window.location.replace(getlink);
+                  }}
+                  styles={{
+                    width: "100%",
+                    marginTop: "20px",
+                  }}
+                >
+                  Proceed to Paymennt
+                </Btn>
+              )}
+            </>
+          ) : (
+            <>
+              {getmsg === "You are yet to complete your KYC." ? (
+                <Msg>This User is yet to complete their KYC</Msg>
+              ) : (
+                <Msg>{getmsg}</Msg>
+              )}
+            </>
+          )}
+        </ReusableModal>
+      )}
+      {statusCode && (
+        <ReusableModal
+          isOpen={statusCode}
+          onClose={() => {
+            navigate("/user/sendmoney");
+            localStorage.removeItem("amount");
+          }}
+        >
+          <Msg type={statusCode === "0" ? true : false}>
+            {params.get("statusMessage")}
+          </Msg>
+        </ReusableModal>
       )}
       {beneficiaryComponent ? (
         ""
@@ -87,14 +203,24 @@ function SendMoney() {
                 details={details}
                 setDetails={setDetails}
                 setRate={setRate}
+                selectedCountry={selectedCountry}
+                setSelectedCountry={setSelectedCountry}
+                setSelectedCountry2={setSelectedCountry2}
+                selectedCountry2={selectedCountry2}
+                setPayment={setPayment}
+                setPayout={setPayout}
+                setPurpose={setPurpose}
+                newPurpose={newPurpose}
+                payment={payment}
+                payout={payout}
               />
             )}
-            {params.get("step") === "4" && <SendDetails />}
+            {params.get("step") === "4" && <SendDetailsFinal rate={rate} />}
           </div>
           <div
             style={{
               display: "grid",
-              width: "28%",
+              width: "30%",
               gridTemplateColumns: "1fr 1fr",
               gridGap: "10px",
               marginTop: "30px",
@@ -138,7 +264,14 @@ function SendMoney() {
                         active
                       )}&user=${JSON.stringify(
                         userSelected
-                      )}&fullDetails=${JSON.stringify(details)}&step=${3}`
+                      )}&fullDetails=${JSON.stringify({
+                        fromCurrency: selectedCountry,
+                        toCurrency: selectedCountry2,
+                        rate: rate,
+                        payment: payment,
+                        payout: payout,
+                        ...details,
+                      })}&step=${3}`
                     );
                   }
                 }}
@@ -153,6 +286,7 @@ function SendMoney() {
               ""
             ) : (
               <button
+                disabled={isLoading}
                 onClick={() => {
                   setStep((prev) => prev + 1);
                   if (step === 1) {
@@ -175,14 +309,30 @@ function SendMoney() {
                         active
                       )}&user=${JSON.stringify(
                         userSelected
-                      )}&fullDetails=${JSON.stringify(details)}&step=${4}`
+                      )}&fullDetails=${JSON.stringify({
+                        fromCurrency: selectedCountry,
+                        toCurrency: selectedCountry2,
+                        rate: rate,
+                        payment: payment,
+                        payout: payout,
+                        ...details,
+                      })}&step=${4}`
                     );
+                  }
+                  if (step === 4) {
+                    mutate(details);
                   }
                 }}
                 className="confirm"
               >
                 {" "}
-                <span>Continue</span>
+                <span>
+                  {params.get("step") === "4"
+                    ? isLoading
+                      ? "sending..."
+                      : "Proceed To Payment"
+                    : "Continue"}
+                </span>
               </button>
             )}
           </div>
