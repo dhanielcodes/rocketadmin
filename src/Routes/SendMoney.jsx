@@ -5,19 +5,118 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import SearchInput from "../reuseables/SearchInput";
 import BeneficiaryComponent from "../COMPONENTS/BeneficiaryComponent";
 import SendMoneyCustomersTableList from "./SendMoney/SendMoneyCustomersTableList";
+import SelectBeneficiary from "./SendMoney/SelectBeneficiary";
+import SendDetails from "./SendMoney/SendDetails";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import SendDetailsFinal from "./SendMoney/SendDetailsFinal";
+import { useMutation } from "@tanstack/react-query";
+import { sendMoney } from "../services/Dashboard";
+import ReusableModal from "../reuseables/ReusableModal";
+import Msg from "../reuseables/Msg";
+import Btn from "../reuseables/Btn";
 function SendMoney() {
-  const [selectSender, setSelectSender] = useState(true);
-  const [beneficiary, setBeneficiary] = useState();
-  const [sendmoney, setSendMoney] = useState();
-  const [reviewTransfer, setReviewTransfer] = useState();
   const [userSelected, setUserSelected] = useState("");
 
-  const [step, setStep] = useState(1);
+  const [newPurpose, setPurpose] = useState();
+  const [payout, setPayout] = useState();
+  const [payment, setPayment] = useState();
+  const [selectedCountry, setSelectedCountry] = useState();
+  const [selectedCountry2, setSelectedCountry2] = useState();
+
+  const [rate, setRate] = useState("");
+
+  const [params] = useSearchParams();
+  const user = JSON.parse(params.get("user"));
+  const statusCode = params.get("statusCode");
+
+  const bene = JSON.parse(params.get("beneficiary"));
+
+  const [details, setDetails] = useState({
+    userId: params.get("id"),
+    userBeneficiaryId: bene?.id,
+    fromCurrencyId: "",
+    toCurrencyId: "",
+    amount: "",
+    paymentChannelId: "",
+    walletId: 0,
+    payoutChannelId: "",
+    purpose: "",
+    note: "",
+    transactionSource: "backOffice",
+    promoCode: "",
+    redirectURL: `${window.location.origin}/sendmoney?step=1`,
+    source: "backOffice",
+  });
+
+  const [step, setStep] = useState(params.get("step"));
+
+  console.log(params.get("step") ? true : false);
 
   const [Noteinfo, setNoteinfo] = useState(true);
+  const navigate = useNavigate();
+
+  const [active, setActive] = useState("");
+  useEffect(() => {
+    navigate("/sendmoney?step=1");
+  }, []);
+
+  useEffect(() => {
+    setDetails({
+      ...details,
+      userId: params.get("id"),
+      userBeneficiaryId: bene?.id,
+    });
+
+    //eslint-disable-next-line
+  }, [params.get("step")]);
 
   //   Component useState
   const [beneficiaryComponent, setBeneficiaryComponent] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const [getmsg, setmsg] = useState("");
+  const [getlink, setlink] = useState("");
+  const [showBtn, setShowBtn] = useState(false);
+  const [status, setStatus] = useState(false);
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: sendMoney,
+    onSuccess: (data) => {
+      console.log("🚀 ~ file: Login.jsx:61 ~ Login ~ data:", data?.data);
+      setStep(1);
+      navigate("/sendmoney?step=1");
+      if (!data.status) {
+        setOpen(true);
+        setmsg(data?.message);
+      } else {
+        setlink(data?.data);
+        setOpen(true);
+        setmsg(data?.message);
+
+        if (
+          new RegExp(
+            "([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?"
+          ).test(data?.data)
+        ) {
+          setShowBtn(true);
+        } else {
+          setShowBtn(false);
+        }
+
+        setStatus(true);
+      }
+    },
+    onError: (data) => {
+      console.log("🚀 ~ file: SendMoney.jsx:286 ~ SendMoney ~ data:", data);
+
+      // setShow(true)
+      // setInfo(data)
+      // setTimeout(() => {
+      //     //  seterr("")
+      // }, 2000)
+      return;
+    },
+  });
   return (
     <BodyLayout>
       {beneficiaryComponent && (
@@ -25,145 +124,217 @@ function SendMoney() {
           closeBeneficiaryComponent={setBeneficiaryComponent}
         />
       )}
+      {open && (
+        <ReusableModal
+          isOpen={open}
+          onClose={() => {
+            setOpen(!open);
+            setSelectedCountry(null);
+            setSelectedCountry2(null);
+            setShowBtn(false);
+          }}
+        >
+          {status === true ? (
+            <>
+              <Msg type={true}>{getmsg}</Msg>
+
+              {showBtn && (
+                <Btn
+                  clicking={() => {
+                    window.location.replace(getlink);
+                  }}
+                  styles={{
+                    width: "100%",
+                    marginTop: "20px",
+                  }}
+                >
+                  Proceed to Paymennt
+                </Btn>
+              )}
+            </>
+          ) : (
+            <>
+              {getmsg === "You are yet to complete your KYC." ? (
+                <Msg>This User is yet to complete their KYC</Msg>
+              ) : (
+                <Msg>{getmsg}</Msg>
+              )}
+            </>
+          )}
+        </ReusableModal>
+      )}
+      {statusCode && (
+        <ReusableModal
+          isOpen={statusCode}
+          onClose={() => {
+            navigate("/user/sendmoney");
+            localStorage.removeItem("amount");
+          }}
+        >
+          <Msg type={statusCode === "0" ? true : false}>
+            {params.get("statusMessage")}
+          </Msg>
+        </ReusableModal>
+      )}
       {beneficiaryComponent ? (
         ""
       ) : (
         <Content>
           <div className="top">
-            <p>Incomplete Registrations</p>
+            <p>Send Money</p>
             <span>
-              This page shows you customers with incomplete registrations
+              This page let's you send money to customer beneficiaries
             </span>
           </div>
-          {Noteinfo && (
-            <div className="info">
-              <div className="note">
-                <svg
-                  width="20"
-                  height="19"
-                  viewBox="0 0 20 19"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10.0001 12.8327V9.49935M10.0001 6.16602H10.0084M18.3334 9.49935C18.3334 14.1017 14.6025 17.8327 10.0001 17.8327C5.39771 17.8327 1.66675 14.1017 1.66675 9.49935C1.66675 4.89698 5.39771 1.16602 10.0001 1.16602C14.6025 1.16602 18.3334 4.89698 18.3334 9.49935Z"
-                    stroke="#417CD4"
-                    stroke-width="1.66667"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
 
-                <p>
-                  Note, Click on{" "}
-                  <span style={{ color: "#417CD4" }}>Send Money</span> from the
-                  table list below to send money to a customer.
-                </p>
-              </div>
-              <svg
-                onClick={() => setNoteinfo(false)}
-                cursor="pointer"
-                width="36"
-                height="37"
-                viewBox="0 0 36 37"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M23 13.5L13 23.5M13 13.5L23 23.5"
-                  stroke="#344054"
-                  stroke-width="1.67"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-          )}
           <div className="main">
-            <div className="selection">
-              <div
-                className="sender"
-                onClick={() => {
-                  setSelectSender(true);
-                  setBeneficiary(false);
-                  setSendMoney(false);
-                  setReviewTransfer(false);
-                }}
-              >
-                <span
-                  style={{ border: selectSender ? "8px solid #00a85a24" : "" }}
-                >
-                  1
-                </span>
-                <p style={{ color: selectSender ? "#00A85A" : "" }}>
-                  Select Sender
-                </p>
-              </div>
-              <div
-                className="sender"
-                onClick={() => {
-                  setSelectSender(false);
-                  setBeneficiary(true);
-                  setSendMoney(false);
-                  setReviewTransfer(false);
-                }}
-              >
-                <span
-                  style={{ border: beneficiary ? "8px solid #00a85a24" : "" }}
-                >
-                  2
-                </span>
-                <p style={{ color: beneficiary ? "#00A85A" : "" }}>
-                  Beneficiary
-                </p>
-              </div>
-              <div
-                className="sender"
-                onClick={() => {
-                  setSelectSender(false);
-                  setBeneficiary(false);
-                  setSendMoney(true);
-                  setReviewTransfer(false);
-                }}
-              >
-                <span
-                  style={{ border: sendmoney ? "8px solid #00a85a24" : "" }}
-                >
-                  3
-                </span>
-                <p style={{ color: sendmoney ? "#00A85A" : "" }}>Send Money</p>
-              </div>
-              <div
-                className="sender"
-                onClick={() => {
-                  setSelectSender(false);
-                  setBeneficiary(false);
-                  setSendMoney(false);
-                  setReviewTransfer(true);
-                }}
-              >
-                <span
-                  style={{
-                    border: reviewTransfer ? "8px solid #00a85a24" : "",
-                  }}
-                >
-                  4
-                </span>
-                <p style={{ color: reviewTransfer ? "#00A85A" : "" }}>
-                  Review Transfer
-                </p>
-              </div>
-            </div>
-
-            {step === 1 && (
+            {params.get("step") === "1" && (
               <SendMoneyCustomersTableList
                 setStep={setStep}
                 setUserSelected={setUserSelected}
                 userSelected={userSelected}
               />
             )}
-            {step === 2 && <SendMoneyCustomersTableList />}
-            {step === 3 && <SendMoneyCustomersTableList />}
+            {params.get("step") === "2" && (
+              <SelectBeneficiary active={active} setActive={setActive} />
+            )}
+            {params.get("step") === "3" && (
+              <SendDetails
+                details={details}
+                setDetails={setDetails}
+                setRate={setRate}
+                selectedCountry={selectedCountry}
+                setSelectedCountry={setSelectedCountry}
+                setSelectedCountry2={setSelectedCountry2}
+                selectedCountry2={selectedCountry2}
+                setPayment={setPayment}
+                setPayout={setPayout}
+                setPurpose={setPurpose}
+                newPurpose={newPurpose}
+                payment={payment}
+                payout={payout}
+              />
+            )}
+            {params.get("step") === "4" && <SendDetailsFinal rate={rate} />}
+          </div>
+          <div
+            style={{
+              display: "grid",
+              width: "30%",
+              gridTemplateColumns: "1fr 1fr",
+              gridGap: "10px",
+              marginTop: "30px",
+              marginLeft: "auto",
+              paddingBottom: "20px",
+              paddingRight: "20px",
+            }}
+          >
+            {params.get("step") === "1" ? (
+              <div></div>
+            ) : (
+              <button
+                onClick={() => {
+                  setStep((prev) => prev - 1);
+                  if (step === 1) {
+                    navigate(`/sendmoney?id=${params.get("id")}&step=${1}`);
+                  }
+                  if (step === 2) {
+                    navigate(
+                      `/sendmoney?id=${params.get(
+                        "id"
+                      )}&beneficiary=${JSON.stringify(
+                        active
+                      )}&user=${JSON.stringify(userSelected)}&step=${1}`
+                    );
+                  }
+                  if (step === 3) {
+                    navigate(
+                      `/sendmoney?id=${params.get(
+                        "id"
+                      )}&beneficiary=${JSON.stringify(
+                        active
+                      )}&user=${JSON.stringify(userSelected)}&step=${2}`
+                    );
+                  }
+                  if (step === 4) {
+                    navigate(
+                      `/sendmoney?id=${params.get(
+                        "id"
+                      )}&beneficiary=${JSON.stringify(
+                        active
+                      )}&user=${JSON.stringify(
+                        userSelected
+                      )}&fullDetails=${JSON.stringify({
+                        fromCurrency: selectedCountry,
+                        toCurrency: selectedCountry2,
+                        rate: rate,
+                        payment: payment,
+                        payout: payout,
+                        ...details,
+                      })}&step=${3}`
+                    );
+                  }
+                }}
+                className="cancel"
+              >
+                {" "}
+                <span>Previous</span>
+              </button>
+            )}
+
+            {params.get("step") === "1" ? (
+              ""
+            ) : (
+              <button
+                disabled={isLoading}
+                onClick={() => {
+                  setStep((prev) => prev + 1);
+                  if (step === 1) {
+                    navigate(`/sendmoney?id=${params.get("id")}&step=${2}`);
+                  }
+                  if (step === 2) {
+                    navigate(
+                      `/sendmoney?id=${params.get(
+                        "id"
+                      )}&beneficiary=${JSON.stringify(
+                        active
+                      )}&user=${JSON.stringify(userSelected)}&step=${3}`
+                    );
+                  }
+                  if (step === 3) {
+                    navigate(
+                      `/sendmoney?id=${params.get(
+                        "id"
+                      )}&beneficiary=${JSON.stringify(
+                        active
+                      )}&user=${JSON.stringify(
+                        userSelected
+                      )}&fullDetails=${JSON.stringify({
+                        fromCurrency: selectedCountry,
+                        toCurrency: selectedCountry2,
+                        rate: rate,
+                        payment: payment,
+                        payout: payout,
+                        ...details,
+                      })}&step=${4}`
+                    );
+                  }
+                  if (step === 4) {
+                    mutate(details);
+                  }
+                }}
+                className="confirm"
+              >
+                {" "}
+                <span>
+                  {params.get("step") === "4"
+                    ? isLoading
+                      ? "sending..."
+                      : "Proceed To Payment"
+                    : "Continue"}
+                </span>
+              </button>
+            )}
           </div>
         </Content>
       )}

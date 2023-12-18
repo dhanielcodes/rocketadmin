@@ -142,9 +142,9 @@ export const updatePayoutClientWalletProvider = async (body) => {
 }; */
 export const beneficiaries = async (userId, bid) => {
   const { data } = await Axios.get(
-    `${baseurl}/getuserbeneficiaries?userId=${
-      userId || 68059751
-    }&beneficiaryId=${bid || 0}`
+    `${baseurl}/getuserbeneficiaries?userId=${userId || 0}&beneficiaryId=${
+      bid || 0
+    }`
   );
   return data;
 };
@@ -170,7 +170,7 @@ export const Tranx = async (userId) => {
     userId?.queryKey[0]
   );
   const { data } = await Axios.get(
-    `${baseurl}/getuserlog/${userId?.queryKey[0]}`
+    `${baseurl}/getusertransactionlog/${userId?.queryKey[0]}`
   );
   return data;
 };

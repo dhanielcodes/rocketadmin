@@ -12,10 +12,14 @@ export const getAdminDashboard = async (userId = 0) => {
 
 export const beneficiaries = async (userId, bid) => {
   const { data } = await Axios.get(
-    `${baseurl}/getuserbeneficiaries?userId=${
-      userId || 68059751
-    }&beneficiaryId=${bid || 0}`
+    `${baseurl}/getuserbeneficiaries?userId=${userId || 0}&beneficiaryId=${
+      bid || 0
+    }`
   );
+  return data;
+};
+export const getCurrencies = async () => {
+  const { data } = await Axios.get(`${baseurl}/getcurrency`);
   return data;
 };
 
@@ -34,12 +38,35 @@ export const nameEnquiry = async (query) => {
   return data;
 };
 
+export const agentCustomerGetRate = async (query) => {
+  const q = query?.queryKey;
+  const { data } = await Axios.get(
+    `${baseurl}//agentcustomersgetrate?fromCurrencyId=${
+      q[0] || 0
+    }&toCurrencyId=${q[1] || 0}&fromAmount=${q[2] || 0}&toAmount=${
+      q[3] || 0
+    }&roleId=${q[4]}&agentId=${q[5]}&userId=${q[6]}`
+  );
+  return data;
+};
+
+export const customerRates = async (query) => {
+  const q = query?.queryKey;
+  const { data } = await Axios.get(
+    `${baseurl}/getrate?fromCurrencyId=${q[0] || 0}&toCurrencyId=${
+      q[1] || 0
+    }&fromAmount=${q[2] || 0}&toAmount=${q[3] || 0}&roleId=${q[4]}&userId=${
+      q[6]
+    }`
+  );
+  return data;
+};
 export const Tranx = async (userId) => {
   console.log(
     "🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:",
     userId?.queryKey[0]
   );
-  const { data } = await Axios.get(`${baseurl}/getuserlog/0`);
+  const { data } = await Axios.get(`${baseurl}/getusertransactionlog/0`);
   return data;
 };
 export const TodayLogss = async (userId) => {

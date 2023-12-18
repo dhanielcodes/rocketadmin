@@ -85,6 +85,7 @@ export default function NewNavBar() {
     {
       name: "Send Money",
       path: "/sendmoney",
+      init: "/sendmoney?step=1",
       icon: SendMoneyIcon,
     },
     {
@@ -207,7 +208,7 @@ export default function NewNavBar() {
       if (payload.parentName != active) {
         setActive("");
       }
-      navigate(payload.path);
+      navigate(payload.init || payload.path);
     }
   };
 
@@ -230,7 +231,7 @@ export default function NewNavBar() {
       if (payload.parentName != active2) {
         setActive2("");
       }
-      navigate(payload.path);
+      navigate(payload.init || payload.path);
     }
   };
 
