@@ -40,6 +40,7 @@ import CountriesPage from "./Routes/Countries";
 import CitiesPage from "./Routes/Cities";
 import TransfersListPage from "./Routes/Transfers";
 import CreateNewMetadata from "./Routes/CreateNewMetadata";
+import UpdateRateMetaData from "./Routes/UpdateRateMetaData";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -145,6 +146,14 @@ function App() {
                 element={
                   <AppLogout>
                     <CreateNewMetadata />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/update-meta"
+                element={
+                  <AppLogout>
+                    <UpdateRateMetaData />
                   </AppLogout>
                 }
               />
