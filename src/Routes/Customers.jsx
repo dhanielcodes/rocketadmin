@@ -8,7 +8,11 @@ import { kFormatter, removeDup } from "../utils/format";
 import { getUsers } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { IconMoreVertical, IconSearch } from "@arco-design/web-react/icon";
+import {
+  IconEye,
+  IconMoreVertical,
+  IconSearch,
+} from "@arco-design/web-react/icon";
 import { Dropdown, Input, Menu } from "@arco-design/web-react";
 import UpdateAgentCustomerRates from "../modals/UpdateAgentCustomerRates";
 const Droplist = ({ id, name, setModal }) => (
@@ -17,7 +21,7 @@ const Droplist = ({ id, name, setModal }) => (
     style={{
       borderRadius: "10px",
       paddingTop: "6px",
-      width: "150px",
+      // width: "150px",
     }}
   >
     <Menu.Item
@@ -70,6 +74,110 @@ const Droplist = ({ id, name, setModal }) => (
         }}
       >
         Update Rate
+      </span>
+    </Menu.Item>
+    <Menu.Item
+      onClick={() => setModal()}
+      key="3"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M5.83398 4.16797V16.668"
+          stroke="#464F60"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M14.168 15.834L14.168 3.33398"
+          stroke="#464F60"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M3.33398 5.83398L5.24473 3.78155C5.52251 3.48317 5.6614 3.33398 5.83398 3.33398C6.00657 3.33398 6.14546 3.48317 6.42324 3.78155L8.33398 5.83398"
+          stroke="#464F60"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M11.668 14.168L13.5787 16.2204C13.8565 16.5188 13.9954 16.668 14.168 16.668C14.3406 16.668 14.4794 16.5188 14.7572 16.2204L16.668 14.168"
+          stroke="#464F60"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Deactivate Customer
+      </span>
+    </Menu.Item>
+    <Menu.Item
+      onClick={() => setModal()}
+      key="3"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M5.83398 4.16797V16.668"
+          stroke="#464F60"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M14.168 15.834L14.168 3.33398"
+          stroke="#464F60"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M3.33398 5.83398L5.24473 3.78155C5.52251 3.48317 5.6614 3.33398 5.83398 3.33398C6.00657 3.33398 6.14546 3.48317 6.42324 3.78155L8.33398 5.83398"
+          stroke="#464F60"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M11.668 14.168L13.5787 16.2204C13.8565 16.5188 13.9954 16.668 14.168 16.668C14.3406 16.668 14.4794 16.5188 14.7572 16.2204L16.668 14.168"
+          stroke="#464F60"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Deactivate Customer
       </span>
     </Menu.Item>
   </Menu>
@@ -215,9 +323,12 @@ function Customers() {
             style={{
               color: "blue",
               cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
             }}
           >
             {item?.firstName}
+            {item?.watchListStatus && <IconEye fontSize={20} />}
           </p>
         </Link>
       ),
