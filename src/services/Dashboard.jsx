@@ -75,6 +75,24 @@ export const TodayLogss = async (userId) => {
   const { data } = await Axios.get(`${baseurl}/gettodaylog/0`);
   return data;
 };
+
+export const updateUserWatchList = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/uppdateaccountwatchliststatus`,
+    body
+  );
+  return data;
+};
+
+export const suspendAccount = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/suspendaccount`, body);
+  return data;
+};
+export const activateAccount = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/reactivateaccount`, body);
+  return data;
+};
+
 export const getUsers = async (id = 5) => {
   const { data } = await Axios.get(`${baseurl}/getuserbyrole/6`);
   return data;

@@ -5,8 +5,13 @@ import { styled } from "styled-components";
 import CustomerFilter from "../COMPONENTS/CustomerFilter";
 import CustomTable from "../reuseables/CustomTable";
 import { kFormatter, removeDup } from "../utils/format";
-import { getUsers } from "../services/Dashboard";
-import { useQuery } from "@tanstack/react-query";
+import {
+  activateAccount,
+  getUsers,
+  suspendAccount,
+  updateUserWatchList,
+} from "../services/Dashboard";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import {
   IconEye,
@@ -92,42 +97,34 @@ const Droplist = ({
         alignItems: "center",
       }}
     >
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M5.83398 4.16797V16.668"
-          stroke="#464F60"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M14.168 15.834L14.168 3.33398"
-          stroke="#464F60"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M3.33398 5.83398L5.24473 3.78155C5.52251 3.48317 5.6614 3.33398 5.83398 3.33398C6.00657 3.33398 6.14546 3.48317 6.42324 3.78155L8.33398 5.83398"
-          stroke="#464F60"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M11.668 14.168L13.5787 16.2204C13.8565 16.5188 13.9954 16.668 14.168 16.668C14.3406 16.668 14.4794 16.5188 14.7572 16.2204L16.668 14.168"
-          stroke="#464F60"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
+      {stateStatus ? (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.00016 1.33398C11.6668 1.33398 14.6668 4.33398 14.6668 8.00065C14.6668 11.6673 11.6668 14.6673 8.00016 14.6673C4.3335 14.6673 1.3335 11.6673 1.3335 8.00065C1.3335 4.33398 4.3335 1.33398 8.00016 1.33398ZM8.00016 2.66732C6.7335 2.66732 5.60016 3.06732 4.7335 3.80065L12.2002 11.2673C12.8668 10.334 13.3335 9.20065 13.3335 8.00065C13.3335 5.06732 10.9335 2.66732 8.00016 2.66732ZM11.2668 12.2007L3.80016 4.73398C3.06683 5.60065 2.66683 6.73398 2.66683 8.00065C2.66683 10.934 5.06683 13.334 8.00016 13.334C9.26683 13.334 10.4002 12.934 11.2668 12.2007Z"
+            fill="#F04438"
+          />
+        </svg>
+      ) : (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.00016 1.33398C11.6668 1.33398 14.6668 4.33398 14.6668 8.00065C14.6668 11.6673 11.6668 14.6673 8.00016 14.6673C4.3335 14.6673 1.3335 11.6673 1.3335 8.00065C1.3335 4.33398 4.3335 1.33398 8.00016 1.33398ZM8.00016 2.66732C6.7335 2.66732 5.60016 3.06732 4.7335 3.80065L12.2002 11.2673C12.8668 10.334 13.3335 9.20065 13.3335 8.00065C13.3335 5.06732 10.9335 2.66732 8.00016 2.66732ZM11.2668 12.2007L3.80016 4.73398C3.06683 5.60065 2.66683 6.73398 2.66683 8.00065C2.66683 10.934 5.06683 13.334 8.00016 13.334C9.26683 13.334 10.4002 12.934 11.2668 12.2007Z"
+            fill="#38f03e"
+          />
+        </svg>
+      )}
+
       <span
         style={{
           marginLeft: "10px",
@@ -144,42 +141,12 @@ const Droplist = ({
         alignItems: "center",
       }}
     >
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M5.83398 4.16797V16.668"
-          stroke="#464F60"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M14.168 15.834L14.168 3.33398"
-          stroke="#464F60"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M3.33398 5.83398L5.24473 3.78155C5.52251 3.48317 5.6614 3.33398 5.83398 3.33398C6.00657 3.33398 6.14546 3.48317 6.42324 3.78155L8.33398 5.83398"
-          stroke="#464F60"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M11.668 14.168L13.5787 16.2204C13.8565 16.5188 13.9954 16.668 14.168 16.668C14.3406 16.668 14.4794 16.5188 14.7572 16.2204L16.668 14.168"
-          stroke="#464F60"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
+      <IconEye
+        fontSize={20}
+        style={{
+          margin: 0,
+        }}
+      />
       <span
         style={{
           marginLeft: "10px",
@@ -203,9 +170,55 @@ function Customers() {
     data: customers,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery({
     queryKey: ["getUsers"],
     queryFn: () => getUsers(),
+  });
+
+  const { mutate: updateUser, isLoading: updateUserLoading } = useMutation({
+    mutationFn: updateUserWatchList,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
+
+  const { mutate: suspend, isLoading: suspendLoading } = useMutation({
+    mutationFn: suspendAccount,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
+
+  const { mutate: activate, isLoading: activateLoading } = useMutation({
+    mutationFn: activateAccount,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
   });
 
   console.log(customers);
@@ -272,7 +285,7 @@ function Customers() {
         }
       },
 
-      width: 200,
+      width: 270,
     },
     {
       title: "ADDRESS",
@@ -335,7 +348,8 @@ function Customers() {
               alignItems: "center",
             }}
           >
-            {item?.firstName}
+            {item?.firstName + " " + item?.surName}
+            &nbsp;
             {item?.watchListStatus && <IconEye fontSize={20} />}
           </p>
         </Link>
@@ -366,6 +380,34 @@ function Customers() {
                   setModal={() => {
                     setModal(true);
                   }}
+                  changeStatus={() => {
+                    setStatus(true);
+                    if (item?.status) {
+                      suspend({
+                        userId: item?.userId,
+                      });
+                    } else {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
+                  }}
+                  stateStatus={item?.status}
+                  watch={() => {
+                    setWatch(true);
+                    if (item?.watchListStatus) {
+                      updateUser({
+                        userId: item?.userId,
+                        watchListStatus: false,
+                      });
+                    } else {
+                      updateUser({
+                        userId: item?.userId,
+                        watchListStatus: true,
+                      });
+                    }
+                  }}
+                  watchStatus={item?.watchListStatus}
                 />
               }
               position="bl"
@@ -421,6 +463,8 @@ function Customers() {
 
   console.log(newData);
   const [modal, setModal] = useState(false);
+  const [status, setStatus] = useState(false);
+  const [watch, setWatch] = useState(false);
 
   return (
     <>
@@ -545,7 +589,7 @@ function Customers() {
 
               <CustomTable
                 noData={customers?.data?.length}
-                loading={isLoading || isFetching}
+                loading={isLoading || isFetching || updateUserLoading}
                 Apidata={newData}
                 tableColumns={columns}
               />
