@@ -15,7 +15,15 @@ import {
 } from "@arco-design/web-react/icon";
 import { Dropdown, Input, Menu } from "@arco-design/web-react";
 import UpdateAgentCustomerRates from "../modals/UpdateAgentCustomerRates";
-const Droplist = ({ id, name, setModal }) => (
+const Droplist = ({
+  id,
+  name,
+  setModal,
+  watch,
+  changeStatus,
+  stateStatus,
+  watchStatus,
+}) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
     style={{
@@ -77,7 +85,7 @@ const Droplist = ({ id, name, setModal }) => (
       </span>
     </Menu.Item>
     <Menu.Item
-      onClick={() => setModal()}
+      onClick={() => changeStatus()}
       key="3"
       style={{
         display: "flex",
@@ -125,11 +133,11 @@ const Droplist = ({ id, name, setModal }) => (
           marginLeft: "10px",
         }}
       >
-        Deactivate Customer
+        {stateStatus ? "Deactivate Customer" : "Activate Customer"}
       </span>
     </Menu.Item>
     <Menu.Item
-      onClick={() => setModal()}
+      onClick={() => watch()}
       key="3"
       style={{
         display: "flex",
@@ -177,7 +185,7 @@ const Droplist = ({ id, name, setModal }) => (
           marginLeft: "10px",
         }}
       >
-        Deactivate Customer
+        {watchStatus ? "Unwatch Customer" : "Watch Customer"}
       </span>
     </Menu.Item>
   </Menu>

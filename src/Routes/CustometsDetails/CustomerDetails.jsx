@@ -28,17 +28,25 @@ import PlusIcon from "../../assets/icons/PlusIcon";
 import toast from "react-hot-toast";
 import Gateways from "./ClientDetailsTabs/Gateways";
 import CustomerDetailsTop from "./MainDetailsBody";
+import { GetDetails, GetUserDetails } from "../../services/Dashboard";
 
 export default function CustomerDetailsPage() {
   const [params] = useSearchParams();
-
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-
   const userId = params.get("userId");
 
   const customerDetails = JSON.parse(userId);
 
   const clientUser = JSON.parse(userId);
+  const {
+    data: customer,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ["GetUserDetails"],
+    queryFn: () => GetUserDetails(clientUser?.userId),
+  });
+
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(customerDetails, clientUser, "daeo");
 
@@ -163,7 +171,7 @@ export default function CustomerDetailsPage() {
                   </div>
 
                   {active === "Overview" && (
-                    <Details clientDetails={clientUser} />
+                    <Details clientDetails={customer?.data} />
                   )}
                   {active === "ID Documents" && (
                     <Documents clientDetails={clientUser} />

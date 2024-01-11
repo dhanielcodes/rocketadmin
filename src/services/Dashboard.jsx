@@ -169,6 +169,14 @@ export const GetDetails = async (id) => {
   );
   return data;
 };
+export const GetUserDetails = async (id) => {
+  console.log(
+    "🚀 ~ file: Dashboard.jsx:57 ~ GetDetails ~ id:",
+    id?.queryKey?.[0]
+  );
+  const { data } = await Axios.get(`${baseurl}/getuserdashboard/${id}`);
+  return data;
+};
 
 export const Rates = async (query) => {
   const q = query?.queryKey;

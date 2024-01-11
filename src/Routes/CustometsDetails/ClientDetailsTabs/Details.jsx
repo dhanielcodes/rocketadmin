@@ -1,69 +1,71 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import AppInput from "../../../reuseables/AppInput";
+import AmountFormatter from "../../../reuseables/AmountFormatter";
+import CountryDropdownDash from "../../../reuseables/CountryDropdownDash";
 
 export default function Details({ clientDetails }) {
+  const [selected, setSelected] = useState();
+  const newSelected =
+    selected ||
+    clientDetails?.transactionVolumeByCurrency?.map((item) => {
+      return {
+        label: item?.currency,
+        value: item?.currency,
+        ...item,
+      };
+    })?.[0];
   return (
     <>
       <div
         style={{
-          paddingBottom: "20px",
-          marginBottom: "20px",
-          borderBottom: "1px solid #EAECF0",
+          width: "200px",
+          marginLeft: "auto",
         }}
       >
-        <div
-          style={{
-            fontSize: "18px",
-            fontWeight: "600",
+        <CountryDropdownDash
+          option={
+            clientDetails?.transactionVolumeByCurrency?.map((item) => {
+              return {
+                label: item?.currency,
+                value: item?.currency,
+                ...item,
+              };
+            }) || []
+          }
+          onChange={(e) => {
+            setSelected(e);
+            console.log(e);
           }}
-        >
-          Personal Information
-        </div>
-        <div>View, edit and update personal info</div>
+        />
       </div>
       <DetailsStyle>
-        <div className="name">
-          <label>Full Name</label>
-          <AppInput
-            placeholder="Enter name"
-            type="text"
-            width="95%"
-            name="firstName"
-            value={clientDetails?.companyName}
-          />
-        </div>
-        <div className="name">
-          <label>Email</label>
-          <AppInput
-            placeholder="Enter name"
-            type="text"
-            width="95%"
-            name="firstName"
-            value={clientDetails?.email}
-          />
-        </div>
-        <div className="name">
-          <label>City</label>
-          <AppInput
-            placeholder="Enter name"
-            type="text"
-            width="95%"
-            name="firstName"
-            value={clientDetails?.city?.name}
-          />
-        </div>
-        <div className="name">
-          <label>Address</label>
-          <AppInput
-            placeholder="Enter name"
-            type="text"
-            width="95%"
-            name="firstName"
-            value={
-              clientDetails?.city?.name + ", " + clientDetails?.country?.name
-            }
-          />
+        <div></div>
+        <div className="box_bank">
+          <div className="box_bank_card">
+            <div className="box_data">Roll Over 1 month</div>
+            <div className="box_data">{newSelected?.lastThirtyDays}</div>
+          </div>
+          <div className="box_bank_card">
+            <div className="box_data">{newSelected?.lastThirtyDays}</div>
+
+            <div className="box_data">{clientDetails?.beneficiaryName}</div>
+          </div>
+          <div className="box_bank_card">
+            <div>Account Number</div>
+            <div className="box_data">
+              {clientDetails?.beneficiaryBank?.accountNumber}
+            </div>
+          </div>
+          <div className="box_bank_card">
+            <div>Total amount you will be paying</div>
+            <div className="box_data">
+              <AmountFormatter
+                currency={clientDetails?.fromCurrency?.code}
+                value={clientDetails?.rate?.data?.totalAmountToPay || 0}
+              />
+            </div>
+          </div>
         </div>
       </DetailsStyle>
     </>
@@ -72,17 +74,25 @@ export default function Details({ clientDetails }) {
 
 const DetailsStyle = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
-  .name {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  .name label {
-    font-weight: 500;
-    font-size: 17px;
-    line-height: 20px;
-    color: #344054;
+  grid-template-columns: 1fr 2fr;
+  margin-top: 20px;
+  .box_bank {
+    border: 1px solid #c7c7c7;
+    width: 100%;
+    border-radius: 14px;
+    padding: 20px 0px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    .box_bank_card {
+      border-right: 1px solid #c7c7c7;
+      padding: 0 26px;
+      .box_data {
+        font-size: 16px;
+        margin-top: 10px;
+      }
+    }
+    .box_bank_card:last-child {
+      border-right: none;
+    }
   }
 `;
