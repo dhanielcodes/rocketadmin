@@ -72,8 +72,7 @@ function PayoutDashboard() {
         name: item?.currency,
       };
     })[0];
-  const transactions =
-    payoutDashboard?.data?.analyticByTransactionStatus;
+  const transactions = payoutDashboard?.data?.analyticByTransactionStatus;
 
   const providers = payoutDashboard?.data?.analyticByProvider;
 
@@ -352,9 +351,18 @@ function PayoutDashboard() {
                 </div>
                 <div className="paymentmethod">
                   {providers?.map((item) => {
+                    const randomColor = Math.floor(
+                      Math.random() * 16777215
+                    ).toString(16);
+
                     return (
                       <div className="card">
-                        <div className="color1"></div>
+                        <div
+                          className="color"
+                          style={{
+                            background: "#" + randomColor,
+                          }}
+                        ></div>
                         <span>{item?.providerName}</span>
                       </div>
                     );
@@ -495,6 +503,11 @@ const Content = styled.div`
     padding: 20px 20px 40px 20px;
     display: flex;
     gap: 20px;
+  }
+  .color {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
   }
   .color1 {
     background-color: #2a278f;
