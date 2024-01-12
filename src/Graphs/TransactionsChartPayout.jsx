@@ -110,7 +110,7 @@ function TransactionsChartPayout({ apiData }) {
         <p>
           Failed:{" "}
           <span style={{ color: payload?.[1]?.stroke }}>
-            {kFormatter4(payload?.[1]?.value)}
+            {kFormatter4(payload?.[2]?.value)}
           </span>
         </p>
       </div>
@@ -161,13 +161,13 @@ function TransactionsChartPayout({ apiData }) {
         <Tooltip content={<CustomTooltip />} />
         {/* <Legend /> */}
         <Bar
-          dataKey="pv"
+          dataKey="amt"
           stackId="a"
           fill="#46A246"
           barSize={10}
           radius={[3, 3, 0, 0]}
         />
-        <Bar dataKey="uv" fill="#CBC7C6" barSize={10} radius={[3, 3, 0, 0]} />
+        <Bar dataKey="pv" fill="#CBC7C6" barSize={10} radius={[3, 3, 0, 0]} />
         <Bar dataKey="uv" fill="#D94040" barSize={10} radius={[3, 3, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
