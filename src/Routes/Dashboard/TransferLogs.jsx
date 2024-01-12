@@ -6,12 +6,7 @@ import CustomTable from "../../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { getAgentRates } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
-import {
-  kFormatter,
-  kFormatter2,
-  kFormatter3,
-  kFormatter4,
-} from "../../utils/format";
+import { kFormatter3, kFormatter2, kFormatter4 } from "../../utils/format";
 import { Tranx } from "../../services/Dashboard";
 
 function TransferLogsTable({ userId }) {
@@ -87,20 +82,20 @@ function TransferLogsTable({ userId }) {
     {
       title: "GBP AMOUNT",
       dataIndex: "paymentAmount",
-      render: (ire) => kFormatter(ire),
+      render: (ire) => kFormatter3(ire),
       width: 120,
     },
 
     {
       title: "RATE",
       dataIndex: "rate",
-      render: (ire) => kFormatter(ire),
+      render: (ire) => kFormatter3(ire),
       width: 120,
     },
     {
       title: "FOREIGN CURRENCY AMOUNT",
       dataIndex: "receivedAmount",
-      render: (ire) => kFormatter(ire),
+      render: (ire) => kFormatter3(ire),
       width: 260,
     },
     {

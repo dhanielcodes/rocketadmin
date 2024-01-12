@@ -99,6 +99,8 @@ function Agent() {
       title: "ACTION",
       dataIndex: "action2",
       width: 70,
+      fixed: "left",
+
       //render: () => "Other 2",
     },
     {

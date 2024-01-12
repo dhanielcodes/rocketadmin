@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 //import SearchInput from "../reuseables/SearchInput";
 import CustomerFilter from "../COMPONENTS/CustomerFilter";
 import CustomTable from "../reuseables/CustomTable";
-import { kFormatter, removeDup } from "../utils/format";
+import { kFormatter3, removeDup } from "../utils/format";
 import {
   activateAccount,
   getUsers,
@@ -230,6 +230,7 @@ function Customers() {
       dataIndex: "action2",
       width: 70,
       //render: () => "Other 2",
+      fixed: "left",
     },
     {
       title: "CUSTOMER REF",

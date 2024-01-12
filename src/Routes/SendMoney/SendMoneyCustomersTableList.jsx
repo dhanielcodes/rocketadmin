@@ -6,12 +6,7 @@ import CustomTable from "../../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { getAgentRates } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
-import {
-  kFormatter,
-  kFormatter2,
-  kFormatter3,
-  kFormatter4,
-} from "../../utils/format";
+import { kFormatter3, kFormatter2, kFormatter4 } from "../../utils/format";
 import { Tranx, getUsers } from "../../services/Dashboard";
 import { useState } from "react";
 

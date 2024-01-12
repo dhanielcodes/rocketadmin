@@ -30,7 +30,7 @@ import {
   getPayoutDashboard,
 } from "../../services/PayoutDashboard";
 import { Link, useSearchParams } from "react-router-dom";
-import { kFormatter, kFormatter2, kFormatter4 } from "../../utils/format";
+import { kFormatter3, kFormatter2 } from "../../utils/format";
 import PayoutChart from "../../Graphs/PayoutChart";
 import TransactionsChartPayout from "../../Graphs/TransactionsChartPayout";
 import ClientTable from "../../TableComponent/Payout/ClientTable";
@@ -199,10 +199,12 @@ function PayoutDashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter4(
-                          cardDetails?.successful +
-                            cardDetails?.pendingAmount +
-                            cardDetails?.failedAmount || 0
+                        {kFormatter3(
+                          Math.ceil(
+                            cardDetails?.successful +
+                              cardDetails?.pendingAmount +
+                              cardDetails?.failedAmount || 0
+                          )
                         )}
                       </div>
                     </div>
@@ -232,7 +234,7 @@ function PayoutDashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter4(cardDetails?.successful || 0)}
+                        {kFormatter3(Math.ceil(cardDetails?.successful || 0))}
                       </div>
                     </div>
                     <div
@@ -261,7 +263,9 @@ function PayoutDashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter4(cardDetails?.pendingAmount || 0)}
+                        {kFormatter3(
+                          Math.ceil(cardDetails?.pendingAmount || 0)
+                        )}
                       </div>
                     </div>
                     <div
@@ -289,7 +293,7 @@ function PayoutDashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter4(cardDetails?.failedAmount || 0)}
+                        {kFormatter3(Math.ceil(cardDetails?.failedAmount || 0))}
                       </div>
                     </div>
                   </div>
