@@ -6,13 +6,13 @@ import CustomTable from "../../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { getRatesList } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
-import { kFormatter } from "../../utils/format";
+import { kFormatter3 } from "../../utils/format";
 import { useState } from "react";
 import UpdateRatesModal from "../../modals/UpdateRatesModal";
 import { countryObjectsArray } from "../../../config/CountryCodes";
 import { IconSearch } from "@arco-design/web-react/icon";
 import { Input } from "@arco-design/web-react";
-import { removeDup, kFormatter3 } from "../../utils/format";
+import { removeDup } from "../../utils/format";
 
 function ExistingRatesTable() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));

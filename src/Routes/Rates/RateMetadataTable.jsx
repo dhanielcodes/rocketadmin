@@ -7,7 +7,7 @@ import CustomTable from "../../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { getRatesList } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
-import { kFormatter } from "../../utils/format";
+import { kFormatter3 } from "../../utils/format";
 import { useEffect, useState } from "react";
 import UpdateRatesModal from "../../modals/UpdateRatesModal";
 import { getRoleMeta } from "../../services/Dashboard";

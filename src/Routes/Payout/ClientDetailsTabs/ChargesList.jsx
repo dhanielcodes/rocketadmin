@@ -402,9 +402,7 @@ export default function ChargesList({ data, refetch }) {
               <CountryDropdown2
                 value={{
                   label:
-                    charge?.currency?.name +
-                    " - " +
-                    charge?.currency?.currencyCode,
+                    charge?.currency?.name + " - " + charge?.currency?.code,
                   value: charge?.currency?.name,
                   regionId: charge?.currency?.regionId,
                   subRegionId: charge?.currency?.subRegionId,

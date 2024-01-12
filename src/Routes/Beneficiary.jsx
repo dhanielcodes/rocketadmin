@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 //import SearchInput from "../reuseables/SearchInput";
 import CustomerFilter from "../COMPONENTS/CustomerFilter";
 import CustomTable from "../reuseables/CustomTable";
-import { kFormatter, removeDup } from "../utils/format";
+import { kFormatter3, removeDup } from "../utils/format";
 import { beneficiaries, getUsers } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";

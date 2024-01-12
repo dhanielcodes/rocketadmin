@@ -7,9 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getAgentRates } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
 import {
-  kFormatter,
-  kFormatter2,
   kFormatter3,
+  kFormatter2,
   kFormatter4,
   removeDup,
 } from "../../utils/format";

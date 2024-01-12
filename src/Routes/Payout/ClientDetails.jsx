@@ -315,8 +315,8 @@ export default function ClientDetailsPage() {
                   (item) => {
                     return {
                       ...item,
-                      name: `${item?.providerName} - [${item?.wallet?.country?.currencyCode}]`,
-                      value: `${item?.providerName} - [${item?.wallet?.country?.currencyCode}]`,
+                      name: `${item?.providerName} - [${item?.wallet?.currency?.code}]`,
+                      value: `${item?.providerName} - [${item?.wallet?.currency?.code}]`,
                     };
                   }
                 )}
