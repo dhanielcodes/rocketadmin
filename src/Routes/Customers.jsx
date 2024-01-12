@@ -97,7 +97,7 @@ const Droplist = ({
         alignItems: "center",
       }}
     >
-      {stateStatus ? (
+      {stateStatus === "Active" ? (
         <svg
           width="16"
           height="16"
@@ -130,7 +130,7 @@ const Droplist = ({
           marginLeft: "10px",
         }}
       >
-        {stateStatus ? "Deactivate Customer" : "Activate Customer"}
+        {stateStatus === "Active" ? "Deactivate Customer" : "Activate Customer"}
       </span>
     </Menu.Item>
     <Menu.Item
