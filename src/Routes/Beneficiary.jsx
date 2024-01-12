@@ -74,7 +74,7 @@ const Droplist = ({ id, name, setModal }) => (
     </Menu.Item>
   </Menu>
 );
-function Beneficiaries() {
+function Beneficiaries({ userId }) {
   const [filter, setFilter] = useState(false);
   const AppData = JSON.parse(localStorage?.getItem("AppData"));
   console.log(AppData);
@@ -89,7 +89,7 @@ function Beneficiaries() {
     isFetching,
   } = useQuery({
     queryKey: ["beneficiariess"],
-    queryFn: () => beneficiaries(),
+    queryFn: () => beneficiaries(userId),
   });
 
   console.log(customers);

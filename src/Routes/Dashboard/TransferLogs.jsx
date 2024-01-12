@@ -14,7 +14,7 @@ import {
 } from "../../utils/format";
 import { Tranx } from "../../services/Dashboard";
 
-function TransferLogsTable() {
+function TransferLogsTable({ userId }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
@@ -25,10 +25,10 @@ function TransferLogsTable() {
     isFetching,
   } = useQuery({
     queryKey: ["Tranx"],
-    queryFn: () => Tranx(),
+    queryFn: () => Tranx(userId),
   });
 
-  console.log(rates);
+  console.log(rates, userId);
 
   const columns = [
     {
@@ -110,13 +110,7 @@ function TransferLogsTable() {
 
       //render: () => "Other",
     },
-    {
-      title: "USER",
-      dataIndex: "senderName",
-      width: 180,
 
-      //render: () => "Other",
-    },
     {
       title: "BRANCH",
       dataIndex: "transactionSource",

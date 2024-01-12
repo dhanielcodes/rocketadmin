@@ -123,19 +123,25 @@ function Dashboard() {
                     <div className="contside2child2">
                       <div className="box">
                         <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                          {kFormatter2(newVolume?.lastSixtyDays || 0)}
+                          {kFormatter2(
+                            Math.ceil(newVolume?.lastSixtyDays || 0)
+                          )}
                         </div>{" "}
                         <span>Last 60 Days</span>
                       </div>
                       <div className="box">
                         <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                          {kFormatter2(newVolume?.lastNinetyDays || 0)}
+                          {kFormatter2(
+                            Math.ceil(newVolume?.lastNinetyDays || 0)
+                          )}
                         </div>{" "}
                         <span>Last 90 Days</span>
                       </div>
                       <div className="box">
                         <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                          {kFormatter2(newVolume?.lastOneTwentyDays || 0)}
+                          {kFormatter2(
+                            Math.ceil(newVolume?.lastOneTwentyDays || 0)
+                          )}
                         </div>{" "}
                         <span>Last 120 Days</span>
                       </div>
@@ -273,9 +279,11 @@ function Dashboard() {
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
                         {kFormatter2(
-                          newVolume?.depositedAmount +
-                            newVolume?.pendingAmount +
-                            newVolume?.failedAmount || 0
+                          Math.ceil(
+                            newVolume?.depositedAmount +
+                              newVolume?.pendingAmount +
+                              newVolume?.failedAmount || 0
+                          )
                         )}
                       </div>
                     </div>
@@ -305,7 +313,9 @@ function Dashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter2(newVolume?.depositedAmount || 0)}
+                        {kFormatter2(
+                          Math.ceil(newVolume?.depositedAmount || 0)
+                        )}
                       </div>
                     </div>
                     <div
@@ -334,7 +344,7 @@ function Dashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter2(newVolume?.pendingAmount || 0)}
+                        {kFormatter2(Math.ceil(newVolume?.pendingAmount || 0))}
                       </div>
                     </div>
                     <div
@@ -362,7 +372,7 @@ function Dashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter2(newVolume?.failedAmount || 0)}
+                        {kFormatter2(Math.ceil(newVolume?.failedAmount || 0))}
                       </div>
                     </div>
                   </div>

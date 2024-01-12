@@ -62,11 +62,9 @@ export const customerRates = async (query) => {
   return data;
 };
 export const Tranx = async (userId) => {
-  console.log(
-    "🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:",
-    userId?.queryKey[0]
+  const { data } = await Axios.get(
+    `${baseurl}/getusertransactionlog/${userId || 0}`
   );
-  const { data } = await Axios.get(`${baseurl}/getusertransactionlog/0`);
   return data;
 };
 export const TodayLogss = async (userId) => {
@@ -77,6 +75,24 @@ export const TodayLogss = async (userId) => {
   const { data } = await Axios.get(`${baseurl}/gettodaylog/0`);
   return data;
 };
+
+export const updateUserWatchList = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/uppdateaccountwatchliststatus`,
+    body
+  );
+  return data;
+};
+
+export const suspendAccount = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/suspendaccount`, body);
+  return data;
+};
+export const activateAccount = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/reactivateaccount`, body);
+  return data;
+};
+
 export const getUsers = async (id = 5) => {
   const { data } = await Axios.get(`${baseurl}/getuserbyrole/6`);
   return data;
@@ -169,6 +185,14 @@ export const GetDetails = async (id) => {
   const { data } = await Axios.get(
     `${baseurl}/getuserdashboard/${id?.queryKey[0]}`
   );
+  return data;
+};
+export const GetUserDetails = async (id) => {
+  console.log(
+    "🚀 ~ file: Dashboard.jsx:57 ~ GetDetails ~ id:",
+    id?.queryKey?.[0]
+  );
+  const { data } = await Axios.get(`${baseurl}/getuserdashboard/${id}`);
   return data;
 };
 
