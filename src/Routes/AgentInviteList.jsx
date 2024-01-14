@@ -183,6 +183,11 @@ function AgentInviteList() {
 
   const columns = [
     {
+      title: "ACTION",
+      dataIndex: "action2",
+      width: 170,
+    },
+    {
       title: "AGENT ID",
       dataIndex: "id",
       width: 100,
@@ -311,91 +316,19 @@ function AgentInviteList() {
           </svg>
         </p>
       ),
+
       action2: (
         <div
           style={{
-            textDecoration: "none",
-          }}
-          onClick={() => {
-            setRate(item);
-          }}
-        >
-          <p
-            onClick={() => {
-              console.log(item?.userId);
-            }}
-            style={{
-              color: "blue",
-              cursor: "pointer",
-            }}
-          >
-            <Dropdown
-              droplist={
-                <Droplist
-                  id={item?.userId}
-                  name={item?.firstName + " " + item?.surName}
-                  setModal={() => {
-                    setModal(true);
-                  }}
-                  changeStatus={() => {
-                    setStatus(true);
-                    if (item?.status) {
-                      suspend({
-                        userId: item?.userId,
-                      });
-                    } else {
-                      activate({
-                        userId: item?.userId,
-                      });
-                    }
-                  }}
-                  stateStatus={item?.status}
-                  watch={() => {
-                    setWatch(true);
-                    if (item?.watchListStatus) {
-                      updateUser({
-                        userId: item?.userId,
-                        watchListStatus: false,
-                      });
-                    } else {
-                      updateUser({
-                        userId: item?.userId,
-                        watchListStatus: true,
-                      });
-                    }
-                  }}
-                  watchStatus={item?.watchListStatus}
-                />
-              }
-              position="bl"
-              on
-            >
-              {" "}
-              <Link style={{ marginRight: 40 }}>
-                <IconMoreVertical
-                  style={{
-                    fontSize: 15,
-                    marginLeft: 6,
-                    color: "#000",
-                  }}
-                />
-              </Link>
-            </Dropdown>
-          </p>
-        </div>
-      ),
-      idNumber: (
-        <div
-          style={{
             padding: "8px 16px",
-            borderRadius: "10000px",
-            background: item?.isKYCCompleted ? "#63ff706c" : "#ff63634b",
-            color: item?.isKYCCompleted ? "green" : "red",
+            borderRadius: "10px",
+            background: "#00b044",
+            color: "white",
             width: "fit-content",
-            fontWeight: "700",
+            cursor: "pointer",
           }}
         >
-          {item?.isKYCCompleted ? "Verified" : "Not Verified"}
+          RESEND INVITE
         </div>
       ),
       status: (
@@ -405,13 +338,23 @@ function AgentInviteList() {
             style={{
               padding: "8px 16px",
               borderRadius: "10000px",
-              background: item?.status ? "#63ff706c" : "#ff63634b",
-              color: item?.status ? "green" : "red",
+              background:
+                item?.status === "Accepted"
+                  ? "#63ff706c"
+                  : item?.status === "Sent"
+                  ? "#afafaf"
+                  : "#ff63634b",
+              color:
+                item?.status === "Accepted"
+                  ? "#63ff70"
+                  : item?.status === "Sent"
+                  ? "#3f3f3f"
+                  : "#ff6363",
               width: "fit-content",
               fontWeight: "700",
             }}
           >
-            {item?.status ? "True" : "False"}
+            {item?.status}
           </div>
         </>
       ),
