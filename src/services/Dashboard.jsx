@@ -151,6 +151,10 @@ export const getRoleMeta = async () => {
   );
   return data;
 };
+export const getAgentInviteList = async () => {
+  const { data } = await Axios.get(`${baseurl}/getagentinvite`);
+  return data;
+};
 
 export const getPaymentProcessors = async () => {
   const { data } = await Axios.get(`${baseurl}/getpaymentchannelprocessor`);

@@ -57,8 +57,20 @@ export default function NewNavBar() {
     },
     {
       name: "Agents",
-      path: "/agent",
+      path: "//",
       icon: AgentsIcon,
+      miniLinks: [
+        {
+          name: "Agent List",
+          path: "/agent",
+          parentName: "Manage Customers",
+        },
+        {
+          name: "Agent Invite List",
+          path: "/agent-invites",
+          parentName: "Manage Customers",
+        },
+      ],
     },
     {
       name: "Manage Customers",
