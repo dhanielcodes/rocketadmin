@@ -41,6 +41,7 @@ import CitiesPage from "./Routes/Cities";
 import TransfersListPage from "./Routes/Transfers";
 import CreateNewMetadata from "./Routes/CreateNewMetadata";
 import UpdateRateMetaData from "./Routes/UpdateRateMetaData";
+import AgentInviteList from "./Routes/AgentInviteList";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -130,6 +131,14 @@ function App() {
                 element={
                   <AppLogout>
                     <Agent />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/agent-invites"
+                element={
+                  <AppLogout>
+                    <AgentInviteList />
                   </AppLogout>
                 }
               />
