@@ -27,7 +27,7 @@ const ModalLayoutStyle = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 10000000;
   height: 100vh;
   overflow: hidden;
   overflow-y: scroll;
@@ -44,5 +44,3 @@ const ModalBody = styled.div`
   padding: 20px;
   margin-bottom: 80px;
 `;
-
-
