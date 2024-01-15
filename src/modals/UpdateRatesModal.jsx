@@ -195,7 +195,7 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
                     userId: userDetails?.userId,
                     firstName: "Admin",
                   },
-                  conversionRate: rate,
+                  conversionRate: rateItem?.conversionRate || rate,
                   fromCurrency: {
                     id: rateItem?.fromCurrency?.id,
                   },
