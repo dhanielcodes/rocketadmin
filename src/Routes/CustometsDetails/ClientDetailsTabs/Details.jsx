@@ -41,29 +41,112 @@ export default function Details({ clientDetails }) {
       </div>
       <DetailsStyle>
         <div></div>
-        <div className="box_bank">
-          <div className="box_bank_card">
-            <div className="box_data">Roll Over 1 month</div>
-            <div className="box_data">{newSelected?.lastThirtyDays}</div>
-          </div>
-          <div className="box_bank_card">
-            <div className="box_data">{newSelected?.lastThirtyDays}</div>
+        <div>
+          <div className="box_bank">
+            <div className="box_bank_card">
+              <div className="box_data">Roll Over 1 month</div>
+              <div className="box_data">{newSelected?.lastThirtyDays}</div>
+            </div>
+            <div className="box_bank_card">
+              <div className="box_data">{newSelected?.lastThirtyDays}</div>
 
-            <div className="box_data">{clientDetails?.beneficiaryName}</div>
-          </div>
-          <div className="box_bank_card">
-            <div>Account Number</div>
-            <div className="box_data">
-              {clientDetails?.beneficiaryBank?.accountNumber}
+              <div className="box_data">{clientDetails?.beneficiaryName}</div>
+            </div>
+            <div className="box_bank_card">
+              <div>Account Number</div>
+              <div className="box_data">
+                {clientDetails?.beneficiaryBank?.accountNumber}
+              </div>
+            </div>
+            <div className="box_bank_card">
+              <div>Total amount you will be paying</div>
+              <div className="box_data">
+                <AmountFormatter
+                  currency={clientDetails?.fromCurrency?.code}
+                  value={clientDetails?.rate?.data?.totalAmountToPay || 0}
+                />
+              </div>
             </div>
           </div>
-          <div className="box_bank_card">
-            <div>Total amount you will be paying</div>
-            <div className="box_data">
-              <AmountFormatter
-                currency={clientDetails?.fromCurrency?.code}
-                value={clientDetails?.rate?.data?.totalAmountToPay || 0}
-              />
+
+          <div className="box_bank">
+            <div className="box_bank_card">
+              <div className="box_data">Roll Over 2 months</div>
+              <div className="box_data">{newSelected?.lastSixtyDays}</div>
+            </div>
+            <div className="box_bank_card">
+              <div className="box_data">{newSelected?.lastSixtyDays}</div>
+
+              <div className="box_data">{clientDetails?.beneficiaryName}</div>
+            </div>
+            <div className="box_bank_card">
+              <div>Account Number</div>
+              <div className="box_data">
+                {clientDetails?.beneficiaryBank?.accountNumber}
+              </div>
+            </div>
+            <div className="box_bank_card">
+              <div>Total amount you will be paying</div>
+              <div className="box_data">
+                <AmountFormatter
+                  currency={clientDetails?.fromCurrency?.code}
+                  value={clientDetails?.rate?.data?.totalAmountToPay || 0}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="box_bank">
+            <div className="box_bank_card">
+              <div className="box_data">Roll Over 3 months</div>
+              <div className="box_data">{newSelected?.lastNinetyDays}</div>
+            </div>
+            <div className="box_bank_card">
+              <div className="box_data">{newSelected?.lastNinetyDays}</div>
+
+              <div className="box_data">{clientDetails?.beneficiaryName}</div>
+            </div>
+            <div className="box_bank_card">
+              <div>Account Number</div>
+              <div className="box_data">
+                {clientDetails?.beneficiaryBank?.accountNumber}
+              </div>
+            </div>
+            <div className="box_bank_card">
+              <div>Total amount you will be paying</div>
+              <div className="box_data">
+                <AmountFormatter
+                  currency={clientDetails?.fromCurrency?.code}
+                  value={clientDetails?.rate?.data?.totalAmountToPay || 0}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="box_bank">
+            <div className="box_bank_card">
+              <div className="box_data">Roll Over 4 months</div>
+              <div className="box_data">{newSelected?.lastNinetyDays}</div>
+            </div>
+            <div className="box_bank_card">
+              <div className="box_data">{newSelected?.lastNinetyDays}</div>
+
+              <div className="box_data">{clientDetails?.beneficiaryName}</div>
+            </div>
+            <div className="box_bank_card">
+              <div>Account Number</div>
+              <div className="box_data">
+                {clientDetails?.beneficiaryBank?.accountNumber}
+              </div>
+            </div>
+            <div className="box_bank_card">
+              <div>Total amount you will be paying</div>
+              <div className="box_data">
+                <AmountFormatter
+                  currency={clientDetails?.fromCurrency?.code}
+                  value={clientDetails?.rate?.data?.totalAmountToPay || 0}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -82,6 +165,7 @@ const DetailsStyle = styled.div`
     border-radius: 14px;
     padding: 20px 0px;
     display: grid;
+    margin-bottom: 10px;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     .box_bank_card {
       border-right: 1px solid #c7c7c7;
