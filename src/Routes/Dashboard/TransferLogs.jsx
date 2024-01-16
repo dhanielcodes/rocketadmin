@@ -8,6 +8,7 @@ import { getAgentRates } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
 import { kFormatter3, kFormatter2, kFormatter4 } from "../../utils/format";
 import { Tranx } from "../../services/Dashboard";
+import AmountFormatter from "../../reuseables/AmountFormatter";
 
 function TransferLogsTable({ userId }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -81,8 +82,7 @@ function TransferLogsTable({ userId }) {
     },
     {
       title: "GBP AMOUNT",
-      dataIndex: "paymentAmount",
-      render: (ire) => kFormatter3(ire),
+      dataIndex: "newPaymentAmount",
       width: 120,
     },
 
@@ -124,7 +124,17 @@ function TransferLogsTable({ userId }) {
   const newData = rates?.data?.map((item) => {
     return {
       ...item,
-
+      newPaymentAmount: (
+        <>
+          {" "}
+          <div>
+            <AmountFormatter
+              currency={item?.senderCurrency}
+              value={item?.paymentAmount}
+            />
+          </div>
+        </>
+      ),
       status: (
         <>
           {" "}
