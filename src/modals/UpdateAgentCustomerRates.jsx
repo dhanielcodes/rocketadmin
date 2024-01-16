@@ -88,7 +88,6 @@ export default function UpdateAgentCustomerRates({
       style={{
         opacity: modal ? "1" : "0",
         pointerEvents: modal ? "all" : "none",
-        transition: "all 0.3s",
       }}
     >
       {modal && (

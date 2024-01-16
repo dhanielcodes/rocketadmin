@@ -56,7 +56,6 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
       style={{
         opacity: modal ? "1" : "0",
         pointerEvents: modal ? "all" : "none",
-        transition: "all 0.3s",
       }}
     >
       {modal && (
