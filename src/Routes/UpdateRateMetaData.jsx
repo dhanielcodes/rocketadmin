@@ -65,6 +65,8 @@ function UpdateRateMetaData({ recall, setRecall, setModal, modal }) {
     rateItem?.allowAboveMaximum || false
   );
 
+  const [autoPayout, setAutoPayout] = useState(rateItem?.autoPayout || false);
+
   const [allowMinTf, setAllowMinTf] = useState(false);
   const [allowMaxTf, setAllowMaxTf] = useState(false);
 
@@ -505,6 +507,27 @@ function UpdateRateMetaData({ recall, setRecall, setModal, modal }) {
                 ></hr>{" "}
                 <div
                   style={{
+                    display: "flex",
+                    gridGap: "40px",
+                  }}
+                >
+                  <div>Auto-Payout</div>
+                  <Switch
+                    onClick={() => {
+                      setAutoPayout(!autoPayout);
+                    }}
+                    checked={autoPayout}
+                  />
+                </div>
+                <hr
+                  style={{
+                    marginBottom: "20px",
+                    marginTop: "20px",
+                    opacity: "0.4",
+                  }}
+                ></hr>{" "}
+                <div
+                  style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr 1fr",
                     gridGap: "40px",
@@ -833,6 +856,7 @@ function UpdateRateMetaData({ recall, setRecall, setModal, modal }) {
                       aboveMaximumLimitCharges:
                         allowMaxFee || rateItem?.aboveMaximumLimitCharges,
                       bonusRateValue: bonusRate || rateItem?.bonusRateValue,
+                      autopayout: autoPayout || rateItem?.autoPayout,
                     });
                   }
                 }}

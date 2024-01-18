@@ -65,6 +65,8 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
     rateItem?.allowAboveMaximum || false
   );
 
+  const [autoPayout, setAutoPayout] = useState(false);
+
   const [allowMinTf, setAllowMinTf] = useState(false);
   const [allowMaxTf, setAllowMaxTf] = useState(false);
 
@@ -505,6 +507,27 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                 ></hr>{" "}
                 <div
                   style={{
+                    display: "flex",
+                    gridGap: "40px",
+                  }}
+                >
+                  <div>Auto-Payout</div>
+                  <Switch
+                    onClick={() => {
+                      setAutoPayout(!autoPayout);
+                    }}
+                    checked={autoPayout}
+                  />
+                </div>
+                <hr
+                  style={{
+                    marginBottom: "20px",
+                    marginTop: "20px",
+                    opacity: "0.4",
+                  }}
+                ></hr>{" "}
+                <div
+                  style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr 1fr",
                     gridGap: "40px",
@@ -884,7 +907,7 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                         allowAboveMaximum: allowMax,
                         aboveMaximumChargeType: allowMaxTf || "",
                         aboveMaximumLimitCharges: allowMaxFee || "",
-
+                        autopayout: autoPayout,
                         kycThreshold: kycThreshold || 0,
                         bonusRateValue: bonusRate || 0,
                       });
