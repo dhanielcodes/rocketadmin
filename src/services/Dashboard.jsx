@@ -67,6 +67,47 @@ export const Tranx = async (userId) => {
   );
   return data;
 };
+
+export const cancelTransaction = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/canceltransaction/${body}`);
+  return data;
+};
+
+export const confirmTransaction = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/confirmtransactionpayment/${body}`
+  );
+  return data;
+};
+
+export const marktransactionsuspicious = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/marktransactionsuspicious/${body}`
+  );
+  return data;
+};
+
+export const paytransaction = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/paytransaction/${body}`);
+  return data;
+};
+export const holdtransaction = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/holdtransaction/${body}`);
+  return data;
+};
+export const revertholdtransaction = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/revertholdtransaction/${body}`);
+  return data;
+};
+
+export const addcommenttotransaction = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/addcommenttotransaction/`,
+    body
+  );
+  return data;
+};
+
 export const TodayLogss = async (userId) => {
   console.log(
     "🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:",
