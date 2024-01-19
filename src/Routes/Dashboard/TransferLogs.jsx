@@ -18,14 +18,15 @@ import {
 } from "../../services/Dashboard";
 import AmountFormatter from "../../reuseables/AmountFormatter";
 import { IconEye, IconMoreVertical } from "@arco-design/web-react/icon";
-import { Dropdown, Menu } from "@arco-design/web-react";
+import { Dropdown, Input, Menu } from "@arco-design/web-react";
 import { useState } from "react";
 import ReusableModal from "../../reuseables/ReusableModal";
 import Msg from "../../reuseables/Msg";
 import Btn from "../../reuseables/Btn";
 import toast from "react-hot-toast";
+const TextArea = Input.TextArea;
 
-const Droplist = ({ action, setModal }) => (
+const Droplist = ({ action, setModal, setUserId }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
     style={{
@@ -61,6 +62,9 @@ const Droplist = ({ action, setModal }) => (
       style={{
         display: "flex",
         alignItems: "center",
+      }}
+      onClick={() => {
+        setUserId();
       }}
     >
       <IconEye
@@ -252,6 +256,7 @@ const Droplist = ({ action, setModal }) => (
       onClick={() => {
         setModal(true);
         action("addComment");
+        setUserId();
       }}
       key="7"
       style={{
@@ -416,10 +421,11 @@ const Droplist2 = ({ action, setModal }) => (
   </Menu>
 );
 
-function TransferLogsTable({ userId }) {
+function TransferLogsTable() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
+  const [userId, setUserIdd] = useState("");
 
   const {
     data: rates,
@@ -427,10 +433,11 @@ function TransferLogsTable({ userId }) {
     isFetching,
   } = useQuery({
     queryKey: ["Tranx"],
-    queryFn: () => Tranx(userId),
+    queryFn: () => Tranx(0),
   });
 
   const [modal, setModal] = useState(false);
+  const [note, setNote] = useState(false);
 
   const [call, setCall] = useState("");
 
@@ -665,7 +672,7 @@ function TransferLogsTable({ userId }) {
           <p
             onClick={() => {
               console.log(item?.userId);
-              setUserId(item?.paymentRef);
+              setUserId(item);
             }}
             style={{
               color: "blue",
@@ -677,7 +684,13 @@ function TransferLogsTable({ userId }) {
                 item?.paymentStatus === "Pending" ? (
                   <Droplist2 action={setCall} setModal={setModal} />
                 ) : (
-                  <Droplist action={setCall} setModal={setModal} />
+                  <Droplist
+                    action={setCall}
+                    setModal={setModal}
+                    setUserId={() => {
+                      setUserIdd(item?.userId);
+                    }}
+                  />
                 )
               }
               position="bl"
@@ -810,6 +823,7 @@ function TransferLogsTable({ userId }) {
         {modal && (
           <ReusableModal
             isOpen={modal}
+            width={400}
             onClose={() => {
               setModal(false);
               setCall();
@@ -818,22 +832,39 @@ function TransferLogsTable({ userId }) {
             <Msg>
               {/* {err} */}
               <p>
-                Are you sure you want to,{" "}
                 {call === "markAsSuspicious"
-                  ? "Mark as suspicious"
+                  ? "Are you sure you want to Mark as suspicious"
                   : call === "holdTransaction"
-                  ? "Hold Transaction"
+                  ? "Are you sure you want to Hold Transaction"
                   : call === "cancelTransaction"
-                  ? "Cancel Transaction"
+                  ? "Are you sure you want to Cancel Transaction"
                   : call === "revertHoldTransaction"
-                  ? "Revert Hold Transaction"
+                  ? "Are you sure you want to Revert Hold Transaction"
                   : call === "confirmTransaction"
-                  ? "Confirm Transaction"
+                  ? "Are you sure you want to Confirm Transaction"
                   : call === "payTransaction"
-                  ? "Pay Transaction"
+                  ? "Are you sure you want to Pay Transaction"
                   : "Add Comment"}
                 ?
               </p>
+              <br />
+              {call === "addComment" && (
+                <TextArea
+                  name="address"
+                  className="textarea"
+                  placeholder="Enter comments ..."
+                  style={{
+                    minHeight: 104,
+                    background: "transparent",
+                    border: "1px solid #d8d8d8",
+                    borderRadius: "8px",
+                  }}
+                  onChange={(e) => {
+                    setNote(e);
+                  }}
+                />
+              )}
+
               <br />
 
               <div
@@ -877,19 +908,24 @@ function TransferLogsTable({ userId }) {
                       : "Add Comment";
 
                     if (call === "markAsSuspicious") {
-                      marktransactionsuspiciousMutation(userIdd);
+                      marktransactionsuspiciousMutation(userIdd?.paymentRef);
                     } else if (call === "holdTransaction") {
-                      holdTransactionMutation(userIdd);
+                      holdTransactionMutation(userIdd.paymentRef);
                     } else if (call === "cancelTransaction") {
-                      cancelTransactionMutation(userIdd);
+                      cancelTransactionMutation(userIdd.paymentRef);
                     } else if (call === "revertHoldTransaction") {
-                      revertholdtransactionMutation(userIdd);
+                      revertholdtransactionMutation(userIdd.paymentRef);
                     } else if (call === "confirmTransaction") {
-                      confirmTransactionMutation(userIdd);
+                      confirmTransactionMutation(userIdd.paymentRef);
                     } else if (call === "payTransaction") {
-                      payTransactionMutation(userIdd);
+                      payTransactionMutation(userIdd.paymentRef);
                     } else {
-                      addcommenttotransactionMutation(userIdd);
+                      addcommenttotransactionMutation({
+                        customerId: userId,
+                        transactionId: userIdd?.sn,
+                        commentBy: 0,
+                        comment: note,
+                      });
                     }
                   }}
                   size={30}

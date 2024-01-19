@@ -101,10 +101,7 @@ export const revertholdtransaction = async (body) => {
 };
 
 export const addcommenttotransaction = async (body) => {
-  const { data } = await Axios.post(
-    `${baseurl}/addcommenttotransaction/`,
-    body
-  );
+  const { data } = await Axios.post(`${baseurl}/addcommenttotransaction`, body);
   return data;
 };
 
