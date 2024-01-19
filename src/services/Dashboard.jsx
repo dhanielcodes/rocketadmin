@@ -104,6 +104,13 @@ export const addcommenttotransaction = async (body) => {
   const { data } = await Axios.post(`${baseurl}/addcommenttotransaction`, body);
   return data;
 };
+export const viewCommentsTransaction = async (userId) => {
+  console.log("🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:md", userId);
+  const { data } = await Axios.get(
+    `${baseurl}/viewtransactioncomment/${userId}`
+  );
+  return data;
+};
 
 export const TodayLogss = async (userId) => {
   console.log(
