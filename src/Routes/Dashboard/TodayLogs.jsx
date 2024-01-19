@@ -3,16 +3,433 @@ import { styled } from "styled-components";
 
 import SearchInput from "../../reuseables/SearchInput";
 import CustomTable from "../../reuseables/CustomTable";
-import { useQuery } from "@tanstack/react-query";
-import { getAgentRates } from "../../services/PayoutDashboard";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import CountryFlag from "react-country-flag";
 import { kFormatter3, kFormatter2, kFormatter4 } from "../../utils/format";
-import { TodayLogss, Tranx } from "../../services/Dashboard";
+import {
+  TodayLogss,
+  Tranx,
+  addcommenttotransaction,
+  cancelTransaction,
+  confirmTransaction,
+  holdtransaction,
+  marktransactionsuspicious,
+  paytransaction,
+  revertholdtransaction,
+  viewCommentsTransaction,
+} from "../../services/Dashboard";
+import AmountFormatter from "../../reuseables/AmountFormatter";
+import { IconEye, IconMoreVertical } from "@arco-design/web-react/icon";
+import { Dropdown, Input, Menu } from "@arco-design/web-react";
+import { useState } from "react";
+import ReusableModal from "../../reuseables/ReusableModal";
+import Msg from "../../reuseables/Msg";
+import Btn from "../../reuseables/Btn";
+import toast from "react-hot-toast";
+const TextArea = Input.TextArea;
 
-function TodayLogs() {
+const Droplist = ({ action, setModal, setUserId }) => (
+  //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
+  <Menu
+    style={{
+      borderRadius: "10px",
+      paddingTop: "6px",
+      // width: "150px",
+    }}
+  >
+    <Menu.Item
+      key="1"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <IconEye
+        fontSize={20}
+        style={{
+          margin: 0,
+        }}
+      />
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        View Details
+      </span>
+    </Menu.Item>
+
+    <Menu.Item
+      key="2"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+      onClick={() => {
+        setModal(true);
+        action("viewComment");
+        setUserId();
+      }}
+    >
+      <IconEye
+        fontSize={20}
+        style={{
+          margin: 0,
+        }}
+      />
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        View Comments
+      </span>
+    </Menu.Item>
+    <Menu.Item
+      onClick={() => {
+        setModal(true);
+        action("markAsSuspicious");
+      }}
+      key="3"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_4000_16424)">
+          <path
+            d="M11.334 1.99955C11.5091 1.82445 11.7169 1.68556 11.9457 1.5908C12.1745 1.49604 12.4197 1.44727 12.6673 1.44727C12.9149 1.44727 13.1601 1.49604 13.3889 1.5908C13.6177 1.68556 13.8256 1.82445 14.0007 1.99955C14.1757 2.17465 14.3146 2.38252 14.4094 2.61129C14.5042 2.84006 14.5529 3.08526 14.5529 3.33288C14.5529 3.58051 14.5042 3.8257 14.4094 4.05448C14.3146 4.28325 14.1757 4.49112 14.0007 4.66622L5.00065 13.6662L1.33398 14.6662L2.33398 10.9995L11.334 1.99955Z"
+            stroke="#464F60"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_4000_16424">
+            <rect width="16" height="16" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Mark as Suspicious
+      </span>
+    </Menu.Item>
+
+    <Menu.Item
+      onClick={() => {
+        setModal(true);
+        action("holdTransaction");
+      }}
+      key="4"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_4000_16424)">
+          <path
+            d="M11.334 1.99955C11.5091 1.82445 11.7169 1.68556 11.9457 1.5908C12.1745 1.49604 12.4197 1.44727 12.6673 1.44727C12.9149 1.44727 13.1601 1.49604 13.3889 1.5908C13.6177 1.68556 13.8256 1.82445 14.0007 1.99955C14.1757 2.17465 14.3146 2.38252 14.4094 2.61129C14.5042 2.84006 14.5529 3.08526 14.5529 3.33288C14.5529 3.58051 14.5042 3.8257 14.4094 4.05448C14.3146 4.28325 14.1757 4.49112 14.0007 4.66622L5.00065 13.6662L1.33398 14.6662L2.33398 10.9995L11.334 1.99955Z"
+            stroke="#464F60"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_4000_16424">
+            <rect width="16" height="16" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Hold Transaction
+      </span>
+    </Menu.Item>
+    <Menu.Item
+      onClick={() => {
+        setModal(true);
+        action("cancelTransaction");
+      }}
+      key="5"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_4000_16424)">
+          <path
+            d="M11.334 1.99955C11.5091 1.82445 11.7169 1.68556 11.9457 1.5908C12.1745 1.49604 12.4197 1.44727 12.6673 1.44727C12.9149 1.44727 13.1601 1.49604 13.3889 1.5908C13.6177 1.68556 13.8256 1.82445 14.0007 1.99955C14.1757 2.17465 14.3146 2.38252 14.4094 2.61129C14.5042 2.84006 14.5529 3.08526 14.5529 3.33288C14.5529 3.58051 14.5042 3.8257 14.4094 4.05448C14.3146 4.28325 14.1757 4.49112 14.0007 4.66622L5.00065 13.6662L1.33398 14.6662L2.33398 10.9995L11.334 1.99955Z"
+            stroke="#464F60"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_4000_16424">
+            <rect width="16" height="16" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Cancel Transaction
+      </span>
+    </Menu.Item>
+
+    <Menu.Item
+      onClick={() => {
+        setModal(true);
+        action("revertHoldTransaction");
+      }}
+      key="6"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_4000_16424)">
+          <path
+            d="M11.334 1.99955C11.5091 1.82445 11.7169 1.68556 11.9457 1.5908C12.1745 1.49604 12.4197 1.44727 12.6673 1.44727C12.9149 1.44727 13.1601 1.49604 13.3889 1.5908C13.6177 1.68556 13.8256 1.82445 14.0007 1.99955C14.1757 2.17465 14.3146 2.38252 14.4094 2.61129C14.5042 2.84006 14.5529 3.08526 14.5529 3.33288C14.5529 3.58051 14.5042 3.8257 14.4094 4.05448C14.3146 4.28325 14.1757 4.49112 14.0007 4.66622L5.00065 13.6662L1.33398 14.6662L2.33398 10.9995L11.334 1.99955Z"
+            stroke="#464F60"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_4000_16424">
+            <rect width="16" height="16" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Revert Hold Transaction
+      </span>
+    </Menu.Item>
+
+    <Menu.Item
+      onClick={() => {
+        setModal(true);
+        action("addComment");
+        setUserId();
+      }}
+      key="7"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_4000_16424)">
+          <path
+            d="M11.334 1.99955C11.5091 1.82445 11.7169 1.68556 11.9457 1.5908C12.1745 1.49604 12.4197 1.44727 12.6673 1.44727C12.9149 1.44727 13.1601 1.49604 13.3889 1.5908C13.6177 1.68556 13.8256 1.82445 14.0007 1.99955C14.1757 2.17465 14.3146 2.38252 14.4094 2.61129C14.5042 2.84006 14.5529 3.08526 14.5529 3.33288C14.5529 3.58051 14.5042 3.8257 14.4094 4.05448C14.3146 4.28325 14.1757 4.49112 14.0007 4.66622L5.00065 13.6662L1.33398 14.6662L2.33398 10.9995L11.334 1.99955Z"
+            stroke="#464F60"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_4000_16424">
+            <rect width="16" height="16" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Add Comment to Transaction
+      </span>
+    </Menu.Item>
+
+    <Menu.Item
+      onClick={() => {
+        setModal(true);
+        action("confirmTransaction");
+      }}
+      key="8"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_4000_16424)">
+          <path
+            d="M11.334 1.99955C11.5091 1.82445 11.7169 1.68556 11.9457 1.5908C12.1745 1.49604 12.4197 1.44727 12.6673 1.44727C12.9149 1.44727 13.1601 1.49604 13.3889 1.5908C13.6177 1.68556 13.8256 1.82445 14.0007 1.99955C14.1757 2.17465 14.3146 2.38252 14.4094 2.61129C14.5042 2.84006 14.5529 3.08526 14.5529 3.33288C14.5529 3.58051 14.5042 3.8257 14.4094 4.05448C14.3146 4.28325 14.1757 4.49112 14.0007 4.66622L5.00065 13.6662L1.33398 14.6662L2.33398 10.9995L11.334 1.99955Z"
+            stroke="#464F60"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_4000_16424">
+            <rect width="16" height="16" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Confirm Transaction
+      </span>
+    </Menu.Item>
+
+    <Menu.Item
+      onClick={() => {
+        setModal(true);
+        action("payTransaction");
+      }}
+      key="9"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_4000_16424)">
+          <path
+            d="M11.334 1.99955C11.5091 1.82445 11.7169 1.68556 11.9457 1.5908C12.1745 1.49604 12.4197 1.44727 12.6673 1.44727C12.9149 1.44727 13.1601 1.49604 13.3889 1.5908C13.6177 1.68556 13.8256 1.82445 14.0007 1.99955C14.1757 2.17465 14.3146 2.38252 14.4094 2.61129C14.5042 2.84006 14.5529 3.08526 14.5529 3.33288C14.5529 3.58051 14.5042 3.8257 14.4094 4.05448C14.3146 4.28325 14.1757 4.49112 14.0007 4.66622L5.00065 13.6662L1.33398 14.6662L2.33398 10.9995L11.334 1.99955Z"
+            stroke="#464F60"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_4000_16424">
+            <rect width="16" height="16" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Pay Transaction
+      </span>
+    </Menu.Item>
+  </Menu>
+);
+
+const Droplist2 = ({ action, setModal }) => (
+  //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
+  <Menu
+    style={{
+      borderRadius: "10px",
+      paddingTop: "6px",
+      // width: "150px",
+    }}
+  >
+    <Menu.Item
+      onClick={() => {
+        setModal(true);
+        action();
+      }}
+      key="3"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <IconEye
+        fontSize={20}
+        style={{
+          margin: 0,
+        }}
+      />
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        View Details
+      </span>
+    </Menu.Item>
+  </Menu>
+);
+
+function TransferLogsTable() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
+  const [userId, setUserIdd] = useState("");
 
   const {
     data: rates,
@@ -23,9 +440,144 @@ function TodayLogs() {
     queryFn: () => TodayLogss(),
   });
 
-  console.log(rates);
+  const [modal, setModal] = useState(false);
+  const [note, setNote] = useState(false);
+
+  const [call, setCall] = useState("");
+
+  const { mutate: cancelTransactionMutation, isLoading: loading1 } =
+    useMutation({
+      mutationFn: cancelTransaction,
+      onSuccess: (data) => {
+        if (data.status) {
+          toast.success(data?.message);
+          setModal(false);
+        } else {
+          toast.error(data?.message);
+        }
+      },
+      onError: (data) => {
+        toast.error(data?.message);
+      },
+    });
+
+  const { mutate: confirmTransactionMutation, isLoading: loading2 } =
+    useMutation({
+      mutationFn: confirmTransaction,
+      onSuccess: (data) => {
+        if (data.status) {
+          toast.success(data?.message);
+          setModal(false);
+        } else {
+          toast.error(data?.message);
+        }
+      },
+      onError: (data) => {
+        toast.error(data?.message);
+      },
+    });
+
+  const { mutate: marktransactionsuspiciousMutation, isLoading: loading3 } =
+    useMutation({
+      mutationFn: marktransactionsuspicious,
+      onSuccess: (data) => {
+        if (data.status) {
+          toast.success(data?.message);
+          setModal(false);
+        } else {
+          toast.error(data?.message);
+        }
+      },
+      onError: (data) => {
+        toast.error(data?.message);
+      },
+    });
+
+  const { mutate: payTransactionMutation, isLoading: loading4 } = useMutation({
+    mutationFn: paytransaction,
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success(data?.message);
+        setModal(false);
+      } else {
+        toast.error(data?.message);
+      }
+    },
+    onError: (data) => {
+      toast.error(data?.message);
+    },
+  });
+
+  const { mutate: holdTransactionMutation, isLoading: loading5 } = useMutation({
+    mutationFn: holdtransaction,
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success(data?.message);
+        setModal(false);
+      } else {
+        toast.error(data?.message);
+      }
+    },
+    onError: (data) => {
+      toast.error(data?.message);
+    },
+  });
+
+  const { mutate: revertholdtransactionMutation, isLoading: loading6 } =
+    useMutation({
+      mutationFn: revertholdtransaction,
+      onSuccess: (data) => {
+        if (data.status) {
+          toast.success(data?.message);
+
+          setModal(false);
+        } else {
+          toast.error(data?.message);
+        }
+      },
+      onError: (data) => {
+        toast.error(data?.message);
+      },
+    });
+
+  const { mutate: addcommenttotransactionMutation, isLoading: loading7 } =
+    useMutation({
+      mutationFn: addcommenttotransaction,
+      onSuccess: (data) => {
+        if (data.status) {
+          toast.success(data?.message);
+
+          setModal(false);
+        } else {
+          toast.error(data?.message);
+        }
+      },
+      onError: (data) => {
+        toast.error(data?.message);
+      },
+    });
+  const [userIdd, setUserId] = useState();
+  const odk = userIdd;
+
+  const {
+    data: comments,
+    isLoading: viewloading,
+    refetch,
+  } = useQuery({
+    queryKey: [odk?.sn],
+    queryFn: () => viewCommentsTransaction(odk?.sn),
+  });
+
+  console.log(rates, userId);
 
   const columns = [
+    {
+      title: "ACTION",
+      dataIndex: "action2",
+      width: 70,
+      //render: () => "Other 2",
+      fixed: "left",
+    },
     {
       title: "TRANSACTION STATUS",
       dataIndex: "status",
@@ -81,8 +633,7 @@ function TodayLogs() {
     },
     {
       title: "GBP AMOUNT",
-      dataIndex: "paymentAmount",
-      render: (ire) => kFormatter3(ire),
+      dataIndex: "newPaymentAmount",
       width: 120,
     },
 
@@ -105,13 +656,7 @@ function TodayLogs() {
 
       //render: () => "Other",
     },
-    {
-      title: "USER",
-      dataIndex: "senderName",
-      width: 180,
 
-      //render: () => "Other",
-    },
     {
       title: "BRANCH",
       dataIndex: "transactionSource",
@@ -130,7 +675,66 @@ function TodayLogs() {
   const newData = rates?.data?.map((item) => {
     return {
       ...item,
-
+      action2: (
+        <div
+          style={{
+            textDecoration: "none",
+          }}
+          onClick={() => {}}
+        >
+          <p
+            onClick={() => {
+              console.log(item?.userId);
+              setUserId(item);
+            }}
+            style={{
+              color: "blue",
+              cursor: "pointer",
+            }}
+          >
+            <Dropdown
+              droplist={
+                item?.paymentStatus === "Pending" ? (
+                  <Droplist2 action={setCall} setModal={setModal} />
+                ) : (
+                  <Droplist
+                    action={setCall}
+                    setModal={setModal}
+                    setUserId={() => {
+                      setUserIdd(item?.userId);
+                      refetch(item?.sn);
+                    }}
+                  />
+                )
+              }
+              position="bl"
+              on
+            >
+              {" "}
+              <Link style={{ marginRight: 40 }}>
+                <IconMoreVertical
+                  style={{
+                    fontSize: 15,
+                    marginLeft: 6,
+                    color: "#000",
+                  }}
+                />
+              </Link>
+            </Dropdown>
+          </p>
+        </div>
+      ),
+      newPaymentAmount: (
+        <>
+          {" "}
+          <div>
+            <AmountFormatter
+              currency={item?.senderCurrency}
+              value={item?.paymentAmount}
+            />
+          </div>
+        </>
+      ),
       status: (
         <>
           {" "}
@@ -206,7 +810,7 @@ function TodayLogs() {
             countryCode={item?.senderCurrency?.slice(0, 2)}
             svg
           />
-          {item?.senderCountry}
+          {item?.senderCurrency}
         </div>
       ),
     };
@@ -229,6 +833,162 @@ function TodayLogs() {
           Apidata={newData}
           tableColumns={columns}
         />
+
+        {modal && (
+          <ReusableModal
+            isOpen={modal}
+            width={400}
+            onClose={() => {
+              setModal(false);
+              setCall();
+            }}
+          >
+            <Msg>
+              {/* {err} */}
+              <p>
+                {call === "markAsSuspicious"
+                  ? "Are you sure you want to Mark as suspicious?"
+                  : call === "holdTransaction"
+                  ? "Are you sure you want to Hold Transaction?"
+                  : call === "cancelTransaction"
+                  ? "Are you sure you want to Cancel Transaction?"
+                  : call === "revertHoldTransaction"
+                  ? "Are you sure you want to Revert Hold Transaction?"
+                  : call === "confirmTransaction"
+                  ? "Are you sure you want to Confirm Transaction?"
+                  : call === "payTransaction"
+                  ? "Are you sure you want to Pay Transaction?"
+                  : call === "addComment"
+                  ? "Add Comment"
+                  : ""}
+              </p>
+              <br />
+              {call === "viewComment"
+                ? comments?.data?.map((item) => {
+                    return viewloading ? (
+                      "loading..."
+                    ) : (
+                      <div className="comment">{item?.comment}</div>
+                    );
+                  })
+                : ""}
+
+              {call === "addComment" && (
+                <TextArea
+                  name="address"
+                  className="textarea"
+                  placeholder="Enter comments ..."
+                  style={{
+                    minHeight: 104,
+                    background: "transparent",
+                    border: "1px solid #d8d8d8",
+                    borderRadius: "8px",
+                  }}
+                  onChange={(e) => {
+                    setNote(e);
+                  }}
+                />
+              )}
+
+              <br />
+
+              {call === "viewComment" ? (
+                ""
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Btn
+                    clicking={() => {
+                      setModal(false);
+                      setCall();
+                    }}
+                    size={30}
+                    styles={{
+                      width: "100%",
+                      marginRight: "10px",
+                      padding: "8px",
+                      fontWeight: "600",
+                      background: "#b0b0b0",
+                    }}
+                  >
+                    Cancel
+                  </Btn>
+                  &nbsp; &nbsp;
+                  <Btn
+                    clicking={() => {
+                      call === "markAsSuspicious"
+                        ? "Mark as suspicious"
+                        : call === "holdTransaction"
+                        ? "Hold Transaction"
+                        : call === "cancelTransaction"
+                        ? "Cancel Transaction"
+                        : call === "revertHoldTransaction"
+                        ? "Revert Hold Transaction"
+                        : call === "confirmTransaction"
+                        ? "Confirm Transaction"
+                        : call === "payTransaction"
+                        ? "Pay Transaction"
+                        : "Add Comment";
+
+                      if (call === "markAsSuspicious") {
+                        marktransactionsuspiciousMutation(userIdd?.paymentRef);
+                      } else if (call === "holdTransaction") {
+                        holdTransactionMutation(userIdd.paymentRef);
+                      } else if (call === "cancelTransaction") {
+                        cancelTransactionMutation(userIdd.paymentRef);
+                      } else if (call === "revertHoldTransaction") {
+                        revertholdtransactionMutation(userIdd.paymentRef);
+                      } else if (call === "confirmTransaction") {
+                        confirmTransactionMutation(userIdd.paymentRef);
+                      } else if (call === "payTransaction") {
+                        payTransactionMutation(userIdd.paymentRef);
+                      } else {
+                        addcommenttotransactionMutation({
+                          customerId: userId,
+                          transactionId: userIdd?.sn,
+                          commentBy: 0,
+                          comment: note,
+                        });
+                      }
+                    }}
+                    size={30}
+                    disabled={
+                      loading1 ||
+                      loading2 ||
+                      loading3 ||
+                      loading4 ||
+                      loading5 ||
+                      loading6 ||
+                      loading7
+                    }
+                    styles={{
+                      width: "100%",
+                      marginRight: "10px",
+                      padding: "8px",
+                      color: "#fff",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {loading1 ||
+                    loading2 ||
+                    loading3 ||
+                    loading4 ||
+                    loading5 ||
+                    loading6 ||
+                    loading7
+                      ? "loading..."
+                      : "Confirm"}
+                  </Btn>
+                </div>
+              )}
+            </Msg>
+          </ReusableModal>
+        )}
 
         {/* <div className="row">
           <span>Showing 1-5 of entries</span>
@@ -258,12 +1018,19 @@ function TodayLogs() {
   );
 }
 
-export default TodayLogs;
+export default TransferLogsTable;
 const Content = styled.div`
   .top {
     padding: 10px 30px 30px 20px;
   }
-
+  .comment {
+    border: 1px solid #c7c7c7;
+    width: 100%;
+    border-radius: 14px;
+    padding: 20px 0px;
+    display: grid;
+    margin-bottom: 10px;
+  }
   .tablecontent {
     background-color: white;
     margin-bottom: 30px;
