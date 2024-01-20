@@ -10,6 +10,7 @@ import {
   Payoutchannel,
   addPayoutProcessor,
   sendAgentInvite,
+  updatePayoutProcessor,
 } from "../services/Dashboard";
 import toast from "react-hot-toast";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
@@ -19,7 +20,7 @@ import {
   getPayoutProviders,
 } from "../services/PayoutDashboard";
 import GatewayDropdown from "../reuseables/GatewayDropdown";
-function AddPayoutProcessorModal({ closeinviteAgent }) {
+function AddPayoutProcessorModal({ closeinviteAgent, type, item }) {
   const { data: paymentChannels } = useQuery({
     queryKey: ["paymentChannels"],
     queryFn: () => Payoutchannel(),
@@ -72,7 +73,7 @@ function AddPayoutProcessorModal({ closeinviteAgent }) {
   }
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: addPayoutProcessor,
+    mutationFn: type === "update" ? updatePayoutProcessor : addPayoutProcessor,
     onSuccess: (data) => {
       if (data.status) {
         console.log(data);
@@ -91,7 +92,9 @@ function AddPayoutProcessorModal({ closeinviteAgent }) {
   return (
     <Content>
       <Modal
-        title="Add Payout Processor"
+        title={
+          type === "update" ? "Update Payout Processor" : "Add Payout Processor"
+        }
         onClick={() => closeinviteAgent(false)}
       >
         <div className="flexout">

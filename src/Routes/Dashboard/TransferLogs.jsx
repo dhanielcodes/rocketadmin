@@ -1624,157 +1624,176 @@ function TransferLogsTable() {
               setCall();
             }}
           >
-            <Msg>
-              {/* {err} */}
-              <p>
-                {call === "markAsSuspicious"
-                  ? "Are you sure you want to Mark as suspicious?"
-                  : call === "markAsPay"
-                  ? "Are you sure you want to Mark as pay?"
-                  : call === "holdTransaction"
-                  ? "Are you sure you want to Hold Transaction?"
-                  : call === "cancelTransaction"
-                  ? "Are you sure you want to Cancel Transaction?"
-                  : call === "revertHoldTransaction"
-                  ? "Are you sure you want to Revert Hold Transaction?"
-                  : call === "confirmTransaction"
-                  ? "Are you sure you want to Confirm Transaction?"
-                  : call === "payTransaction"
-                  ? "Are you sure you want to Pay Transaction?"
-                  : call === "addComment"
-                  ? "Add Comment"
-                  : ""}
-              </p>
-              <br />
-              {call === "viewComment"
-                ? comments?.data?.map((item) => {
-                    return viewloading ? (
-                      "loading..."
-                    ) : (
-                      <div className="comment">{item?.comment}</div>
-                    );
-                  })
-                : ""}
+            {call === "viewComment" && <h2>View Comments</h2>}
 
-              {call === "addComment" && (
-                <TextArea
-                  name="address"
-                  className="textarea"
-                  placeholder="Enter comments ..."
-                  style={{
-                    minHeight: 104,
-                    background: "transparent",
-                    border: "1px solid #d8d8d8",
-                    borderRadius: "8px",
-                  }}
-                  onChange={(e) => {
-                    setNote(e);
-                  }}
-                />
-              )}
+            {call === "viewComment" ? (
+              comments?.data?.map((item) => {
+                return viewloading ? (
+                  "loading..."
+                ) : (
+                  <div className="comment">
+                    <span>{item?.comment}</span>
+                    <span
+                      style={{
+                        marginLeft: "auto",
+                        fontWeight: "700",
+                        marginTop: "5px",
+                        fontSize: "12px",
+                      }}
+                    >
+                      {item?.commentDate}
+                    </span>
+                  </div>
+                );
+              })
+            ) : (
+              <Msg>
+                {/* {err} */}
+                <p>
+                  {call === "markAsSuspicious"
+                    ? "Are you sure you want to Mark as suspicious?"
+                    : call === "markAsPay"
+                    ? "Are you sure you want to Mark as pay?"
+                    : call === "holdTransaction"
+                    ? "Are you sure you want to Hold Transaction?"
+                    : call === "cancelTransaction"
+                    ? "Are you sure you want to Cancel Transaction?"
+                    : call === "revertHoldTransaction"
+                    ? "Are you sure you want to Revert Hold Transaction?"
+                    : call === "confirmTransaction"
+                    ? "Are you sure you want to Confirm Transaction?"
+                    : call === "payTransaction"
+                    ? "Are you sure you want to Pay Transaction?"
+                    : call === "addComment"
+                    ? "Add Comment"
+                    : ""}
+                </p>
+                <br />
 
-              <br />
-
-              {call === "viewComment" ? (
-                ""
-              ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Btn
-                    clicking={() => {
-                      setModal(false);
-                      setCall();
+                {call === "addComment" && (
+                  <TextArea
+                    name="address"
+                    className="textarea"
+                    placeholder="Enter comments ..."
+                    style={{
+                      minHeight: 104,
+                      background: "transparent",
+                      border: "1px solid #d8d8d8",
+                      borderRadius: "8px",
                     }}
-                    size={30}
-                    styles={{
-                      width: "100%",
-                      marginRight: "10px",
-                      padding: "8px",
-                      fontWeight: "600",
-                      background: "#b0b0b0",
+                    onChange={(e) => {
+                      setNote(e);
+                    }}
+                  />
+                )}
+
+                <br />
+
+                {call === "viewComment" ? (
+                  ""
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                     }}
                   >
-                    Cancel
-                  </Btn>
-                  &nbsp; &nbsp;
-                  <Btn
-                    clicking={() => {
-                      call === "markAsSuspicious"
-                        ? "Mark as suspicious"
-                        : call === "markAsPay"
-                        ? "Mark as pay"
-                        : call === "holdTransaction"
-                        ? "Hold Transaction"
-                        : call === "cancelTransaction"
-                        ? "Cancel Transaction"
-                        : call === "revertHoldTransaction"
-                        ? "Revert Hold Transaction"
-                        : call === "confirmTransaction"
-                        ? "Confirm Transaction"
-                        : call === "payTransaction"
-                        ? "Pay Transaction"
-                        : "Add Comment";
+                    <Btn
+                      clicking={() => {
+                        setModal(false);
+                        setCall();
+                      }}
+                      size={30}
+                      styles={{
+                        width: "100%",
+                        marginRight: "10px",
+                        padding: "8px",
+                        fontWeight: "600",
+                        background: "#b0b0b0",
+                      }}
+                    >
+                      Cancel
+                    </Btn>
+                    &nbsp; &nbsp;
+                    <Btn
+                      clicking={() => {
+                        call === "markAsSuspicious"
+                          ? "Mark as suspicious"
+                          : call === "markAsPay"
+                          ? "Mark as pay"
+                          : call === "holdTransaction"
+                          ? "Hold Transaction"
+                          : call === "cancelTransaction"
+                          ? "Cancel Transaction"
+                          : call === "revertHoldTransaction"
+                          ? "Revert Hold Transaction"
+                          : call === "confirmTransaction"
+                          ? "Confirm Transaction"
+                          : call === "payTransaction"
+                          ? "Pay Transaction"
+                          : "Add Comment";
 
-                      if (call === "markAsSuspicious") {
-                        marktransactionsuspiciousMutation(userIdd?.paymentRef);
-                      } else if (call === "markAsPay") {
-                        markaspayMutation(userIdd.paymentRef);
-                      } else if (call === "holdTransaction") {
-                        holdTransactionMutation(userIdd.paymentRef);
-                      } else if (call === "cancelTransaction") {
-                        cancelTransactionMutation(userIdd.paymentRef);
-                      } else if (call === "revertHoldTransaction") {
-                        revertholdtransactionMutation(userIdd.paymentRef);
-                      } else if (call === "confirmTransaction") {
-                        confirmTransactionMutation(userIdd.paymentRef);
-                      } else if (call === "payTransaction") {
-                        payTransactionMutation(userIdd.paymentRef);
-                      } else {
-                        addcommenttotransactionMutation({
-                          customerId: userId,
-                          transactionId: userIdd?.sn,
-                          commentBy: 0,
-                          comment: note,
-                        });
+                        if (call === "markAsSuspicious") {
+                          marktransactionsuspiciousMutation(
+                            userIdd?.paymentRef
+                          );
+                        } else if (call === "markAsPay") {
+                          markaspayMutation(userIdd.paymentRef);
+                        } else if (call === "holdTransaction") {
+                          holdTransactionMutation(userIdd.paymentRef);
+                        } else if (call === "cancelTransaction") {
+                          cancelTransactionMutation(userIdd.paymentRef);
+                        } else if (call === "revertHoldTransaction") {
+                          revertholdtransactionMutation(userIdd.paymentRef);
+                        } else if (call === "confirmTransaction") {
+                          confirmTransactionMutation(userIdd.paymentRef);
+                        } else if (call === "payTransaction") {
+                          payTransactionMutation(userIdd.paymentRef);
+                        } else {
+                          addcommenttotransactionMutation({
+                            customerId: userId,
+                            transactionId: userIdd?.sn,
+                            commentBy: 0,
+                            comment: note,
+                          });
+                        }
+                      }}
+                      size={30}
+                      disabled={
+                        loading1 ||
+                        loading2 ||
+                        loading3 ||
+                        loading4 ||
+                        loading5 ||
+                        loading6 ||
+                        loading7 ||
+                        loading8
                       }
-                    }}
-                    size={30}
-                    disabled={
-                      loading1 ||
+                      styles={{
+                        width: "100%",
+                        marginRight: "10px",
+                        padding: "8px",
+                        color: "#fff",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {loading1 ||
                       loading2 ||
                       loading3 ||
                       loading4 ||
                       loading5 ||
                       loading6 ||
-                      loading7 ||
-                      loading8
-                    }
-                    styles={{
-                      width: "100%",
-                      marginRight: "10px",
-                      padding: "8px",
-                      color: "#fff",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {loading1 ||
-                    loading2 ||
-                    loading3 ||
-                    loading4 ||
-                    loading5 ||
-                    loading6 ||
-                    loading7
-                      ? "loading..."
-                      : "Confirm"}
-                  </Btn>
-                </div>
-              )}
-            </Msg>
+                      loading7
+                        ? "loading..."
+                        : "Confirm"}
+                    </Btn>
+                  </div>
+                )}
+              </Msg>
+            )}
+
+            {""}
           </ReusableModal>
         )}
 
@@ -1812,12 +1831,14 @@ const Content = styled.div`
     padding: 10px 30px 30px 20px;
   }
   .comment {
-    border: 1px solid #c7c7c7;
-    width: 100%;
-    border-radius: 14px;
-    padding: 20px 0px;
+    background: #e5e5e5;
+    width: 360px;
+    color: #000000;
+    border-radius: 12px;
+    padding: 18px;
     display: grid;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    font-size: 14px;
   }
   .tablecontent {
     background-color: white;

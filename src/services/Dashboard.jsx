@@ -231,6 +231,22 @@ export const addPaymentProcessor = async (body) => {
   return data;
 };
 
+export const updatePayoutProcessor = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updatepayoutchannelprocessor`,
+    body
+  );
+  return data;
+};
+
+export const updatePaymentProcessor = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updatepaymentchannelprocessor`,
+    body
+  );
+  return data;
+};
+
 export const GetDetails = async (id) => {
   console.log(
     "🚀 ~ file: Dashboard.jsx:57 ~ GetDetails ~ id:",
