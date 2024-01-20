@@ -507,17 +507,57 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                 ></hr>{" "}
                 <div
                   style={{
-                    display: "flex",
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr 1fr",
                     gridGap: "40px",
+                    alignItems: "center",
                   }}
                 >
-                  <div>Auto-Payout</div>
-                  <Switch
-                    onClick={() => {
-                      setAutoPayout(!autoPayout);
+                  <div
+                    style={{
+                      display: "flex",
+                      gridGap: "40px",
                     }}
-                    checked={autoPayout}
-                  />
+                  >
+                    <div>Auto-Payout</div>
+                    <Switch
+                      onClick={() => {
+                        setAutoPayout(!autoPayout);
+                      }}
+                      checked={autoPayout}
+                    />
+                  </div>
+                  <div className="name" style={{}}>
+                    <label>Transfer Bonus Threshold</label>
+                    <AppInput
+                      placeholder=""
+                      type="number"
+                      onChange={(e) => {
+                        setTransferBonusThresh(e.target.value);
+                      }}
+                      width="95%"
+                      name="username"
+                      defaultValue={
+                        transferBonusThresh || rateItem?.transferBonusThreshold
+                      }
+                    />
+                  </div>
+
+                  <div className="name" style={{}}>
+                    <label>Transfer Bonus Rate Value</label>
+                    <AppInput
+                      placeholder=""
+                      type="number"
+                      onChange={(e) => {
+                        setBonusRate(e.target.value);
+                      }}
+                      width="95%"
+                      name="username"
+                      defaultValue={
+                        bonusRate || rateItem?.transferBonusRateValue
+                      }
+                    />
+                  </div>
                 </div>
                 <hr
                   style={{
@@ -601,45 +641,6 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                     opacity: "0.4",
                   }}
                 ></hr>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr 1fr",
-                    gridGap: "40px",
-                  }}
-                >
-                  <div className="name" style={{}}>
-                    <label>Transfer Bonus Threshold</label>
-                    <AppInput
-                      placeholder=""
-                      type="number"
-                      onChange={(e) => {
-                        setTransferBonusThresh(e.target.value);
-                      }}
-                      width="95%"
-                      name="username"
-                      defaultValue={
-                        transferBonusThresh || rateItem?.transferBonusThreshold
-                      }
-                    />
-                  </div>
-
-                  <div className="name" style={{}}>
-                    <label>Bonus Rate Value</label>
-                    <AppInput
-                      placeholder=""
-                      type="number"
-                      onChange={(e) => {
-                        setBonusRate(e.target.value);
-                      }}
-                      width="95%"
-                      name="username"
-                      defaultValue={
-                        bonusRate || rateItem?.transferBonusRateValue
-                      }
-                    />
-                  </div>
-                </div>
               </div>
             )}
             {step === 3 && (

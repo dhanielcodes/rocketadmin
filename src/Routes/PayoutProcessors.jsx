@@ -37,6 +37,13 @@ function PayoutProcessors() {
   }, [inviteAgent]);
 
   const columns = [
+    /*   {
+      title: "ACTION",
+      dataIndex: "action",
+      width: 150,
+      fixed: "left",
+      //render: () => "Other 2",
+    }, */
     {
       title: "CHANNEL ID",
       dataIndex: "id",
@@ -58,6 +65,17 @@ function PayoutProcessors() {
 
       onFilter: (value, row) => row.currency["name"].indexOf(value) > -1,
       filterMultiple: true,
+    },
+
+    {
+      title: "PAYOUT CHANNEL NAME",
+      dataIndex: "name",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+
+      width: 240,
     },
 
     {
@@ -111,6 +129,8 @@ function PayoutProcessors() {
       //render: () => "Other 2",
     },
   ];
+  const [type, setType] = useState("add");
+
   const newData = payouts?.data?.map((item) => {
     return {
       ...item,
@@ -158,7 +178,10 @@ function PayoutProcessors() {
           style={{
             textDecoration: "none",
           }}
-          to={`/client-detail?userId=${item?.userId}`}
+          onClick={() => {
+            setType("update");
+            setInviteAgent(true);
+          }}
         >
           <p
             onClick={() => {
@@ -169,7 +192,7 @@ function PayoutProcessors() {
               cursor: "pointer",
             }}
           >
-            {item?.firstName}
+            Update Channel
           </p>
         </div>
       ),
@@ -199,7 +222,10 @@ function PayoutProcessors() {
   return (
     <>
       {inviteAgent && (
-        <AddPayoutProcessorModal closeinviteAgent={setInviteAgent} />
+        <AddPayoutProcessorModal
+          closeinviteAgent={setInviteAgent}
+          type={type}
+        />
       )}{" "}
       <BodyLayout active={window.location.pathname}>
         <Content>
@@ -255,6 +281,7 @@ function PayoutProcessors() {
                 }}
                 onClick={() => {
                   setInviteAgent(true);
+                  setType("add");
                 }}
               >
                 {/* <AiOutlinePlus size={18} style={{ color: "white" }} /> */}
