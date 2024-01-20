@@ -12,6 +12,7 @@ import {
   cancelTransaction,
   confirmTransaction,
   holdtransaction,
+  markaspay,
   marktransactionsuspicious,
   paytransaction,
   revertholdtransaction,
@@ -292,6 +293,49 @@ const Droplist2 = ({ action, setModal, setUserId }) => (
         }}
       >
         View Details
+      </span>
+    </Menu.Item>
+    <Menu.Item
+      onClick={() => {
+        setModal(true);
+        action("markAsPay");
+        setUserId();
+      }}
+      key="3"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_4000_16424)">
+          <path
+            d="M11.334 1.99955C11.5091 1.82445 11.7169 1.68556 11.9457 1.5908C12.1745 1.49604 12.4197 1.44727 12.6673 1.44727C12.9149 1.44727 13.1601 1.49604 13.3889 1.5908C13.6177 1.68556 13.8256 1.82445 14.0007 1.99955C14.1757 2.17465 14.3146 2.38252 14.4094 2.61129C14.5042 2.84006 14.5529 3.08526 14.5529 3.33288C14.5529 3.58051 14.5042 3.8257 14.4094 4.05448C14.3146 4.28325 14.1757 4.49112 14.0007 4.66622L5.00065 13.6662L1.33398 14.6662L2.33398 10.9995L11.334 1.99955Z"
+            stroke="#464F60"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_4000_16424">
+            <rect width="16" height="16" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Mark as Pay
       </span>
     </Menu.Item>
     <Menu.Item
@@ -1170,6 +1214,21 @@ function TransferLogsTable() {
       },
     });
 
+  const { mutate: markaspayMutation, isLoading: loading8 } = useMutation({
+    mutationFn: markaspay,
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success(data?.message);
+        setModal(false);
+      } else {
+        toast.error(data?.message);
+      }
+    },
+    onError: (data) => {
+      toast.error(data?.message);
+    },
+  });
+
   const { mutate: payTransactionMutation, isLoading: loading4 } = useMutation({
     mutationFn: paytransaction,
     onSuccess: (data) => {
@@ -1570,6 +1629,8 @@ function TransferLogsTable() {
               <p>
                 {call === "markAsSuspicious"
                   ? "Are you sure you want to Mark as suspicious?"
+                  : call === "markAsPay"
+                  ? "Are you sure you want to Mark as pay?"
                   : call === "holdTransaction"
                   ? "Are you sure you want to Hold Transaction?"
                   : call === "cancelTransaction"
@@ -1645,6 +1706,8 @@ function TransferLogsTable() {
                     clicking={() => {
                       call === "markAsSuspicious"
                         ? "Mark as suspicious"
+                        : call === "markAsPay"
+                        ? "Mark as pay"
                         : call === "holdTransaction"
                         ? "Hold Transaction"
                         : call === "cancelTransaction"
@@ -1659,6 +1722,8 @@ function TransferLogsTable() {
 
                       if (call === "markAsSuspicious") {
                         marktransactionsuspiciousMutation(userIdd?.paymentRef);
+                      } else if (call === "markAsPay") {
+                        markaspayMutation(userIdd.paymentRef);
                       } else if (call === "holdTransaction") {
                         holdTransactionMutation(userIdd.paymentRef);
                       } else if (call === "cancelTransaction") {
@@ -1686,7 +1751,8 @@ function TransferLogsTable() {
                       loading4 ||
                       loading5 ||
                       loading6 ||
-                      loading7
+                      loading7 ||
+                      loading8
                     }
                     styles={{
                       width: "100%",

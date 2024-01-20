@@ -87,6 +87,11 @@ export const marktransactionsuspicious = async (body) => {
   return data;
 };
 
+export const markaspay = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/markaspay/${body}`);
+  return data;
+};
+
 export const paytransaction = async (body) => {
   const { data } = await Axios.post(`${baseurl}/paytransaction/${body}`);
   return data;
