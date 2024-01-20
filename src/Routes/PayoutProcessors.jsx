@@ -37,13 +37,13 @@ function PayoutProcessors() {
   }, [inviteAgent]);
 
   const columns = [
-    /*   {
+    {
       title: "ACTION",
       dataIndex: "action",
       width: 150,
       fixed: "left",
       //render: () => "Other 2",
-    }, */
+    },
     {
       title: "CHANNEL ID",
       dataIndex: "id",
@@ -130,6 +130,7 @@ function PayoutProcessors() {
     },
   ];
   const [type, setType] = useState("add");
+  const [item, setItem] = useState("");
 
   const newData = payouts?.data?.map((item) => {
     return {
@@ -181,6 +182,7 @@ function PayoutProcessors() {
           onClick={() => {
             setType("update");
             setInviteAgent(true);
+            setItem(item);
           }}
         >
           <p
@@ -224,7 +226,9 @@ function PayoutProcessors() {
       {inviteAgent && (
         <AddPayoutProcessorModal
           closeinviteAgent={setInviteAgent}
+          setItem={setItem}
           type={type}
+          item={item}
         />
       )}{" "}
       <BodyLayout active={window.location.pathname}>

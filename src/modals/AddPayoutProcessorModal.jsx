@@ -20,7 +20,8 @@ import {
   getPayoutProviders,
 } from "../services/PayoutDashboard";
 import GatewayDropdown from "../reuseables/GatewayDropdown";
-function AddPayoutProcessorModal({ closeinviteAgent, type, item }) {
+import { Switch } from "@arco-design/web-react";
+function AddPayoutProcessorModal({ closeinviteAgent, type, item, setItem }) {
   const { data: paymentChannels } = useQuery({
     queryKey: ["paymentChannels"],
     queryFn: () => Payoutchannel(),
@@ -34,18 +35,21 @@ function AddPayoutProcessorModal({ closeinviteAgent, type, item }) {
   const [selectedCountry, setSelectedCountry] = useState();
   const [payout, setPayout] = useState();
   const [payment, setPayment] = useState();
+  const [active, setActive] = useState(false);
 
   const [processor, setProcessor] = useState({
-    name: "",
-    description: "",
+    id: item?.id,
+    name: "" || item?.name,
+    description: "" || item?.description,
+    status: false || item?.status,
     currency: {
-      id: selectedCountry?.id,
+      id: selectedCountry?.id || item?.currency?.id,
     },
     payoutChannel: {
-      id: payment?.id,
+      id: payment?.id || item?.payoutChannel?.id,
     },
     payoutProvider: {
-      id: payout?.id,
+      id: payout?.id || item?.payoutProvider?.id,
     },
   });
 
@@ -79,6 +83,7 @@ function AddPayoutProcessorModal({ closeinviteAgent, type, item }) {
         console.log(data);
         toast.success(data?.message);
         closeinviteAgent(false);
+        setItem();
       } else {
         toast.error(data?.message);
       }
@@ -88,16 +93,35 @@ function AddPayoutProcessorModal({ closeinviteAgent, type, item }) {
     },
   });
 
-  console.log(processor);
+  console.log(item);
   return (
     <Content>
       <Modal
         title={
           type === "update" ? "Update Payout Processor" : "Add Payout Processor"
         }
-        onClick={() => closeinviteAgent(false)}
+        onClick={() => {
+          closeinviteAgent(false);
+          setItem();
+        }}
       >
         <div className="flexout">
+          {type === "update" && (
+            <div
+              style={{
+                display: "flex",
+                gridGap: "40px",
+              }}
+            >
+              <div>Status</div>
+              <Switch
+                onClick={() => {
+                  setActive(!active);
+                }}
+                checked={active || item?.status}
+              />
+            </div>
+          )}
           <div className="name">
             <label>Name</label>
             <AppInput
@@ -106,6 +130,7 @@ function AddPayoutProcessorModal({ closeinviteAgent, type, item }) {
               width="95%"
               name="name"
               onChange={handleOnChange}
+              defaultValue={item?.name}
             />
           </div>
 
@@ -117,6 +142,7 @@ function AddPayoutProcessorModal({ closeinviteAgent, type, item }) {
               type="text"
               name="description"
               onChange={handleOnChange}
+              defaultValue={item?.description}
             />
           </div>
         </div>
@@ -128,7 +154,14 @@ function AddPayoutProcessorModal({ closeinviteAgent, type, item }) {
         >
           <label>Currency</label>
           <CountryDropdown2
-            value={selectedCountry}
+            value={
+              selectedCountry || {
+                value: item?.currency?.name,
+                label: item?.currency?.label,
+                id: item?.currency?.id,
+                ...item?.currency,
+              }
+            }
             onChange={(e) => {
               setSelectedCountry(e);
               setProcessor({
@@ -144,7 +177,13 @@ function AddPayoutProcessorModal({ closeinviteAgent, type, item }) {
           <label>Payout Channel</label>
 
           <GatewayDropdown
-            value={payment}
+            value={
+              payment || {
+                value: item?.payoutChannel?.name,
+                label: item?.payoutChannel?.label,
+                ...item?.payoutChannel,
+              }
+            }
             options={paymentChannels?.data?.map((item) => {
               return {
                 ...item,
@@ -166,7 +205,14 @@ function AddPayoutProcessorModal({ closeinviteAgent, type, item }) {
         <div className="name">
           <label>Provider</label>
           <GatewayDropdown
-            value={payout}
+            value={
+              payout || {
+                value: item?.payoutProvider?.name,
+                label: item?.payoutProvider?.label,
+
+                ...item?.payoutProvider,
+              }
+            }
             options={paymentP?.data?.map((item) => {
               return {
                 ...item,
@@ -195,7 +241,13 @@ function AddPayoutProcessorModal({ closeinviteAgent, type, item }) {
             onClick={() => closeinviteAgent(false)}
           />
           <AppButton
-            placeholder={isLoading ? "adding processor..." : "Add Processor"}
+            placeholder={
+              isLoading
+                ? "loading..."
+                : type === "update"
+                ? "Update Processor"
+                : "Add Processor"
+            }
             disabled={isLoading}
             style={{
               backgroundColor: "#00A85A",
