@@ -42,6 +42,13 @@ function PaymentProcessors() {
 
   const columns = [
     {
+      title: "ACTION",
+      dataIndex: "action",
+      width: 150,
+      fixed: "left",
+      //render: () => "Other 2",
+    },
+    {
       title: "CHANNEL ID",
       dataIndex: "id",
       width: 190,
@@ -115,6 +122,8 @@ function PaymentProcessors() {
       //render: () => "Other 2",
     },
   ];
+  const [type, setType] = useState("add");
+  const [item, setItem] = useState("");
   const newData = !payouts?.data
     ? []
     : payouts?.data?.map((item) => {
@@ -164,6 +173,11 @@ function PaymentProcessors() {
               style={{
                 textDecoration: "none",
               }}
+              onClick={() => {
+                setType("update");
+                setInviteAgent(true);
+                setItem(item);
+              }}
             >
               <p
                 onClick={() => {
@@ -174,7 +188,7 @@ function PaymentProcessors() {
                   cursor: "pointer",
                 }}
               >
-                {item?.firstName}
+                Update Channel
               </p>
             </div>
           ),
@@ -204,7 +218,12 @@ function PaymentProcessors() {
   return (
     <>
       {inviteAgent && (
-        <AddPaymentProcessorModal closeinviteAgent={setInviteAgent} />
+        <AddPaymentProcessorModal
+          closeinviteAgent={setInviteAgent}
+          setItem={setItem}
+          type={type}
+          item={item}
+        />
       )}
       <BodyLayout active={window.location.pathname}>
         <Content>

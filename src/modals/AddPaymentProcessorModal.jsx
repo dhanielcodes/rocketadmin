@@ -9,6 +9,7 @@ import {
   Paymentchannel,
   addPaymentProcessor,
   sendAgentInvite,
+  updatePaymentProcessor,
 } from "../services/Dashboard";
 import toast from "react-hot-toast";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
@@ -18,7 +19,8 @@ import {
   getPayoutProviders,
 } from "../services/PayoutDashboard";
 import GatewayDropdown from "../reuseables/GatewayDropdown";
-function AddPaymentProcessorModal({ closeinviteAgent }) {
+import { Switch } from "@arco-design/web-react";
+function AddPaymentProcessorModal({ closeinviteAgent, type, item, setItem }) {
   const { data: paymentChannels } = useQuery({
     queryKey: ["paymentChannels"],
     queryFn: () => Paymentchannel(),
@@ -32,18 +34,19 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
   const [selectedCountry, setSelectedCountry] = useState();
   const [payment, setPayment] = useState();
   const [payout, setPayout] = useState();
-
+  const [active, setActive] = useState(false);
   const [processor, setProcessor] = useState({
-    name: "",
-    description: "",
+    id: item?.id,
+    name: "" || item?.name,
+    description: "" || item?.description,
     currency: {
-      id: selectedCountry?.id,
+      id: selectedCountry?.id || item?.currency?.id,
     },
     paymentChannel: {
-      id: payment?.id,
+      id: payment?.id || item?.paymentChannel?.id,
     },
     paymentProvider: {
-      id: payout?.id,
+      id: payout?.id || item?.paymentChannel?.id,
     },
   });
 
@@ -71,11 +74,15 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
   }
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: addPaymentProcessor,
+    mutationFn:
+      type === "update" ? updatePaymentProcessor : addPaymentProcessor,
+
     onSuccess: (data) => {
       if (data.status) {
         console.log(data);
         toast.success(data?.message);
+        setItem();
+
         closeinviteAgent(false);
       } else {
         toast.error(data?.message);
@@ -86,14 +93,34 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
     },
   });
 
-  console.log(processor);
+  console.log(item);
   return (
     <Content>
       <Modal
-        title="Add Payment Processor"
+        title={
+          type === "update"
+            ? "Update Payment Processor"
+            : "Add Payment Processor"
+        }
         onClick={() => closeinviteAgent(false)}
       >
         <div className="flexout">
+          {type === "update" && (
+            <div
+              style={{
+                display: "flex",
+                gridGap: "40px",
+              }}
+            >
+              <div>Status</div>
+              <Switch
+                onClick={() => {
+                  setActive(!active);
+                }}
+                checked={active || item?.status}
+              />
+            </div>
+          )}
           <div className="name">
             <label>Name</label>
             <AppInput
@@ -102,6 +129,7 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
               width="95%"
               name="name"
               onChange={handleOnChange}
+              defaultValue={item?.name}
             />
           </div>
 
@@ -113,6 +141,7 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
               type="text"
               name="description"
               onChange={handleOnChange}
+              defaultValue={item?.description}
             />
           </div>
         </div>
@@ -124,7 +153,14 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
         >
           <label>Currency</label>
           <CountryDropdown2
-            value={selectedCountry}
+            value={
+              selectedCountry || {
+                value: item?.currency?.name,
+                label: item?.currency?.label,
+                id: item?.currency?.id,
+                ...item?.currency,
+              }
+            }
             onChange={(e) => {
               setSelectedCountry(e);
               setProcessor({
@@ -140,7 +176,13 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
           <label>Payment Channel</label>
 
           <GatewayDropdown
-            value={payment}
+            value={
+              payment || {
+                value: item?.paymentChannel?.name,
+                label: item?.paymentChannel?.label,
+                ...item?.paymentChannel,
+              }
+            }
             options={paymentChannels?.data?.map((item) => {
               return {
                 ...item,
@@ -162,7 +204,14 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
         <div className="name">
           <label>Provider</label>
           <GatewayDropdown
-            value={payout}
+            value={
+              payout || {
+                value: item?.paymentProvider?.name,
+                label: item?.paymentProvider?.label,
+
+                ...item?.paymentProvider,
+              }
+            }
             options={paymentP?.data?.map((item) => {
               return {
                 ...item,
@@ -191,7 +240,13 @@ function AddPaymentProcessorModal({ closeinviteAgent }) {
             onClick={() => closeinviteAgent(false)}
           />
           <AppButton
-            placeholder={isLoading ? "adding processor..." : "Add Processor"}
+            placeholder={
+              isLoading
+                ? "loading..."
+                : type === "update"
+                ? "Update Processor"
+                : "Add Processor"
+            }
             disabled={isLoading}
             style={{
               backgroundColor: "#00A85A",
