@@ -117,7 +117,7 @@ function CreateNewDocument({}) {
                       };
                     })}
                     onChange={(e) => {
-                      setDocType(e.value);
+                      setDocType(e);
                     }}
                   />
                 </div>
@@ -242,7 +242,7 @@ function CreateNewDocument({}) {
 
                   <FileUpload2
                     setValue={setImageOne}
-                    value={imageTwo}
+                    value={imageOne}
                     setLoading={setLoading}
                     otherId={params.get("userId")?.userId}
                   />
@@ -291,7 +291,7 @@ function CreateNewDocument({}) {
                     comments
                   ) {
                     mutate({
-                      userId: params.get("userId")?.userId,
+                      userId: JSON.parse(params.get("userId"))?.userId,
                       userKYCDocument: {
                         documentType: {
                           id: docType?.id,
@@ -303,8 +303,8 @@ function CreateNewDocument({}) {
                         expiryDate: expiryDate,
                         uploadedBy: 0,
                         verifiedBy: 0,
-                        documentFrontPageURL: imageOne, //Call file upload endpoint to upload the file then set the return URL as this value..
-                        documentBackPageURL: imageTwo, //Call file upload endpoint to upload the file then set the return URL as this value..
+                        documentFrontPageURL: imageOne?.secure_url, //Call file upload endpoint to upload the file then set the return URL as this value..
+                        documentBackPageURL: imageTwo?.secure_url, //Call file upload endpoint to upload the file then set the return URL as this value..
                         comment: comments,
                       },
                     });

@@ -211,6 +211,11 @@ export const getIdTypes = async () => {
   return data;
 };
 
+export const getUserDocTypes = async () => {
+  const { data } = await Axios.get(`${baseurl}/getuserdocumentstypes`);
+  return data;
+};
+
 export const addNewDocument = async (body) => {
   const { data } = await Axios.post(`${baseurl}/aduserkycdocument`, body);
   return data;
