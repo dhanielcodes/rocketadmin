@@ -206,6 +206,16 @@ export const getAgentInviteList = async () => {
   return data;
 };
 
+export const getIdTypes = async () => {
+  const { data } = await Axios.get(`${baseurl}/getidtypes`);
+  return data;
+};
+
+export const addNewDocument = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/aduserkycdocument`, body);
+  return data;
+};
+
 export const getPaymentProcessors = async () => {
   const { data } = await Axios.get(`${baseurl}/getpaymentchannelprocessor`);
   return data;

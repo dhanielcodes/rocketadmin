@@ -42,6 +42,7 @@ import TransfersListPage from "./Routes/Transfers";
 import CreateNewMetadata from "./Routes/CreateNewMetadata";
 import UpdateRateMetaData from "./Routes/UpdateRateMetaData";
 import AgentInviteList from "./Routes/AgentInviteList";
+import CreateNewDocument from "./Routes/CreateNewDocument";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -131,6 +132,14 @@ function App() {
                 element={
                   <AppLogout>
                     <Agent />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/new-document"
+                element={
+                  <AppLogout>
+                    <CreateNewDocument />
                   </AppLogout>
                 }
               />

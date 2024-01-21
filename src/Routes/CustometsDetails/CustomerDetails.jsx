@@ -54,7 +54,7 @@ export default function CustomerDetailsPage() {
 
   const [active, setActive] = useState("Overview");
 
-  const tab = ["Overview", "Transfer List", "Beneficiary List"];
+  const tab = ["Overview", "ID Documents", "Transfer List", "Beneficiary List"];
 
   const [modal, setModal] = useState(false);
 
