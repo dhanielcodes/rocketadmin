@@ -217,7 +217,7 @@ export const getUserDocTypes = async () => {
 };
 
 export const addNewDocument = async (body) => {
-  const { data } = await Axios.post(`${baseurl}/aduserkycdocument`, body);
+  const { data } = await Axios.post(`${baseurl}/adduserkycdocument`, body);
   return data;
 };
 

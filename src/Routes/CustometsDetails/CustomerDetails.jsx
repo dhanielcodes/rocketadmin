@@ -29,6 +29,7 @@ import toast from "react-hot-toast";
 import Gateways from "./ClientDetailsTabs/Gateways";
 import CustomerDetailsTop from "./MainDetailsBody";
 import { GetDetails, GetUserDetails } from "../../services/Dashboard";
+import AuditLogs from "./ClientDetailsTabs/AuditLogs";
 
 export default function CustomerDetailsPage() {
   const [params] = useSearchParams();
@@ -54,7 +55,13 @@ export default function CustomerDetailsPage() {
 
   const [active, setActive] = useState("Overview");
 
-  const tab = ["Overview", "ID Documents", "Transfer List", "Beneficiary List"];
+  const tab = [
+    "Overview",
+    "ID Documents",
+    "Transfer List",
+    "Beneficiary List",
+    "Audit Logs",
+  ];
 
   const [modal, setModal] = useState(false);
 
@@ -175,6 +182,9 @@ export default function CustomerDetailsPage() {
                   )}
                   {active === "ID Documents" && (
                     <Documents clientDetails={clientUser} />
+                  )}
+                  {active === "Audit Logs" && (
+                    <AuditLogs clientDetails={customer?.data} />
                   )}
                   {active === "Transfer List" && (
                     <TransactionsList

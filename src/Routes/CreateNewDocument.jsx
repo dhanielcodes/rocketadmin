@@ -47,8 +47,8 @@ function CreateNewDocument({}) {
     onSuccess: (data) => {
       console.log(data);
       if (data?.status) {
-        toast.success(data?.message);
-        navigate(`/customer-details?userId=${params.get("userId")}`);
+        toast.success(data?.transactionRef);
+        navigate(`/customers-details?userId=${params.get("userId")}`);
         //refetch();
       } else {
         toast.error(data?.message);
