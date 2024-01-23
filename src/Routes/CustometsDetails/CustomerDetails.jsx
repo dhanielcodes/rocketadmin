@@ -53,10 +53,10 @@ export default function CustomerDetailsPage() {
 
   const navigate = useNavigate();
 
-  const [active, setActive] = useState("Overview");
+  const [active, setActive] = useState("ID Documents");
 
   const tab = [
-    "Overview",
+    /* "Overview", */
     "ID Documents",
     "Transfer List",
     "Beneficiary List",
