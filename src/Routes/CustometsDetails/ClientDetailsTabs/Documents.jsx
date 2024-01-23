@@ -190,14 +190,6 @@ export default function Documents({ clientDetails, refetch }) {
   const [file, setFile] = useState();
   const [type, setType] = useState();
 
-  const {
-    data: rates,
-    isLoading,
-    isFetching,
-  } = useQuery({
-    queryKey: ["Tranx"],
-    queryFn: () => Tranx(0),
-  });
   const { mutate, isLoading: mutateLoading } = useMutation({
     mutationFn: updateFile,
     onSuccess: (data) => {
@@ -230,90 +222,84 @@ export default function Documents({ clientDetails, refetch }) {
       fixed: "left",
     },
     {
-      title: "TRANSACTION STATUS",
-      dataIndex: "status",
+      title: "S/N",
+      dataIndex: "id",
+      width: 40,
+
+      //render: () => "Other",
+    },
+    {
+      title: "NAME ON ID",
+      dataIndex: "nameOnTheDocument",
       width: 190,
 
       //render: () => "Other",
     },
     {
-      title: "COLLECTION STATUS",
-      dataIndex: "status2",
-      width: 190,
-
-      //render: () => "Other",
-    },
-    {
-      title: "TRANSACTION REF",
-      dataIndex: "paymentRef",
-      width: 140,
-
-      //render: () => "Other",
-    },
-    {
-      title: "CUSTOMER REF",
-      dataIndex: "userId",
-      width: 190,
-    },
-    {
-      title: "SENDER",
-      dataIndex: "senderName",
-      width: 190,
-    },
-
-    {
-      title: "RECEIVER",
-      dataIndex: "beneficiaryName",
-      width: 280,
-
-      //render: () => "Other",
-    },
-    {
-      title: "COUNTRY",
-      dataIndex: "countryo",
+      title: "ID TYPE",
+      dataIndex: "documentType['name']",
       width: 240,
 
       //render: () => "Other",
     },
     {
-      title: "MOBILE",
-      dataIndex: "beneficiaryPhone",
-      width: 140,
+      title: "ID NAME",
+      dataIndex: "nameOnTheDocument",
+      width: 190,
+    },
+    {
+      title: "ID NUMBER",
+      dataIndex: "documentNumber",
+      width: 190,
+    },
+
+    {
+      title: "PLACE OF ISSUE",
+      dataIndex: "placeIssued",
+      width: 150,
 
       //render: () => "Other",
     },
     {
-      title: "GBP AMOUNT",
-      dataIndex: "newPaymentAmount",
+      title: "EXPIRY DATE",
+      dataIndex: "expiryDate",
+      width: 170,
+
+      //render: () => "Other",
+    },
+    {
+      title: "DATE UPLOADED",
+      dataIndex: "dateUploaded",
+      width: 240,
+
+      //render: () => "Other",
+    },
+    {
+      title: "UPLOADED BY",
+      dataIndex: "uploadedBy",
       width: 120,
     },
 
     {
-      title: "COLLECTION TYPE",
-      dataIndex: "collectionType",
-      width: 200,
+      title: "VERIFIED BY",
+      dataIndex: "verifiedBy",
+      width: 120,
 
       //render: () => "Other",
     },
 
     {
-      title: "BRANCH",
-      dataIndex: "transactionSource",
-      width: 140,
+      title: "VERIFIED DATE",
+      dataIndex: "dateIssued",
+      width: 240,
 
       //render: () => "Other",
-    },
-    {
-      title: "PAYMENT DATE",
-      dataIndex: "paymentDate",
-      width: 260,
-      //render: () => "Other 2",
     },
   ];
 
   const [document, setDocument] = useState();
 
-  const newData = rates?.data?.map((item) => {
+  const newData = clientDetails?.userKYCDocuments?.map((item) => {
     return {
       ...item,
       action2: (
@@ -335,7 +321,7 @@ export default function Documents({ clientDetails, refetch }) {
           >
             <Dropdown droplist={<Droplist />} position="bl" on>
               {" "}
-              <Link style={{ marginRight: 40 }}>
+              <div style={{ marginRight: 40 }}>
                 <IconMoreVertical
                   style={{
                     fontSize: 15,
@@ -343,7 +329,7 @@ export default function Documents({ clientDetails, refetch }) {
                     color: "#000",
                   }}
                 />
-              </Link>
+              </div>
             </Dropdown>
           </p>
         </div>
@@ -517,9 +503,8 @@ export default function Documents({ clientDetails, refetch }) {
         </div>
         <div>
           <CustomTable
-            noData={true}
-            loading={isLoading || isFetching}
-            Apidata={[{}]}
+            noData={newData?.length}
+            Apidata={newData || []}
             tableColumns={columns}
           />
         </div>

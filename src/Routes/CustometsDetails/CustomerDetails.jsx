@@ -181,7 +181,7 @@ export default function CustomerDetailsPage() {
                     <Details clientDetails={customer?.data} />
                   )}
                   {active === "ID Documents" && (
-                    <Documents clientDetails={clientUser} />
+                    <Documents clientDetails={customer?.data} />
                   )}
                   {active === "Audit Logs" && (
                     <AuditLogs clientDetails={customer?.data} />
