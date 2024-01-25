@@ -221,6 +221,11 @@ export const addNewDocument = async (body) => {
   return data;
 };
 
+export const updateDocument = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/updateuserkycdocument`, body);
+  return data;
+};
+
 export const getPaymentProcessors = async () => {
   const { data } = await Axios.get(`${baseurl}/getpaymentchannelprocessor`);
   return data;

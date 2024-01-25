@@ -10,14 +10,18 @@ import { saveAs } from "file-saver";
 import FileUpload from "../../../services/FileUpload";
 import { uploadFile } from "../../../services/Auth";
 import toast from "react-hot-toast";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { updateFile } from "../../../services/PayoutDashboard";
 import CustomTable from "../../../reuseables/CustomTable";
 import SectionHeader from "../../../reuseables/SectionHeader";
 import { Dropdown, Menu } from "@arco-design/web-react";
-import { IconEye, IconMoreVertical } from "@arco-design/web-react/icon";
+import {
+  IconDownload,
+  IconEye,
+  IconMoreVertical,
+} from "@arco-design/web-react/icon";
 
-const Droplist = ({ action, setModal, setUserId }) => (
+const Droplist = ({ action, setModal, download, edit, setFront, setBack }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
     style={{
@@ -27,6 +31,9 @@ const Droplist = ({ action, setModal, setUserId }) => (
     }}
   >
     <Menu.Item
+      onClick={() => {
+        setFront();
+      }}
       key="1"
       style={{
         display: "flex",
@@ -48,7 +55,10 @@ const Droplist = ({ action, setModal, setUserId }) => (
       </span>
     </Menu.Item>
     <Menu.Item
-      key="1"
+      onClick={() => {
+        setBack();
+      }}
+      key="4"
       style={{
         display: "flex",
         alignItems: "center",
@@ -76,11 +86,15 @@ const Droplist = ({ action, setModal, setUserId }) => (
         alignItems: "center",
       }}
       onClick={() => {
-        setModal(true);
-        action("viewComment");
-        setUserId();
+        download();
       }}
     >
+      <IconDownload
+        fontSize={20}
+        style={{
+          margin: 0,
+        }}
+      />
       <span
         style={{
           marginLeft: "10px",
@@ -91,9 +105,7 @@ const Droplist = ({ action, setModal, setUserId }) => (
     </Menu.Item>
     <Menu.Item
       onClick={() => {
-        setModal(true);
-        action("markAsSuspicious");
-        setUserId();
+        edit();
       }}
       key="3"
       style={{
@@ -129,10 +141,33 @@ const Droplist = ({ action, setModal, setUserId }) => (
           marginLeft: "10px",
         }}
       >
-        Edit
+        Edit Document
       </span>
     </Menu.Item>
-
+    <Menu.Item
+      onClick={() => {
+        setBack();
+      }}
+      key="4"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <IconEye
+        fontSize={20}
+        style={{
+          margin: 0,
+        }}
+      />
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        View Comments
+      </span>
+    </Menu.Item>
     <Menu.Item
       onClick={() => {
         setModal(true);
@@ -181,37 +216,9 @@ const Droplist = ({ action, setModal, setUserId }) => (
 export default function Documents({ clientDetails, refetch }) {
   const [params] = useSearchParams();
 
+  const navigate = useNavigate();
   const [modal, setModal] = useState(false);
-  const [modal2, setModal2] = useState(false);
-
-  const [loading, setLoading] = useState(false);
-
   const [image, setImage] = useState();
-  const [file, setFile] = useState();
-  const [type, setType] = useState();
-
-  const { mutate, isLoading: mutateLoading } = useMutation({
-    mutationFn: updateFile,
-    onSuccess: (data) => {
-      console.log(data);
-      if (data?.status) {
-        toast.success(data?.message);
-        setModal(false);
-        refetch();
-      } else {
-        toast.error(data?.message);
-      }
-    },
-    onError: (data) => {
-      //setModal(true);
-      toast.error("Request wasn't created");
-
-      setTimeout(() => {
-        //  seterr("")
-      }, 2000);
-      return;
-    },
-  });
 
   const columns = [
     {
@@ -319,7 +326,30 @@ export default function Documents({ clientDetails, refetch }) {
               cursor: "pointer",
             }}
           >
-            <Dropdown droplist={<Droplist />} position="bl" on>
+            <Dropdown
+              droplist={
+                <Droplist
+                  setFront={() => {
+                    setImage(item?.documentFrontPageURL);
+                    setModal(true);
+                  }}
+                  setBack={() => {
+                    setImage(item?.documentBackPageURL);
+                    setModal(true);
+                  }}
+                  download={() => {}}
+                  edit={() => {
+                    navigate(
+                      `/edit-document?userId=${params.get(
+                        "userId"
+                      )}&document=${JSON.stringify(item)}`
+                    );
+                  }}
+                />
+              }
+              position="bl"
+              on
+            >
               {" "}
               <div style={{ marginRight: 40 }}>
                 <IconMoreVertical
@@ -348,76 +378,12 @@ export default function Documents({ clientDetails, refetch }) {
         }}
       >
         <AppModal
-          closeModal={() => {
-            setModal(false);
-            setFile();
-            setImage();
-          }}
-          heading="Edit Document"
-        >
-          <div style={{ width: "90%" }}>
-            <FileUpload
-              setValue={setImage}
-              value={image}
-              placeholder="Click to update file"
-              setLoading={setLoading}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr",
-              gridGap: "10px",
-              marginTop: "30px",
-            }}
-          >
-            <div></div>
-            <button
-              onClick={() => {
-                setModal(false);
-                setFile();
-                setImage();
-              }}
-              className="cancel"
-            >
-              {" "}
-              <span>Cancel</span>
-            </button>
-            <button
-              disabled={mutateLoading || loading}
-              onClick={() => {
-                mutate({
-                  objectId: params.get("userId"),
-                  action: 1,
-                  fileName: file,
-                  fileURL: image?.secure_url,
-                });
-              }}
-              className="confirm"
-            >
-              {" "}
-              <span>{mutateLoading || loading ? "sending..." : "Submit"}</span>
-            </button>
-          </div>
-        </AppModal>
-      </div>
-
-      <div
-        style={{
-          opacity: modal2 ? "1" : "0",
-          pointerEvents: modal2 ? "all" : "none",
-          transition: "all 0.3s",
-        }}
-      >
-        <AppModal
           padding="40px"
           closeModal={() => {
-            setModal2(false);
-            setFile();
+            setModal(false);
             setImage();
           }}
-          heading={type === "view" ? "" : "Delete Document"}
+          heading={"Document"}
         >
           <div style={{ width: "100%", textAlign: "center" }}>
             <img
@@ -427,47 +393,6 @@ export default function Documents({ clientDetails, refetch }) {
               src={image}
             />
           </div>
-
-          {type !== "view" && (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr",
-                gridGap: "10px",
-                marginTop: "30px",
-              }}
-            >
-              <div></div>
-              <button
-                onClick={() => {
-                  setModal2(false);
-                  setFile();
-                  setImage();
-                }}
-                className="cancel"
-              >
-                {" "}
-                <span>Cancel</span>
-              </button>
-              <button
-                disabled={loading || mutateLoading}
-                onClick={() => {
-                  mutate({
-                    objectId: params.get("userId"),
-                    action: 0,
-                    fileName: file,
-                    fileURL: image,
-                  });
-                }}
-                className="confirm"
-              >
-                {" "}
-                <span>
-                  {mutateLoading || loading ? "sending..." : "Submit"}
-                </span>
-              </button>
-            </div>
-          )}
         </AppModal>
       </div>
       <div>

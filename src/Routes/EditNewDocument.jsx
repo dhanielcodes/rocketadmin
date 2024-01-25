@@ -6,7 +6,12 @@ import SearchInput from "../reuseables/SearchInput";
 import BeneficiaryComponent from "../COMPONENTS/BeneficiaryComponent";
 import SendMoneyCustomersTableList from "./SendMoney/SendMoneyCustomersTableList";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
-import { addNewDocument, getIdTypes, getRoleMeta } from "../services/Dashboard";
+import {
+  addNewDocument,
+  getIdTypes,
+  getRoleMeta,
+  updateDocument,
+} from "../services/Dashboard";
 import { getCurrencies } from "../services/Auth";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -19,8 +24,12 @@ import { Switch } from "@arco-design/web-react";
 import AppSelect2 from "../reuseables/AppSelect2";
 import FileUpload from "../services/FileUpload";
 import FileUpload2 from "../services/FileUpload2";
-function CreateNewDocument({}) {
+function EditNewDocument({}) {
   const [params] = useSearchParams();
+
+  const selectDoc = JSON.parse(params.get("document"));
+
+  console.log(selectDoc);
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   const [loading, setLoading] = useState(true);
@@ -37,13 +46,13 @@ function CreateNewDocument({}) {
   const [placeOfIssue, setPlaceOfIssue] = useState();
   const [comments, setComments] = useState();
 
-  const [imageOne, setImageOne] = useState();
-  const [imageTwo, setImageTwo] = useState();
+  const [imageOne, setImageOne] = useState(selectDoc?.documentFrontPageURL);
+  const [imageTwo, setImageTwo] = useState(selectDoc?.documentBackPageURL);
 
   const navigate = useNavigate();
 
   const { mutate, isLoading: mutateLoading } = useMutation({
-    mutationFn: addNewDocument,
+    mutationFn: updateDocument,
     onSuccess: (data) => {
       console.log(data);
       if (data?.status) {
@@ -113,11 +122,15 @@ function CreateNewDocument({}) {
                       return {
                         ...item,
                         label: item?.name,
-                        value: item?.name,
+                        value: item?.id,
                       };
                     })}
                     onChange={(e) => {
                       setDocType(e);
+                    }}
+                    value={{
+                      label: selectDoc?.documentType?.name,
+                      value: selectDoc?.documentType?.id,
                     }}
                   />
                 </div>
@@ -131,6 +144,7 @@ function CreateNewDocument({}) {
                     }}
                     width="95%"
                     name="username"
+                    defaultValue={selectDoc?.nameOnTheDocument}
                   />
                 </div>
               </div>
@@ -151,6 +165,7 @@ function CreateNewDocument({}) {
                     }}
                     width="97%"
                     name="username"
+                    defaultValue={selectDoc?.documentNumber}
                   />
                 </div>
               </div>
@@ -171,6 +186,7 @@ function CreateNewDocument({}) {
                     }}
                     width="95%"
                     name="username"
+                    defaultValue={selectDoc?.dateIssued}
                   />
                 </div>
                 <div className="name" style={{}}>
@@ -183,6 +199,7 @@ function CreateNewDocument({}) {
                     }}
                     width="95%"
                     name="username"
+                    defaultValue={selectDoc?.expiryDate}
                   />
                 </div>
               </div>
@@ -203,6 +220,7 @@ function CreateNewDocument({}) {
                     }}
                     width="95%"
                     name="username"
+                    defaultValue={selectDoc?.placeIssued}
                   />
                 </div>
                 <div className="name" style={{}}>
@@ -215,6 +233,7 @@ function CreateNewDocument({}) {
                     }}
                     width="95%"
                     name="username"
+                    defaultValue={selectDoc?.comment}
                   />
                 </div>
               </div>
@@ -283,44 +302,34 @@ function CreateNewDocument({}) {
 
               <button
                 onClick={() => {
-                  if (
-                    docName &&
-                    docType &&
-                    docNumber &&
-                    placeOfIssue &&
-                    issueDate &&
-                    expiryDate &&
-                    imageOne &&
-                    imageTwo &&
-                    comments
-                  ) {
-                    mutate({
-                      userId: JSON.parse(params.get("userId"))?.userId,
-                      userKYCDocument: {
-                        documentType: {
-                          id: docType?.id,
-                        },
-                        nameOnTheDocument: docName,
-                        documentNumber: docNumber,
-                        placeIssued: placeOfIssue,
-                        dateIssued: issueDate,
-                        expiryDate: expiryDate,
-                        uploadedBy: 0,
-                        verifiedBy: 0,
-                        documentFrontPageURL: imageOne?.secure_url, //Call file upload endpoint to upload the file then set the return URL as this value..
-                        documentBackPageURL: imageTwo?.secure_url, //Call file upload endpoint to upload the file then set the return URL as this value..
-                        comment: comments,
+                  mutate({
+                    userId: JSON.parse(params.get("userId"))?.userId,
+                    userKYCDocument: {
+                      id: selectDoc?.id,
+                      documentType: {
+                        id: docType?.id || selectDoc?.documentType?.id,
                       },
-                    });
-                  } else {
-                    toast.error("Fill all fields");
-                  }
+                      nameOnTheDocument:
+                        docName || selectDoc?.nameOnTheDocument,
+                      documentNumber: docNumber || selectDoc?.documentNumber,
+                      placeIssued: placeOfIssue || selectDoc?.placeIssued,
+                      dateIssued: issueDate || selectDoc?.dateIssued,
+                      expiryDate: expiryDate || selectDoc?.expiryDate,
+                      uploadedBy: 0,
+                      verifiedBy: 0,
+                      documentFrontPageURL:
+                        imageOne?.secure_url || selectDoc?.documentFrontPageURL, //Call file upload endpoint to upload the file then set the return URL as this value..
+                      documentBackPageURL:
+                        imageTwo?.secure_url || selectDoc?.documentBackPageURL, //Call file upload endpoint to upload the file then set the return URL as this value..
+                      comment: comments || selectDoc?.comment,
+                    },
+                  });
                 }}
                 className="confirm"
                 disabled={mutateLoading}
               >
                 {" "}
-                <span>{mutateLoading ? "creating..." : "Add Document"}</span>
+                <span>{mutateLoading ? "creating..." : "Update Document"}</span>
               </button>
             </div>
           </div>
@@ -330,7 +339,7 @@ function CreateNewDocument({}) {
   );
 }
 
-export default CreateNewDocument;
+export default EditNewDocument;
 const Content = styled.div`
   .top p {
     font-size: 32px;
