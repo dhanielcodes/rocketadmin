@@ -44,6 +44,7 @@ import UpdateRateMetaData from "./Routes/UpdateRateMetaData";
 import AgentInviteList from "./Routes/AgentInviteList";
 import CreateNewDocument from "./Routes/CreateNewDocument";
 import EditNewDocument from "./Routes/EditNewDocument";
+import PayoutPartnersPage from "./Routes/PayoutPartners";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -108,6 +109,15 @@ function App() {
                 element={
                   <AppLogout>
                     <KYCProvider />
+                  </AppLogout>
+                }
+              />
+
+              <Route
+                path="/payout-partners"
+                element={
+                  <AppLogout>
+                    <PayoutPartnersPage />
                   </AppLogout>
                 }
               />

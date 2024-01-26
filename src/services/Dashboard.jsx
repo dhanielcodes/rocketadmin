@@ -216,6 +216,23 @@ export const getUserDocTypes = async () => {
   return data;
 };
 
+export const getPayoutPartner = async () => {
+  const { data } = await Axios.get(`${baseurl}/getpayoutpartner`);
+  return data;
+};
+
+export const getPayoutPartnerGateways = async (id) => {
+  const { data } = await Axios.get(`${baseurl}/getpayoutpartnergateways/${id}`);
+  return data;
+};
+
+export const getPayoutPartnerLog = async (id) => {
+  const { data } = await Axios.get(
+    `${baseurl}/getpayoutlogbypayoutpartner/${id}`
+  );
+  return data;
+};
+
 export const addNewDocument = async (body) => {
   const { data } = await Axios.post(`${baseurl}/adduserkycdocument`, body);
   return data;
