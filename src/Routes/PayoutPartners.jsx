@@ -9,36 +9,43 @@ import {
   getPayoutPartnerLog,
 } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function PayoutPartnersPage() {
-  const {
-    data: payoutPartner,
-    isLoading,
-    isFetching,
-  } = useQuery({
+  const { data: payoutPartner } = useQuery({
     queryKey: ["getPayoutPartner"],
     queryFn: () => getPayoutPartner(),
   });
   const [selectedPartner, setSelectedPartner] = useState();
   const [selectedGateway, setSelectedGateway] = useState();
+
+  const [logs, setLogs] = useState();
+
+  const [gateWays, setGateWays] = useState([]);
+
   const [date, setDate] = useState();
 
-  const idd = selectedPartner?.id;
+  const getPayoutPartnerLogs = async (id) => {
+    try {
+      const data = await getPayoutPartnerLog(id);
+      console.log(data?.data);
+      setLogs(data?.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-  const { data: payoutGateway, refetch } = useQuery({
-    queryKey: ["getPayoutPartnerGateways"],
-    queryFn: () => getPayoutPartnerGateways(idd),
-  });
+  const getPayoutGateways = async (id) => {
+    try {
+      const data = await getPayoutPartnerGateways(id);
+      console.log(data?.data);
+      setGateWays(data?.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-  const { data: payoutPartnerLogs, refetch: refetchLogs } = useQuery({
-    queryKey: ["getPayoutPartnerLog"],
-    queryFn: () =>
-      getPayoutPartnerLog(
-        `?partnerId=${selectedGateway?.providerId}&start=${date[0]}&end=${date[1]}`
-      ),
-  });
-  console.log(payoutPartnerLogs);
+  console.log(gateWays);
 
   return (
     <>
@@ -72,7 +79,7 @@ export default function PayoutPartnersPage() {
                 })}
                 onChange={(e) => {
                   setSelectedPartner(e);
-                  refetch(e?.id);
+                  getPayoutGateways(e?.id);
                 }}
               />{" "}
               <div>
@@ -102,7 +109,9 @@ export default function PayoutPartnersPage() {
               <button
                 className="confirm"
                 onClick={() => {
-                  refetchLogs();
+                  getPayoutPartnerLogs(
+                    `?partnerId=${selectedPartner?.id}&start=${date[0]}&end=${date[1]}`
+                  );
                 }}
               >
                 {" "}
@@ -112,7 +121,7 @@ export default function PayoutPartnersPage() {
             <div className="cont">
               <AppSelect
                 options={
-                  payoutGateway?.data?.map((item) => {
+                  gateWays?.map((item) => {
                     return {
                       ...item,
                       label: item?.providerName,
@@ -129,7 +138,7 @@ export default function PayoutPartnersPage() {
           </div>
         </DataFields>
 
-        <PayoutPartnersTable />
+        {logs?.length && <PayoutPartnersTable data={logs} />}
       </BodyLayout>
     </>
   );

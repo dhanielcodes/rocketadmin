@@ -1,143 +1,80 @@
-import { Link } from "react-router-dom";
 import { styled } from "styled-components";
-
-import SearchInput from "../../reuseables/SearchInput";
 import CustomTable from "../../reuseables/CustomTable";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import CountryFlag from "react-country-flag";
-import { kFormatter3, kFormatter2, kFormatter4 } from "../../utils/format";
-import {
-  TodayLogss,
-  Tranx,
-  addcommenttotransaction,
-  cancelTransaction,
-  confirmTransaction,
-  holdtransaction,
-  markaspay,
-  marktransactionsuspicious,
-  paytransaction,
-  revertholdtransaction,
-  viewCommentsTransaction,
-} from "../../services/Dashboard";
-import AmountFormatter from "../../reuseables/AmountFormatter";
-import { IconEye, IconMoreVertical } from "@arco-design/web-react/icon";
-import { Dropdown, Input, Menu } from "@arco-design/web-react";
-import { useState } from "react";
-import ReusableModal from "../../reuseables/ReusableModal";
-import Msg from "../../reuseables/Msg";
-import Btn from "../../reuseables/Btn";
-import toast from "react-hot-toast";
-const TextArea = Input.TextArea;
+import { kFormatter3 } from "../../utils/format";
 
-function PayoutPartnersTable() {
+function PayoutPartnersTable({ data, isLoading }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
-  const [userId, setUserIdd] = useState("");
-
-  const {
-    data: rates,
-    isLoading,
-    isFetching,
-  } = useQuery({
-    queryKey: ["TodayLogss"],
-    queryFn: () => TodayLogss(),
-  });
-
-  const [modal, setModal] = useState(false);
-  const [note, setNote] = useState(false);
-
-  const [call, setCall] = useState("");
-
-  const [userIdd, setUserId] = useState();
-  const odk = userIdd;
-
-  const {
-    data: comments,
-    isLoading: viewloading,
-    refetch,
-  } = useQuery({
-    queryKey: [odk?.sn],
-    queryFn: () => viewCommentsTransaction(odk?.sn),
-  });
-
-  console.log(rates, userId);
 
   const columns = [
     {
-      title: "S/N",
-      dataIndex: "status",
-      width: 190,
+      title: "ID",
+      dataIndex: "id",
+      width: 150,
 
       //render: () => "Other",
     },
     {
       title: "GATEWAY ID",
-      dataIndex: "status2",
+      dataIndex: "payoutClientApp['id']",
       width: 190,
 
       //render: () => "Other",
     },
     {
       title: "PAYOUT ID",
-      dataIndex: "paymentRef",
+      dataIndex: "payOutProvider['id']",
       width: 140,
 
       //render: () => "Other",
     },
     {
       title: "GATEWAY NAME",
-      dataIndex: "userId",
+      dataIndex: "payoutClientApp['appName']",
       width: 190,
     },
     {
       title: "BANK CODE",
-      dataIndex: "senderName",
+      dataIndex: "beneficiary['beneficiaryBank']['bankCode']",
       width: 190,
     },
 
     {
       title: "BANK NAME",
-      dataIndex: "beneficiaryName",
+      dataIndex: "beneficiary['beneficiaryBank']['bankName']",
       width: 280,
 
       //render: () => "Other",
     },
     {
       title: "ACCOUNT NUMBER",
-      dataIndex: "countryo",
-      width: 240,
+      dataIndex: "beneficiary['beneficiaryBank']['accountNumber']",
+      width: 170,
 
       //render: () => "Other",
     },
     {
       title: "ACCOUNT NAME",
-      dataIndex: "beneficiaryPhone",
-      width: 140,
+      dataIndex: "beneficiary['beneficiaryBank']['accountName']",
+      width: 240,
 
       //render: () => "Other",
     },
     {
       title: "TRANSACTION ID",
-      dataIndex: "newPaymentAmount",
+      dataIndex: "clientRef",
       width: 120,
     },
 
     {
-      title: "GATEWAYREF",
-      dataIndex: "rate",
-      render: (ire) => kFormatter3(ire),
-      width: 120,
-    },
-    {
       title: "STATUS",
-      dataIndex: "receivedAmount",
-      render: (ire) => kFormatter3(ire),
-      width: 260,
+      dataIndex: "status",
+      width: 140,
     },
     {
       title: "CHARGES",
-      dataIndex: "collectionType",
+      dataIndex: "transferFee",
       width: 200,
 
       //render: () => "Other",
@@ -145,26 +82,18 @@ function PayoutPartnersTable() {
 
     {
       title: "NARRATION",
-      dataIndex: "transactionSource",
+      dataIndex: "note",
       width: 140,
 
       //render: () => "Other",
     },
     {
       title: "DATE",
-      dataIndex: "paymentDate",
+      dataIndex: "dateCreated",
       width: 260,
       //render: () => "Other 2",
     },
   ];
-
-  const newData = rates?.data?.map((item) => {
-    return {
-      ...item,
-    };
-  });
-
-  console.log(newData);
 
   return (
     <Content>
@@ -174,198 +103,11 @@ function PayoutPartnersTable() {
           <SearchInput placeholder="Search Records" className="SearchRecords" />
         </div> */}
         <CustomTable
-          noData={rates?.data?.length}
-          loading={isLoading || isFetching}
-          Apidata={newData}
+          noData={data?.length}
+          loading={isLoading}
+          Apidata={data}
           tableColumns={columns}
         />
-
-        {modal && (
-          <ReusableModal
-            isOpen={modal}
-            width={400}
-            onClose={() => {
-              setModal(false);
-              setCall();
-            }}
-          >
-            <Msg>
-              {/* {err} */}
-              <p>
-                {call === "markAsSuspicious"
-                  ? "Are you sure you want to Mark as suspicious?"
-                  : call === "markAsPay"
-                  ? "Are you sure you want to Mark as pay?"
-                  : call === "holdTransaction"
-                  ? "Are you sure you want to Hold Transaction?"
-                  : call === "cancelTransaction"
-                  ? "Are you sure you want to Cancel Transaction?"
-                  : call === "revertHoldTransaction"
-                  ? "Are you sure you want to Revert Hold Transaction?"
-                  : call === "confirmTransaction"
-                  ? "Are you sure you want to Confirm Transaction?"
-                  : call === "payTransaction"
-                  ? "Are you sure you want to Pay Transaction?"
-                  : call === "addComment"
-                  ? "Add Comment"
-                  : ""}
-              </p>
-              <br />
-              {call === "viewComment"
-                ? comments?.data?.map((item) => {
-                    return viewloading ? (
-                      "loading..."
-                    ) : (
-                      <div className="comment">{item?.comment}</div>
-                    );
-                  })
-                : ""}
-
-              {call === "addComment" && (
-                <TextArea
-                  name="address"
-                  className="textarea"
-                  placeholder="Enter comments ..."
-                  style={{
-                    minHeight: 104,
-                    background: "transparent",
-                    border: "1px solid #d8d8d8",
-                    borderRadius: "8px",
-                  }}
-                  onChange={(e) => {
-                    setNote(e);
-                  }}
-                />
-              )}
-
-              <br />
-
-              {call === "viewComment" ? (
-                ""
-              ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Btn
-                    clicking={() => {
-                      setModal(false);
-                      setCall();
-                    }}
-                    size={30}
-                    styles={{
-                      width: "100%",
-                      marginRight: "10px",
-                      padding: "8px",
-                      fontWeight: "600",
-                      background: "#b0b0b0",
-                    }}
-                  >
-                    Cancel
-                  </Btn>
-                  &nbsp; &nbsp;
-                  <Btn
-                    clicking={() => {
-                      call === "markAsSuspicious"
-                        ? "Mark as suspicious"
-                        : call === "markAsPay"
-                        ? "Mark as pay"
-                        : call === "holdTransaction"
-                        ? "Hold Transaction"
-                        : call === "cancelTransaction"
-                        ? "Cancel Transaction"
-                        : call === "revertHoldTransaction"
-                        ? "Revert Hold Transaction"
-                        : call === "confirmTransaction"
-                        ? "Confirm Transaction"
-                        : call === "payTransaction"
-                        ? "Pay Transaction"
-                        : "Add Comment";
-
-                      if (call === "markAsSuspicious") {
-                        marktransactionsuspiciousMutation(userIdd?.paymentRef);
-                      } else if (call === "markAsPay") {
-                        markaspayMutation(userIdd.paymentRef);
-                      } else if (call === "holdTransaction") {
-                        holdTransactionMutation(userIdd.paymentRef);
-                      } else if (call === "cancelTransaction") {
-                        cancelTransactionMutation(userIdd.paymentRef);
-                      } else if (call === "revertHoldTransaction") {
-                        revertholdtransactionMutation(userIdd.paymentRef);
-                      } else if (call === "confirmTransaction") {
-                        confirmTransactionMutation(userIdd.paymentRef);
-                      } else if (call === "payTransaction") {
-                        payTransactionMutation(userIdd.paymentRef);
-                      } else {
-                        addcommenttotransactionMutation({
-                          customerId: userId,
-                          transactionId: userIdd?.sn,
-                          commentBy: 0,
-                          comment: note,
-                        });
-                      }
-                    }}
-                    size={30}
-                    disabled={
-                      loading1 ||
-                      loading2 ||
-                      loading3 ||
-                      loading4 ||
-                      loading5 ||
-                      loading6 ||
-                      loading7 ||
-                      loading8
-                    }
-                    styles={{
-                      width: "100%",
-                      marginRight: "10px",
-                      padding: "8px",
-                      color: "#fff",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {loading1 ||
-                    loading2 ||
-                    loading3 ||
-                    loading4 ||
-                    loading5 ||
-                    loading6 ||
-                    loading7
-                      ? "loading..."
-                      : "Confirm"}
-                  </Btn>
-                </div>
-              )}
-            </Msg>
-          </ReusableModal>
-        )}
-
-        {/* <div className="row">
-          <span>Showing 1-5 of entries</span>
-          <div className="pagins">
-            <p>Rows per page:</p>
-            <select>
-              <option>5</option>
-            </select>
-            <div className="arrow">
-              <button
-                onClick={() => {
-                  // setSortDate(sortdate - 1);
-                  // setEnd((prev) => prev - end);
-                }}
-              >
-                <AiOutlineLeft />
-              </button>
-              <button>{sortdate}</button>
-              <button>
-                <AiOutlineRight />
-              </button>
-            </div>
-          </div>
-        </div> */}
       </div>
     </Content>
   );
