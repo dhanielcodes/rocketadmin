@@ -30,6 +30,11 @@ export default function NewNavBar() {
           path: "/ivr-campaign/media-mgmt",
           parentName: "Dashboard",
         },
+        {
+          name: "Payout Partners",
+          path: "/payout-partners",
+          parentName: "Dashboard",
+        },
 
         {
           name: "Payout Dashboard",

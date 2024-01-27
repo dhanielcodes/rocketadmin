@@ -133,7 +133,7 @@ export default function FileUpload2({
             style={{
               width: "130px",
             }}
-            src={value?.secure_url}
+            src={value?.secure_url || value}
           />
           <div>
             <MDeleteIcon
