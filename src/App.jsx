@@ -45,6 +45,7 @@ import AgentInviteList from "./Routes/AgentInviteList";
 import CreateNewDocument from "./Routes/CreateNewDocument";
 import EditNewDocument from "./Routes/EditNewDocument";
 import PayoutPartnersPage from "./Routes/PayoutPartners";
+import NotificationsPage from "./Routes/Notifications";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -325,6 +326,14 @@ function App() {
                 element={
                   <AppLogout>
                     <TransfersListPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/notifications"
+                element={
+                  <AppLogout>
+                    <NotificationsPage />
                   </AppLogout>
                 }
               />
