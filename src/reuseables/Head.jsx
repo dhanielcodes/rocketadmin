@@ -5,6 +5,7 @@ import { Breadcrumb } from "@arco-design/web-react";
 import styled from "styled-components";
 import NotificationTab from "../COMPONENTS/NotificationTab";
 import { useState } from "react";
+import NotificationTabKyc from "../COMPONENTS/NotificationTabKyc";
 const BreadcrumbItem = Breadcrumb.Item;
 
 const App = () => {
@@ -20,11 +21,12 @@ const App = () => {
           display: "flex",
         }}
       >
-        <div>
+        <div style={{ position: "relative" }}>
           <svg
             style={{ cursor: "pointer", marginRight: "10px" }}
             onClick={() => {
               setKyc(!kyc);
+              setNotif(false);
             }}
             width="48"
             height="48"
@@ -51,6 +53,18 @@ const App = () => {
               </clipPath>
             </defs>
           </svg>
+          <div
+            style={{
+              opacity: kyc ? 1 : 0,
+              pointerEvents: kyc ? "all" : "none",
+            }}
+          >
+            <NotificationTabKyc
+              close={() => {
+                setKyc(false);
+              }}
+            />
+          </div>
         </div>
 
         <div style={{ paddingRight: "20px", position: "relative" }}>
@@ -58,6 +72,7 @@ const App = () => {
             style={{ cursor: "pointer" }}
             onClick={() => {
               setNotif(!notif);
+              setKyc(false);
             }}
             width="24"
             height="24"

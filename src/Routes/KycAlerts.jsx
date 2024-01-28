@@ -1,25 +1,23 @@
 import BodyLayout from "../reuseables/BodyLayout";
 import styled from "styled-components";
-import {
-  markNotifAsRead,
-  transactionNotifications,
-} from "../services/Dashboard";
+import { getKycNotifications, markKycNotifAsRead } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import { Skeleton } from "@arco-design/web-react";
 import { useState } from "react";
 
-export default function NotificationsPage() {
+export default function KycAlertsPage() {
   const { data, isLoading, isFetching, refetch } = useQuery({
-    queryKey: ["transactionNotificationsss"],
-    queryFn: () => transactionNotifications(),
+    queryKey: ["getKycNotifications"],
+    queryFn: () => getKycNotifications(),
   });
+
   const [loading, setLoading] = useState(false);
 
   const markAsRead = async (id) => {
     setLoading(true);
     try {
-      const data = await markNotifAsRead(id);
+      const data = await markKycNotifAsRead(id);
       console.log(data);
       refetch();
       setLoading(false);
@@ -34,10 +32,8 @@ export default function NotificationsPage() {
       <BodyLayout>
         <Header>
           <div className="content">
-            <div className="heading">Notifications</div>
-            <div className="sub">
-              This page allows you to see all notifications.{" "}
-            </div>
+            <div className="heading">Alerts</div>
+            <div className="sub">This page allows you to see all alerts. </div>
           </div>
           {/*   <button
             onClick={() => {
@@ -74,7 +70,7 @@ export default function NotificationsPage() {
                       textAlign: "center",
                     }}
                   >
-                    No Notifications.
+                    No Alerts.
                   </div>
                 )
               )}

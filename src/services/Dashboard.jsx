@@ -45,6 +45,27 @@ export const transactionNotifications = async () => {
   return data;
 };
 
+export const markNotifAsRead = async (id) => {
+  const { data } = await Axios.post(
+    `${baseurl}/markdepositnotificationasread/${id}`
+  );
+  return data;
+};
+
+export const getKycNotifications = async () => {
+  const { data } = await Axios.get(
+    `${baseurl}/getuserkycverificationnotifications`
+  );
+  return data;
+};
+
+export const markKycNotifAsRead = async (id) => {
+  const { data } = await Axios.post(
+    `${baseurl}/markuserverficationnotificationasread/${id}`
+  );
+  return data;
+};
+
 export const agentCustomerGetRate = async (query) => {
   const q = query?.queryKey;
   const { data } = await Axios.get(
