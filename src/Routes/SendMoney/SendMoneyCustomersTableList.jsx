@@ -127,6 +127,7 @@ function SendMoneyCustomersTableList({
             setUserSelected(item);
             setStep(2);
             navigate(`/sendmoney?id=${item?.userId}&step=2`);
+            localStorage.setItem("userSend", JSON.stringify(item));
           }}
           style={{
             color: "blue",
@@ -141,8 +142,8 @@ function SendMoneyCustomersTableList({
           style={{
             padding: "8px 16px",
             borderRadius: "10000px",
-            background: item?.isKYCCompleted ? "#63ff706c" : "#ff63634b",
-            color: item?.isKYCCompleted ? "green" : "red",
+            background: item?.isKYCCompleted ? "#63ff70" : "#ff6363",
+            color: "white",
             width: "fit-content",
             fontWeight: "700",
           }}
@@ -157,8 +158,8 @@ function SendMoneyCustomersTableList({
             style={{
               padding: "8px 16px",
               borderRadius: "10000px",
-              background: item?.status ? "#63ff706c" : "#ff63634b",
-              color: item?.status ? "green" : "red",
+              background: item?.status ? "#63ff70" : "#ff6363",
+              color: "white",
               width: "fit-content",
               fontWeight: "700",
             }}

@@ -14,6 +14,7 @@ import { sendMoney } from "../services/Dashboard";
 import ReusableModal from "../reuseables/ReusableModal";
 import Msg from "../reuseables/Msg";
 import Btn from "../reuseables/Btn";
+import toast from "react-hot-toast";
 function SendMoney() {
   const [userSelected, setUserSelected] = useState("");
 
@@ -288,36 +289,53 @@ function SendMoney() {
               <button
                 disabled={isLoading}
                 onClick={() => {
-                  setStep((prev) => prev + 1);
                   if (step === 1) {
                     navigate(`/sendmoney?id=${params.get("id")}&step=${2}`);
+                    setStep((prev) => prev + 1);
+                    localStorage.setItem(
+                      "userSend",
+                      JSON.stringify(userSelected)
+                    );
                   }
                   if (step === 2) {
-                    navigate(
-                      `/sendmoney?id=${params.get(
-                        "id"
-                      )}&beneficiary=${JSON.stringify(
-                        active
-                      )}&user=${JSON.stringify(userSelected)}&step=${3}`
-                    );
+                    if (active) {
+                      setStep((prev) => prev + 1);
+                      localStorage.setItem("userBene", JSON.stringify(active));
+                      navigate(`/sendmoney?id=${params.get("id")}&step=${3}`);
+                    } else {
+                      toast.error("Select a beneficiary");
+                    }
                   }
                   if (step === 3) {
-                    navigate(
-                      `/sendmoney?id=${params.get(
-                        "id"
-                      )}&beneficiary=${JSON.stringify(
-                        active
-                      )}&user=${JSON.stringify(
-                        userSelected
-                      )}&fullDetails=${JSON.stringify({
-                        fromCurrency: selectedCountry,
-                        toCurrency: selectedCountry2,
-                        rate: rate,
-                        payment: payment,
-                        payout: payout,
-                        ...details,
-                      })}&step=${4}`
-                    );
+                    if (
+                      selectedCountry &&
+                      selectedCountry2 &&
+                      rate &&
+                      payment &&
+                      payout &&
+                      details?.fromCurrencyId &&
+                      details?.toCurrencyId &&
+                      details?.amount &&
+                      details?.paymentChannelId &&
+                      details?.purpose &&
+                      details?.note
+                    ) {
+                      localStorage.setItem(
+                        "sendDetails",
+                        JSON.stringify({
+                          fromCurrency: selectedCountry,
+                          toCurrency: selectedCountry2,
+                          rate: rate,
+                          payment: payment,
+                          payout: payout,
+                          ...details,
+                        })
+                      );
+
+                      navigate(`/sendmoney?id=${params.get("id")}&step=${4}`);
+                    } else {
+                      toast.error("All fields are required");
+                    }
                   }
                   if (step === 4) {
                     mutate(details);

@@ -35,16 +35,16 @@ export default function CustomerDetailsPage() {
   const [params] = useSearchParams();
   const userId = params.get("userId");
 
-  const customerDetails = JSON.parse(userId);
+  const customerDetails = JSON.parse(localStorage.getItem("customer_details"));
 
-  const clientUser = JSON.parse(userId);
+  const clientUser = JSON.parse(localStorage.getItem("customer_details"));
   const {
     data: customer,
     isLoading,
     isFetching,
   } = useQuery({
     queryKey: ["GetUserDetails"],
-    queryFn: () => GetUserDetails(clientUser?.userId),
+    queryFn: () => GetUserDetails(userId),
   });
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));

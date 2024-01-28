@@ -3,9 +3,8 @@ import logo from "../../images/logo.svg";
 import { useSearchParams } from "react-router-dom";
 
 export default function SendDetailsTop({ clientUser, profile, mail, phone }) {
-  const [params] = useSearchParams();
-  const userDetails = JSON.parse(params.get("beneficiary"));
-  const user = JSON.parse(params.get("user"));
+  const userDetails = JSON.parse(localStorage.getItem("userBene"));
+  const user = JSON.parse(localStorage.getItem("userSend"));
   return (
     <div
       style={{
