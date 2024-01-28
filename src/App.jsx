@@ -46,6 +46,7 @@ import CreateNewDocument from "./Routes/CreateNewDocument";
 import EditNewDocument from "./Routes/EditNewDocument";
 import PayoutPartnersPage from "./Routes/PayoutPartners";
 import NotificationsPage from "./Routes/Notifications";
+import KycAlertsPage from "./Routes/KycAlerts";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -334,6 +335,14 @@ function App() {
                 element={
                   <AppLogout>
                     <NotificationsPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/alerts"
+                element={
+                  <AppLogout>
+                    <KycAlertsPage />
                   </AppLogout>
                 }
               />

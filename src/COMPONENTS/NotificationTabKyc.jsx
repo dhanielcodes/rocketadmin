@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import {
-  markNotifAsRead,
-  transactionNotifications,
-} from "../services/Dashboard";
+import { getKycNotifications, markKycNotifAsRead } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@arco-design/web-react";
 import { Link } from "react-router-dom";
 
-export default function NotificationTab({ close }) {
+export default function NotificationTabKyc({ close }) {
   const { data, isLoading, isFetching, refetch } = useQuery({
-    queryKey: ["transactionNotifications"],
-    queryFn: () => transactionNotifications(),
+    queryKey: ["getKycNotifications"],
+    queryFn: () => getKycNotifications(),
   });
 
   const [loading, setLoading] = useState(false);
@@ -19,7 +16,7 @@ export default function NotificationTab({ close }) {
   const markAsRead = async (id) => {
     setLoading(true);
     try {
-      const data = await markNotifAsRead(id);
+      const data = await markKycNotifAsRead(id);
       console.log(data);
       refetch();
       setLoading(false);
@@ -43,7 +40,7 @@ export default function NotificationTab({ close }) {
           borderBottom: " 1px solid #d4d4d4",
         }}
       >
-        <span style={{ transform: "translateX(180px)" }}>Notifications</span>
+        <span style={{ transform: "translateX(200px)" }}>Alerts</span>
         <svg
           onClick={() => {
             close();
@@ -96,7 +93,7 @@ export default function NotificationTab({ close }) {
                 textAlign: "center",
               }}
             >
-              No Notifications.
+              No Alerts.
             </div>
           )
         )}
@@ -138,10 +135,8 @@ export default function NotificationTab({ close }) {
                     cy="25"
                     r="25"
                     stroke={
-                      item?.depositStatus === "Deposited"
+                      item?.documentCheckResult === "Passed"
                         ? "#00A85A"
-                        : item?.depositStatus === "Pending"
-                        ? "#ffe063"
                         : "#ff6363"
                     }
                     fill-opacity="0.1"
@@ -149,10 +144,8 @@ export default function NotificationTab({ close }) {
                   <path
                     d="M29.6783 19.9334L19.0717 30.54"
                     stroke={
-                      item?.depositStatus === "Deposited"
+                      item?.documentCheckResult === "Passed"
                         ? "#00A85A"
-                        : item?.depositStatus === "Pending"
-                        ? "#ffe063"
                         : "#ff6363"
                     }
                     stroke-width="1.5"
@@ -162,10 +155,8 @@ export default function NotificationTab({ close }) {
                   <path
                     d="M21.1407 19.9513L29.6783 19.9329L29.6606 28.4712"
                     stroke={
-                      item?.depositStatus === "Deposited"
+                      item?.documentCheckResult === "Passed"
                         ? "#00A85A"
-                        : item?.depositStatus === "Pending"
-                        ? "#ffe063"
                         : "#ff6363"
                     }
                     stroke-width="1.5"
@@ -178,28 +169,25 @@ export default function NotificationTab({ close }) {
                   <div>
                     <b>
                       {" "}
-                      {item?.customerName} - {item?.transactionRef}
+                      {item?.userName} - {item?.userId}
                     </b>
                   </div>
                   <b
                     style={{
                       color:
-                        item?.depositStatus === "Deposited"
+                        item?.documentCheckResult === "Passed"
                           ? "#00A85A"
-                          : item?.depositStatus === "Pending"
-                          ? "#ffe063"
                           : "#ff6363",
                     }}
                   >
                     {item?.depositStatus}
                   </b>
-                  <div>Transfer Ref - {item?.transactionRef}</div>
                   <div
                     style={{
                       color: "#667085",
                     }}
                   >
-                    User Name: {item?.customerUserName}
+                    Verification Type: {item?.verificationType}
                   </div>
                 </div>
               </div>
@@ -208,8 +196,8 @@ export default function NotificationTab({ close }) {
           );
         })}
       </div>
-      <Link to="/notifications">
-        <div className="view">View All Notifications</div>
+      <Link to="/alerts">
+        <div className="view">View All Alerts</div>
       </Link>
     </NotStyle>
   );
