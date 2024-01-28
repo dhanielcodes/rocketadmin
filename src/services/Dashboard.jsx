@@ -38,6 +38,13 @@ export const nameEnquiry = async (query) => {
   return data;
 };
 
+export const transactionNotifications = async () => {
+  const { data } = await Axios.get(
+    `${baseurl}/gettransactiondepositnotifications`
+  );
+  return data;
+};
+
 export const agentCustomerGetRate = async (query) => {
   const q = query?.queryKey;
   const { data } = await Axios.get(

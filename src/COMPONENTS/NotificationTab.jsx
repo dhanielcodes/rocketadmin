@@ -1,19 +1,34 @@
 import React from "react";
 import styled from "styled-components";
+import { transactionNotifications } from "../services/Dashboard";
+import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "@arco-design/web-react";
+import { Link } from "react-router-dom";
 
-export default function NotificationTab() {
+export default function NotificationTab({ close }) {
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ["transactionNotifications"],
+    queryFn: () => transactionNotifications(),
+  });
+
+  console.log(data);
+
   return (
     <NotStyle>
       <div
         style={{
-          padding: "0px 16px",
+          padding: "20px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          fontSize: "18px",
         }}
       >
-        <span>Notifications</span>
+        <span style={{ transform: "translateX(180px)" }}>Notifications</span>
         <svg
+          onClick={() => {
+            close();
+          }}
           width="24"
           height="24"
           viewBox="0 0 24 24"
@@ -33,76 +48,160 @@ export default function NotificationTab() {
           </defs>
         </svg>
       </div>
-      <div>
-        <div
-          style={{
-            padding: "10px 10px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
+      <div
+        style={{
+          overflow: "hidden",
+          overflowY: "scroll",
+          height: "400px",
+        }}
+      >
+        {isLoading || isFetching ? (
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
+              padding: "0 20px",
             }}
           >
-            <svg
-              style={{ marginRight: "10px" }}
-              width="50"
-              height="50"
-              viewBox="0 0 50 50"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle
-                cx="25"
-                cy="25"
-                r="25"
-                fill="#00A85A"
-                fill-opacity="0.1"
-              />
-              <path
-                d="M29.6783 19.9334L19.0717 30.54"
-                stroke="#00A85A"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M21.1407 19.9513L29.6783 19.9329L29.6606 28.4712"
-                stroke="#00A85A"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-
-            <div>
-              <div>Abiola - TR90849303</div>
-              <div>Deposited</div>
-              <div>Transfer Ref - TX904893728</div>
-              <div>User Name: transferadmin</div>
-            </div>
+            <Skeleton />
           </div>
-          <div>1 min ago</div>
-        </div>
+        ) : (
+          ""
+        )}
+        {data?.data?.slice(0, 5)?.map((item) => {
+          return isLoading || isFetching ? (
+            ""
+          ) : (
+            <div
+              className="datum"
+              style={{
+                padding: "16px",
+                background: "#F3F9FE",
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "space-between",
+                borderBottom: "1px solid #e2e2e2",
+                cursor: "pointer",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                }}
+              >
+                <svg
+                  style={{ marginRight: "10px" }}
+                  width="50"
+                  height="50"
+                  viewBox="0 0 50 50"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="25"
+                    cy="25"
+                    r="25"
+                    stroke={
+                      item?.depositStatus === "deposited"
+                        ? "#00A85A"
+                        : item?.depositStatus === "Pending"
+                        ? "#ffe063"
+                        : "#ff6363"
+                    }
+                    fill-opacity="0.1"
+                  />
+                  <path
+                    d="M29.6783 19.9334L19.0717 30.54"
+                    stroke={
+                      item?.depositStatus === "deposited"
+                        ? "#00A85A"
+                        : item?.depositStatus === "Pending"
+                        ? "#ffe063"
+                        : "#ff6363"
+                    }
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M21.1407 19.9513L29.6783 19.9329L29.6606 28.4712"
+                    stroke={
+                      item?.depositStatus === "deposited"
+                        ? "#00A85A"
+                        : item?.depositStatus === "Pending"
+                        ? "#ffe063"
+                        : "#ff6363"
+                    }
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+
+                <div className="inner_dets">
+                  <div>
+                    <b>
+                      {" "}
+                      {item?.customerName} - {item?.transactionRef}
+                    </b>
+                  </div>
+                  <b
+                    style={{
+                      color:
+                        item?.depositStatus === "deposited"
+                          ? "#00A85A"
+                          : item?.depositStatus === "Pending"
+                          ? "#ffe063"
+                          : "#ff6363",
+                    }}
+                  >
+                    {item?.depositStatus}
+                  </b>
+                  <div>Transfer Ref - {item?.transactionRef}</div>
+                  <div
+                    style={{
+                      color: "#667085",
+                    }}
+                  >
+                    User Name: {item?.customerUserName}
+                  </div>
+                </div>
+              </div>
+              <div>1 min ago</div>
+            </div>
+          );
+        })}
       </div>
+      <Link to="/notifications">
+        <div className="view">View All Notifications</div>
+      </Link>
     </NotStyle>
   );
 }
 
 const NotStyle = styled.div`
   position: absolute;
-  pointer-events: none;
-  opacity: 0;
+  //pointer-events: none;
+  //opacity: 0;
   top: 0;
   right: 20px;
   background: white;
   margin-top: 50px;
   border-radius: 20px;
-  width: 400px;
+  width: 500px;
+
   border: 1px solid #d4d4d4;
   z-index: 10;
+  line-height: normal;
+  .datum:hover {
+    background: #f3f9fe;
+  }
+  .inner_dets div {
+    margin: 10px 0px;
+  }
+  .view {
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    border-top: 1px solid #d4d4d4;
+  }
 `;
