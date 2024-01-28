@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { transactionNotifications } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
+import { Skeleton } from "@arco-design/web-react";
 
 export default function NotificationsPage() {
   const { data, isLoading, isFetching } = useQuery({
@@ -34,8 +35,21 @@ export default function NotificationsPage() {
         <AuditStyle>
           <div>
             <div className="audit_cont">
+              {isLoading || isFetching ? (
+                <div
+                  style={{
+                    padding: "0 20px",
+                  }}
+                >
+                  <Skeleton />
+                </div>
+              ) : (
+                ""
+              )}
               {data?.data?.map((item) => {
-                return (
+                return isLoading || isFetching ? (
+                  ""
+                ) : (
                   <div className="audit">
                     <svg
                       width="40"
