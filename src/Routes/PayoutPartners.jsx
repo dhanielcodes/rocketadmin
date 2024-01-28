@@ -10,6 +10,7 @@ import {
 } from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { kFormatter, kFormatter2, kFormatter3 } from "../utils/format";
 
 export default function PayoutPartnersPage() {
   const { data: payoutPartner } = useQuery({
@@ -47,6 +48,16 @@ export default function PayoutPartnersPage() {
 
   console.log(gateWays);
 
+  console.log(
+    logs?.filter(
+      (item) => item?.payOutProvider?.id === selectedGateway?.providerId
+    )
+  );
+
+  const filtered = logs?.filter(
+    (item) => item?.payOutProvider?.id === selectedGateway?.providerId
+  );
+
   return (
     <>
       <BodyLayout>
@@ -59,11 +70,17 @@ export default function PayoutPartnersPage() {
           </div>
         </Header>
         <Body>
-          <div className="body_card">
-            <div className="card_top">OHP!</div>
-            <div className="card_middle">Naira Balance</div>
-            <div className="card_bottom">123</div>
-          </div>
+          {gateWays?.map((item) => {
+            return (
+              <div className="body_card">
+                <div className="card_top">{item?.providerName}</div>
+                <div className="card_middle">Naira Balance</div>
+                <div className="card_bottom">
+                  {kFormatter3(item?.wallet?.balance)}
+                </div>
+              </div>
+            );
+          })}
         </Body>
         <DataFields>
           <div className="data_cont">
@@ -138,7 +155,7 @@ export default function PayoutPartnersPage() {
           </div>
         </DataFields>
 
-        {logs?.length && <PayoutPartnersTable data={logs} />}
+        {logs?.length && <PayoutPartnersTable data={filtered || logs} />}
       </BodyLayout>
     </>
   );
@@ -182,6 +199,7 @@ const Body = styled.div`
     background-color: white;
     border-radius: 20px;
     text-align: center;
+    margin-right: 10px;
 
     .card_top {
       font-weight: 500;

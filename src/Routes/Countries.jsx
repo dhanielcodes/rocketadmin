@@ -202,7 +202,7 @@ function CountriesPage() {
               background: item?.isCollectionCurrency
                 ? "#63ff706c"
                 : "#ff63634b",
-              color: item?.isCollectionCurrency ? "green" : "red",
+              color: "white",
               width: "fit-content",
               fontWeight: "700",
             }}

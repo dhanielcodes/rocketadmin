@@ -19,10 +19,8 @@ import AppInput from "../../reuseables/AppInput";
 import AmountFormatter from "../../reuseables/AmountFormatter";
 
 export default function SendDetailsFinal({ rate }) {
-  const [params] = useSearchParams();
-
-  const user = JSON.parse(params.get("fullDetails"));
-  const beneficiary = JSON.parse(params.get("beneficiary"));
+  const user = JSON.parse(localStorage.getItem("sendDetails"));
+  const beneficiary = JSON.parse(localStorage.getItem("userBene"));
 
   console.log(user, rate);
   return (

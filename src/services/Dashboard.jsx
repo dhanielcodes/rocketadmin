@@ -228,7 +228,7 @@ export const getPayoutPartnerGateways = async (id) => {
 
 export const getPayoutPartnerLog = async (id) => {
   const { data } = await Axios.get(
-    `${baseurl}/getpayoutlogbypayoutpartner/${id}`
+    `${baseurl}/getpayoutlogbypayoutpartner${id}`
   );
   return data;
 };

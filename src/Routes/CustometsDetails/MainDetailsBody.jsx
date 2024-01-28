@@ -9,8 +9,8 @@ export default function CustomerDetailsTop({
   phone,
 }) {
   const [params] = useSearchParams();
-  const userDetails = JSON.parse(params.get("beneficiary"));
-  const user = JSON.parse(params.get("userId"));
+  const user = JSON.parse(localStorage.getItem("customer_details"));
+
   return (
     <div
       style={{
