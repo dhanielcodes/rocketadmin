@@ -42,6 +42,12 @@ export default function NotificationsPage() {
                   }}
                 >
                   <Skeleton />
+                  <br />
+                  <br />
+                  <Skeleton />
+                  <br />
+                  <br />
+                  <Skeleton />
                 </div>
               ) : (
                 ""

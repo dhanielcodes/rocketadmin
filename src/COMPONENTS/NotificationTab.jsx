@@ -62,6 +62,12 @@ export default function NotificationTab({ close }) {
             }}
           >
             <Skeleton />
+            <br />
+            <br />
+            <Skeleton />
+            <br />
+            <br />
+            <Skeleton />{" "}
           </div>
         ) : (
           ""
