@@ -30,8 +30,8 @@ export default function CustomerDetailsTop({
       >
         <svg
           style={{
-            width: "160px",
-            height: "160px",
+            width: "120px",
+            height: "120px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -66,7 +66,7 @@ export default function CustomerDetailsTop({
           <div>
             <div
               style={{
-                fontSize: "26px",
+                fontSize: "22px",
                 textTransform: "capitalize",
                 marginRight: "10px",
               }}
@@ -162,21 +162,28 @@ export default function CustomerDetailsTop({
               style={{
                 padding: "8px 16px",
                 borderRadius: "10000px",
-                background: user?.status ? "#63ff706c" : "#ff63634b",
-                color: user?.status ? "green" : "red",
+                background: user?.status ? "#2dda58" : "#ff6363",
+                color: "white",
                 width: "fit-content",
                 fontWeight: "700",
               }}
             >
               {user?.status ? "Active" : "Inactive"}
             </div>
+
             <div
               style={{
                 padding: "8px 16px",
                 borderRadius: "10000px",
-                background: user?.isKYCCompleted ? "#63ff706c" : "#ff63634b",
-                color: user?.isKYCCompleted ? "green" : "red",
-                width: "fit-content",
+                fontSize: "14px",
+                background: user?.isKYCCompleted
+                  ? "#2dda58"
+                  : user?.isKYCCompleted
+                  ? "#ffe063"
+                  : "#ff6363",
+                color: "white",
+                width: "100px",
+                textAlign: "center",
                 fontWeight: "700",
                 marginTop: "10px",
               }}

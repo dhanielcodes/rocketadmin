@@ -56,7 +56,7 @@ export default function CustomerDetailsPage() {
   const [active, setActive] = useState("ID Documents");
 
   const tab = [
-    /* "Overview", */
+    "Overview",
     "ID Documents",
     "Transfer List",
     "Beneficiary List",
