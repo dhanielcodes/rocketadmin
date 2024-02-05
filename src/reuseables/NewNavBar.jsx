@@ -161,6 +161,23 @@ export default function NewNavBar() {
           ],
         },
         {
+          name: "Employee ",
+          path: "//",
+          parentName: "Masters",
+          miniLinks: [
+            {
+              name: "Employee Master",
+              path: "/employee-master",
+              parentName: "Employee",
+            },
+          ],
+        },
+        {
+          name: "Profession Master",
+          path: "/profession",
+          parentName: "Masters",
+        },
+        {
           name: "Payment Channels",
           path: "/payment-channels",
           parentName: "Masters",

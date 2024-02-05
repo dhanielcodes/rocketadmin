@@ -47,6 +47,9 @@ import EditNewDocument from "./Routes/EditNewDocument";
 import PayoutPartnersPage from "./Routes/PayoutPartners";
 import NotificationsPage from "./Routes/Notifications";
 import KycAlertsPage from "./Routes/KycAlerts";
+import EmployeeMaster from "./Routes/Employee/EmployeeMaster";
+import CreateNewEmployee from "./Routes/CreateNewEmployee";
+import ProfessionMaster from "./Routes/ProfessionMaster";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -114,7 +117,6 @@ function App() {
                   </AppLogout>
                 }
               />
-
               <Route
                 path="/payout-partners"
                 element={
@@ -123,7 +125,6 @@ function App() {
                   </AppLogout>
                 }
               />
-
               <Route
                 path="/clients"
                 element={
@@ -204,7 +205,6 @@ function App() {
                   </AppLogout>
                 }
               />
-
               <Route
                 path="/payout-processors"
                 element={
@@ -213,7 +213,6 @@ function App() {
                   </AppLogout>
                 }
               />
-
               <Route
                 path="/payment-processors"
                 element={
@@ -222,7 +221,6 @@ function App() {
                   </AppLogout>
                 }
               />
-
               <Route
                 path="/payment-channels"
                 element={
@@ -231,7 +229,6 @@ function App() {
                   </AppLogout>
                 }
               />
-
               <Route
                 path="/payment-providers"
                 element={
@@ -248,7 +245,6 @@ function App() {
                   </AppLogout>
                 }
               />
-
               <Route
                 path="/payout-providers"
                 element={
@@ -305,7 +301,6 @@ function App() {
                   </AppLogout>
                 }
               />
-
               <Route
                 path="/countries"
                 element={
@@ -343,6 +338,30 @@ function App() {
                 element={
                   <AppLogout>
                     <KycAlertsPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/employee-master"
+                element={
+                  <AppLogout>
+                    <EmployeeMaster />
+                  </AppLogout>
+                }
+              />{" "}
+              <Route
+                path="/create-employee"
+                element={
+                  <AppLogout>
+                    <CreateNewEmployee />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/profession"
+                element={
+                  <AppLogout>
+                    <ProfessionMaster />
                   </AppLogout>
                 }
               />

@@ -368,3 +368,27 @@ export const sendAgentInvite = async (body) => {
   const { data } = await Axios.post(`${baseurl}/sendagentinvite`, body);
   return data;
 };
+
+export const GetEmployees = async () => {
+  const { data } = await Axios.get(`${baseurl}/getemployees`);
+  return data;
+};
+export const AddEmployees = async () => {
+  const { data } = await Axios.get(`${baseurl}/getemployees`);
+  return data;
+};
+
+export const getProfessions = async () => {
+  const { data } = await Axios.get(`${baseurl}/getprofession`);
+  return data;
+};
+
+export const updateProfession = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/updateprofession`, body);
+  return data;
+};
+
+export const getRisks = async () => {
+  const { data } = await Axios.get(`${baseurl}/getriskfactors`);
+  return data;
+};

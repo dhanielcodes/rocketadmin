@@ -79,7 +79,16 @@ const data = [
   },
 ];
 
-const CustomTable = ({ Apidata, tableColumns, loading, noData }) => {
+const CustomTable = ({
+  Apidata,
+  tableColumns,
+  loading,
+  noData,
+  scroll = {
+    x: 1600,
+    y: 800,
+  },
+}) => {
   return (
     <Content>
       <Table
@@ -100,10 +109,7 @@ const CustomTable = ({ Apidata, tableColumns, loading, noData }) => {
         style={{
           padding: "12px 0",
         }}
-        scroll={{
-          x: 1600,
-          y: 800,
-        }}
+        scroll={scroll}
       />
     </Content>
   );
