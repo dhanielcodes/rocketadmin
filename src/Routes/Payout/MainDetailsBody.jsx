@@ -83,11 +83,11 @@ export default function MainDetailsBody({ clientUser, profile, mail, phone }) {
                 </div>
                 <div
                   style={{
-                    padding: "8px 16px",
+                    padding: "6px 14px",
                     borderRadius: "10000px",
                     background:
                       clientUser?.status !== "Suspended"
-                        ? "#63ff706c"
+                        ? "#37d7446c"
                         : "#ff63634b",
                     color: clientUser?.status !== "Suspended" ? "green" : "red",
                     width: "fit-content",

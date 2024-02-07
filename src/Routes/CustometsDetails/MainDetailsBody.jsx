@@ -160,8 +160,8 @@ export default function CustomerDetailsTop({
           >
             <div
               style={{
-                padding: "8px 16px",
-                borderRadius: "10000px",
+                padding: "6px",
+                borderRadius: "7px",
                 background: user?.status ? "#2dda58" : "#ff6363",
                 color: "white",
                 width: "fit-content",
@@ -173,8 +173,8 @@ export default function CustomerDetailsTop({
 
             <div
               style={{
-                padding: "8px 16px",
-                borderRadius: "10000px",
+                padding: "6px",
+                borderRadius: "7px",
                 fontSize: "14px",
                 background: user?.isKYCCompleted
                   ? "#2dda58"

@@ -63,11 +63,11 @@ export default function Gateways({ data }) {
           {" "}
           <div
             style={{
-              padding: "8px 16px",
-              borderRadius: "10000px",
+              padding: "6px 14px",
+              borderRadius: "7px",
               background:
                 item?.status === "true"
-                  ? "#63ff706c"
+                  ? "#37d7446c"
                   : item?.status === "true"
                   ? "#FEF0C7"
                   : "#ff63634b",

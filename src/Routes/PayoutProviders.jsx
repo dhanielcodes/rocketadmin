@@ -271,9 +271,9 @@ function PayoutProvidersList() {
           {" "}
           <div
             style={{
-              padding: "8px 16px",
-              borderRadius: "10000px",
-              background: item?.status ? "#63ff706c" : "#ff63634b",
+              padding: "6px 14px",
+              borderRadius: "7px",
+              background: item?.status ? "#37d7446c" : "#ff63634b",
               color: item?.status ? "green" : "red",
               width: "fit-content",
               fontWeight: "700",

@@ -5,7 +5,7 @@ import AmountFormatter from "../../../reuseables/AmountFormatter";
 import CountryDropdownDash from "../../../reuseables/CountryDropdownDash";
 import GaugeChart from "react-gauge-chart";
 
-export default function Details({ clientDetails }) {
+export default function Details({ clientDetails, setViewRisk }) {
   const [selected, setSelected] = useState();
   const newSelected =
     selected ||
@@ -18,6 +18,8 @@ export default function Details({ clientDetails }) {
     })?.[0];
 
   console.log(clientDetails?.userAssesmentScore / 33);
+
+  const score = clientDetails?.userAssesmentScore || 0;
   return (
     <>
       <div
@@ -60,6 +62,9 @@ export default function Details({ clientDetails }) {
                 color: "#417CD4",
                 cursor: "pointer",
               }}
+              onClick={() => {
+                setViewRisk(true);
+              }}
             >
               View Risk Analysis
             </div>
@@ -70,9 +75,9 @@ export default function Details({ clientDetails }) {
             colors={["#37ffa8", "#FFC371", "#EA4228"]}
             style={{ width: "100%" }}
             textColor="#000"
-            percent={clientDetails?.userAssesmentScore / 33}
+            percent={score / 33}
           />
-          <div></div>
+          <div>{clientDetails?.userRiskLevel}</div>
           <div></div>
           <div></div>
           <div></div>
