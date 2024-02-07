@@ -1521,11 +1521,11 @@ function TransferLogsTable() {
           {" "}
           <div
             style={{
-              padding: "8px 16px",
-              borderRadius: "10000px",
+              padding: "6px 14px",
+              borderRadius: "7px",
               background:
                 item?.paymentStatus === "Deposited"
-                  ? "#63ff70"
+                  ? "#37d744"
                   : item?.paymentStatus === "Pending"
                   ? "#ffe063"
                   : "#ff6363",
@@ -1544,11 +1544,11 @@ function TransferLogsTable() {
           {" "}
           <div
             style={{
-              padding: "8px 16px",
-              borderRadius: "10000px",
+              padding: "6px 14px",
+              borderRadius: "7px",
               background:
                 item?.collectStatus === "Received"
-                  ? "#63ff70"
+                  ? "#37d744"
                   : item?.collectStatus === "Pending"
                   ? "#ffe063"
                   : item?.collectStatus === ""

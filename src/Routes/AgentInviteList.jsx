@@ -320,7 +320,7 @@ function AgentInviteList() {
       action2: (
         <div
           style={{
-            padding: "8px 16px",
+            padding: "6px 14px",
             borderRadius: "10px",
             background: "#00b044",
             color: "white",
@@ -336,17 +336,17 @@ function AgentInviteList() {
           {" "}
           <div
             style={{
-              padding: "8px 16px",
-              borderRadius: "10000px",
+              padding: "6px 14px",
+              borderRadius: "7px",
               background:
                 item?.status === "Accepted"
-                  ? "#63ff706c"
+                  ? "#37d7446c"
                   : item?.status === "Sent"
                   ? "#afafaf"
                   : "#ff63634b",
               color:
                 item?.status === "Accepted"
-                  ? "#63ff70"
+                  ? "#37d744"
                   : item?.status === "Sent"
                   ? "#3f3f3f"
                   : "#ff6363",
