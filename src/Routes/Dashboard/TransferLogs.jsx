@@ -1599,7 +1599,7 @@ function TransferLogsTable() {
         <CustomTable
           noData={rates?.data?.length}
           loading={isLoading || isFetching}
-          Apidata={newData}
+          Apidata={newData || []}
           tableColumns={columns}
         />
 

@@ -229,6 +229,10 @@ export const getRoleMeta = async () => {
   );
   return data;
 };
+export const getRoles = async () => {
+  const { data } = await Axios.get(`${baseurl}/getroles`);
+  return data;
+};
 export const getAgentInviteList = async () => {
   const { data } = await Axios.get(`${baseurl}/getagentinvite`);
   return data;
