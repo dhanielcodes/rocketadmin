@@ -77,7 +77,20 @@ export default function Details({ clientDetails, setViewRisk }) {
             textColor="#000"
             percent={score / 33}
           />
-          <div>{clientDetails?.userRiskLevel}</div>
+          <div
+            style={{
+              fontSize: "32px",
+              transform: "translateY(-70px)",
+              color: "#FDA333",
+              textTransform: "uppercase",
+              fontWeight: 600,
+              textAlign: "center",
+            }}
+          >
+            {score} / 33
+            <br />
+            {clientDetails?.userRiskLevel}
+          </div>
           <div></div>
           <div></div>
           <div></div>
