@@ -73,11 +73,27 @@ export default function Details({ clientDetails, setViewRisk }) {
             id="gauge-chart3"
             nrOfLevels={3}
             colors={["#37ffa8", "#FFC371", "#EA4228"]}
-            style={{ width: "100%" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              transform: "translateY(100px)",
+            }}
             textColor="#000"
             percent={score / 33}
           />
-          <div>{clientDetails?.userRiskLevel}</div>
+          <div
+            style={{
+              fontSize: "32px",
+              color: "#FDA333",
+              textTransform: "uppercase",
+              fontWeight: 600,
+              textAlign: "center",
+            }}
+          >
+            {score} / 33
+            <br />
+            {clientDetails?.userRiskLevel}
+          </div>
           <div></div>
           <div></div>
           <div></div>

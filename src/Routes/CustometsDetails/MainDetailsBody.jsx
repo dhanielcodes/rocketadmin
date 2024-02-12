@@ -166,6 +166,7 @@ export default function CustomerDetailsTop({
                 color: "white",
                 width: "fit-content",
                 fontWeight: "700",
+                marginLeft: "auto",
               }}
             >
               {user?.status ? "Active" : "Inactive"}
@@ -186,6 +187,7 @@ export default function CustomerDetailsTop({
                 textAlign: "center",
                 fontWeight: "700",
                 marginTop: "10px",
+                marginLeft: "auto",
               }}
             >
               KYC: {user?.isKYCCompleted ? "Verified" : "Not Verified"}

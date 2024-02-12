@@ -197,6 +197,11 @@ export default function NewNavBar() {
           path: "/payout-providers",
           parentName: "Masters",
         },
+        {
+          name: "User Access",
+          path: "/user-access",
+          parentName: "Masters",
+        },
       ],
     },
     {

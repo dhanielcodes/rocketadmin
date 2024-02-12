@@ -50,6 +50,7 @@ import KycAlertsPage from "./Routes/KycAlerts";
 import EmployeeMaster from "./Routes/Employee/EmployeeMaster";
 import CreateNewEmployee from "./Routes/CreateNewEmployee";
 import ProfessionMaster from "./Routes/ProfessionMaster";
+import UserAccessPage from "./Routes/UserAccess";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -122,6 +123,14 @@ function App() {
                 element={
                   <AppLogout>
                     <PayoutPartnersPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/user-access"
+                element={
+                  <AppLogout>
+                    <UserAccessPage />
                   </AppLogout>
                 }
               />
