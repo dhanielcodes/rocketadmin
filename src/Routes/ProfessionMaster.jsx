@@ -2,34 +2,21 @@ import { useEffect, useState } from "react";
 import BodyLayout from "../reuseables/BodyLayout";
 import { styled } from "styled-components";
 //import SearchInput from "../reuseables/SearchInput";
-import InviteAgent from "../COMPONENTS/InviteAgent";
-import {
-  getAgents,
-  getPaymentProcessors,
-  getPayoutProcessors,
-} from "../services/Dashboard";
+
 import { useQuery } from "@tanstack/react-query";
 import CustomTable from "../reuseables/CustomTable";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ReactCountryFlag from "react-country-flag";
-import AddPaymentProcessorModal from "../modals/AddPaymentProcessorModal";
-import {
-  getPaymentProviders,
-  getPayoutProviders,
-} from "../services/PayoutDashboard";
-import UpdatePayoutProvider from "../modals/UpdatePayoutProvider";
-import { countryObjectsArray } from "../../config/CountryCodes";
-import { removeDup } from "../utils/format";
+import UpdatePaymentProvider from "../modals/UpdatePaymentProvider";
+import { getProfessions } from "../services/Dashboard";
+import AddProfessionModal from "../modals/AddProfessionModal";
 
 // hhhhhhh
-function PayoutProvidersList() {
+function ProfessionMaster() {
   const [inviteAgent, setInviteAgent] = useState(false);
   /* {
     "id": 1,
-    "payOutProviderSupportedCurrency": [
-        {
-            "id": 161
-        },
+    "paymentProviderSupportedCurrency": [
         {
             "id": 232
         },
@@ -48,8 +35,8 @@ function PayoutProvidersList() {
     isFetching: mutateFetching,
     refetch,
   } = useQuery({
-    queryKey: ["getPayoutPrswoviders"],
-    queryFn: () => getPayoutProviders(),
+    queryKey: ["getProfessions"],
+    queryFn: () => getProfessions(),
   });
 
   console.log(payouts);
@@ -61,54 +48,9 @@ function PayoutProvidersList() {
 
   const columns = [
     {
-      title: "CHANNEL ID",
-      dataIndex: "id",
-      width: 190,
-    },
-
-    {
-      title: "COUNTRY",
-      dataIndex: "sending",
-      width: 220,
-    },
-
-    {
-      title: "PAYMENT PROCESSOR",
-      dataIndex: "newGateWay",
-      width: 240,
-      filters: removeDup(
-        payouts?.data?.map((item) => {
-          return {
-            text: item?.["name"],
-            value: item?.["name"],
-          };
-        })
-      ),
-
-      onFilter: (value, row) => row?.["name"].indexOf(value) > -1,
-      filterMultiple: true,
-    },
-
-    {
-      title: "PAYMENT DESCRIPTION",
-      dataIndex: "description",
-      width: 260,
-    },
-
-    {
-      title: "STATUS",
-      dataIndex: "status",
-      width: 220,
-      //render: () => "Other 2",
-    },
-    {
-      title: "DATE CREATED",
-      dataIndex: "dateCreated",
-      /*   sorter: {
-        compare: (a, b) => a.name - b.name,
-        multiple: 1,
-      }, */
-      width: 200,
+      title: "S/N",
+      dataIndex: "agentId",
+      width: 10,
     },
     {
       title: "ACTION",
@@ -117,9 +59,24 @@ function PayoutProvidersList() {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
       }, */
-      width: 60,
+      width: 30,
+    },
+
+    {
+      title: "PROFESSION NAME",
+      dataIndex: "name",
+      width: 90,
+    },
+
+    {
+      title: "RISK LEVEL",
+      dataIndex: "luStatus",
+      width: 90,
+      //render: () => "Other 2",
     },
   ];
+
+  const navigate = useNavigate();
 
   const [active, setActive] = useState();
   const [item, setItem] = useState();
@@ -218,70 +175,19 @@ function PayoutProvidersList() {
           )}
         </div>
       ),
-      newGateWay: (
+      luStatus: (
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
+            padding: "6px 14px",
+            borderRadius: "7px",
+            background: item?.riskLevel?.name === "Low" ? "#37d744" : "#ff6363",
+            color: "white",
+            width: "fit-content",
+            fontWeight: "700",
           }}
         >
-          <img
-            style={{
-              width: "30px",
-              height: "30px",
-              borderRadius: "1000px",
-              marginRight: "10px",
-              objectFit: "cover",
-            }}
-            src={item["logo"]}
-            alt=""
-          />
-          {item["name"]}
+          {item?.riskLevel?.name}
         </div>
-      ),
-      sending: (
-        <>
-          {item?.payOutProviderSupportedCurrency?.map((item) => {
-            return (
-              <>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <ReactCountryFlag
-                    style={{
-                      borderRadius: "10000000px",
-                      marginRight: "10px",
-                    }}
-                    countryCode={item?.code?.slice(0, 2)}
-                    svg
-                  />
-                  {item["code"]}
-                </div>
-              </>
-            );
-          })}
-        </>
-      ),
-
-      status: (
-        <>
-          {" "}
-          <div
-            style={{
-              padding: "6px 14px",
-              borderRadius: "7px",
-              background: item?.status ? "#37d7446c" : "#ff63634b",
-              color: item?.status ? "green" : "red",
-              width: "fit-content",
-              fontWeight: "700",
-            }}
-          >
-            {item?.status ? "Active" : "Inactive"}
-          </div>
-        </>
       ),
     };
   });
@@ -291,7 +197,7 @@ function PayoutProvidersList() {
   return (
     <>
       {inviteAgent && (
-        <UpdatePayoutProvider item={item} closeinviteAgent={setInviteAgent} />
+        <AddProfessionModal item={item} closeinviteAgent={setInviteAgent} />
       )}
       <BodyLayout
         onClick={() => {
@@ -302,56 +208,17 @@ function PayoutProvidersList() {
         <Content>
           <div className="header">
             <div className="top">
-              <p>Payout Providers</p>
-              <span>This page allows you to manage payment providers</span>
+              <p>Profession</p>
+              <span>This page allows you to add and update professions</span>
             </div>
             <div className="btn">
-              {/*   <button
-                style={{
-                  backgroundColor: "white",
-                  color: "#464F60",
-                  border: "2px solid gainsboro",
-                }}
-              >
-                <svg
-                  width="20"
-                  height="18"
-                  viewBox="0 0 20 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M6.66661 13.1666L9.99994 16.4999M9.99994 16.4999L13.3333 13.1666M9.99994 16.4999V8.99994M17.3999 14.0749C18.1244 13.5655 18.6677 12.8384 18.951 11.9992C19.2343 11.1601 19.2428 10.2525 18.9753 9.40813C18.7078 8.56381 18.1782 7.82669 17.4633 7.30375C16.7485 6.78081 15.8856 6.49925 14.9999 6.49994H13.9499C13.6993 5.52317 13.2304 4.61598 12.5784 3.84668C11.9264 3.07737 11.1084 2.46599 10.186 2.05857C9.2635 1.65115 8.26065 1.4583 7.25288 1.49454C6.24512 1.53078 5.25871 1.79517 4.36791 2.2678C3.47711 2.74043 2.70513 3.40898 2.1101 4.22314C1.51507 5.03729 1.11249 5.97582 0.932662 6.96807C0.752836 7.96032 0.800453 8.98044 1.07193 9.95163C1.3434 10.9228 1.83166 11.8198 2.49994 12.5749"
-                    stroke="#344054"
-                    stroke-width="1.336"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                Export Report{" "}
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M2 5L8 11L14 5"
-                    stroke="#868FA0"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </button> */}
-              {/*   <button
+              <button
                 style={{
                   backgroundColor: "#00A85A",
                   color: "white",
                 }}
                 onClick={() => {
-                  //setInviteAgent(true);
+                  setInviteAgent(true);
                 }}
               >
                 <svg
@@ -368,50 +235,20 @@ function PayoutProvidersList() {
                     fill="white"
                   />
                 </svg>
-                New Processor
-              </button> */}
+                New Profession
+              </button>
             </div>
           </div>
           <div className="main">
-            <div className="head">
-              {/*               <SearchInput placeholder="Search" style={{ width: "30vw" }} />
-               */}{" "}
-              {/*  <button>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M2.5 5.83301H17.5"
-                    stroke="#344054"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    d="M5 10H15"
-                    stroke="#344054"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    d="M8.33337 14.167H11.6667"
-                    stroke="#344054"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                </svg>
-                Filter
-              </button> */}
-            </div>
-
             <CustomTable
               noData={payouts?.data?.length}
               loading={mutateLoading || mutateFetching}
               Apidata={newData}
               tableColumns={columns}
+              scroll={{
+                x: 800,
+                y: 800,
+              }}
             />
           </div>
         </Content>
@@ -420,7 +257,7 @@ function PayoutProvidersList() {
   );
 }
 
-export default PayoutProvidersList;
+export default ProfessionMaster;
 
 const Content = styled.div`
   .head {

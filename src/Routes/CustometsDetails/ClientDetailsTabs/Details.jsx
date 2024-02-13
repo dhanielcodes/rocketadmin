@@ -3,8 +3,9 @@ import styled from "styled-components";
 import AppInput from "../../../reuseables/AppInput";
 import AmountFormatter from "../../../reuseables/AmountFormatter";
 import CountryDropdownDash from "../../../reuseables/CountryDropdownDash";
+import GaugeChart from "react-gauge-chart";
 
-export default function Details({ clientDetails }) {
+export default function Details({ clientDetails, setViewRisk }) {
   const [selected, setSelected] = useState();
   const newSelected =
     selected ||
@@ -15,6 +16,10 @@ export default function Details({ clientDetails }) {
         ...item,
       };
     })?.[0];
+
+  console.log(clientDetails?.userAssesmentScore / 33);
+
+  const score = clientDetails?.userAssesmentScore || 0;
   return (
     <>
       <div
@@ -40,7 +45,59 @@ export default function Details({ clientDetails }) {
         />
       </div>
       <DetailsStyle>
-        <div></div>
+        <div className="gauge">
+          {" "}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "90%",
+              fontSize: "18px",
+              margin: "auto",
+            }}
+          >
+            <div>Customer Risk Chart</div>
+            <div
+              style={{
+                color: "#417CD4",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setViewRisk(true);
+              }}
+            >
+              View Risk Analysis
+            </div>
+          </div>
+          <GaugeChart
+            id="gauge-chart3"
+            nrOfLevels={3}
+            colors={["#37ffa8", "#FFC371", "#EA4228"]}
+            style={{
+              width: "100%",
+              height: "100%",
+              transform: "translateY(100px)",
+            }}
+            textColor="#000"
+            percent={score / 33}
+          />
+          <div
+            style={{
+              fontSize: "32px",
+              color: "#FDA333",
+              textTransform: "uppercase",
+              fontWeight: 600,
+              textAlign: "center",
+            }}
+          >
+            {score} / 33
+            <br />
+            {clientDetails?.userRiskLevel}
+          </div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
         <div>
           <div className="box_bank">
             <div className="box_bank_card">
@@ -157,8 +214,15 @@ export default function Details({ clientDetails }) {
 
 const DetailsStyle = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1.5fr 2fr;
+  grid-gap: 20px;
   margin-top: 20px;
+  .gauge {
+    border-radius: 14px;
+    border: 1px solid #c7c7c7;
+    display: grid;
+    place-items: center;
+  }
   .box_bank {
     border: 1px solid #c7c7c7;
     width: 100%;

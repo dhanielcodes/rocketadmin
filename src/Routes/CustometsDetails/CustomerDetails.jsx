@@ -30,6 +30,7 @@ import Gateways from "./ClientDetailsTabs/Gateways";
 import CustomerDetailsTop from "./MainDetailsBody";
 import { GetDetails, GetUserDetails } from "../../services/Dashboard";
 import AuditLogs from "./ClientDetailsTabs/AuditLogs";
+import RiskTable from "./ClientDetailsTabs/RiskTable";
 
 export default function CustomerDetailsPage() {
   const [params] = useSearchParams();
@@ -53,10 +54,11 @@ export default function CustomerDetailsPage() {
 
   const navigate = useNavigate();
 
-  const [active, setActive] = useState("ID Documents");
+  const [active, setActive] = useState("Overview");
+  const [viewRisk, setViewRisk] = useState(false);
 
   const tab = [
-    /* "Overview", */
+    "Overview",
     "ID Documents",
     "Transfer List",
     "Beneficiary List",
@@ -177,9 +179,18 @@ export default function CustomerDetailsPage() {
                     })}
                   </div>
 
-                  {active === "Overview" && (
-                    <Details clientDetails={customer?.data} />
-                  )}
+                  {active === "Overview" &&
+                    ((viewRisk && (
+                      <RiskTable
+                        clientDetails={customer?.data}
+                        setViewRisk={setViewRisk}
+                      />
+                    )) || (
+                      <Details
+                        clientDetails={customer?.data}
+                        setViewRisk={setViewRisk}
+                      />
+                    ))}
                   {active === "ID Documents" && (
                     <Documents clientDetails={customer?.data} />
                   )}

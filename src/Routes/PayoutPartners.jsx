@@ -11,6 +11,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { kFormatter, kFormatter2, kFormatter3 } from "../utils/format";
+import toast from "react-hot-toast";
 
 export default function PayoutPartnersPage() {
   const { data: payoutPartner } = useQuery({
@@ -30,7 +31,11 @@ export default function PayoutPartnersPage() {
     try {
       const data = await getPayoutPartnerLog(id);
       console.log(data?.data);
-      setLogs(data?.data);
+      if (data?.status) {
+        setLogs(data?.data);
+      } else {
+        toast.error(data?.message);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -54,9 +59,10 @@ export default function PayoutPartnersPage() {
     )
   );
 
-  const filtered = logs?.filter(
-    (item) => item?.payOutProvider?.id === selectedGateway?.providerId
-  );
+  const filtered =
+    logs?.filter(
+      (item) => item?.payOutProvider?.id === selectedGateway?.providerId
+    ) || [];
 
   return (
     <>

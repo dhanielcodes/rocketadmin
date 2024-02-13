@@ -229,6 +229,17 @@ export const getRoleMeta = async () => {
   );
   return data;
 };
+export const getRoles = async () => {
+  const { data } = await Axios.get(`${baseurl}/getroles`);
+  return data;
+};
+
+export const getRoleMenu = async (id) => {
+  const { data } = await Axios.get(
+    `${baseurl}/getroleswithuseraccess/${id || 0}`
+  );
+  return data;
+};
 export const getAgentInviteList = async () => {
   const { data } = await Axios.get(`${baseurl}/getagentinvite`);
   return data;
@@ -366,5 +377,45 @@ export const sendMoney = async (body) => {
 };
 export const sendAgentInvite = async (body) => {
   const { data } = await Axios.post(`${baseurl}/sendagentinvite`, body);
+  return data;
+};
+
+export const GetEmployees = async () => {
+  const { data } = await Axios.get(`${baseurl}/getemployees`);
+  return data;
+};
+export const AddEmployees = async () => {
+  const { data } = await Axios.get(`${baseurl}/getemployees`);
+  return data;
+};
+
+export const getProfessions = async () => {
+  const { data } = await Axios.get(`${baseurl}/getprofession`);
+  return data;
+};
+
+export const updateProfession = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/updateprofession`, body);
+  return data;
+};
+
+export const getRisks = async () => {
+  const { data } = await Axios.get(`${baseurl}/getriskfactors`);
+  return data;
+};
+
+export const updateUserMenu = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updateuserrolemenuaccess`,
+    body
+  );
+  return data;
+};
+
+export const updateUserSubMenu = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updateuserrolesubmenuaccess`,
+    body
+  );
   return data;
 };

@@ -148,9 +148,9 @@ function ClientTable() {
       idNumber: (
         <div
           style={{
-            padding: "8px 16px",
-            borderRadius: "10000px",
-            background: item?.isKYCCompleted ? "#63ff70" : "#ff6363",
+            padding: "6px 14px",
+            borderRadius: "7px",
+            background: item?.isKYCCompleted ? "#37d744" : "#ff6363",
             color: "white",
             width: "fit-content",
             fontWeight: "700",
@@ -169,9 +169,9 @@ function ClientTable() {
           {" "}
           <div
             style={{
-              padding: "8px 16px",
-              borderRadius: "10000px",
-              background: item?.status === "Active" ? "#63ff706c" : "#ff63634b",
+              padding: "6px 14px",
+              borderRadius: "7px",
+              background: item?.status === "Active" ? "#37d7446c" : "#ff63634b",
               color: item?.status === "Active" ? "green" : "red",
               width: "fit-content",
               fontWeight: "700",

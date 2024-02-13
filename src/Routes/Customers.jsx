@@ -434,9 +434,9 @@ function Customers() {
       idNumber: (
         <div
           style={{
-            padding: "8px 16px",
-            borderRadius: "10000px",
-            background: item?.isKYCCompleted ? "#63ff70" : "#ff6363",
+            padding: "6px 14px",
+            borderRadius: "7px",
+            background: item?.isKYCCompleted ? "#37d744" : "#ff6363",
             color: "white",
             width: "fit-content",
             fontWeight: "700",
@@ -450,9 +450,9 @@ function Customers() {
           {" "}
           <div
             style={{
-              padding: "8px 16px",
-              borderRadius: "10000px",
-              background: item?.status ? "#63ff70" : "#ff6363",
+              padding: "6px 14px",
+              borderRadius: "7px",
+              background: item?.status ? "#37d744" : "#ff6363",
               color: "white",
               width: "fit-content",
               fontWeight: "700",
