@@ -233,6 +233,13 @@ export const getRoles = async () => {
   const { data } = await Axios.get(`${baseurl}/getroles`);
   return data;
 };
+
+export const getRoleMenu = async (id) => {
+  const { data } = await Axios.get(
+    `${baseurl}/getroleswithuseraccess/${id || 0}`
+  );
+  return data;
+};
 export const getAgentInviteList = async () => {
   const { data } = await Axios.get(`${baseurl}/getagentinvite`);
   return data;

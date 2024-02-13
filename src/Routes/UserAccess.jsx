@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BodyLayout from "../reuseables/BodyLayout";
 import { styled } from "styled-components";
 //import SearchInput from "../reuseables/SearchInput";
 import CustomTable from "../reuseables/CustomTable";
 import AddPaymentProcessorModal from "../modals/AddPaymentProcessorModal";
 import { Select, Switch } from "@arco-design/web-react";
-import { getRoles, updateUserMenu } from "../services/Dashboard";
+import {
+  getRoleMenu,
+  getRoles,
+  updateUserMenu,
+  updateUserSubMenu,
+} from "../services/Dashboard";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import AppSelect from "../reuseables/AppSelect";
 import toast from "react-hot-toast";
@@ -19,9 +24,14 @@ function UserAccessPage() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails?.userRoleMenuAccess);
-  const { data } = useQuery({
-    queryKey: ["getRoles"],
-    queryFn: () => getRoles(),
+  const {
+    data: userMenu,
+    isLoading: menuLoading,
+    isFetching,
+    refetch,
+  } = useQuery({
+    queryKey: ["getRoleMenu"],
+    queryFn: () => getRoleMenu(),
   });
 
   const { mutate, isLoading } = useMutation({
@@ -30,6 +40,7 @@ function UserAccessPage() {
       if (data.status) {
         console.log(data);
         toast.success(data?.message);
+        refetch();
       } else {
         toast.error(data?.message);
       }
@@ -39,7 +50,21 @@ function UserAccessPage() {
     },
   });
 
-  console.log(data?.data);
+  const { mutate: mutateSub, isLoading: isLoadingSub } = useMutation({
+    mutationFn: updateUserSubMenu,
+    onSuccess: (data) => {
+      if (data.status) {
+        console.log(data);
+        toast.success(data?.message);
+        refetch();
+      } else {
+        toast.error(data?.message);
+      }
+    },
+    onError: (data) => {
+      toast.error(data?.message);
+    },
+  });
   const columns = [
     {
       title: "MODULE",
@@ -69,7 +94,12 @@ function UserAccessPage() {
   ];
 
   const [selected, setSelected] = useState();
-  const newData = userDetails?.userRoleMenuAccess?.map((item) => {
+
+  const rolemnei = userMenu?.data;
+
+  const data2 = rolemnei?.find((item) => item?.id === selectedRole?.id);
+  console.log(data2, "kss");
+  const newData = data2?.userRoleMenuAccess?.map((item) => {
     return {
       ...item,
       name: (
@@ -86,21 +116,113 @@ function UserAccessPage() {
       ),
       deny: (
         <div>
-          <Switch checked={item?.menuAccessType?.id === 1} />
+          <Switch
+            onClick={() => {
+              mutate({
+                accessId: item?.accessId,
+                menuAccessType: {
+                  id: 1,
+                },
+              });
+            }}
+            checked={item?.menuAccessType?.id === 1}
+          />
         </div>
       ),
       read: (
         <div>
-          <Switch checked={item?.menuAccessType?.id === 2} />
+          <Switch
+            onClick={() => {
+              mutate({
+                accessId: item?.accessId,
+                menuAccessType: {
+                  id: 2,
+                },
+              });
+            }}
+            checked={item?.menuAccessType?.id === 2}
+          />
         </div>
       ),
       readWrite: (
         <div>
-          <Switch checked={item?.menuAccessType?.id === 3} />
+          <Switch
+            onClick={() => {
+              mutate({
+                accessId: item?.accessId,
+                menuAccessType: {
+                  id: 3,
+                },
+              });
+            }}
+            checked={item?.menuAccessType?.id === 3}
+          />
         </div>
       ),
     };
-  });
+  }); /* ||
+    selectedRole?.userRoleMenuAccess?.map((item) => {
+      return {
+        ...item,
+        name: (
+          <div
+            onClick={() => {
+              setSelected(item);
+            }}
+            style={{
+              cursor: "pointer",
+            }}
+          >
+            <a href="#other">{item?.menuName}</a>
+          </div>
+        ),
+        deny: (
+          <div>
+            <Switch
+              onClick={() => {
+                mutate({
+                  accessId: item?.accessId,
+                  menuAccessType: {
+                    id: 1,
+                  },
+                });
+              }}
+              checked={item?.menuAccessType?.id === 1}
+            />
+          </div>
+        ),
+        read: (
+          <div>
+            <Switch
+              onClick={() => {
+                mutate({
+                  accessId: item?.accessId,
+                  menuAccessType: {
+                    id: 2,
+                  },
+                });
+              }}
+              checked={item?.menuAccessType?.id === 2}
+            />
+          </div>
+        ),
+        readWrite: (
+          <div>
+            <Switch
+              onClick={() => {
+                mutate({
+                  accessId: item?.accessId,
+                  menuAccessType: {
+                    id: 3,
+                  },
+                });
+              }}
+              checked={item?.menuAccessType?.id === 3}
+            />
+          </div>
+        ),
+      };
+    }); */
 
   const newData2 = selected?.userRoleSubMenuAccess?.map((item) => {
     return {
@@ -112,17 +234,47 @@ function UserAccessPage() {
       ),
       deny: (
         <div>
-          <Switch checked={item?.menuAccessType?.id === 1} />
+          <Switch
+            onClick={() => {
+              mutateSub({
+                accessId: item?.accessId,
+                menuAccessType: {
+                  id: 1,
+                },
+              });
+            }}
+            checked={item?.menuAccessType?.id === 1}
+          />
         </div>
       ),
       read: (
         <div>
-          <Switch checked={item?.menuAccessType?.id === 2} />
+          <Switch
+            onClick={() => {
+              mutateSub({
+                accessId: item?.accessId,
+                menuAccessType: {
+                  id: 2,
+                },
+              });
+            }}
+            checked={item?.menuAccessType?.id === 2}
+          />
         </div>
       ),
       readWrite: (
         <div>
-          <Switch checked={item?.menuAccessType?.id === 3} />
+          <Switch
+            onClick={() => {
+              mutateSub({
+                accessId: item?.accessId,
+                menuAccessType: {
+                  id: 3,
+                },
+              });
+            }}
+            checked={item?.menuAccessType?.id === 3}
+          />
         </div>
       ),
     };
@@ -158,7 +310,7 @@ function UserAccessPage() {
               <p className="">Select Role</p>
               <AppSelect
                 value={selectedRole}
-                options={data?.data?.map((item) => {
+                options={userMenu?.data?.map((item) => {
                   return {
                     label: item?.name,
                     value: item?.name,
@@ -167,6 +319,7 @@ function UserAccessPage() {
                 })}
                 onChange={(val) => {
                   setSelectedRole(val);
+                  setSelected();
                 }}
               />
             </div>
@@ -174,6 +327,7 @@ function UserAccessPage() {
               noData={newData?.length}
               Apidata={newData || []}
               tableColumns={columns}
+              loading={menuLoading || isLoading || isLoadingSub || isFetching}
               scroll={{
                 x: 800,
                 y: 800,
@@ -185,6 +339,7 @@ function UserAccessPage() {
             <CustomTable
               noData={newData2?.length}
               Apidata={newData2 || []}
+              loading={menuLoading || isLoading || isLoadingSub || isFetching}
               tableColumns={columns}
               scroll={{
                 x: 800,
