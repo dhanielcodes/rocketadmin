@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { styled } from "styled-components";
 
 import SearchInput from "../../reuseables/SearchInput";
@@ -1152,13 +1152,16 @@ function TransferLogsTable() {
   console.log(userDetails);
   const [userId, setUserIdd] = useState("");
 
+  const [params] = useSearchParams();
+  const userWe = params.get("userId");
+
   const {
     data: rates,
     isLoading,
     isFetching,
   } = useQuery({
     queryKey: ["Tranx"],
-    queryFn: () => Tranx(0),
+    queryFn: () => Tranx(userWe),
   });
 
   const [modal, setModal] = useState(false);
