@@ -170,6 +170,16 @@ export default function NewNavBar() {
               path: "/employee-master",
               parentName: "Employee",
             },
+            {
+              name: "User Access",
+              path: "/user-access",
+              parentName: "Employee",
+            },
+            {
+              name: "User Roles",
+              path: "/user-role",
+              parentName: "Employee",
+            },
           ],
         },
         {
@@ -195,11 +205,6 @@ export default function NewNavBar() {
         {
           name: "Payout Providers",
           path: "/payout-providers",
-          parentName: "Masters",
-        },
-        {
-          name: "User Access",
-          path: "/user-access",
           parentName: "Masters",
         },
       ],

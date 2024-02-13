@@ -11,7 +11,7 @@ import AppSelect from "../reuseables/AppSelect";
 import toast from "react-hot-toast";
 
 // hhhhhhh
-function UserAccessPage() {
+function UserRolePage() {
   const [inviteAgent, setInviteAgent] = useState(false);
 
   const [selectedRole, setSelectedRole] = useState();
@@ -42,88 +42,47 @@ function UserAccessPage() {
   console.log(data?.data);
   const columns = [
     {
-      title: "MODULE",
-      dataIndex: "name",
+      title: "S/N",
+      dataIndex: "id",
       width: 80,
     },
 
     {
-      title: "DENY",
-      dataIndex: "deny",
+      title: "ROLE NAME",
+      dataIndex: "name",
       width: 100,
       //render: () => "Other 2",
     },
 
     {
-      title: "READ-ONLY",
-      dataIndex: "read",
-      width: 100,
-      //render: () => "Other 2",
-    },
-    {
-      title: "READ/WRITE",
-      dataIndex: "readWrite",
+      title: "STATUS",
+      dataIndex: "status",
       width: 100,
       //render: () => "Other 2",
     },
   ];
 
   const [selected, setSelected] = useState();
-  const newData = userDetails?.userRoleMenuAccess?.map((item) => {
+  const newData = data?.data?.map((item) => {
     return {
       ...item,
-      name: (
-        <div
-          onClick={() => {
-            setSelected(item);
-          }}
-          style={{
-            cursor: "pointer",
-          }}
-        >
-          <a href="#other">{item?.menuName}</a>
-        </div>
-      ),
-      deny: (
-        <div>
-          <Switch checked={item?.menuAccessType?.id === 1} />
-        </div>
-      ),
-      read: (
-        <div>
-          <Switch checked={item?.menuAccessType?.id === 2} />
-        </div>
-      ),
-      readWrite: (
-        <div>
-          <Switch checked={item?.menuAccessType?.id === 3} />
-        </div>
-      ),
-    };
-  });
 
-  const newData2 = selected?.userRoleSubMenuAccess?.map((item) => {
-    return {
-      ...item,
-      name: (
-        <div>
-          <span>{item?.subMenuName}</span>
-        </div>
-      ),
-      deny: (
-        <div>
-          <Switch checked={item?.menuAccessType?.id === 1} />
-        </div>
-      ),
-      read: (
-        <div>
-          <Switch checked={item?.menuAccessType?.id === 2} />
-        </div>
-      ),
-      readWrite: (
-        <div>
-          <Switch checked={item?.menuAccessType?.id === 3} />
-        </div>
+      status: (
+        <>
+          {" "}
+          <div
+            style={{
+              padding: "6px 14px",
+              borderRadius: "7px",
+              background: item?.status ? "#37d744" : "#ff6363",
+              color: "white",
+              width: "fit-content",
+              fontWeight: "700",
+            }}
+          >
+            {item?.status ? "True" : "False"}
+          </div>
+        </>
       ),
     };
   });
@@ -139,37 +98,14 @@ function UserAccessPage() {
         <Content>
           <div className="header">
             <div className="top">
-              <p>User Access</p>
-              <span>
-                This page allows you to manage all user access privileges{" "}
-              </span>
+              <p>User Roles</p>
+              <span>This page allows you to manage all user access roles </span>
             </div>
             <div className="btn"></div>
           </div>
           <div className="main">
-            <div
-              style={{
-                width: "400px",
-                padding: "10px 20px",
-                position: "relative",
-                zIndex: 1000,
-              }}
-            >
-              <p className="">Select Role</p>
-              <AppSelect
-                value={selectedRole}
-                options={data?.data?.map((item) => {
-                  return {
-                    label: item?.name,
-                    value: item?.name,
-                    ...item,
-                  };
-                })}
-                onChange={(val) => {
-                  setSelectedRole(val);
-                }}
-              />
-            </div>
+            <br />
+            <br />
             <CustomTable
               noData={newData?.length}
               Apidata={newData || []}
@@ -180,18 +116,7 @@ function UserAccessPage() {
               }}
             />
           </div>
-          <br />
-          <div className="main" id="other">
-            <CustomTable
-              noData={newData2?.length}
-              Apidata={newData2 || []}
-              tableColumns={columns}
-              scroll={{
-                x: 800,
-                y: 800,
-              }}
-            />
-          </div>
+
           <br />
         </Content>
       </BodyLayout>
@@ -199,7 +124,7 @@ function UserAccessPage() {
   );
 }
 
-export default UserAccessPage;
+export default UserRolePage;
 
 const Content = styled.div`
   .head {

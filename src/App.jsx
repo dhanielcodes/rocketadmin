@@ -51,6 +51,7 @@ import EmployeeMaster from "./Routes/Employee/EmployeeMaster";
 import CreateNewEmployee from "./Routes/CreateNewEmployee";
 import ProfessionMaster from "./Routes/ProfessionMaster";
 import UserAccessPage from "./Routes/UserAccess";
+import UserRolePage from "./Routes/UserRoles";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -131,6 +132,14 @@ function App() {
                 element={
                   <AppLogout>
                     <UserAccessPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/user-role"
+                element={
+                  <AppLogout>
+                    <UserRolePage />
                   </AppLogout>
                 }
               />

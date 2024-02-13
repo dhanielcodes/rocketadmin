@@ -396,3 +396,19 @@ export const getRisks = async () => {
   const { data } = await Axios.get(`${baseurl}/getriskfactors`);
   return data;
 };
+
+export const updateUserMenu = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updateuserrolemenuaccess`,
+    body
+  );
+  return data;
+};
+
+export const updateUserSubMenu = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updateuserrolesubmenuaccess`,
+    body
+  );
+  return data;
+};
