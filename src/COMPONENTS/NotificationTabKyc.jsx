@@ -14,6 +14,7 @@ export default function NotificationTabKyc({ close }) {
   const [loading, setLoading] = useState(false);
 
   const markAsRead = async (id) => {
+    console.log(id);
     setLoading(true);
     try {
       const data = await markKycNotifAsRead(id);
@@ -104,7 +105,7 @@ export default function NotificationTabKyc({ close }) {
             <div
               className="datum"
               onClick={() => {
-                markAsRead(item?.transactionRef);
+                markAsRead(item?.id);
               }}
               style={{
                 padding: "16px",

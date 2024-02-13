@@ -30,7 +30,7 @@ function SendMoney() {
   const user = JSON.parse(params.get("user"));
   const statusCode = params.get("statusCode");
 
-  const bene = JSON.parse(params.get("beneficiary"));
+  const bene = JSON.parse(localStorage.getItem("userBene"));
 
   const [details, setDetails] = useState({
     userId: params.get("id"),
@@ -337,7 +337,7 @@ function SendMoney() {
                       toast.error("All fields are required");
                     }
                   }
-                  if (step === 4) {
+                  if (params.get("step") === "4") {
                     mutate(details);
                   }
                 }}

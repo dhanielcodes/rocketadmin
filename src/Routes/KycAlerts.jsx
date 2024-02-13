@@ -81,7 +81,7 @@ export default function KycAlertsPage() {
                   <div
                     className="audit"
                     onClick={() => {
-                      markAsRead(item?.transactionRef);
+                      markAsRead(item?.id);
                     }}
                   >
                     <svg
