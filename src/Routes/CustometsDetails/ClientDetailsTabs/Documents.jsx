@@ -21,7 +21,15 @@ import {
   IconMoreVertical,
 } from "@arco-design/web-react/icon";
 
-const Droplist = ({ action, setModal, download, edit, setFront, setBack }) => (
+const Droplist = ({
+  action,
+  setModal,
+  download,
+  download2,
+  edit,
+  setFront,
+  setBack,
+}) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
     style={{
@@ -100,7 +108,31 @@ const Droplist = ({ action, setModal, download, edit, setFront, setBack }) => (
           marginLeft: "10px",
         }}
       >
-        Download ID
+        Download Front ID
+      </span>
+    </Menu.Item>
+    <Menu.Item
+      key="6"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+      onClick={() => {
+        download2();
+      }}
+    >
+      <IconDownload
+        fontSize={20}
+        style={{
+          margin: 0,
+        }}
+      />
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Download Back ID
       </span>
     </Menu.Item>
     <Menu.Item
@@ -337,7 +369,12 @@ export default function Documents({ clientDetails, refetch }) {
                     setImage(item?.documentBackPageURL);
                     setModal(true);
                   }}
-                  download={() => {}}
+                  download={() => {
+                    saveAs(item?.documentFrontPageURL, "id_front"); // Put your image URL here.
+                  }}
+                  download2={() => {
+                    saveAs(item?.documentBackPageURL, "id_back"); // Put your image URL here.
+                  }}
                   edit={() => {
                     navigate(
                       `/edit-document?userId=${params.get(

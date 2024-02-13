@@ -3,21 +3,38 @@ import BodyLayout from "../reuseables/BodyLayout";
 import { styled } from "styled-components";
 //import SearchInput from "../reuseables/SearchInput";
 import InviteAgent from "../COMPONENTS/InviteAgent";
-import { getAgents } from "../services/Dashboard";
-import { useQuery } from "@tanstack/react-query";
+import {
+  activateAccount,
+  getAgents,
+  suspendAccount,
+  updateUserWatchList,
+} from "../services/Dashboard";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import CustomTable from "../reuseables/CustomTable";
 import { Link } from "react-router-dom";
 import { removeDup } from "../utils/format";
 import { Dropdown, Input, Menu } from "@arco-design/web-react";
-import { IconMoreVertical, IconSearch } from "@arco-design/web-react/icon";
+import {
+  IconEye,
+  IconMoreVertical,
+  IconSearch,
+} from "@arco-design/web-react/icon";
 import UpdateAgentCustomerRates from "../modals/UpdateAgentCustomerRates";
-const Droplist = ({ id, name, setModal }) => (
+const Droplist = ({
+  id,
+  name,
+  setModal,
+  watch,
+  changeStatus,
+  stateStatus,
+  watchStatus,
+}) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
     style={{
       borderRadius: "10px",
       paddingTop: "6px",
-      width: "150px",
+      // width: "150px",
     }}
   >
     <Menu.Item
@@ -72,6 +89,72 @@ const Droplist = ({ id, name, setModal }) => (
         Update Rate
       </span>
     </Menu.Item>
+    <Menu.Item
+      onClick={() => changeStatus()}
+      key="3"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      {stateStatus === "Active" ? (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.00016 1.33398C11.6668 1.33398 14.6668 4.33398 14.6668 8.00065C14.6668 11.6673 11.6668 14.6673 8.00016 14.6673C4.3335 14.6673 1.3335 11.6673 1.3335 8.00065C1.3335 4.33398 4.3335 1.33398 8.00016 1.33398ZM8.00016 2.66732C6.7335 2.66732 5.60016 3.06732 4.7335 3.80065L12.2002 11.2673C12.8668 10.334 13.3335 9.20065 13.3335 8.00065C13.3335 5.06732 10.9335 2.66732 8.00016 2.66732ZM11.2668 12.2007L3.80016 4.73398C3.06683 5.60065 2.66683 6.73398 2.66683 8.00065C2.66683 10.934 5.06683 13.334 8.00016 13.334C9.26683 13.334 10.4002 12.934 11.2668 12.2007Z"
+            fill="#F04438"
+          />
+        </svg>
+      ) : (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.00016 1.33398C11.6668 1.33398 14.6668 4.33398 14.6668 8.00065C14.6668 11.6673 11.6668 14.6673 8.00016 14.6673C4.3335 14.6673 1.3335 11.6673 1.3335 8.00065C1.3335 4.33398 4.3335 1.33398 8.00016 1.33398ZM8.00016 2.66732C6.7335 2.66732 5.60016 3.06732 4.7335 3.80065L12.2002 11.2673C12.8668 10.334 13.3335 9.20065 13.3335 8.00065C13.3335 5.06732 10.9335 2.66732 8.00016 2.66732ZM11.2668 12.2007L3.80016 4.73398C3.06683 5.60065 2.66683 6.73398 2.66683 8.00065C2.66683 10.934 5.06683 13.334 8.00016 13.334C9.26683 13.334 10.4002 12.934 11.2668 12.2007Z"
+            fill="#38f03e"
+          />
+        </svg>
+      )}
+
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        {stateStatus === "Active" ? "Deactivate Customer" : "Activate Customer"}
+      </span>
+    </Menu.Item>
+    <Menu.Item
+      onClick={() => watch()}
+      key="3"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <IconEye
+        fontSize={20}
+        style={{
+          margin: 0,
+        }}
+      />
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        {watchStatus ? "Unwatch Customer" : "Watch Customer"}
+      </span>
+    </Menu.Item>
   </Menu>
 );
 // hhhhhhh
@@ -86,9 +169,55 @@ function Agent() {
     data: agents,
     isLoading: mutateLoading,
     isFetching: mutateFetching,
+    refetch,
   } = useQuery({
     queryKey: ["getAgents"],
     queryFn: () => getAgents(),
+  });
+
+  const { mutate: updateUser, isLoading: updateUserLoading } = useMutation({
+    mutationFn: updateUserWatchList,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
+
+  const { mutate: suspend, isLoading: suspendLoading } = useMutation({
+    mutationFn: suspendAccount,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
+
+  const { mutate: activate, isLoading: activateLoading } = useMutation({
+    mutationFn: activateAccount,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
   });
 
   console.log(agents);
@@ -245,6 +374,34 @@ function Agent() {
                   setModal={() => {
                     setModal(true);
                   }}
+                  changeStatus={() => {
+                    setStatus(true);
+                    if (item?.status) {
+                      suspend({
+                        userId: item?.userId,
+                      });
+                    } else {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
+                  }}
+                  stateStatus={item?.status}
+                  watch={() => {
+                    setWatch(true);
+                    if (item?.watchListStatus) {
+                      updateUser({
+                        userId: item?.userId,
+                        watchListStatus: false,
+                      });
+                    } else {
+                      updateUser({
+                        userId: item?.userId,
+                        watchListStatus: true,
+                      });
+                    }
+                  }}
+                  watchStatus={item?.watchListStatus}
                 />
               }
               position="bl"
@@ -301,7 +458,8 @@ function Agent() {
   console.log(newData);
 
   const [modal, setModal] = useState(false);
-
+  const [status, setStatus] = useState(false);
+  const [watch, setWatch] = useState(false);
   return (
     <>
       {inviteAgent && <InviteAgent closeinviteAgent={setInviteAgent} />}
