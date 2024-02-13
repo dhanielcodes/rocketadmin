@@ -191,7 +191,7 @@ export default function UpdateAgentCustomerRates({
                 />
                 <AmountFormatter
                   currency={selectedCountry?.currencyRate?.toCurrency?.code}
-                  value={selectedCountry?.currencyRate?.conversionRate || 0}
+                  value={selectedCountry?.specialRate || 0}
                 />
               </div>
             </div>
