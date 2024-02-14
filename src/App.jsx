@@ -104,7 +104,7 @@ function App() {
                 }
               />
               <Route
-                path="/dashboard-payout"
+                path="/payout-dashboard"
                 element={
                   <AppLogout>
                     <PayoutDashboard />
@@ -112,7 +112,7 @@ function App() {
                 }
               />
               <Route
-                path="/kyc-providers"
+                path="/kyc-provider"
                 element={
                   <AppLogout>
                     <KYCProvider />
@@ -120,7 +120,7 @@ function App() {
                 }
               />
               <Route
-                path="/payout-partners"
+                path="/payout-partner"
                 element={
                   <AppLogout>
                     <PayoutPartnersPage />
@@ -224,7 +224,7 @@ function App() {
                 }
               />
               <Route
-                path="/payout-processors"
+                path="/payout-channel-processor"
                 element={
                   <AppLogout>
                     <PayoutProcessors />
@@ -232,7 +232,7 @@ function App() {
                 }
               />
               <Route
-                path="/payment-processors"
+                path="/payment-channel-processor"
                 element={
                   <AppLogout>
                     <PaymentProcessors />
@@ -248,7 +248,7 @@ function App() {
                 }
               />
               <Route
-                path="/payment-providers"
+                path="/payment-provider"
                 element={
                   <AppLogout>
                     <PaymentProviders />
@@ -264,7 +264,7 @@ function App() {
                 }
               />
               <Route
-                path="/payout-providers"
+                path="/payout-provider"
                 element={
                   <AppLogout>
                     <PayoutProvidersList />
@@ -272,7 +272,7 @@ function App() {
                 }
               />
               <Route
-                path="/update-rates"
+                path="/update-rate-&-fees"
                 element={
                   <AppLogout>
                     <UpdateRatesPage />
@@ -280,7 +280,7 @@ function App() {
                 }
               />
               <Route
-                path="/rate-metadata"
+                path="/currency-rate-metadata"
                 element={
                   <AppLogout>
                     <RateMetadata />
@@ -288,7 +288,7 @@ function App() {
                 }
               />
               <Route
-                path="/actionrequired"
+                path="/action-required"
                 element={
                   <AppLogout>
                     <ActionRequired />
@@ -296,7 +296,7 @@ function App() {
                 }
               />
               <Route
-                path="/incompleteregistration"
+                path="/incomplete-registration"
                 element={
                   <AppLogout>
                     <IncompleteRegistration />
@@ -304,7 +304,7 @@ function App() {
                 }
               />
               <Route
-                path="/sendmoney"
+                path="/send-money"
                 element={
                   <AppLogout>
                     <SendMoney />
@@ -336,7 +336,7 @@ function App() {
                 }
               />
               <Route
-                path="/transfers"
+                path="/view-transfers"
                 element={
                   <AppLogout>
                     <TransfersListPage />
@@ -344,7 +344,7 @@ function App() {
                 }
               />
               <Route
-                path="/notifications"
+                path="/notification"
                 element={
                   <AppLogout>
                     <NotificationsPage />
