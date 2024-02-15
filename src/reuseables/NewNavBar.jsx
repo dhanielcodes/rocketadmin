@@ -28,6 +28,23 @@ export default function NewNavBar() {
               ...item,
               name: item?.subMenuName,
               path: "//",
+              miniLinks: item?.userRoleSuSubbMenuAccess?.map((item) => {
+                if (item?.userRoleSuSubbMenuAccess?.length) {
+                  return {
+                    ...item,
+                    name: item?.subSubMenuName,
+                    path: "//",
+                  };
+                } else {
+                  return {
+                    ...item,
+                    name: item?.subSubMenuName,
+                    path: `/${item?.subSubMenuName
+                      ?.toLowerCase()
+                      ?.replace(/\s+/g, "-")}`,
+                  };
+                }
+              }),
             };
           } else {
             return {
@@ -79,6 +96,23 @@ export default function NewNavBar() {
                 ...item,
                 name: item?.subMenuName,
                 path: "//",
+                miniLinks: item?.userRoleSuSubbMenuAccess?.map((item) => {
+                  if (item?.userRoleSuSubbMenuAccess?.length) {
+                    return {
+                      ...item,
+                      name: item?.subSubMenuName,
+                      path: "//",
+                    };
+                  } else {
+                    return {
+                      ...item,
+                      name: item?.subSubMenuName,
+                      path: `/${item?.subSubMenuName
+                        ?.toLowerCase()
+                        ?.replace(/\s+/g, "-")}`,
+                    };
+                  }
+                }),
               };
             } else {
               return {

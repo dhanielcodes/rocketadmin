@@ -234,7 +234,9 @@ function PayoutDashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter3(Math.ceil(cardDetails?.successful || 0))}
+                        {kFormatter3(
+                          Math.ceil(cardDetails?.successfulAmount || 0)
+                        )}
                       </div>
                     </div>
                     <div

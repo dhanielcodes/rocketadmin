@@ -128,7 +128,7 @@ function App() {
                 }
               />
               <Route
-                path="/user-access"
+                path="/user-access-"
                 element={
                   <AppLogout>
                     <UserAccessPage />
