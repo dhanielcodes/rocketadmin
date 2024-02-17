@@ -3,8 +3,8 @@ import React from "react";
 export default function YellowCardIcon() {
   return (
     <svg
-      width="22%"
-      height="22%"
+      width="58"
+      height="58"
       viewBox="0 0 58 58"
       fill="none"
       style={{

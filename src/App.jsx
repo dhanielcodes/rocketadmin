@@ -52,6 +52,8 @@ import CreateNewEmployee from "./Routes/CreateNewEmployee";
 import ProfessionMaster from "./Routes/ProfessionMaster";
 import UserAccessPage from "./Routes/UserAccess";
 import UserRolePage from "./Routes/UserRoles";
+import PayoutTransactionsPage from "./Routes/PayoutTransactions";
+import ClientFundRequestLogPage from "./Routes/ClientFundRequestLog";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -340,6 +342,22 @@ function App() {
                 element={
                   <AppLogout>
                     <TransfersListPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/payout-transfers"
+                element={
+                  <AppLogout>
+                    <PayoutTransactionsPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/client-log-request"
+                element={
+                  <AppLogout>
+                    <ClientFundRequestLogPage />
                   </AppLogout>
                 }
               />

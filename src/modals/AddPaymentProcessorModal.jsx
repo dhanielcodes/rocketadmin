@@ -161,6 +161,7 @@ function AddPaymentProcessorModal({ closeinviteAgent, type, item, setItem }) {
                 ...item?.currency,
               }
             }
+            collectionStatus
             onChange={(e) => {
               setSelectedCountry(e);
               setProcessor({

@@ -11,7 +11,7 @@ import {
 import CustomTable from "../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { getPayoutClientDashboard } from "../services/PayoutDashboard";
-import { kFormatter4, removeDup } from "../utils/format";
+import { kFormatter3, kFormatter4, removeDup } from "../utils/format";
 
 function TransactionList({ data }) {
   const [sortdate, setSortDate] = useState(0);
@@ -142,7 +142,7 @@ function TransactionList({ data }) {
       title: "AMOUNT",
       dataIndex: "Amount",
       width: 120,
-      render: (item) => kFormatter4(item),
+      render: (item) => kFormatter3(item),
       sorter: {
         compare: (a, b) => a.Amount - b.Amount,
         multiple: 3,
@@ -151,6 +151,8 @@ function TransactionList({ data }) {
     {
       title: "TRANSFER FEE",
       dataIndex: "transferFee",
+      render: (item) => kFormatter3(item),
+
       width: 120,
     },
   ];

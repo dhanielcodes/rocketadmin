@@ -17,6 +17,7 @@ export default function UpdateAgentCustomerRates({
   rateItem,
   modal,
   setModal,
+  recall,
 }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -45,9 +46,11 @@ export default function UpdateAgentCustomerRates({
         setModal(false);
         setRateMeta();
         setRate();
+        setFee();
         setSend();
         setReceive();
-        //refetch();
+        recall();
+        setSelectedCountry();
       } else {
         toast.error(data?.message);
       }
@@ -237,7 +240,7 @@ export default function UpdateAgentCustomerRates({
               className="confirm"
             >
               {" "}
-              <span>{mutateLoading ? "creating..." : "Create"}</span>
+              <span>{mutateLoading ? "updating..." : "Update"}</span>
             </button>
           </div>
         </AppModal>

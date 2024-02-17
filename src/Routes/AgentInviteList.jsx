@@ -188,6 +188,13 @@ function AgentInviteList() {
       width: 170,
     },
     {
+      title: "STATUS",
+      dataIndex: "status",
+      width: 140,
+
+      //render: () => "Other 2",
+    },
+    {
       title: "AGENT ID",
       dataIndex: "id",
       width: 100,
@@ -265,14 +272,6 @@ function AgentInviteList() {
       dataIndex: "action",
       width: 160,
     },
-
-    {
-      title: "STATUS",
-      dataIndex: "status",
-      width: 140,
-
-      //render: () => "Other 2",
-    },
   ];
   const [rate, setRate] = useState();
 
@@ -340,16 +339,11 @@ function AgentInviteList() {
               borderRadius: "7px",
               background:
                 item?.status === "Accepted"
-                  ? "#37d7446c"
-                  : item?.status === "Sent"
-                  ? "#afafaf"
-                  : "#ff63634b",
-              color:
-                item?.status === "Accepted"
                   ? "#37d744"
                   : item?.status === "Sent"
-                  ? "#3f3f3f"
+                  ? "#afafaf"
                   : "#ff6363",
+              color: "#fff",
               width: "fit-content",
               fontWeight: "700",
             }}

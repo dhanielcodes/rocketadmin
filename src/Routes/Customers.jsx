@@ -238,6 +238,12 @@ function Customers() {
       width: 190,
     },
     {
+      title: "STATUS",
+      dataIndex: "userStatus",
+      width: 190,
+      //render: () => "Other 2",
+    },
+    {
       title: "ID VERIFICATION",
       dataIndex: "idNumber",
       width: 190,
@@ -339,7 +345,9 @@ function Customers() {
           onClick={() => {
             localStorage.setItem("customer_details", JSON.stringify(item));
           }}
-          to={`/customers-details?userId=${JSON.stringify(item?.userId)}`}
+          to={`/customers-details?from=customer&userId=${JSON.stringify(
+            item?.userId
+          )}`}
         >
           <p
             onClick={() => {
@@ -357,6 +365,25 @@ function Customers() {
             {item?.watchListStatus && <IconEye fontSize={20} />}
           </p>
         </Link>
+      ),
+      userStatus: (
+        <div
+          style={{
+            padding: "6px 14px",
+            borderRadius: "7px",
+            background:
+              item?.status === "InActive"
+                ? "#ff6363"
+                : item?.status === "Active"
+                ? "#37d744"
+                : "#d7ac37",
+            color: "white",
+            width: "fit-content",
+            fontWeight: "700",
+          }}
+        >
+          {item?.status}
+        </div>
       ),
       action2: (
         <div

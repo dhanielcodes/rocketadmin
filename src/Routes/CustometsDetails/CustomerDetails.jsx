@@ -31,10 +31,12 @@ import CustomerDetailsTop from "./MainDetailsBody";
 import { GetDetails, GetUserDetails } from "../../services/Dashboard";
 import AuditLogs from "./ClientDetailsTabs/AuditLogs";
 import RiskTable from "./ClientDetailsTabs/RiskTable";
+import CustomerList from "./ClientDetailsTabs/CustomerList";
 
 export default function CustomerDetailsPage() {
   const [params] = useSearchParams();
   const userId = params.get("userId");
+  const from = params.get("from");
 
   const customerDetails = JSON.parse(localStorage.getItem("customer_details"));
 
@@ -62,6 +64,14 @@ export default function CustomerDetailsPage() {
     "ID Documents",
     "Transfer List",
     "Beneficiary List",
+    "Audit Logs",
+  ];
+
+  const tabAAgent = [
+    "Overview",
+    "ID Documents",
+    "Transfer List",
+    "Customers List",
     "Audit Logs",
   ];
 
@@ -99,7 +109,11 @@ export default function CustomerDetailsPage() {
                   <div
                     className="back_buttton"
                     onClick={() => {
-                      navigate("/customers");
+                      if (from === "agent") {
+                        navigate("/agent");
+                      } else {
+                        navigate("/customers");
+                      }
                     }}
                   >
                     <svg
@@ -125,7 +139,9 @@ export default function CustomerDetailsPage() {
                       />
                     </svg>
 
-                    <span>Back to Customers</span>
+                    <span>
+                      Back to {from === "agent" ? "Agents" : "Customers"}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -146,37 +162,71 @@ export default function CustomerDetailsPage() {
                       display: "flex",
                     }}
                   >
-                    {tab.map((item) => {
-                      return (
-                        <div
-                          onClick={() => {
-                            setActive(item);
-                          }}
-                          style={{
-                            paddingBottom: "10px",
-                            paddingLeft: "8px",
-                            paddingRight: "8px",
-                            borderBottom:
-                              active !== item
-                                ? "1px solid transparent"
-                                : "1px solid #00A85A",
-                            width: "fit-content",
-                            fontSize: "16px",
-                            cursor: "pointer",
-                            marginRight: "10px",
-                          }}
-                        >
-                          <span
-                            style={{
-                              width: "100%",
-                              color: active === item ? "#00A85A" : "#667085",
-                            }}
-                          >
-                            {item}
-                          </span>
-                        </div>
-                      );
-                    })}
+                    {from === "agent"
+                      ? tabAAgent.map((item) => {
+                          return (
+                            <div
+                              onClick={() => {
+                                setActive(item);
+                              }}
+                              style={{
+                                paddingBottom: "10px",
+                                paddingLeft: "8px",
+                                paddingRight: "8px",
+                                borderBottom:
+                                  active !== item
+                                    ? "1px solid transparent"
+                                    : "1px solid #00A85A",
+                                width: "fit-content",
+                                fontSize: "16px",
+                                cursor: "pointer",
+                                marginRight: "10px",
+                              }}
+                            >
+                              <span
+                                style={{
+                                  width: "100%",
+                                  color:
+                                    active === item ? "#00A85A" : "#667085",
+                                }}
+                              >
+                                {item}
+                              </span>
+                            </div>
+                          );
+                        })
+                      : tab.map((item) => {
+                          return (
+                            <div
+                              onClick={() => {
+                                setActive(item);
+                              }}
+                              style={{
+                                paddingBottom: "10px",
+                                paddingLeft: "8px",
+                                paddingRight: "8px",
+                                borderBottom:
+                                  active !== item
+                                    ? "1px solid transparent"
+                                    : "1px solid #00A85A",
+                                width: "fit-content",
+                                fontSize: "16px",
+                                cursor: "pointer",
+                                marginRight: "10px",
+                              }}
+                            >
+                              <span
+                                style={{
+                                  width: "100%",
+                                  color:
+                                    active === item ? "#00A85A" : "#667085",
+                                }}
+                              >
+                                {item}
+                              </span>
+                            </div>
+                          );
+                        })}
                   </div>
 
                   {active === "Overview" &&
@@ -204,6 +254,10 @@ export default function CustomerDetailsPage() {
                   )}
                   {active === "Beneficiary List" && (
                     <ChargesList data={clientUser?.userId}></ChargesList>
+                  )}
+
+                  {active === "Customers List" && (
+                    <CustomerList data={clientUser?.userId}></CustomerList>
                   )}
 
                   {active === "Gateways" && (
