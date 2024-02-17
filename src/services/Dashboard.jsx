@@ -403,6 +403,10 @@ export const getRisks = async () => {
   const { data } = await Axios.get(`${baseurl}/getriskfactors`);
   return data;
 };
+export const getAgentCustomers = async (id) => {
+  const { data } = await Axios.get(`${baseurl}/getagentcustomers/${id}`);
+  return data;
+};
 
 export const updateUserMenu = async (body) => {
   const { data } = await Axios.post(

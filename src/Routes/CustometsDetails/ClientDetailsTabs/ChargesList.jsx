@@ -103,12 +103,12 @@ export default function ChargesList({ data }) {
   const inputRef = useRef(null);
 
   const columns = [
-    {
+    /*  {
       title: "ACTION",
       dataIndex: "action2",
       width: 70,
       //render: () => "Other 2",
-    },
+    }, */
     {
       title: "CUSTOMER ID",
       dataIndex: "id",

@@ -45,7 +45,7 @@ function SendMoney() {
     note: "",
     transactionSource: "backOffice",
     promoCode: "",
-    redirectURL: `${window.location.origin}/sendmoney?step=1`,
+    redirectURL: `${window.location.origin}/send-money?step=1`,
     source: "backOffice",
   });
 
@@ -58,7 +58,7 @@ function SendMoney() {
 
   const [active, setActive] = useState("");
   useEffect(() => {
-    navigate("/sendmoney?step=1");
+    navigate("/send-money?step=1");
   }, []);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ function SendMoney() {
     onSuccess: (data) => {
       console.log("🚀 ~ file: Login.jsx:61 ~ Login ~ data:", data?.data);
       setStep(1);
-      navigate("/sendmoney?step=1");
+      navigate("/send-money?step=1");
       if (!data.status) {
         setOpen(true);
         setmsg(data?.message);
@@ -168,7 +168,7 @@ function SendMoney() {
         <ReusableModal
           isOpen={statusCode}
           onClose={() => {
-            navigate("/user/sendmoney");
+            navigate("/send-money?step=1");
             localStorage.removeItem("amount");
           }}
         >
@@ -237,11 +237,11 @@ function SendMoney() {
                 onClick={() => {
                   setStep((prev) => prev - 1);
                   if (step === 1) {
-                    navigate(`/sendmoney?id=${params.get("id")}&step=${1}`);
+                    navigate(`/send-money?id=${params.get("id")}&step=${1}`);
                   }
                   if (step === 2) {
                     navigate(
-                      `/sendmoney?id=${params.get(
+                      `/send-money?id=${params.get(
                         "id"
                       )}&beneficiary=${JSON.stringify(
                         active
@@ -250,7 +250,7 @@ function SendMoney() {
                   }
                   if (step === 3) {
                     navigate(
-                      `/sendmoney?id=${params.get(
+                      `/send-money?id=${params.get(
                         "id"
                       )}&beneficiary=${JSON.stringify(
                         active
@@ -259,7 +259,7 @@ function SendMoney() {
                   }
                   if (step === 4) {
                     navigate(
-                      `/sendmoney?id=${params.get(
+                      `/send-money?id=${params.get(
                         "id"
                       )}&beneficiary=${JSON.stringify(
                         active
@@ -290,7 +290,7 @@ function SendMoney() {
                 disabled={isLoading}
                 onClick={() => {
                   if (step === 1) {
-                    navigate(`/sendmoney?id=${params.get("id")}&step=${2}`);
+                    navigate(`/send-money?id=${params.get("id")}&step=${2}`);
                     setStep((prev) => prev + 1);
                     localStorage.setItem(
                       "userSend",
@@ -301,7 +301,7 @@ function SendMoney() {
                     if (active) {
                       setStep((prev) => prev + 1);
                       localStorage.setItem("userBene", JSON.stringify(active));
-                      navigate(`/sendmoney?id=${params.get("id")}&step=${3}`);
+                      navigate(`/send-money?id=${params.get("id")}&step=${3}`);
                     } else {
                       toast.error("Select a beneficiary");
                     }
@@ -332,7 +332,7 @@ function SendMoney() {
                         })
                       );
 
-                      navigate(`/sendmoney?id=${params.get("id")}&step=${4}`);
+                      navigate(`/send-money?id=${params.get("id")}&step=${4}`);
                     } else {
                       toast.error("All fields are required");
                     }

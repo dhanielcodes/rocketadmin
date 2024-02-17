@@ -148,7 +148,7 @@ function Dashboard() {
                     </div>
                   </div>
                   <div className="smallbox">
-                    <Link className="smallcard" to="/sendmoney?step=1">
+                    <Link className="smallcard" to="/send-money?step=1">
                       <div className="smallcard">
                         <svg
                           width="24"

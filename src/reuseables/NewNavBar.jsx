@@ -14,7 +14,146 @@ import CustomersIcon from "../assets/icons/CustomersIcon";
 import { FiLogOut } from "react-icons/fi";
 
 export default function NewNavBar() {
-  const links = [
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
+  const navAccess = userDetails?.userRoleMenuAccess?.map((item) => {
+    if (item?.userRoleSubMenuAccess?.length) {
+      return {
+        ...item,
+        name: item?.menuName,
+        path: "//",
+        miniLinks: item?.userRoleSubMenuAccess?.map((item) => {
+          if (item?.userRoleSuSubbMenuAccess?.length) {
+            return {
+              ...item,
+              name: item?.subMenuName,
+              path: "//",
+              miniLinks: item?.userRoleSuSubbMenuAccess?.map((item) => {
+                if (item?.userRoleSuSubbMenuAccess?.length) {
+                  return {
+                    ...item,
+                    name: item?.subSubMenuName,
+                    path: "//",
+                  };
+                } else {
+                  return {
+                    ...item,
+                    name: item?.subSubMenuName,
+                    path: `/${item?.subSubMenuName
+                      ?.toLowerCase()
+                      ?.replace(/\s+/g, "-")}`,
+                  };
+                }
+              }),
+            };
+          } else {
+            return {
+              ...item,
+              name: item?.subMenuName,
+              path: `/${item?.subMenuName
+                ?.toLowerCase()
+                ?.replace(/\s+/g, "-")}`,
+            };
+          }
+        }),
+      };
+    } else {
+      return {
+        ...item,
+        name: item?.menuName,
+        path: `/${item?.menuName?.toLowerCase()?.replace(/\s+/g, "-")}`,
+        miniLinks: item?.userRoleSubMenuAccess?.map((item) => {
+          if (item?.userRoleSuSubbMenuAccess?.length) {
+            return {
+              ...item,
+              name: item?.subMenuName,
+              path: "//",
+            };
+          } else {
+            return {
+              ...item,
+              name: item?.subMenuName,
+              path: `/${item?.subMenuName
+                ?.toLowerCase()
+                ?.replace(/\s+/g, "-")}`,
+            };
+          }
+        }),
+      };
+    }
+  });
+
+  console.log(
+    userDetails?.userRoleMenuAccess?.map((item) => {
+      if (item?.userRoleSubMenuAccess?.length) {
+        return {
+          ...item,
+          name: item?.menuName,
+          path: "//",
+          miniLinks: item?.userRoleSubMenuAccess?.map((item) => {
+            if (item?.userRoleSuSubbMenuAccess?.length) {
+              return {
+                ...item,
+                name: item?.subMenuName,
+                path: "//",
+                miniLinks: item?.userRoleSuSubbMenuAccess?.map((item) => {
+                  if (item?.userRoleSuSubbMenuAccess?.length) {
+                    return {
+                      ...item,
+                      name: item?.subSubMenuName,
+                      path: "//",
+                    };
+                  } else {
+                    return {
+                      ...item,
+                      name: item?.subSubMenuName,
+                      path: `/${item?.subSubMenuName
+                        ?.toLowerCase()
+                        ?.replace(/\s+/g, "-")}`,
+                    };
+                  }
+                }),
+              };
+            } else {
+              return {
+                ...item,
+                name: item?.subMenuName,
+                path: `/${item?.subMenuName
+                  ?.toLowerCase()
+                  ?.replace(/\s+/g, "-")}`,
+              };
+            }
+          }),
+        };
+      } else {
+        return {
+          ...item,
+          name: item?.menuName,
+          path: `/${item?.menuName?.toLowerCase()?.replace(/\s+/g, "-")}`,
+          miniLinks: item?.userRoleSubMenuAccess?.map((item) => {
+            if (item?.userRoleSuSubbMenuAccess?.length) {
+              return {
+                ...item,
+                name: item?.subMenuName,
+                path: "//",
+              };
+            } else {
+              return {
+                ...item,
+                name: item?.subMenuName,
+                path: `/${item?.subMenuName
+                  ?.toLowerCase()
+                  ?.replace(/\s+/g, "-")}`,
+              };
+            }
+          }),
+        };
+      }
+    }),
+    "navaa"
+  );
+
+  const links = navAccess || [
     {
       name: "Dashboard",
       path: "//",
@@ -32,7 +171,7 @@ export default function NewNavBar() {
         },
         {
           name: "Payout Partners",
-          path: "/payout-partners",
+          path: "/payout-partner",
           parentName: "Dashboard",
         },
 
@@ -101,8 +240,8 @@ export default function NewNavBar() {
     },
     {
       name: "Send Money",
-      path: "/sendmoney",
-      init: "/sendmoney?step=1",
+      path: "/send-money",
+      init: "/send-money?step=1",
       icon: SendMoneyIcon,
     },
     {
@@ -319,12 +458,12 @@ export default function NewNavBar() {
                     justifyContent: "space-between",
                   }}
                 >
-                  <item.icon
+                  {/*  <item.icon
                     color={item.path === location.pathname ? "#fff" : "#464F60"}
                     style={{
                       marginRight: "10px",
                     }}
-                  />
+                  /> */}
                   <span
                     style={{
                       color:

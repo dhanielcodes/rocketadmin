@@ -198,14 +198,14 @@ function PayoutDashboard() {
                           Total Transaction Count
                         </div>
                       </div>
-                      <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter3(
-                          Math.ceil(
-                            cardDetails?.successful +
-                              cardDetails?.pendingAmount +
-                              cardDetails?.failedAmount || 0
-                          )
-                        )}
+                      <div
+                        style={{
+                          fontSize: "2vw",
+                          textSizeAdjust: "40%",
+                          fontWeight: "600",
+                        }}
+                      >
+                        {kFormatter3(cardDetails?.totalAmount)}
                       </div>
                     </div>
                     <div
@@ -234,7 +234,9 @@ function PayoutDashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter3(Math.ceil(cardDetails?.successful || 0))}
+                        {kFormatter3(
+                          Math.ceil(cardDetails?.successfulAmount || 0)
+                        )}
                       </div>
                     </div>
                     <div
