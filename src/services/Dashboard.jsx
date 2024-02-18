@@ -372,7 +372,7 @@ export const createWallet = async (body) => {
   return data;
 };
 export const sendMoney = async (body) => {
-  const { data } = await Axios.post(`${baseurl}/sm`, body);
+  const { data } = await Axios.post(`${baseurl}/sendmoneyviabackoffice`, body);
   return data;
 };
 export const sendAgentInvite = async (body) => {

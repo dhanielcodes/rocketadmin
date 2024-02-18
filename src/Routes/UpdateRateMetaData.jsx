@@ -83,7 +83,7 @@ function UpdateRateMetaData({ recall, setRecall, setModal, modal }) {
       console.log(data);
       if (data?.status) {
         toast.success(`Rate ${rateItem ? "Updated" : "Created"} Successfully`);
-        navigate("/rate-metadata");
+        navigate("/currency-rate-metadata");
         setRecall(!recall);
         //refetch();
       } else {

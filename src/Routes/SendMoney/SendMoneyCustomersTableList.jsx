@@ -126,7 +126,7 @@ function SendMoneyCustomersTableList({
             console.log(item?.userId);
             setUserSelected(item);
             setStep(2);
-            navigate(`/sendmoney?id=${item?.userId}&step=2`);
+            navigate(`/send-money?id=${item?.userId}&step=2`);
             localStorage.setItem("userSend", JSON.stringify(item));
           }}
           style={{
