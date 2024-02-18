@@ -21,6 +21,8 @@ export default function PayoutPartnersPage() {
   const [selectedPartner, setSelectedPartner] = useState();
   const [selectedGateway, setSelectedGateway] = useState();
 
+  const [loading, setLoading] = useState(false);
+
   const [logs, setLogs] = useState();
 
   const [gateWays, setGateWays] = useState([]);
@@ -28,9 +30,12 @@ export default function PayoutPartnersPage() {
   const [date, setDate] = useState();
 
   const getPayoutPartnerLogs = async (id) => {
+    setLoading(true);
+
     try {
       const data = await getPayoutPartnerLog(id);
       console.log(data?.data);
+      setLoading(false);
       if (data?.status) {
         setLogs(data?.data);
       } else {
@@ -38,6 +43,7 @@ export default function PayoutPartnersPage() {
       }
     } catch (e) {
       console.log(e);
+      setLoading(false);
     }
   };
 
@@ -161,7 +167,7 @@ export default function PayoutPartnersPage() {
           </div>
         </DataFields>
 
-        {logs?.length && <PayoutPartnersTable data={filtered || logs} />}
+        {<PayoutPartnersTable isLoading={loading} data={filtered || logs} />}
       </BodyLayout>
     </>
   );

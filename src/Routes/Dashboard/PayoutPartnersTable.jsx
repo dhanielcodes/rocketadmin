@@ -15,30 +15,6 @@ function PayoutPartnersTable({ data, isLoading }) {
 
       //render: () => "Other",
     },
-    {
-      title: "GATEWAY ID",
-      dataIndex: "payoutClientApp['id']",
-      width: 190,
-
-      //render: () => "Other",
-    },
-    {
-      title: "PAYOUT ID",
-      dataIndex: "payOutProvider['id']",
-      width: 140,
-
-      //render: () => "Other",
-    },
-    {
-      title: "GATEWAY NAME",
-      dataIndex: "payoutClientApp['appName']",
-      width: 190,
-    },
-    {
-      title: "BANK CODE",
-      dataIndex: "beneficiary['beneficiaryBank']['bankCode']",
-      width: 190,
-    },
 
     {
       title: "BANK NAME",
