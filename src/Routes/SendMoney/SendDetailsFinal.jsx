@@ -134,7 +134,7 @@ export default function SendDetailsFinal({ rate, dataId }) {
                   navigator.clipboard.writeText(
                     `https://dashboard.transferrocket.co.uk//confirm-transaction?tfId=${dataId}`
                   );
-                  toast.success("Your Agent Link Copied!");
+                  toast.success("Payment Link Copied!");
                 }}
               >
                 <span>Click to copy payment link</span>
