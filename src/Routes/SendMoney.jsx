@@ -80,12 +80,12 @@ function SendMoney() {
   const [showBtn, setShowBtn] = useState(false);
   const [status, setStatus] = useState(false);
 
-  const { mutate, isLoading } = useMutation({
+  const { mutate, isLoading, data } = useMutation({
     mutationFn: sendMoney,
     onSuccess: (data) => {
       console.log("🚀 ~ file: Login.jsx:61 ~ Login ~ data:", data?.data);
       setStep(1);
-      navigate("/send-money?step=1");
+      // navigate("/send-money?step=1");
       if (!data.status) {
         setOpen(true);
         setmsg(data?.message);
@@ -216,7 +216,9 @@ function SendMoney() {
                 payout={payout}
               />
             )}
-            {params.get("step") === "4" && <SendDetailsFinal rate={rate} />}
+            {params.get("step") === "4" && (
+              <SendDetailsFinal rate={rate} dataId={data?.data} />
+            )}
           </div>
           <div
             style={{
@@ -289,6 +291,9 @@ function SendMoney() {
               <button
                 disabled={isLoading}
                 onClick={() => {
+                  if (data?.status) {
+                    navigate(`/dashboard`);
+                  }
                   if (step === 1) {
                     navigate(`/send-money?id=${params.get("id")}&step=${2}`);
                     setStep((prev) => prev + 1);
@@ -348,6 +353,8 @@ function SendMoney() {
                   {params.get("step") === "4"
                     ? isLoading
                       ? "sending..."
+                      : data?.status
+                      ? "To Dashboard"
                       : "Proceed To Payment"
                     : "Continue"}
                 </span>

@@ -279,6 +279,7 @@ function PaymentProcessors() {
                 }}
                 onClick={() => {
                   setInviteAgent(true);
+                  setType("add");
                 }}
               >
                 {/* <AiOutlinePlus size={18} style={{ color: "white" }} /> */}
