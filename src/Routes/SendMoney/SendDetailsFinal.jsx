@@ -121,7 +121,7 @@ export default function SendDetailsFinal({ rate, dataId }) {
           {dataId && (
             <>
               <QRCode
-                value={`${window.location.origin}/confirm-transaction?tfId=${dataId}`}
+                value={`https://dashboard.transferrocket.co.uk//confirm-transaction?tfId=${dataId}`}
               />
               <div
                 style={{
@@ -132,7 +132,7 @@ export default function SendDetailsFinal({ rate, dataId }) {
                 }}
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `https://apidoc.transferrocket.co.uk/agentcustomersignup/${Userdata?.data?.user?.userId}`
+                    `https://dashboard.transferrocket.co.uk//confirm-transaction?tfId=${dataId}`
                   );
                   toast.success("Your Agent Link Copied!");
                 }}
