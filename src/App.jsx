@@ -322,7 +322,7 @@ function App() {
                 }
               />
               <Route
-                path="/countries"
+                path="/country"
                 element={
                   <AppLogout>
                     <CountriesPage />

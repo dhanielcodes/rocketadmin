@@ -39,7 +39,7 @@ const Droplist = ({
   >
     <Menu.Item
       onClick={() => setModal()}
-      key="3"
+      key="1"
       style={{
         display: "flex",
         alignItems: "center",
@@ -91,7 +91,7 @@ const Droplist = ({
     </Menu.Item>
     <Menu.Item
       onClick={() => changeStatus()}
-      key="3"
+      key="2"
       style={{
         display: "flex",
         alignItems: "center",

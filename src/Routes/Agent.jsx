@@ -5,6 +5,7 @@ import { styled } from "styled-components";
 import InviteAgent from "../COMPONENTS/InviteAgent";
 import {
   activateAccount,
+  deactivateAccount,
   getAgents,
   suspendAccount,
   updateUserWatchList,
@@ -39,7 +40,7 @@ const Droplist = ({
   >
     <Menu.Item
       onClick={() => setModal()}
-      key="3"
+      key="1"
       style={{
         display: "flex",
         alignItems: "center",
@@ -91,7 +92,7 @@ const Droplist = ({
     </Menu.Item>
     <Menu.Item
       onClick={() => changeStatus()}
-      key="3"
+      key="2"
       style={{
         display: "flex",
         alignItems: "center",
@@ -130,7 +131,11 @@ const Droplist = ({
           marginLeft: "10px",
         }}
       >
-        {stateStatus === "Active" ? "Deactivate Customer" : "Activate Customer"}
+        {stateStatus === "Active"
+          ? "Deactivate Agent"
+          : stateStatus === "Suspended"
+          ? " Unsuspend Agent"
+          : "Activate Agent"}
       </span>
     </Menu.Item>
     <Menu.Item
@@ -152,7 +157,7 @@ const Droplist = ({
           marginLeft: "10px",
         }}
       >
-        {watchStatus ? "Unwatch Customer" : "Watch Customer"}
+        {watchStatus ? "Unwatch Agent" : "Watch Agent"}
       </span>
     </Menu.Item>
   </Menu>
@@ -207,6 +212,20 @@ function Agent() {
 
   const { mutate: activate, isLoading: activateLoading } = useMutation({
     mutationFn: activateAccount,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
+  const { mutate: deactivate, isLoading: deactivateLoading } = useMutation({
+    mutationFn: deactivateAccount,
     onSuccess: (data) => {
       refetch();
     },
@@ -391,12 +410,18 @@ function Agent() {
                   }}
                   changeStatus={() => {
                     setStatus(true);
-                    if (item?.status) {
+                    if (item?.status === "Suspend") {
                       suspend({
                         userId: item?.userId,
                       });
-                    } else {
+                    }
+                    if (item?.status === "Inactive") {
                       activate({
+                        userId: item?.userId,
+                      });
+                    }
+                    if (item?.status === "Active") {
+                      deactivate({
                         userId: item?.userId,
                       });
                     }
@@ -615,7 +640,13 @@ function Agent() {
 
             <CustomTable
               noData={agents?.data?.length}
-              loading={mutateLoading || mutateFetching}
+              loading={
+                mutateLoading ||
+                mutateFetching ||
+                activateLoading ||
+                deactivateLoading ||
+                suspendLoading
+              }
               Apidata={newData}
               tableColumns={columns}
             />

@@ -170,6 +170,10 @@ export const activateAccount = async (body) => {
   const { data } = await Axios.post(`${baseurl}/reactivateaccount`, body);
   return data;
 };
+export const deactivateAccount = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/deactivateaccount`, body);
+  return data;
+};
 
 export const getUsers = async (id = 5) => {
   const { data } = await Axios.get(`${baseurl}/getuserbyrole/6`);
