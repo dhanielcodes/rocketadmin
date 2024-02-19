@@ -121,7 +121,7 @@ export default function SendDetailsFinal({ rate, dataId }) {
           {dataId && (
             <>
               <QRCode
-                value={`https://dashboard.transferrocket.co.uk//confirm-transaction?tfId=${dataId}`}
+                value={`https://dashboard.transferrocket.co.uk/confirm-transaction?tfId=${dataId}`}
               />
               <div
                 style={{
@@ -132,7 +132,7 @@ export default function SendDetailsFinal({ rate, dataId }) {
                 }}
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `https://dashboard.transferrocket.co.uk//confirm-transaction?tfId=${dataId}`
+                    `https://dashboard.transferrocket.co.uk/confirm-transaction?tfId=${dataId}`
                   );
                   toast.success("Payment Link Copied!");
                 }}
