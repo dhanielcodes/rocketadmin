@@ -33,6 +33,7 @@ export default function SendDetails({
   setSelectedCountry,
   selectedCountry2,
   setSelectedCountry2,
+  customer,
 }) {
   const [params] = useSearchParams();
 
@@ -79,7 +80,7 @@ export default function SendDetails({
   return (
     <Content>
       <div className="tablecontent">
-        <SendDetailsTop />
+        <SendDetailsTop clientUser={customer} />
         <hr
           style={{
             marginBottom: "20px",

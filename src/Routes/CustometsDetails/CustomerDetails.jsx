@@ -147,7 +147,7 @@ export default function CustomerDetailsPage() {
               </div>
 
               <div className="body">
-                <CustomerDetailsTop />
+                <CustomerDetailsTop clientUser={customer?.data} />
 
                 <div
                   style={{
