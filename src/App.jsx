@@ -163,7 +163,7 @@ function App() {
                 }
               />
               <Route
-                path="/agent"
+                path="/agents"
                 element={
                   <AppLogout>
                     <Agent />
@@ -187,7 +187,7 @@ function App() {
                 }
               />
               <Route
-                path="/agent-invites"
+                path="/agent-invite"
                 element={
                   <AppLogout>
                     <AgentInviteList />
