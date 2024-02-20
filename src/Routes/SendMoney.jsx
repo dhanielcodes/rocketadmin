@@ -9,15 +9,22 @@ import SelectBeneficiary from "./SendMoney/SelectBeneficiary";
 import SendDetails from "./SendMoney/SendDetails";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SendDetailsFinal from "./SendMoney/SendDetailsFinal";
-import { useMutation } from "@tanstack/react-query";
-import { sendMoney } from "../services/Dashboard";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { GetUserDetails, sendMoney } from "../services/Dashboard";
 import ReusableModal from "../reuseables/ReusableModal";
 import Msg from "../reuseables/Msg";
 import Btn from "../reuseables/Btn";
 import toast from "react-hot-toast";
 function SendMoney() {
   const [userSelected, setUserSelected] = useState("");
+  const [params] = useSearchParams();
 
+  const userId = params.get("id");
+
+  const { data: customer, isFetching } = useQuery({
+    queryKey: ["GetUserDetaikls"],
+    queryFn: () => GetUserDetails(userId),
+  });
   const [newPurpose, setPurpose] = useState();
   const [payout, setPayout] = useState();
   const [payment, setPayment] = useState();
@@ -26,7 +33,6 @@ function SendMoney() {
 
   const [rate, setRate] = useState("");
 
-  const [params] = useSearchParams();
   const user = JSON.parse(params.get("user"));
   const statusCode = params.get("statusCode");
 
@@ -201,6 +207,7 @@ function SendMoney() {
             )}
             {params.get("step") === "3" && (
               <SendDetails
+                customer={customer?.data}
                 details={details}
                 setDetails={setDetails}
                 setRate={setRate}
