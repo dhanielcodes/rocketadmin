@@ -61,6 +61,21 @@ function PayoutProvidersList() {
 
   const columns = [
     {
+      title: "ACTION",
+      dataIndex: "action",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 60,
+    },
+    {
+      title: "STATUS",
+      dataIndex: "status",
+      width: 220,
+      //render: () => "Other 2",
+    },
+    {
       title: "CHANNEL ID",
       dataIndex: "id",
       width: 190,
@@ -96,12 +111,6 @@ function PayoutProvidersList() {
     },
 
     {
-      title: "STATUS",
-      dataIndex: "status",
-      width: 220,
-      //render: () => "Other 2",
-    },
-    {
       title: "DATE CREATED",
       dataIndex: "dateCreated",
       /*   sorter: {
@@ -109,15 +118,6 @@ function PayoutProvidersList() {
         multiple: 1,
       }, */
       width: 200,
-    },
-    {
-      title: "ACTION",
-      dataIndex: "action",
-      /*   sorter: {
-        compare: (a, b) => a.name - b.name,
-        multiple: 1,
-      }, */
-      width: 60,
     },
   ];
 

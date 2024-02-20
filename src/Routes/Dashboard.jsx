@@ -737,7 +737,8 @@ const Content = styled.div`
   }
   .contside2down {
     .contside2childdown {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
       background-color: #fff;
       padding: 1em;
       /* text-align: center; */

@@ -23,5 +23,10 @@ const Content = styled.div`
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+    outline: none;
+    color: white;
+    border: none;
+    margin: auto;
+    background-color: #00a85a;
   }
 `;

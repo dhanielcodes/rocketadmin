@@ -206,7 +206,7 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
               className="confirm"
             >
               {" "}
-              <span>{mutateLoading ? "editing..." : "Edit"}</span>
+              <span>{mutateLoading ? "updating..." : "Update"}</span>
             </button>
           </div>
         </AppModal>

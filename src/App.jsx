@@ -54,6 +54,7 @@ import UserAccessPage from "./Routes/UserAccess";
 import UserRolePage from "./Routes/UserRoles";
 import PayoutTransactionsPage from "./Routes/PayoutTransactions";
 import ClientFundRequestLogPage from "./Routes/ClientFundRequestLog";
+import Error from "./Routes/Error";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -322,7 +323,7 @@ function App() {
                 }
               />
               <Route
-                path="/countries"
+                path="/country"
                 element={
                   <AppLogout>
                     <CountriesPage />
@@ -406,7 +407,7 @@ function App() {
           {!userDetails && <Route path="/" element={<Login />} />}
 
           {/* </Route> */}
-          <Route path="*" element={<h1>Error</h1>} />
+          <Route path="*" element={<Error />} />
         </Route>
       </Routes>
     </Router>
