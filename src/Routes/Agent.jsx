@@ -27,6 +27,7 @@ const Droplist = ({
   setModal,
   watch,
   changeStatus,
+  changeStatus2,
   stateStatus,
   watchStatus,
 }) => (
@@ -131,11 +132,23 @@ const Droplist = ({
           marginLeft: "10px",
         }}
       >
-        {stateStatus === "Active"
-          ? "Deactivate Agent"
-          : stateStatus === "Suspended"
-          ? " Unsuspend Agent"
-          : "Activate Agent"}
+        {stateStatus === "Active" ? "Deactivate Agent" : "Activate Agent"}
+      </span>
+    </Menu.Item>
+    <Menu.Item
+      onClick={() => changeStatus2()}
+      key="2"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        {stateStatus === "Suspended" ? " Unsuspend Agent" : "Suspend Agent"}
       </span>
     </Menu.Item>
     <Menu.Item
@@ -410,18 +423,22 @@ function Agent() {
                   }}
                   changeStatus={() => {
                     setStatus(true);
-                    if (item?.status === "Suspend") {
-                      suspend({
-                        userId: item?.userId,
-                      });
-                    }
-                    if (item?.status === "Inactive") {
+
+                    if (item?.status === "InActive") {
                       activate({
                         userId: item?.userId,
                       });
                     }
                     if (item?.status === "Active") {
                       deactivate({
+                        userId: item?.userId,
+                      });
+                    }
+                  }}
+                  changeStatus2={() => {
+                    setStatus(true);
+                    if (item?.status === "Suspend") {
+                      suspend({
                         userId: item?.userId,
                       });
                     }

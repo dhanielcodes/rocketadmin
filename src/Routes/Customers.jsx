@@ -7,6 +7,7 @@ import CustomTable from "../reuseables/CustomTable";
 import { kFormatter3, removeDup } from "../utils/format";
 import {
   activateAccount,
+  deactivateAccount,
   getUsers,
   suspendAccount,
   updateUserWatchList,
@@ -26,6 +27,7 @@ const Droplist = ({
   setModal,
   watch,
   changeStatus,
+  changeStatus2,
   stateStatus,
   watchStatus,
 }) => (
@@ -134,8 +136,24 @@ const Droplist = ({
       </span>
     </Menu.Item>
     <Menu.Item
-      onClick={() => watch()}
+      onClick={() => changeStatus2()}
       key="3"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        {stateStatus === "Suspended" ? " Unsuspend Agent" : "Suspend Agent"}
+      </span>
+    </Menu.Item>
+    <Menu.Item
+      onClick={() => watch()}
+      key="4"
       style={{
         display: "flex",
         alignItems: "center",
@@ -208,6 +226,21 @@ function Customers() {
 
   const { mutate: activate, isLoading: activateLoading } = useMutation({
     mutationFn: activateAccount,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
+
+  const { mutate: deactivate, isLoading: deactivateLoading } = useMutation({
+    mutationFn: deactivateAccount,
     onSuccess: (data) => {
       refetch();
     },
@@ -413,12 +446,22 @@ function Customers() {
                   }}
                   changeStatus={() => {
                     setStatus(true);
-                    if (item?.status) {
-                      suspend({
+
+                    if (item?.status === "InActive") {
+                      activate({
                         userId: item?.userId,
                       });
-                    } else {
-                      activate({
+                    }
+                    if (item?.status === "Active") {
+                      deactivate({
+                        userId: item?.userId,
+                      });
+                    }
+                  }}
+                  changeStatus2={() => {
+                    setStatus(true);
+                    if (item?.status === "Suspend") {
+                      suspend({
                         userId: item?.userId,
                       });
                     }
@@ -620,7 +663,14 @@ function Customers() {
 
               <CustomTable
                 noData={customers?.data?.length}
-                loading={isLoading || isFetching || updateUserLoading}
+                loading={
+                  isLoading ||
+                  isFetching ||
+                  updateUserLoading ||
+                  activateLoading ||
+                  deactivateLoading ||
+                  suspendLoading
+                }
                 Apidata={newData}
                 tableColumns={columns}
               />
