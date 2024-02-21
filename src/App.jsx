@@ -55,6 +55,7 @@ import UserRolePage from "./Routes/UserRoles";
 import PayoutTransactionsPage from "./Routes/PayoutTransactions";
 import ClientFundRequestLogPage from "./Routes/ClientFundRequestLog";
 import Error from "./Routes/Error";
+import TransferDetailsPage from "./Routes/TransferDetails";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -399,6 +400,14 @@ function App() {
                 element={
                   <AppLogout>
                     <ProfessionMaster />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/transaction-details"
+                element={
+                  <AppLogout>
+                    <TransferDetailsPage />
                   </AppLogout>
                 }
               />
