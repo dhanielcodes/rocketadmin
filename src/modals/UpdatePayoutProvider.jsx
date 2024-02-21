@@ -165,6 +165,7 @@ function UpdatePayoutProvider({ closeinviteAgent, item }) {
             style={{
               backgroundColor: "transparent",
               border: "1px solid gainsboro",
+              color: "black",
             }}
             onClick={() => closeinviteAgent(false)}
           />

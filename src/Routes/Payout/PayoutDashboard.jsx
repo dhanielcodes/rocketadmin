@@ -173,10 +173,9 @@ function PayoutDashboard() {
                 <div className="contside2down">
                   <div className="contside2childdown">
                     <div
-                      className=""
+                      className="boxx"
                       style={{
                         borderRight: "1px solid rgba(213, 219, 229, 1)",
-                        marginLeft: "1vw",
                       }}
                     >
                       <div
@@ -200,19 +199,17 @@ function PayoutDashboard() {
                       </div>
                       <div
                         style={{
-                          fontSize: "2vw",
-                          textSizeAdjust: "40%",
                           fontWeight: "600",
                         }}
+                        className="fontTotal"
                       >
-                        {kFormatter3(cardDetails?.totalAmount)}
+                        {kFormatter3(Math.ceil(cardDetails?.totalAmount))}
                       </div>
                     </div>
                     <div
-                      className=""
+                      className="boxx"
                       style={{
                         borderRight: "1px solid rgba(213, 219, 229, 1)",
-                        marginLeft: "1vw",
                       }}
                     >
                       <div
@@ -233,17 +230,16 @@ function PayoutDashboard() {
                           Successful
                         </div>
                       </div>
-                      <div style={{ fontSize: "2vw", fontWeight: "600" }}>
+                      <div style={{ fontWeight: "600" }} className="fontTotal">
                         {kFormatter3(
                           Math.ceil(cardDetails?.successfulAmount || 0)
                         )}
                       </div>
                     </div>
                     <div
-                      className=""
+                      className="boxx"
                       style={{
                         borderRight: "1px solid rgba(213, 219, 229, 1)",
-                        marginLeft: "1vw",
                       }}
                     >
                       <div
@@ -264,18 +260,13 @@ function PayoutDashboard() {
                           Pending
                         </div>
                       </div>
-                      <div style={{ fontSize: "2vw", fontWeight: "600" }}>
+                      <div style={{ fontWeight: "600" }} className="fontTotal">
                         {kFormatter3(
                           Math.ceil(cardDetails?.pendingAmount || 0)
                         )}
                       </div>
                     </div>
-                    <div
-                      className=""
-                      style={{
-                        marginLeft: "1vw",
-                      }}
-                    >
+                    <div className="boxx" style={{}}>
                       <div
                         className=""
                         style={{
@@ -294,7 +285,7 @@ function PayoutDashboard() {
                           Failed
                         </div>
                       </div>
-                      <div style={{ fontSize: "2vw", fontWeight: "600" }}>
+                      <div style={{ fontWeight: "600" }} className="fontTotal">
                         {kFormatter3(Math.ceil(cardDetails?.failedAmount || 0))}
                       </div>
                     </div>
@@ -431,6 +422,22 @@ function PayoutDashboard() {
 }
 
 const Content = styled.div`
+  .fontTotal {
+    font-size: clamp(20px, 1.7vw, 50px);
+    word-wrap: break-word;
+    width: 100%;
+  }
+
+  .boxx {
+    width: 100%;
+    word-wrap: break-word;
+    word-break: break-all;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 0px;
+  }
   .limit {
     display: flex;
     justify-content: space-between;
@@ -659,8 +666,9 @@ const Content = styled.div`
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
       background-color: #fff;
+      grid-gap: 10px;
       /* text-align: center; */
-      padding: 2% 0;
+      padding: 20px;
       border-radius: 10px;
       .box2 {
         border-right: 1px solid rgba(213, 219, 229, 1);

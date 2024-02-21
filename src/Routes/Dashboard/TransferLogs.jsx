@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { styled } from "styled-components";
 
 import SearchInput from "../../reuseables/SearchInput";
@@ -28,7 +28,7 @@ import Btn from "../../reuseables/Btn";
 import toast from "react-hot-toast";
 const TextArea = Input.TextArea;
 
-const Droplist = ({ action, setModal, setUserId }) => (
+const Droplist = ({ action, setModal, setUserId, viewDetails }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
     style={{
@@ -42,6 +42,9 @@ const Droplist = ({ action, setModal, setUserId }) => (
       style={{
         display: "flex",
         alignItems: "center",
+      }}
+      onClick={() => {
+        viewDetails();
       }}
     >
       <IconEye
@@ -261,7 +264,7 @@ const Droplist = ({ action, setModal, setUserId }) => (
   </Menu>
 );
 
-const Droplist2 = ({ action, setModal, setUserId }) => (
+const Droplist2 = ({ action, setModal, setUserId, viewDetails }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
     style={{
@@ -271,14 +274,13 @@ const Droplist2 = ({ action, setModal, setUserId }) => (
     }}
   >
     <Menu.Item
-      onClick={() => {
-        setModal(true);
-        action();
-      }}
       key="3"
       style={{
         display: "flex",
         alignItems: "center",
+      }}
+      onClick={() => {
+        viewDetails();
       }}
     >
       <IconEye
@@ -384,7 +386,7 @@ const Droplist2 = ({ action, setModal, setUserId }) => (
   </Menu>
 );
 
-const DroplistPending = ({ action, setModal, setUserId }) => (
+const DroplistPending = ({ action, setModal, setUserId, viewDetails }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
     style={{
@@ -398,6 +400,9 @@ const DroplistPending = ({ action, setModal, setUserId }) => (
       style={{
         display: "flex",
         alignItems: "center",
+      }}
+      onClick={() => {
+        viewDetails();
       }}
     >
       <IconEye
@@ -657,32 +662,7 @@ const DroplistPending = ({ action, setModal, setUserId }) => (
         Hold Transaction
       </span>
     </Menu.Item>
-    <Menu.Item
-      onClick={() => {
-        setModal(true);
-        action();
-        setUserId();
-      }}
-      key="3"
-      style={{
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-      <IconEye
-        fontSize={20}
-        style={{
-          margin: 0,
-        }}
-      />
-      <span
-        style={{
-          marginLeft: "10px",
-        }}
-      >
-        View Details
-      </span>
-    </Menu.Item>
+
     <Menu.Item
       onClick={() => {
         setModal(true);
@@ -729,7 +709,7 @@ const DroplistPending = ({ action, setModal, setUserId }) => (
   </Menu>
 );
 
-const DroplistProcessed = ({ action, setModal, setUserId }) => (
+const DroplistProcessed = ({ action, setModal, setUserId, viewDetails }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
     style={{
@@ -783,9 +763,7 @@ const DroplistProcessed = ({ action, setModal, setUserId }) => (
     </Menu.Item>
     <Menu.Item
       onClick={() => {
-        setModal(true);
-        action();
-        setUserId();
+        viewDetails();
       }}
       key="3"
       style={{
@@ -810,7 +788,7 @@ const DroplistProcessed = ({ action, setModal, setUserId }) => (
   </Menu>
 );
 
-const DroplistHold = ({ action, setModal, setUserId }) => (
+const DroplistHold = ({ action, setModal, setUserId, viewDetails }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
     style={{
@@ -951,9 +929,7 @@ const DroplistHold = ({ action, setModal, setUserId }) => (
     </Menu.Item>
     <Menu.Item
       onClick={() => {
-        setModal(true);
-        action();
-        setUserId();
+        viewDetails();
       }}
       key="3"
       style={{
@@ -978,7 +954,7 @@ const DroplistHold = ({ action, setModal, setUserId }) => (
   </Menu>
 );
 
-const DroplistCancelled = ({ action, setModal, setUserId }) => (
+const DroplistCancelled = ({ action, setModal, setUserId, viewDetails }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
     style={{
@@ -1119,9 +1095,7 @@ const DroplistCancelled = ({ action, setModal, setUserId }) => (
     </Menu.Item>
     <Menu.Item
       onClick={() => {
-        setModal(true);
-        action();
-        setUserId();
+        viewDetails();
       }}
       key="3"
       style={{
@@ -1411,6 +1385,8 @@ function TransferLogsTable() {
     },
   ];
 
+  const navigate = useNavigate();
+
   const newData = rates?.data?.map((item) => {
     return {
       ...item,
@@ -1441,6 +1417,13 @@ function TransferLogsTable() {
                       setUserIdd(item?.userId);
                       refetch(item?.sn);
                     }}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
                     paymentStatus={item?.paymentStatus}
                     collectStatus={item?.collectionStatus}
                   />
@@ -1448,6 +1431,13 @@ function TransferLogsTable() {
                   <DroplistPending
                     action={setCall}
                     setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
                     setUserId={() => {
                       setUserIdd(item?.userId);
                       refetch(item?.sn);
@@ -1457,6 +1447,13 @@ function TransferLogsTable() {
                   <DroplistProcessed
                     action={setCall}
                     setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
                     setUserId={() => {
                       setUserIdd(item?.userId);
                       refetch(item?.sn);
@@ -1466,6 +1463,13 @@ function TransferLogsTable() {
                   <DroplistCancelled
                     action={setCall}
                     setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
                     setUserId={() => {
                       setUserIdd(item?.userId);
                       refetch(item?.sn);
@@ -1475,6 +1479,13 @@ function TransferLogsTable() {
                   <DroplistHold
                     action={setCall}
                     setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
                     setUserId={() => {
                       setUserIdd(item?.userId);
                       refetch(item?.sn);
@@ -1484,6 +1495,13 @@ function TransferLogsTable() {
                   <Droplist
                     action={setCall}
                     setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
                     setUserId={() => {
                       setUserIdd(item?.userId);
                       refetch(item?.sn);
