@@ -408,12 +408,14 @@ export default function NewNavBar() {
                     {item?.name}
                   </span>
                 </div>
-                {item?.miniLinks && (
+                {item?.miniLinks?.length ? (
                   <DropDown
                     color={
                       item?.path === location.pathname ? "#fff" : "#464F60"
                     }
                   />
+                ) : (
+                  ""
                 )}
               </NavTab>
               {
