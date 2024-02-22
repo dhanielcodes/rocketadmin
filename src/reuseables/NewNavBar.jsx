@@ -16,142 +16,76 @@ import { FiLogOut } from "react-icons/fi";
 export default function NewNavBar() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
-  const navAccess = userDetails?.userRoleMenuAccess?.map((item) => {
-    if (item?.userRoleSubMenuAccess?.length) {
-      return {
-        ...item,
-        name: item?.menuName,
-        path: "//",
-        miniLinks: item?.userRoleSubMenuAccess?.map((item) => {
-          if (item?.userRoleSuSubbMenuAccess?.length) {
-            return {
-              ...item,
-              name: item?.subMenuName,
-              path: "//",
-              miniLinks: item?.userRoleSuSubbMenuAccess?.map((item) => {
-                if (item?.userRoleSuSubbMenuAccess?.length) {
-                  return {
-                    ...item,
-                    name: item?.subSubMenuName,
-                    path: "//",
-                  };
-                } else {
-                  return {
-                    ...item,
-                    name: item?.subSubMenuName,
-                    path: `/${item?.subSubMenuName
-                      ?.toLowerCase()
-                      ?.replace(/\s+/g, "-")}`,
-                  };
-                }
-              }),
-            };
-          } else {
-            return {
-              ...item,
-              name: item?.subMenuName,
-              path: `/${item?.subMenuName
-                ?.toLowerCase()
-                ?.replace(/\s+/g, "-")}`,
-            };
-          }
-        }),
-      };
-    } else {
-      return {
-        ...item,
-        name: item?.menuName,
-        path: `/${item?.menuName?.toLowerCase()?.replace(/\s+/g, "-")}`,
-        miniLinks: item?.userRoleSubMenuAccess?.map((item) => {
-          if (item?.userRoleSuSubbMenuAccess?.length) {
-            return {
-              ...item,
-              name: item?.subMenuName,
-              path: "//",
-            };
-          } else {
-            return {
-              ...item,
-              name: item?.subMenuName,
-              path: `/${item?.subMenuName
-                ?.toLowerCase()
-                ?.replace(/\s+/g, "-")}`,
-            };
-          }
-        }),
-      };
-    }
-  });
-
-  console.log(
-    userDetails?.userRoleMenuAccess?.map((item) => {
-      if (item?.userRoleSubMenuAccess?.length) {
-        return {
-          ...item,
-          name: item?.menuName,
-          path: "//",
-          miniLinks: item?.userRoleSubMenuAccess?.map((item) => {
-            if (item?.userRoleSuSubbMenuAccess?.length) {
-              return {
-                ...item,
-                name: item?.subMenuName,
-                path: "//",
-                miniLinks: item?.userRoleSuSubbMenuAccess?.map((item) => {
-                  if (item?.userRoleSuSubbMenuAccess?.length) {
-                    return {
-                      ...item,
-                      name: item?.subSubMenuName,
-                      path: "//",
-                    };
-                  } else {
-                    return {
-                      ...item,
-                      name: item?.subSubMenuName,
-                      path: `/${item?.subSubMenuName
-                        ?.toLowerCase()
-                        ?.replace(/\s+/g, "-")}`,
-                    };
-                  }
-                }),
-              };
-            } else {
-              return {
-                ...item,
-                name: item?.subMenuName,
-                path: `/${item?.subMenuName
-                  ?.toLowerCase()
-                  ?.replace(/\s+/g, "-")}`,
-              };
-            }
-          }),
-        };
-      } else {
-        return {
-          ...item,
-          name: item?.menuName,
-          path: `/${item?.menuName?.toLowerCase()?.replace(/\s+/g, "-")}`,
-          miniLinks: item?.userRoleSubMenuAccess?.map((item) => {
-            if (item?.userRoleSuSubbMenuAccess?.length) {
-              return {
-                ...item,
-                name: item?.subMenuName,
-                path: "//",
-              };
-            } else {
-              return {
-                ...item,
-                name: item?.subMenuName,
-                path: `/${item?.subMenuName
-                  ?.toLowerCase()
-                  ?.replace(/\s+/g, "-")}`,
-              };
-            }
-          }),
-        };
+  const navAccess = userDetails?.userRoleMenuAccess
+    ?.map((item) => {
+      if (item?.menuAccessType?.id !== 1) {
+        if (item?.userRoleSubMenuAccess?.length) {
+          return {
+            ...item,
+            name: item?.menuName,
+            path: "//",
+            miniLinks: item?.userRoleSubMenuAccess?.map((item) => {
+              if (item?.userRoleSuSubbMenuAccess?.length) {
+                return {
+                  ...item,
+                  name: item?.subMenuName,
+                  path: "//",
+                  miniLinks: item?.userRoleSuSubbMenuAccess?.map((item) => {
+                    if (item?.userRoleSuSubbMenuAccess?.length) {
+                      return {
+                        ...item,
+                        name: item?.subSubMenuName,
+                        path: "//",
+                      };
+                    } else {
+                      return {
+                        ...item,
+                        name: item?.subSubMenuName,
+                        path: `/${item?.subSubMenuName
+                          ?.toLowerCase()
+                          ?.replace(/\s+/g, "-")}`,
+                      };
+                    }
+                  }),
+                };
+              } else {
+                return {
+                  ...item,
+                  name: item?.subMenuName,
+                  path: `/${item?.subMenuName
+                    ?.toLowerCase()
+                    ?.replace(/\s+/g, "-")}`,
+                };
+              }
+            }),
+          };
+        } else {
+          return {
+            ...item,
+            name: item?.menuName,
+            path: `/${item?.menuName?.toLowerCase()?.replace(/\s+/g, "-")}`,
+            miniLinks: item?.userRoleSubMenuAccess?.map((item) => {
+              if (item?.userRoleSuSubbMenuAccess?.length) {
+                return {
+                  ...item,
+                  name: item?.subMenuName,
+                  path: "//",
+                };
+              } else {
+                return {
+                  ...item,
+                  name: item?.subMenuName,
+                  path: `/${item?.subMenuName
+                    ?.toLowerCase()
+                    ?.replace(/\s+/g, "-")}`,
+                };
+              }
+            }),
+          };
+        }
       }
-    }),
-    "navaa"
-  );
+    })
+    .filter((item) => item !== undefined);
 
   const links = navAccess || [
     {
@@ -440,7 +374,7 @@ export default function NewNavBar() {
                 onClick={(e) => {
                   navigateTo(e, item);
                 }}
-                $active={item.path}
+                $active={item?.path}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -459,7 +393,7 @@ export default function NewNavBar() {
                   }}
                 >
                   {/*  <item.icon
-                    color={item.path === location.pathname ? "#fff" : "#464F60"}
+                    color={item?.path === location.pathname ? "#fff" : "#464F60"}
                     style={{
                       marginRight: "10px",
                     }}
@@ -467,16 +401,18 @@ export default function NewNavBar() {
                   <span
                     style={{
                       color:
-                        item.path === location.pathname ? "#fff" : "#464F60",
+                        item?.path === location.pathname ? "#fff" : "#464F60",
                       fontSize: "14px",
                     }}
                   >
-                    {item.name}
+                    {item?.name}
                   </span>
                 </div>
                 {item?.miniLinks && (
                   <DropDown
-                    color={item.path === location.pathname ? "#fff" : "#464F60"}
+                    color={
+                      item?.path === location.pathname ? "#fff" : "#464F60"
+                    }
                   />
                 )}
               </NavTab>
@@ -485,11 +421,11 @@ export default function NewNavBar() {
                   style={{
                     borderLeft: "1px solid gray",
                     marginLeft: "20px",
-                    height: active === item.name && "auto",
-                    maxHeight: active !== item.name ? 0 : "1000px",
-                    overflow: active === item.name ? "auto" : "hidden",
+                    height: active === item?.name && "auto",
+                    maxHeight: active !== item?.name ? 0 : "1000px",
+                    overflow: active === item?.name ? "auto" : "hidden",
                     transition: "all 0.4s",
-                    marginBottom: active === item.name && "14px",
+                    marginBottom: active === item?.name && "14px",
                   }}
                 >
                   {item?.miniLinks?.map((link) => {
@@ -533,7 +469,7 @@ export default function NewNavBar() {
                           {link?.miniLinks && (
                             <DropDown
                               color={
-                                item.path === location.pathname
+                                item?.path === location.pathname
                                   ? "#fff"
                                   : "#464F60"
                               }

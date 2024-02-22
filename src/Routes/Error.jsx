@@ -2,6 +2,26 @@ import AppButton from "../reuseables/AppButton";
 import { Link } from "react-router-dom";
 
 export default function Error() {
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
+  const navAccess = userDetails?.userRoleMenuAccess
+    ?.map((item) => {
+      if (item?.menuAccessType?.id !== 1) {
+        return {
+          ...item,
+        };
+      }
+    })
+    .filter((item) => item !== undefined);
+  console.log(navAccess?.filter((item) => item !== undefined));
+  const menu1 = navAccess?.[0]?.menuName?.toLowerCase()?.replace(/\s+/g, "-");
+  const menu2 = navAccess?.[0]?.userRoleSubMenuAccess[0]?.subMenuName
+    .toLowerCase()
+    ?.replace(/\s+/g, "-");
+  const menu3 =
+    navAccess?.[0]?.userRoleSubMenuAccess[0]?.userRoleSuSubbMenuAccess[0]?.subMenuName
+      ?.toLowerCase()
+      ?.replace(/\s+/g, "-");
   return (
     <div
       style={{
@@ -23,8 +43,8 @@ export default function Error() {
           alt=""
         />
         <div>
-          <Link to="/dashboard">
-            <AppButton placeholder="Go to Dashboard" />
+          <Link to={menu3 ? `/${menu3}` : menu2 ? `/${menu2}` : `/${menu1}`}>
+            <AppButton placeholder="Go to Home Page" />
           </Link>
         </div>
       </div>

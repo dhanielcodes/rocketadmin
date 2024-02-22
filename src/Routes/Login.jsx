@@ -132,7 +132,29 @@ function Login() {
       }
       localStorage.setItem("userDetails", JSON.stringify(data?.data));
       //navigate("/dashboard");
-      window.location.reload();
+      const jkj = data?.data?.userRoleMenuAccess
+        ?.map((item) => {
+          if (item?.menuAccessType?.id !== 1) {
+            return {
+              ...item,
+            };
+          }
+        })
+        .filter((item) => item !== undefined);
+      console.log(jkj?.filter((item) => item !== undefined));
+      const menu1 = jkj?.[0]?.menuName?.toLowerCase()?.replace(/\s+/g, "-");
+      const menu2 = jkj?.[0]?.userRoleSubMenuAccess[0]?.subMenuName
+        ?.toLowerCase()
+        ?.replace(/\s+/g, "-");
+      const menu3 =
+        jkj?.[0]?.userRoleSubMenuAccess[0]?.userRoleSuSubbMenuAccess[0]?.subMenuName
+          ?.toLowerCase()
+          ?.replace(/\s+/g, "-");
+      window.location.pathname = menu3
+        ? `/${menu3}`
+        : menu2
+        ? `/${menu2}`
+        : `/${menu1}`;
     },
     onError: (data) => {
       setModal(true);
