@@ -81,7 +81,7 @@ export default function TransferDetailsPage() {
                   toast.success("Payment Link Copied!");
                 }}
               >
-                <span>Click to copy payment link</span>
+                <span>Click to copy transaction link details</span>
                 &nbsp; &nbsp;
                 <svg
                   width="15"
