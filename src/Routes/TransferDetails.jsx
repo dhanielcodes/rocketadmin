@@ -78,10 +78,10 @@ export default function TransferDetailsPage() {
                   navigator.clipboard.writeText(
                     `https://dashboard.transferrocket.co.uk/view-transaction?tid=${payload?.paymentRef}`
                   );
-                  toast.success("Payment Link Copied!");
+                  toast.success("Transaction Link Copied!");
                 }}
               >
-                <span>Click to copy transaction link details</span>
+                <span>Click to copy transaction link</span>
                 &nbsp; &nbsp;
                 <svg
                   width="15"
