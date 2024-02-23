@@ -89,9 +89,11 @@ export const customerRates = async (query) => {
   );
   return data;
 };
-export const Tranx = async (userId) => {
+export const Tranx = async (userId, category) => {
   const { data } = await Axios.get(
-    `${baseurl}/getusertransactionlog/${userId || 0}`
+    `${baseurl}/getusertransactionlog/${userId || 0}${
+      category ? `?categoryId=${category}` : ""
+    }`
   );
   return data;
 };
@@ -177,6 +179,14 @@ export const deactivateAccount = async (body) => {
 
 export const getUsers = async (id = 5) => {
   const { data } = await Axios.get(`${baseurl}/getuserbyrole/6`);
+  return data;
+};
+export const getIncompleteCustomers = async (id = 5) => {
+  const { data } = await Axios.get(`${baseurl}/getincompleteusersbyrole/6`);
+  return data;
+};
+export const getAccountRequiredCustomer = async (id = 5) => {
+  const { data } = await Axios.get(`${baseurl}/getactionrequiredusersbyrole/6`);
   return data;
 };
 export const getAgents = async (id = 5) => {

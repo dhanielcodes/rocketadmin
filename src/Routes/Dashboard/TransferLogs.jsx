@@ -1120,7 +1120,7 @@ const DroplistCancelled = ({ action, setModal, setUserId, viewDetails }) => (
   </Menu>
 );
 
-function TransferLogsTable() {
+function TransferLogsTable({ category }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
@@ -1135,7 +1135,7 @@ function TransferLogsTable() {
     isFetching,
   } = useQuery({
     queryKey: ["Tranx"],
-    queryFn: () => Tranx(userWe),
+    queryFn: () => Tranx(userWe, category),
   });
 
   const [modal, setModal] = useState(false);

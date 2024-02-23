@@ -56,6 +56,9 @@ import PayoutTransactionsPage from "./Routes/PayoutTransactions";
 import ClientFundRequestLogPage from "./Routes/ClientFundRequestLog";
 import Error from "./Routes/Error";
 import TransferDetailsPage from "./Routes/TransferDetails";
+import IncompleteTransfersPage from "./Routes/PaymentCheck";
+import IncompletePayWithBankTransfersPage from "./Routes/IncompletePayWithBankTransfers";
+import PaymentCheckPage from "./Routes/IncompleteTransfers copy";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -344,6 +347,30 @@ function App() {
                 element={
                   <AppLogout>
                     <TransfersListPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/incomplete-transfers"
+                element={
+                  <AppLogout>
+                    <IncompleteTransfersPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/incomplete-pay-with-bank-transfers"
+                element={
+                  <AppLogout>
+                    <IncompletePayWithBankTransfersPage />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/payment-check"
+                element={
+                  <AppLogout>
+                    <PaymentCheckPage />
                   </AppLogout>
                 }
               />
