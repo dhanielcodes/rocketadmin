@@ -59,6 +59,7 @@ import TransferDetailsPage from "./Routes/TransferDetails";
 import IncompleteTransfersPage from "./Routes/PaymentCheck";
 import IncompletePayWithBankTransfersPage from "./Routes/IncompletePayWithBankTransfers";
 import PaymentCheckPage from "./Routes/IncompleteTransfers copy";
+import UpdateEmployee from "./Routes/UpdateEmployee";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -420,6 +421,14 @@ function App() {
                 element={
                   <AppLogout>
                     <CreateNewEmployee />
+                  </AppLogout>
+                }
+              />
+              <Route
+                path="/update-employee"
+                element={
+                  <AppLogout>
+                    <UpdateEmployee />
                   </AppLogout>
                 }
               />

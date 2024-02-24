@@ -12,6 +12,7 @@ import {
   getIdTypes,
   getRoleMenu,
   getRoleMeta,
+  updateEmployee,
 } from "../services/Dashboard";
 import { getCurrencies } from "../services/Auth";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -26,9 +27,9 @@ import AppSelect2 from "../reuseables/AppSelect2";
 import FileUpload from "../services/FileUpload";
 import FileUpload2 from "../services/FileUpload2";
 import AppInput2 from "../reuseables/AppInput2";
-function CreateNewEmployee({}) {
+function UpdateEmployee({}) {
   const [params] = useSearchParams();
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const userDetails = JSON.parse(localStorage.getItem("employeeSelected"));
 
   //   Component useState
   const [beneficiaryComponent, setBeneficiaryComponent] = useState(false);
@@ -47,7 +48,7 @@ function CreateNewEmployee({}) {
   });
 
   const { mutate, isLoading: mutateLoading } = useMutation({
-    mutationFn: addemployee,
+    mutationFn: updateEmployee,
     onSuccess: (data) => {
       console.log(data);
       if (data?.status) {
@@ -74,6 +75,7 @@ function CreateNewEmployee({}) {
 
   const [cities, setCities] = useState();
   const [selectedCity, setselectedCity] = useState("");
+  const [selectedGender, setSelectedGender] = useState("");
 
   useEffect(() => {
     // Fetch states whenever the country ID changes
@@ -121,23 +123,24 @@ function CreateNewEmployee({}) {
   }, [selectedCountry]);
 
   const [details, setDetails] = useState({
-    firstName: "",
-    surName: "",
-    email: "",
+    firstName: userDetails?.firstName,
+    surName: userDetails?.surName,
+    email: userDetails?.email,
     password: "",
+    userId: userDetails?.userId,
     dob: "",
-    gender: "",
-    phone: "",
-    address: "",
-    postcode: "",
+    gender: userDetails?.gender,
+    phone: userDetails?.phone,
+    address: userDetails?.address,
+    postcode: userDetails?.postcode,
     country: {
-      id: "",
+      id: userDetails?.country?.id,
     },
     city: {
-      id: "",
+      id: userDetails?.city?.id,
     },
     role: {
-      id: "",
+      id: userDetails?.role?.id,
     },
     employmentStatusId: 0,
     profession: {
@@ -148,7 +151,7 @@ function CreateNewEmployee({}) {
     agentId: 0,
   });
 
-  console.log(details, "jjkd");
+  console.log(details, userDetails, "jjkd");
 
   return (
     <BodyLayout>
@@ -162,7 +165,7 @@ function CreateNewEmployee({}) {
       ) : (
         <Content>
           <div className="top">
-            <p>Add Employee</p>
+            <p>Update Employee {userDetails?.firstName}</p>
           </div>
 
           <div className="main">
@@ -202,6 +205,7 @@ function CreateNewEmployee({}) {
                     }}
                     width="95%"
                     name="username"
+                    defaultValue={userDetails?.firstName}
                   />
                 </div>
                 <div className="name" style={{}}>
@@ -217,6 +221,7 @@ function CreateNewEmployee({}) {
                     }}
                     width="95%"
                     name="username"
+                    defaultValue={userDetails?.surName}
                   />
                 </div>
                 <div className="name" style={{}}>
@@ -232,6 +237,7 @@ function CreateNewEmployee({}) {
                     }}
                     width="95%"
                     name="username"
+                    defaultValue={userDetails?.email}
                   />
                 </div>
                 <div className="name" style={{}}>
@@ -247,6 +253,7 @@ function CreateNewEmployee({}) {
                     }}
                     width="95%"
                     name="username"
+                    defaultValue={userDetails?.phone}
                   />
                 </div>
               </div>
@@ -276,6 +283,7 @@ function CreateNewEmployee({}) {
                         address: e,
                       });
                     }}
+                    defaultValue={userDetails?.address}
                     style={{
                       minHeight: 104,
                       background: "transparent",
@@ -309,7 +317,13 @@ function CreateNewEmployee({}) {
                         value: d?.name,
                       };
                     })}
-                    value={selectedCountry} // Pass the selected option to the value prop
+                    value={
+                      selectedCountry || {
+                        ...userDetails?.country,
+                        label: userDetails?.country?.name,
+                        value: userDetails?.country?.name,
+                      }
+                    } // Pass the selected option to the value prop
                     onChange={(e) => {
                       setselectedCountry(e);
                       console.log(e);
@@ -333,7 +347,13 @@ function CreateNewEmployee({}) {
                         value: d?.name,
                       };
                     })}
-                    value={selectedCity} // Pass the selected option to the value prop
+                    value={
+                      selectedCity || {
+                        ...userDetails?.city,
+                        label: userDetails?.city?.name,
+                        value: userDetails?.city?.name,
+                      }
+                    } // Pass the selected option to the value prop
                     onChange={(e) => {
                       setselectedCity(e);
                       console.log(e);
@@ -361,6 +381,7 @@ function CreateNewEmployee({}) {
                     }}
                     width="95%"
                     name="username"
+                    defaultValue={userDetails?.postcode}
                   />
                 </div>
               </div>
@@ -380,9 +401,15 @@ function CreateNewEmployee({}) {
                 }}
               >
                 <div>
-                  <p className="">Select Role</p>
                   <AppSelect
-                    value={selectedRole}
+                    label={"Select Role"}
+                    value={
+                      selectedRole || {
+                        ...userDetails?.role,
+                        label: userDetails?.role?.name,
+                        value: userDetails?.role?.name,
+                      }
+                    }
                     options={userMenu?.data?.map((item) => {
                       return {
                         label: item?.name,
@@ -402,12 +429,18 @@ function CreateNewEmployee({}) {
                   />
                 </div>
                 <div>
-                  <p className="">Gender</p>
                   <AppSelect
                     options={[
                       { label: "Male", value: "Male" },
                       { label: "Female", value: "Female" },
                     ]}
+                    value={
+                      selectedGender || {
+                        label: userDetails?.gender,
+                        value: userDetails?.gender,
+                      }
+                    }
+                    label={"Gender"}
                     onChange={(e) => {
                       setDetails({
                         ...details,
@@ -468,30 +501,15 @@ function CreateNewEmployee({}) {
 
               <button
                 onClick={() => {
-                  if (
-                    details?.address &&
-                    details?.email &&
-                    details?.address &&
-                    details?.firstName &&
-                    details?.password &&
-                    details?.surName &&
-                    details?.role &&
-                    details?.country &&
-                    details?.city &&
-                    details?.phone
-                  ) {
-                    mutate({
-                      ...details,
-                    });
-                  } else {
-                    toast.error("Fill all fields");
-                  }
+                  mutate({
+                    ...details,
+                  });
                 }}
                 className="confirm"
                 disabled={mutateLoading}
               >
                 {" "}
-                <span>{mutateLoading ? "adding..." : "Add Employee"}</span>
+                <span>{mutateLoading ? "updating..." : "Update Employee"}</span>
               </button>
             </div>
           </div>
@@ -501,7 +519,7 @@ function CreateNewEmployee({}) {
   );
 }
 
-export default CreateNewEmployee;
+export default UpdateEmployee;
 const Content = styled.div`
   .css-13cymwt-control {
     border-radius: 8px;

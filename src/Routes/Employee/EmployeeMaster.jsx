@@ -18,10 +18,12 @@ import { getPaymentProviders } from "../../services/PayoutDashboard";
 import UpdatePaymentProvider from "../../modals/UpdatePaymentProvider";
 import { countryObjectsArray } from "../../../config/CountryCodes";
 import { removeDup } from "../../utils/format";
+import UpdateEmployeeModal from "../../modals/UpdateEmployee";
 
 // hhhhhhh
 function EmployeeMaster() {
   const [inviteAgent, setInviteAgent] = useState(false);
+  const [addEmployee, setAddEmployee] = useState(false);
   /* {
     "id": 1,
     "paymentProviderSupportedCurrency": [
@@ -58,10 +60,7 @@ function EmployeeMaster() {
     {
       title: "ACTION",
       dataIndex: "action",
-      /*   sorter: {
-        compare: (a, b) => a.name - b.name,
-        multiple: 1,
-      }, */
+
       width: 60,
     },
     {
@@ -73,6 +72,12 @@ function EmployeeMaster() {
     {
       title: "USERNAME",
       dataIndex: "username",
+      width: 220,
+    },
+
+    {
+      title: "ROLE",
+      dataIndex: "role['name']",
       width: 220,
     },
 
@@ -125,10 +130,10 @@ function EmployeeMaster() {
           }}
           onClick={(e) => {
             e.stopPropagation();
-            if (active === item?.id) {
+            if (active === item?.userId) {
               setActive("");
             } else {
-              setActive(item?.id);
+              setActive(item?.userId);
             }
           }}
         >
@@ -148,7 +153,7 @@ function EmployeeMaster() {
             />
           </svg>
 
-          {active === item?.id && (
+          {active === item?.userId && (
             <div
               onClick={(e) => {
                 e.stopPropagation();
@@ -158,19 +163,22 @@ function EmployeeMaster() {
                 border: "1px solid #d1d1d1",
                 borderRadius: "10px",
                 textAlign: "left",
-                right: "30px",
+                left: "30px",
                 bottom: index !== 0 && "0",
                 top: index === 0 && "0",
                 background: "#fff",
                 zIndex: "10000",
-                width: "160px",
+                width: "180px",
               }}
               className="absolute border border-gray-200 rounded-lg text-left left-0 top-[160%] bg-white z-10"
             >
               <div
                 onClick={() => {
-                  setInviteAgent(true);
-                  setItem(item);
+                  navigate("/update-employee");
+                  localStorage.setItem(
+                    "employeeSelected",
+                    JSON.stringify(item)
+                  );
                 }}
                 style={{
                   padding: "10px",
@@ -204,7 +212,7 @@ function EmployeeMaster() {
                     </clipPath>
                   </defs>
                 </svg>
-                Update Provider
+                Update Employee
               </div>
             </div>
           )}
@@ -258,9 +266,6 @@ function EmployeeMaster() {
 
   return (
     <>
-      {inviteAgent && (
-        <UpdatePaymentProvider item={item} closeinviteAgent={setInviteAgent} />
-      )}
       <BodyLayout
         onClick={() => {
           setActive("");
@@ -274,7 +279,7 @@ function EmployeeMaster() {
               <span>This page allows you to add and update employees</span>
             </div>
             <div className="btn">
-              {/*  <button
+              <button
                 style={{
                   backgroundColor: "#00A85A",
                   color: "white",
@@ -283,7 +288,6 @@ function EmployeeMaster() {
                   navigate("/create-employee");
                 }}
               >
-      
                 <svg
                   width="16"
                   height="16"
@@ -299,7 +303,7 @@ function EmployeeMaster() {
                   />
                 </svg>
                 New Employee
-              </button> */}
+              </button>
             </div>
           </div>
           <div className="main">

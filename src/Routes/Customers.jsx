@@ -148,7 +148,9 @@ const Droplist = ({
           marginLeft: "10px",
         }}
       >
-        {stateStatus === "Suspended" ? " Unsuspend Agent" : "Suspend Agent"}
+        {stateStatus === "Suspended"
+          ? " Unsuspend Customer"
+          : "Suspend Customer"}
       </span>
     </Menu.Item>
     <Menu.Item
@@ -452,6 +454,11 @@ function Customers() {
                         userId: item?.userId,
                       });
                     }
+                    if (!item?.status) {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
                     if (item?.status === "Active") {
                       deactivate({
                         userId: item?.userId,
@@ -460,7 +467,17 @@ function Customers() {
                   }}
                   changeStatus2={() => {
                     setStatus(true);
-                    if (item?.status === "Suspend") {
+                    if (item?.status === "Suspended") {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
+                    if (!item?.status) {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
+                    if (item?.status === "Unsuspended") {
                       suspend({
                         userId: item?.userId,
                       });
