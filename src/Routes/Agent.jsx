@@ -137,7 +137,7 @@ const Droplist = ({
     </Menu.Item>
     <Menu.Item
       onClick={() => changeStatus2()}
-      key="2"
+      key="3"
       style={{
         display: "flex",
         alignItems: "center",
@@ -153,7 +153,7 @@ const Droplist = ({
     </Menu.Item>
     <Menu.Item
       onClick={() => watch()}
-      key="3"
+      key="4"
       style={{
         display: "flex",
         alignItems: "center",
@@ -429,6 +429,11 @@ function Agent() {
                         userId: item?.userId,
                       });
                     }
+                    if (!item?.status) {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
                     if (item?.status === "Active") {
                       deactivate({
                         userId: item?.userId,
@@ -437,7 +442,17 @@ function Agent() {
                   }}
                   changeStatus2={() => {
                     setStatus(true);
-                    if (item?.status === "Suspend") {
+                    if (item?.status === "Suspended") {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
+                    if (!item?.status) {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
+                    if (item?.status === "Unsuspended") {
                       suspend({
                         userId: item?.userId,
                       });

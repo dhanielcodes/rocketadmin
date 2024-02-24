@@ -373,7 +373,7 @@ function AgentInviteList() {
           <div className="header">
             <div className="top">
               <p>Agent Invites</p>
-              <span>This page allows you to manage customers</span>
+              <span>This page allows you to manage agent invites</span>
             </div>
             <div className="btn">
               {/*

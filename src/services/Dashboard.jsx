@@ -290,7 +290,14 @@ export const addNewDocument = async (body) => {
   const { data } = await Axios.post(`${baseurl}/adduserkycdocument`, body);
   return data;
 };
-
+export const addemployee = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/addemployee`, body);
+  return data;
+};
+export const updateEmployee = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/updateemployeeprofile`, body);
+  return data;
+};
 export const updateDocument = async (body) => {
   const { data } = await Axios.post(`${baseurl}/updateuserkycdocument`, body);
   return data;
