@@ -8,7 +8,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Paymentchannel,
   addPaymentProcessor,
-  addProfession,
   getRisks,
   sendAgentInvite,
   updatePayoutProvider,
@@ -26,23 +25,26 @@ import ReactCountryFlag from "react-country-flag";
 import { countryObjectsArray } from "../../config/CountryCodes";
 import Select from "react-select";
 
-function AddProfessionModal({ closeinviteAgent }) {
+function UpdateProfessionModal({ closeinviteAgent, item }) {
+  console.log(item?.payOutProviderSupportedCurrency);
+
   const [name, setName] = useState();
   const [status, setStatus] = useState();
   const [riskLevel, setRiskLevel] = useState();
 
   async function UpdateProvider() {
     mutate({
-      name: name,
+      id: 1,
+      name: name || item?.name,
       status: status?.value,
       riskLevel: {
-        id: riskLevel?.id,
+        id: riskLevel?.id || item?.riskLevel?.id,
       },
     });
   }
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: addProfession,
+    mutationFn: updateProfession,
     onSuccess: (data) => {
       if (data.status) {
         console.log(data);
@@ -59,7 +61,7 @@ function AddProfessionModal({ closeinviteAgent }) {
 
   return (
     <Content>
-      <Modal title="Add New Profession" onClick={() => closeinviteAgent(false)}>
+      <Modal title="Update Profession" onClick={() => closeinviteAgent(false)}>
         <div className="name" style={{}}>
           <label>Profession</label>
           <AppInput
@@ -70,6 +72,7 @@ function AddProfessionModal({ closeinviteAgent }) {
             onChange={(e) => {
               setName(e.target.value);
             }}
+            defaultValue={item?.name}
           />
         </div>
         <div className="name" style={{}}>
@@ -88,6 +91,11 @@ function AddProfessionModal({ closeinviteAgent }) {
         <div className="name" style={{}}>
           <label>Risk Level</label>
           <Select
+            value={{
+              label: item?.riskLevel?.name,
+              value: item?.riskLevel?.name,
+              id: item?.riskLevel?.id,
+            }}
             options={[
               { label: "Low", value: "Low", id: 1 },
               { label: "Medium", value: "Medium", id: 2 },
@@ -110,7 +118,9 @@ function AddProfessionModal({ closeinviteAgent }) {
             onClick={() => closeinviteAgent(false)}
           />
           <AppButton
-            placeholder={isLoading ? "adding profession..." : "Add Profession"}
+            placeholder={
+              isLoading ? "updating profession..." : "Update Profession"
+            }
             disabled={isLoading}
             style={{
               backgroundColor: "#00A85A",
@@ -125,7 +135,7 @@ function AddProfessionModal({ closeinviteAgent }) {
   );
 }
 
-export default AddProfessionModal;
+export default UpdateProfessionModal;
 const Content = styled.div`
   .css-13cymwt-control {
     border-radius: 8px;

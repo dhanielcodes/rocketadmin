@@ -415,6 +415,10 @@ export const getProfessions = async () => {
   return data;
 };
 
+export const addProfession = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/addprofession`, body);
+  return data;
+};
 export const updateProfession = async (body) => {
   const { data } = await Axios.post(`${baseurl}/updateprofession`, body);
   return data;
