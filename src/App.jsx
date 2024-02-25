@@ -63,6 +63,16 @@ import UpdateEmployee from "./Routes/UpdateEmployee";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
+  const navAccess = userDetails?.userRoleMenuAccess
+    ?.map((item) => {
+      if (item?.menuAccessType?.id !== 1) {
+        return {
+          ...item,
+        };
+      }
+    })
+    .filter((item) => item !== undefined);
+  console.log(navAccess);
   return (
     <Router>
       <Toaster
@@ -433,7 +443,7 @@ function App() {
                 }
               />
               <Route
-                path="/profession"
+                path="/profession-master"
                 element={
                   <AppLogout>
                     <ProfessionMaster />

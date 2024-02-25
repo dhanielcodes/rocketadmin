@@ -6,14 +6,15 @@ import { styled } from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import CustomTable from "../reuseables/CustomTable";
 import { useNavigate } from "react-router-dom";
-import ReactCountryFlag from "react-country-flag";
-import UpdatePaymentProvider from "../modals/UpdatePaymentProvider";
+
 import { getProfessions } from "../services/Dashboard";
+import UpdateProfessionModal from "../modals/UpdateProfessionModal";
 import AddProfessionModal from "../modals/AddProfessionModal";
 
 // hhhhhhh
 function ProfessionMaster() {
   const [inviteAgent, setInviteAgent] = useState(false);
+  const [inviteAgent2, setInviteAgent2] = useState(false);
   /* {
     "id": 1,
     "paymentProviderSupportedCurrency": [
@@ -123,12 +124,12 @@ function ProfessionMaster() {
                 border: "1px solid #d1d1d1",
                 borderRadius: "10px",
                 textAlign: "left",
-                right: "30px",
+                left: "30px",
                 bottom: index !== 0 && "0",
                 top: index === 0 && "0",
                 background: "#fff",
                 zIndex: "10000",
-                width: "160px",
+                width: "200px",
               }}
               className="absolute border border-gray-200 rounded-lg text-left left-0 top-[160%] bg-white z-10"
             >
@@ -169,7 +170,7 @@ function ProfessionMaster() {
                     </clipPath>
                   </defs>
                 </svg>
-                Update Provider
+                Update Profession
               </div>
             </div>
           )}
@@ -180,7 +181,12 @@ function ProfessionMaster() {
           style={{
             padding: "6px 14px",
             borderRadius: "7px",
-            background: item?.riskLevel?.name === "Low" ? "#37d744" : "#ff6363",
+            background:
+              item?.riskLevel?.name === "Low"
+                ? "#37d744"
+                : item?.riskLevel?.name === "Medium"
+                ? "#d3b331"
+                : "#ff6363",
             color: "white",
             width: "fit-content",
             fontWeight: "700",
@@ -197,7 +203,10 @@ function ProfessionMaster() {
   return (
     <>
       {inviteAgent && (
-        <AddProfessionModal item={item} closeinviteAgent={setInviteAgent} />
+        <UpdateProfessionModal item={item} closeinviteAgent={setInviteAgent} />
+      )}
+      {inviteAgent2 && (
+        <AddProfessionModal closeinviteAgent={setInviteAgent2} />
       )}
       <BodyLayout
         onClick={() => {
@@ -218,7 +227,7 @@ function ProfessionMaster() {
                   color: "white",
                 }}
                 onClick={() => {
-                  setInviteAgent(true);
+                  setInviteAgent2(true);
                 }}
               >
                 <svg
