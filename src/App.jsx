@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -63,16 +63,64 @@ import UpdateEmployee from "./Routes/UpdateEmployee";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
-  const navAccess = userDetails?.userRoleMenuAccess
-    ?.map((item) => {
-      if (item?.menuAccessType?.id !== 1) {
-        return {
-          ...item,
-        };
-      }
-    })
-    .filter((item) => item !== undefined);
-  console.log(navAccess);
+  const navAccess =
+    userDetails?.userRoleMenuAccess
+      ?.map((item) => {
+        if (item?.menuAccessType?.id !== 1) {
+          return {
+            ...item,
+          };
+        }
+      })
+      .filter((item) => item !== undefined) || [];
+
+  const allSubArrays = [];
+  const [newArra, setNewArra] = useState([]);
+
+  useEffect(() => {
+    // Loop through the nested array
+    navAccess?.forEach((innerArray) => {
+      // Loop through the inner arrays
+      innerArray?.userRoleSubMenuAccess?.forEach((element) => {
+        // Add each element to the parent array
+        allSubArrays.push(element);
+        element?.userRoleSuSubbMenuAccess?.forEach((kk) => {
+          // Add each element to the parent array
+          allSubArrays.push(kk);
+        });
+      });
+    });
+    setNewArra([...navAccess, ...allSubArrays]);
+  }, []);
+
+  const les = [
+    ...new Map(
+      newArra.map((item) => [
+        item?.menuName || item?.subMenuName || item?.subSubMenuName,
+        item,
+      ])
+    ).values(),
+  ];
+
+  const actualArrayAccess =
+    les?.map((item) => {
+      return {
+        ...item,
+        name: item?.menuName || item?.subMenuName || item?.subSubMenuName,
+      };
+    }) || [];
+
+  console.log(
+    actualArrayAccess?.map((item) => item?.name),
+    "dsdds"
+  );
+
+  function handleCheckAccess(val, metrics) {
+    return metrics?.some((item) => val === item?.name);
+  }
+
+  console.log(handleCheckAccess("Dashboard", actualArrayAccess), "kklsd");
+
   return (
     <Router>
       <Toaster
@@ -105,62 +153,66 @@ function App() {
           {/* <Route element={<ProtectedRoute />}> */}
           {userDetails && (
             <>
-              <Route
-                path="/"
-                element={
-                  <AppLogout>
-                    <Dashboard />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  <AppLogout>
-                    <Dashboard />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/payout-dashboard"
-                element={
-                  <AppLogout>
-                    <PayoutDashboard />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/kyc-provider"
-                element={
-                  <AppLogout>
-                    <KYCProvider />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/payout-partner"
-                element={
-                  <AppLogout>
-                    <PayoutPartnersPage />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/user-access-"
-                element={
-                  <AppLogout>
-                    <UserAccessPage />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/user-role"
-                element={
-                  <AppLogout>
-                    <UserRolePage />
-                  </AppLogout>
-                }
-              />
+              {handleCheckAccess("Dashboard", actualArrayAccess) && (
+                <Route
+                  path="/dashboard"
+                  element={
+                    <AppLogout>
+                      <Dashboard />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Dashboard", actualArrayAccess) && (
+                <Route
+                  path="/payout-dashboard"
+                  element={
+                    <AppLogout>
+                      <PayoutDashboard />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("KYC Provider", actualArrayAccess) && (
+                <Route
+                  path="/kyc-provider"
+                  element={
+                    <AppLogout>
+                      <KYCProvider />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Payout Partner", actualArrayAccess) && (
+                <Route
+                  path="/payout-partner"
+                  element={
+                    <AppLogout>
+                      <PayoutPartnersPage />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("User Access ", actualArrayAccess) && (
+                <Route
+                  path="/user-access-"
+                  element={
+                    <AppLogout>
+                      <UserAccessPage />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("User Role", actualArrayAccess) && (
+                <Route
+                  path="/user-role"
+                  element={
+                    <AppLogout>
+                      <UserRolePage />
+                    </AppLogout>
+                  }
+                />
+              )}
               <Route
                 path="/clients"
                 element={
@@ -177,14 +229,16 @@ function App() {
                   </AppLogout>
                 }
               />
-              <Route
-                path="/agents"
-                element={
-                  <AppLogout>
-                    <Agent />
-                  </AppLogout>
-                }
-              />
+              {handleCheckAccess("Agents", actualArrayAccess) && (
+                <Route
+                  path="/agents"
+                  element={
+                    <AppLogout>
+                      <Agent />
+                    </AppLogout>
+                  }
+                />
+              )}
               <Route
                 path="/new-document"
                 element={
@@ -201,22 +255,26 @@ function App() {
                   </AppLogout>
                 }
               />
-              <Route
-                path="/agent-invite"
-                element={
-                  <AppLogout>
-                    <AgentInviteList />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/customers"
-                element={
-                  <AppLogout>
-                    <Customers />
-                  </AppLogout>
-                }
-              />
+              {handleCheckAccess("Agent Invite", actualArrayAccess) && (
+                <Route
+                  path="/agent-invite"
+                  element={
+                    <AppLogout>
+                      <AgentInviteList />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Customers", actualArrayAccess) && (
+                <Route
+                  path="/customers"
+                  element={
+                    <AppLogout>
+                      <Customers />
+                    </AppLogout>
+                  }
+                />
+              )}
               <Route
                 path="/create-meta"
                 element={
@@ -233,167 +291,222 @@ function App() {
                   </AppLogout>
                 }
               />
-              <Route
-                path="/customers-details"
-                element={
-                  <AppLogout>
-                    <CustomerDetailsPage />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/payout-channel-processor"
-                element={
-                  <AppLogout>
-                    <PayoutProcessors />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/payment-channel-processor"
-                element={
-                  <AppLogout>
-                    <PaymentProcessors />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/payment-channels"
-                element={
-                  <AppLogout>
-                    <PaymentChannels />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/payment-provider"
-                element={
-                  <AppLogout>
-                    <PaymentProviders />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/payout-channels"
-                element={
-                  <AppLogout>
-                    <PayoutChannels />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/payout-provider"
-                element={
-                  <AppLogout>
-                    <PayoutProvidersList />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/update-rate-&-fees"
-                element={
-                  <AppLogout>
-                    <UpdateRatesPage />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/currency-rate-metadata"
-                element={
-                  <AppLogout>
-                    <RateMetadata />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/action-required"
-                element={
-                  <AppLogout>
-                    <ActionRequired />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/incomplete-registration"
-                element={
-                  <AppLogout>
-                    <IncompleteRegistration />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/send-money"
-                element={
-                  <AppLogout>
-                    <SendMoney />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/beneficiary"
-                element={
-                  <AppLogout>
-                    <Beneficiary />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/country"
-                element={
-                  <AppLogout>
-                    <CountriesPage />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/cities"
-                element={
-                  <AppLogout>
-                    <CitiesPage />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/view-transfers"
-                element={
-                  <AppLogout>
-                    <TransfersListPage />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/incomplete-transfers"
-                element={
-                  <AppLogout>
-                    <IncompleteTransfersPage />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/incomplete-pay-with-bank-transfers"
-                element={
-                  <AppLogout>
-                    <IncompletePayWithBankTransfersPage />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/payment-check"
-                element={
-                  <AppLogout>
-                    <PaymentCheckPage />
-                  </AppLogout>
-                }
-              />
+              {handleCheckAccess("Customers", actualArrayAccess) && (
+                <Route
+                  path="/customers-details"
+                  element={
+                    <AppLogout>
+                      <CustomerDetailsPage />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess(
+                "Payout Channel Processor",
+                actualArrayAccess
+              ) && (
+                <Route
+                  path="/payout-channel-processor"
+                  element={
+                    <AppLogout>
+                      <PayoutProcessors />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess(
+                "Payment Channel Processor",
+                actualArrayAccess
+              ) && (
+                <Route
+                  path="/payment-channel-processor"
+                  element={
+                    <AppLogout>
+                      <PaymentProcessors />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Payment Channels", actualArrayAccess) && (
+                <Route
+                  path="/payment-channels"
+                  element={
+                    <AppLogout>
+                      <PaymentChannels />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Payment Provider", actualArrayAccess) && (
+                <Route
+                  path="/payment-provider"
+                  element={
+                    <AppLogout>
+                      <PaymentProviders />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Payout Channels", actualArrayAccess) && (
+                <Route
+                  path="/payout-channels"
+                  element={
+                    <AppLogout>
+                      <PayoutChannels />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Payout Provider", actualArrayAccess) && (
+                <Route
+                  path="/payout-provider"
+                  element={
+                    <AppLogout>
+                      <PayoutProvidersList />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Update Rate & Fees", actualArrayAccess) && (
+                <Route
+                  path="/update-rate-&-fees"
+                  element={
+                    <AppLogout>
+                      <UpdateRatesPage />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess(
+                "Currency Rate Metadata",
+                actualArrayAccess
+              ) && (
+                <Route
+                  path="/currency-rate-metadata"
+                  element={
+                    <AppLogout>
+                      <RateMetadata />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Action Required", actualArrayAccess) && (
+                <Route
+                  path="/action-required"
+                  element={
+                    <AppLogout>
+                      <ActionRequired />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess(
+                "Incomplete Registration",
+                actualArrayAccess
+              ) && (
+                <Route
+                  path="/incomplete-registration"
+                  element={
+                    <AppLogout>
+                      <IncompleteRegistration />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Send Money", actualArrayAccess) && (
+                <Route
+                  path="/send-money"
+                  element={
+                    <AppLogout>
+                      <SendMoney />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Beneficiary", actualArrayAccess) && (
+                <Route
+                  path="/beneficiary"
+                  element={
+                    <AppLogout>
+                      <Beneficiary />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Country", actualArrayAccess) && (
+                <Route
+                  path="/country"
+                  element={
+                    <AppLogout>
+                      <CountriesPage />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Dashboard", actualArrayAccess) && (
+                <Route
+                  path="/cities"
+                  element={
+                    <AppLogout>
+                      <CitiesPage />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("View Transfers", actualArrayAccess) && (
+                <Route
+                  path="/view-transfers"
+                  element={
+                    <AppLogout>
+                      <TransfersListPage />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Incomplete Transfers", actualArrayAccess) && (
+                <Route
+                  path="/incomplete-transfers"
+                  element={
+                    <AppLogout>
+                      <IncompleteTransfersPage />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess(
+                "Incomplete Pay With Bank Transfers",
+                actualArrayAccess
+              ) && (
+                <Route
+                  path="/incomplete-pay-with-bank-transfers"
+                  element={
+                    <AppLogout>
+                      <IncompletePayWithBankTransfersPage />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Payment Check", actualArrayAccess) && (
+                <Route
+                  path="/payment-check"
+                  element={
+                    <AppLogout>
+                      <PaymentCheckPage />
+                    </AppLogout>
+                  }
+                />
+              )}
               {/* jjj */}
-              <Route
-                path="/payout-transfers"
-                element={
-                  <AppLogout>
-                    <PayoutTransactionsPage />
-                  </AppLogout>
-                }
-              />
+              {handleCheckAccess("Payout Transfers", actualArrayAccess) && (
+                <Route
+                  path="/payout-transfers"
+                  element={
+                    <AppLogout>
+                      <PayoutTransactionsPage />
+                    </AppLogout>
+                  }
+                />
+              )}
               <Route
                 path="/client-log-request"
                 element={
@@ -402,14 +515,16 @@ function App() {
                   </AppLogout>
                 }
               />
-              <Route
-                path="/notification"
-                element={
-                  <AppLogout>
-                    <NotificationsPage />
-                  </AppLogout>
-                }
-              />
+              {handleCheckAccess("Notification", actualArrayAccess) && (
+                <Route
+                  path="/notification"
+                  element={
+                    <AppLogout>
+                      <NotificationsPage />
+                    </AppLogout>
+                  }
+                />
+              )}
               <Route
                 path="/alerts"
                 element={
@@ -418,14 +533,16 @@ function App() {
                   </AppLogout>
                 }
               />
-              <Route
-                path="/employee-master"
-                element={
-                  <AppLogout>
-                    <EmployeeMaster />
-                  </AppLogout>
-                }
-              />{" "}
+              {handleCheckAccess("Employee Master", actualArrayAccess) && (
+                <Route
+                  path="/employee-master"
+                  element={
+                    <AppLogout>
+                      <EmployeeMaster />
+                    </AppLogout>
+                  }
+                />
+              )}
               <Route
                 path="/create-employee"
                 element={
@@ -442,22 +559,26 @@ function App() {
                   </AppLogout>
                 }
               />
-              <Route
-                path="/profession-master"
-                element={
-                  <AppLogout>
-                    <ProfessionMaster />
-                  </AppLogout>
-                }
-              />
-              <Route
-                path="/transaction-details"
-                element={
-                  <AppLogout>
-                    <TransferDetailsPage />
-                  </AppLogout>
-                }
-              />
+              {handleCheckAccess("Profession Master", actualArrayAccess) && (
+                <Route
+                  path="/profession-master"
+                  element={
+                    <AppLogout>
+                      <ProfessionMaster />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("View Transfer", actualArrayAccess) && (
+                <Route
+                  path="/transaction-details"
+                  element={
+                    <AppLogout>
+                      <TransferDetailsPage />
+                    </AppLogout>
+                  }
+                />
+              )}
             </>
           )}
           {!userDetails && <Route path="/" element={<Login />} />}
