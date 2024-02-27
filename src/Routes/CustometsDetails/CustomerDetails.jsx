@@ -1,34 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  createFundingRequest,
-  getPayoutClientDashboard,
-  updatePayoutClientStatus,
-} from "../../services/PayoutDashboard";
-import { isError, useMutation, useQuery } from "@tanstack/react-query";
+
+import { useQuery } from "@tanstack/react-query";
 import BodyLayout from "../../reuseables/BodyLayout";
 import styled from "styled-components";
-import { BackTop, Button, Select, Skeleton } from "@arco-design/web-react";
-import phone from "../../assets/icons/phoneIcon.svg";
-import mail from "../../assets/icons/mailIcon.svg";
-import profile from "../../assets/images/profile.png";
+
 import Details from "./ClientDetailsTabs/Details";
 import Documents from "./ClientDetailsTabs/Documents";
 import TransactionsList from "./ClientDetailsTabs/TransactionsList";
 import ChargesList from "./ClientDetailsTabs/ChargesList";
 import Skeleton2 from "../../reuseables/Skeleton2";
-import AppModal from "../../COMPONENTS/AppModal";
-import AppSelect from "../../reuseables/AppSelect";
-import GatewayDropdown from "../../reuseables/GatewayDropdown";
-import AppInput from "../../reuseables/AppInput";
-import MainDetailsBody from "./MainDetailsBody";
-import SuspendIcon from "../../assets/icons/SuspendIcon";
-import { TiPlus } from "react-icons/ti";
-import PlusIcon from "../../assets/icons/PlusIcon";
-import toast from "react-hot-toast";
+
 import Gateways from "./ClientDetailsTabs/Gateways";
 import CustomerDetailsTop from "./MainDetailsBody";
-import { GetDetails, GetUserDetails } from "../../services/Dashboard";
+import { GetUserDetails } from "../../services/Dashboard";
 import AuditLogs from "./ClientDetailsTabs/AuditLogs";
 import RiskTable from "./ClientDetailsTabs/RiskTable";
 import CustomerList from "./ClientDetailsTabs/CustomerList";
@@ -38,21 +23,15 @@ export default function CustomerDetailsPage() {
   const userId = params.get("userId");
   const from = params.get("from");
 
-  const customerDetails = JSON.parse(localStorage.getItem("customer_details"));
-
-  const clientUser = JSON.parse(localStorage.getItem("customer_details"));
-  const {
-    data: customer,
-    isLoading,
-    isFetching,
-  } = useQuery({
+  const { data: customer, isLoading } = useQuery({
     queryKey: ["GetUserDetails"],
     queryFn: () => GetUserDetails(userId),
   });
+  const customerDetails = customer?.data || {};
 
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  //const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
-  console.log(customerDetails, clientUser, "daeo");
+  console.log(customerDetails, "daeo");
 
   const navigate = useNavigate();
 
@@ -75,14 +54,6 @@ export default function CustomerDetailsPage() {
     "Audit Logs",
   ];
 
-  const [modal, setModal] = useState(false);
-
-  const [gateway, setGateWay] = useState();
-  const [amount, setAmount] = useState();
-  const [description, setDescription] = useState();
-
-  console.log();
-
   return (
     <BodyLayout>
       <div
@@ -102,7 +73,7 @@ export default function CustomerDetailsPage() {
               <Skeleton2 height="80vh" />
             </div>
           )) ||
-          (clientUser && (
+          (customerDetails && (
             <Client>
               <div className="topBar">
                 <div>
@@ -126,16 +97,16 @@ export default function CustomerDetailsPage() {
                       <path
                         d="M4.25 12.2744L19.25 12.2744"
                         stroke="#00A85A"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       />
                       <path
                         d="M10.2998 18.2985L4.2498 12.2745L10.2998 6.24951"
                         stroke="#00A85A"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       />
                     </svg>
 
@@ -147,123 +118,135 @@ export default function CustomerDetailsPage() {
               </div>
 
               <div className="body">
-                <CustomerDetailsTop clientUser={customer?.data} />
+                {isLoading ? (
+                  <Skeleton2 height="400px" />
+                ) : (
+                  <CustomerDetailsTop customerDetails={customerDetails} />
+                )}
 
-                <div
-                  style={{
-                    padding: "20px",
-                  }}
-                >
+                {isLoading ? (
+                  <Skeleton2 height="400ox" />
+                ) : (
                   <div
                     style={{
-                      marginBottom: "20px",
-                      marginTop: "80px",
-                      borderBottom: "1px solid #EAECF0",
-                      display: "flex",
+                      padding: "20px",
                     }}
                   >
-                    {from === "agent"
-                      ? tabAAgent.map((item) => {
-                          return (
-                            <div
-                              onClick={() => {
-                                setActive(item);
-                              }}
-                              style={{
-                                paddingBottom: "10px",
-                                paddingLeft: "8px",
-                                paddingRight: "8px",
-                                borderBottom:
-                                  active !== item
-                                    ? "1px solid transparent"
-                                    : "1px solid #00A85A",
-                                width: "fit-content",
-                                fontSize: "16px",
-                                cursor: "pointer",
-                                marginRight: "10px",
-                              }}
-                            >
-                              <span
+                    <div
+                      style={{
+                        marginBottom: "20px",
+                        marginTop: "80px",
+                        borderBottom: "1px solid #EAECF0",
+                        display: "flex",
+                      }}
+                    >
+                      {from === "agent"
+                        ? tabAAgent.map((item) => {
+                            return (
+                              <div
+                                key={item}
+                                onClick={() => {
+                                  setActive(item);
+                                }}
                                 style={{
-                                  width: "100%",
-                                  color:
-                                    active === item ? "#00A85A" : "#667085",
+                                  paddingBottom: "10px",
+                                  paddingLeft: "8px",
+                                  paddingRight: "8px",
+                                  borderBottom:
+                                    active !== item
+                                      ? "1px solid transparent"
+                                      : "1px solid #00A85A",
+                                  width: "fit-content",
+                                  fontSize: "16px",
+                                  cursor: "pointer",
+                                  marginRight: "10px",
                                 }}
                               >
-                                {item}
-                              </span>
-                            </div>
-                          );
-                        })
-                      : tab.map((item) => {
-                          return (
-                            <div
-                              onClick={() => {
-                                setActive(item);
-                              }}
-                              style={{
-                                paddingBottom: "10px",
-                                paddingLeft: "8px",
-                                paddingRight: "8px",
-                                borderBottom:
-                                  active !== item
-                                    ? "1px solid transparent"
-                                    : "1px solid #00A85A",
-                                width: "fit-content",
-                                fontSize: "16px",
-                                cursor: "pointer",
-                                marginRight: "10px",
-                              }}
-                            >
-                              <span
+                                <span
+                                  style={{
+                                    width: "100%",
+                                    color:
+                                      active === item ? "#00A85A" : "#667085",
+                                  }}
+                                >
+                                  {item}
+                                </span>
+                              </div>
+                            );
+                          })
+                        : tab.map((item) => {
+                            return (
+                              <div
+                                key={item}
+                                onClick={() => {
+                                  setActive(item);
+                                }}
                                 style={{
-                                  width: "100%",
-                                  color:
-                                    active === item ? "#00A85A" : "#667085",
+                                  paddingBottom: "10px",
+                                  paddingLeft: "8px",
+                                  paddingRight: "8px",
+                                  borderBottom:
+                                    active !== item
+                                      ? "1px solid transparent"
+                                      : "1px solid #00A85A",
+                                  width: "fit-content",
+                                  fontSize: "16px",
+                                  cursor: "pointer",
+                                  marginRight: "10px",
                                 }}
                               >
-                                {item}
-                              </span>
-                            </div>
-                          );
-                        })}
+                                <span
+                                  style={{
+                                    width: "100%",
+                                    color:
+                                      active === item ? "#00A85A" : "#667085",
+                                  }}
+                                >
+                                  {item}
+                                </span>
+                              </div>
+                            );
+                          })}
+                    </div>
+
+                    {active === "Overview" &&
+                      ((viewRisk && (
+                        <RiskTable
+                          clientDetails={customerDetails}
+                          setViewRisk={setViewRisk}
+                        />
+                      )) || (
+                        <Details
+                          clientDetails={customerDetails}
+                          setViewRisk={setViewRisk}
+                        />
+                      ))}
+                    {active === "ID Documents" && (
+                      <Documents clientDetails={customerDetails} />
+                    )}
+                    {active === "Audit Logs" && (
+                      <AuditLogs clientDetails={customerDetails} />
+                    )}
+                    {active === "Transfer List" && (
+                      <TransactionsList
+                        data={customerDetails?.userId}
+                      ></TransactionsList>
+                    )}
+                    {active === "Beneficiary List" && (
+                      <ChargesList data={customerDetails?.userId}></ChargesList>
+                    )}
+
+                    {active === "Customers List" && (
+                      <CustomerList
+                        data={customerDetails?.userId}
+                      ></CustomerList>
+                    )}
+
+                    {active === "Gateways" && (
+                      <Gateways data={customerDetails}></Gateways>
+                    )}
                   </div>
-
-                  {active === "Overview" &&
-                    ((viewRisk && (
-                      <RiskTable
-                        clientDetails={customer?.data}
-                        setViewRisk={setViewRisk}
-                      />
-                    )) || (
-                      <Details
-                        clientDetails={customer?.data}
-                        setViewRisk={setViewRisk}
-                      />
-                    ))}
-                  {active === "ID Documents" && (
-                    <Documents clientDetails={customer?.data} />
-                  )}
-                  {active === "Audit Logs" && (
-                    <AuditLogs clientDetails={customer?.data} />
-                  )}
-                  {active === "Transfer List" && (
-                    <TransactionsList
-                      data={clientUser?.userId}
-                    ></TransactionsList>
-                  )}
-                  {active === "Beneficiary List" && (
-                    <ChargesList data={clientUser?.userId}></ChargesList>
-                  )}
-
-                  {active === "Customers List" && (
-                    <CustomerList data={clientUser?.userId}></CustomerList>
-                  )}
-
-                  {active === "Gateways" && (
-                    <Gateways data={clientUser}></Gateways>
-                  )}
-                </div>
+                )}
               </div>
             </Client>
           ))}
