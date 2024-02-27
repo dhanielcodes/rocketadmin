@@ -3,6 +3,7 @@ import styled from "styled-components";
 import AmountFormatter from "../../../reuseables/AmountFormatter";
 import CountryDropdownDash from "../../../reuseables/CountryDropdownDash";
 import GaugeChart from "react-gauge-chart";
+import moment from "moment";
 
 export default function Details({ clientDetails, setViewRisk }) {
   const [selected, setSelected] = useState();
@@ -23,6 +24,9 @@ export default function Details({ clientDetails, setViewRisk }) {
   const day = new Date();
   const today = new Date().setDate(day.getDate());
   const last30Day = new Date().setDate(day.getDate() - 30);
+  const last60Day = new Date().setDate(day.getDate() - 60);
+  const last90Day = new Date().setDate(day.getDate() - 90);
+  const last120Day = new Date().setDate(day.getDate() - 120);
   return (
     <>
       <div
@@ -106,32 +110,184 @@ export default function Details({ clientDetails, setViewRisk }) {
             <div className="box_bank_card">
               <div className="box_data">Roll Over 1 month</div>
               <br />
-              <div className="">From: {today}</div>
-              <div className="">To: {last30Day}</div>
-            </div>
-            <div className="box_bank_card">
-              <div className="box_data">{newSelected?.lastThirtyDays}</div>
-
-              <div className="box_data">{clientDetails?.beneficiaryName}</div>
-            </div>
-            <div className="box_bank_card">
-              <div>Account Number</div>
-              <div className="box_data">
-                {clientDetails?.beneficiaryBank?.accountNumber}
+              <div className="">From: {moment(today).format("DD-MM-YYYY")}</div>
+              <div className="">
+                To: {moment(last30Day).format("DD-MM-YYYY")}
               </div>
             </div>
-            <div className="box_bank_card">
-              <div>Total amount you will be paying</div>
+            <div className="box_bank_card two">
               <div className="box_data">
                 <AmountFormatter
-                  currency={clientDetails?.fromCurrency?.code}
-                  value={clientDetails?.rate?.data?.totalAmountToPay || 0}
+                  value={newSelected?.lastThirtyDays}
+                  currency={newSelected?.currency}
                 />
               </div>
+              <div className="">
+                (Fees:{" "}
+                <AmountFormatter
+                  value={newSelected?.lastThirtyDaysTransitionFee}
+                  currency={newSelected?.currency}
+                />{" "}
+                )
+              </div>
+            </div>
+            <div className="box_bank_card two">
+              <div className="box_data">{newSelected?.lastThirtyDaysCount}</div>
+              <div>Transfer count</div>
+            </div>
+            <div className="box_bank_card two">
+              <div className="box_data">{newSelected?.lastThirtyDaysCount}</div>
+              <div>Average Transaction Value</div>
+            </div>
+          </div>
+
+          <div className="box_bank">
+            <div className="box_bank_card">
+              <div className="box_data">Roll Over 2 month</div>
+              <br />
+              <div className="">From: {moment(today).format("DD-MM-YYYY")}</div>
+              <div className="">
+                To: {moment(last60Day).format("DD-MM-YYYY")}
+              </div>
+            </div>
+            <div className="box_bank_card two">
+              <div className="box_data">
+                <AmountFormatter
+                  value={newSelected?.lastSixtyDays}
+                  currency={newSelected?.currency}
+                />
+              </div>
+              <div className="">
+                (Fees:{" "}
+                <AmountFormatter
+                  value={newSelected?.lastSixtyDaysTransitionFee}
+                  currency={newSelected?.currency}
+                />{" "}
+                )
+              </div>
+            </div>
+            <div className="box_bank_card two">
+              <div className="box_data">{newSelected?.lastSixtyDaysCount}</div>
+              <div>Transfer count</div>
+            </div>
+            <div className="box_bank_card two">
+              <div className="box_data">{newSelected?.lastSixtyDaysCount}</div>
+              <div>Average Transaction Value</div>
+            </div>
+          </div>
+
+          <div className="box_bank">
+            <div className="box_bank_card">
+              <div className="box_data">Roll Over 3 month</div>
+              <br />
+              <div className="">From: {moment(today).format("DD-MM-YYYY")}</div>
+              <div className="">
+                To: {moment(last90Day).format("DD-MM-YYYY")}
+              </div>
+            </div>
+            <div className="box_bank_card two">
+              <div className="box_data">
+                <AmountFormatter
+                  value={newSelected?.lastNinetyDays}
+                  currency={newSelected?.currency}
+                />
+              </div>
+              <div className="">
+                (Fees:{" "}
+                <AmountFormatter
+                  value={newSelected?.lastNinetyDaysTransitionFee}
+                  currency={newSelected?.currency}
+                />{" "}
+                )
+              </div>
+            </div>
+            <div className="box_bank_card two">
+              <div className="box_data">{newSelected?.lastNinetyDaysCount}</div>
+              <div>Transfer count</div>
+            </div>
+            <div className="box_bank_card two">
+              <div className="box_data">{newSelected?.lastNinetyDaysCount}</div>
+              <div>Average Transaction Value</div>
+            </div>
+          </div>
+
+          <div className="box_bank">
+            <div className="box_bank_card">
+              <div className="box_data">Roll Over 4 month</div>
+              <br />
+              <div className="">From: {moment(today).format("DD-MM-YYYY")}</div>
+              <div className="">
+                To: {moment(last120Day).format("DD-MM-YYYY")}
+              </div>
+            </div>
+            <div className="box_bank_card two">
+              <div className="box_data">
+                <AmountFormatter
+                  value={newSelected?.lastOneTwentyDays}
+                  currency={newSelected?.currency}
+                />
+              </div>
+              <div className="">
+                (Fees:{" "}
+                <AmountFormatter
+                  value={newSelected?.lastOneTwentyDaysTransitionFee}
+                  currency={newSelected?.currency}
+                />{" "}
+                )
+              </div>
+            </div>
+            <div className="box_bank_card two">
+              <div className="box_data">
+                {newSelected?.lastOneTwentyDaysCount}
+              </div>
+              <div>Transfer count</div>
+            </div>
+            <div className="box_bank_card two">
+              <div className="box_data">
+                {newSelected?.lastOneTwentyDaysCount}
+              </div>
+              <div>Average Transaction Value</div>
             </div>
           </div>
         </div>
       </DetailsStyle>
+      <Boxx className="box_bank">
+        <h2>Lifetime Summary</h2>
+        <div className="box_bank">
+          <div className="box_bank_card two">
+            <div className="box_data">
+              <AmountFormatter
+                value={
+                  newSelected?.pendingAmount +
+                  newSelected?.processedAmount +
+                  newSelected?.depositedAmount +
+                  newSelected?.failedAmount +
+                  newSelected?.cancelledAmount
+                }
+                currency={newSelected?.currency}
+              />
+            </div>
+            <div className="">
+              (Fees:{" "}
+              <AmountFormatter value={0} currency={newSelected?.currency} /> )
+            </div>
+          </div>
+          <div className="box_bank_card two">
+            <div className="box_data">{newSelected?.lastSixtyDaysCount}</div>
+            <div>Transfer count</div>
+          </div>
+          <div className="box_bank_card two">
+            <div className="box_data">
+              {newSelected?.pending +
+                newSelected?.processed +
+                newSelected?.deposited +
+                newSelected?.failed +
+                newSelected?.cancelled}
+            </div>
+            <div>Average Transaction Value</div>
+          </div>
+        </div>
+      </Boxx>
     </>
   );
 }
@@ -156,6 +312,43 @@ const DetailsStyle = styled.div`
     display: grid;
     margin-bottom: 10px;
     grid-template-columns: 1fr 1fr 1fr 1fr;
+    .box_bank_card.two {
+      text-align: center;
+    }
+    .box_bank_card {
+      border-right: 1px solid #c7c7c7;
+      padding: 0 20px;
+      .box_data {
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 10px;
+      }
+    }
+    .box_bank_card:last-child {
+      border-right: none;
+    }
+  }
+`;
+
+const Boxx = styled.div`
+  margin-top: 20px;
+  border: 1px solid #c7c7c7;
+  width: 100%;
+  border-radius: 14px;
+  padding: 20px;
+  display: grid;
+  margin-bottom: 10px;
+  .box_bank {
+    border: 1px solid #c7c7c7;
+    width: 100%;
+    border-radius: 14px;
+    padding: 20px 0px;
+    display: grid;
+    margin-bottom: 10px;
+    grid-template-columns: 1fr 1fr 1fr;
+    .box_bank_card.two {
+      text-align: center;
+    }
     .box_bank_card {
       border-right: 1px solid #c7c7c7;
       padding: 0 20px;

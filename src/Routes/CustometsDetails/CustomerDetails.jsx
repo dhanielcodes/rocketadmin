@@ -23,7 +23,7 @@ export default function CustomerDetailsPage() {
   const userId = params.get("userId");
   const from = params.get("from");
 
-  const { data: customer } = useQuery({
+  const { data: customer, isLoading } = useQuery({
     queryKey: ["GetUserDetails"],
     queryFn: () => GetUserDetails(userId),
   });
@@ -118,125 +118,135 @@ export default function CustomerDetailsPage() {
               </div>
 
               <div className="body">
-                <CustomerDetailsTop customerDetails={customerDetails} />
+                {isLoading ? (
+                  <Skeleton2 height="400px" />
+                ) : (
+                  <CustomerDetailsTop customerDetails={customerDetails} />
+                )}
 
-                <div
-                  style={{
-                    padding: "20px",
-                  }}
-                >
+                {isLoading ? (
+                  <Skeleton2 height="400ox" />
+                ) : (
                   <div
                     style={{
-                      marginBottom: "20px",
-                      marginTop: "80px",
-                      borderBottom: "1px solid #EAECF0",
-                      display: "flex",
+                      padding: "20px",
                     }}
                   >
-                    {from === "agent"
-                      ? tabAAgent.map((item) => {
-                          return (
-                            <div
-                              key={item}
-                              onClick={() => {
-                                setActive(item);
-                              }}
-                              style={{
-                                paddingBottom: "10px",
-                                paddingLeft: "8px",
-                                paddingRight: "8px",
-                                borderBottom:
-                                  active !== item
-                                    ? "1px solid transparent"
-                                    : "1px solid #00A85A",
-                                width: "fit-content",
-                                fontSize: "16px",
-                                cursor: "pointer",
-                                marginRight: "10px",
-                              }}
-                            >
-                              <span
+                    <div
+                      style={{
+                        marginBottom: "20px",
+                        marginTop: "80px",
+                        borderBottom: "1px solid #EAECF0",
+                        display: "flex",
+                      }}
+                    >
+                      {from === "agent"
+                        ? tabAAgent.map((item) => {
+                            return (
+                              <div
+                                key={item}
+                                onClick={() => {
+                                  setActive(item);
+                                }}
                                 style={{
-                                  width: "100%",
-                                  color:
-                                    active === item ? "#00A85A" : "#667085",
+                                  paddingBottom: "10px",
+                                  paddingLeft: "8px",
+                                  paddingRight: "8px",
+                                  borderBottom:
+                                    active !== item
+                                      ? "1px solid transparent"
+                                      : "1px solid #00A85A",
+                                  width: "fit-content",
+                                  fontSize: "16px",
+                                  cursor: "pointer",
+                                  marginRight: "10px",
                                 }}
                               >
-                                {item}
-                              </span>
-                            </div>
-                          );
-                        })
-                      : tab.map((item) => {
-                          return (
-                            <div
-                              key={item}
-                              onClick={() => {
-                                setActive(item);
-                              }}
-                              style={{
-                                paddingBottom: "10px",
-                                paddingLeft: "8px",
-                                paddingRight: "8px",
-                                borderBottom:
-                                  active !== item
-                                    ? "1px solid transparent"
-                                    : "1px solid #00A85A",
-                                width: "fit-content",
-                                fontSize: "16px",
-                                cursor: "pointer",
-                                marginRight: "10px",
-                              }}
-                            >
-                              <span
+                                <span
+                                  style={{
+                                    width: "100%",
+                                    color:
+                                      active === item ? "#00A85A" : "#667085",
+                                  }}
+                                >
+                                  {item}
+                                </span>
+                              </div>
+                            );
+                          })
+                        : tab.map((item) => {
+                            return (
+                              <div
+                                key={item}
+                                onClick={() => {
+                                  setActive(item);
+                                }}
                                 style={{
-                                  width: "100%",
-                                  color:
-                                    active === item ? "#00A85A" : "#667085",
+                                  paddingBottom: "10px",
+                                  paddingLeft: "8px",
+                                  paddingRight: "8px",
+                                  borderBottom:
+                                    active !== item
+                                      ? "1px solid transparent"
+                                      : "1px solid #00A85A",
+                                  width: "fit-content",
+                                  fontSize: "16px",
+                                  cursor: "pointer",
+                                  marginRight: "10px",
                                 }}
                               >
-                                {item}
-                              </span>
-                            </div>
-                          );
-                        })}
+                                <span
+                                  style={{
+                                    width: "100%",
+                                    color:
+                                      active === item ? "#00A85A" : "#667085",
+                                  }}
+                                >
+                                  {item}
+                                </span>
+                              </div>
+                            );
+                          })}
+                    </div>
+
+                    {active === "Overview" &&
+                      ((viewRisk && (
+                        <RiskTable
+                          clientDetails={customerDetails}
+                          setViewRisk={setViewRisk}
+                        />
+                      )) || (
+                        <Details
+                          clientDetails={customerDetails}
+                          setViewRisk={setViewRisk}
+                        />
+                      ))}
+                    {active === "ID Documents" && (
+                      <Documents clientDetails={customerDetails} />
+                    )}
+                    {active === "Audit Logs" && (
+                      <AuditLogs clientDetails={customerDetails} />
+                    )}
+                    {active === "Transfer List" && (
+                      <TransactionsList
+                        data={customerDetails?.userId}
+                      ></TransactionsList>
+                    )}
+                    {active === "Beneficiary List" && (
+                      <ChargesList data={customerDetails?.userId}></ChargesList>
+                    )}
+
+                    {active === "Customers List" && (
+                      <CustomerList
+                        data={customerDetails?.userId}
+                      ></CustomerList>
+                    )}
+
+                    {active === "Gateways" && (
+                      <Gateways data={customerDetails}></Gateways>
+                    )}
                   </div>
-
-                  {active === "Overview" &&
-                    ((viewRisk && (
-                      <RiskTable
-                        clientDetails={customerDetails}
-                        setViewRisk={setViewRisk}
-                      />
-                    )) || (
-                      <Details
-                        clientDetails={customerDetails}
-                        setViewRisk={setViewRisk}
-                      />
-                    ))}
-                  {active === "ID Documents" && (
-                    <Documents clientDetails={customerDetails} />
-                  )}
-                  {active === "Audit Logs" && (
-                    <AuditLogs clientDetails={customerDetails} />
-                  )}
-                  {active === "Transfer List" && (
-                    <TransactionsList
-                      data={customerDetails?.userId}
-                    ></TransactionsList>
-                  )}
-                  {active === "Beneficiary List" && (
-                    <ChargesList data={customerDetails?.userId}></ChargesList>
-                  )}
-
-                  {active === "Customers List" && (
-                    <CustomerList data={customerDetails?.userId}></CustomerList>
-                  )}
-
-                  {active === "Gateways" && (
-                    <Gateways data={customerDetails}></Gateways>
-                  )}
-                </div>
+                )}
               </div>
             </Client>
           ))}

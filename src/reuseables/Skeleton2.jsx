@@ -17,7 +17,7 @@ const Skeleton2 = ({ height = "40px", style }) => {
 export default Skeleton2;
 
 const SkeletonStyle = styled.div`
-  width: 97%;
+  width: 100%;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   justify-content: space-around;
 
