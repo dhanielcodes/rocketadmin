@@ -23,7 +23,11 @@ export default function CustomerDetailsPage() {
   const userId = params.get("userId");
   const from = params.get("from");
 
-  const { data: customer, isLoading } = useQuery({
+  const {
+    data: customer,
+    isLoading,
+    isFetching,
+  } = useQuery({
     queryKey: ["GetUserDetails"],
     queryFn: () => GetUserDetails(userId),
   });
@@ -81,7 +85,7 @@ export default function CustomerDetailsPage() {
                     className="back_buttton"
                     onClick={() => {
                       if (from === "agent") {
-                        navigate("/agent");
+                        navigate("/agents");
                       } else {
                         navigate("/customers");
                       }
@@ -118,14 +122,14 @@ export default function CustomerDetailsPage() {
               </div>
 
               <div className="body">
-                {isLoading ? (
+                {isLoading || isFetching ? (
                   <Skeleton2 height="400px" />
                 ) : (
                   <CustomerDetailsTop customerDetails={customerDetails} />
                 )}
 
-                {isLoading ? (
-                  <Skeleton2 height="400ox" />
+                {isLoading || isFetching ? (
+                  <Skeleton2 height="400px" />
                 ) : (
                   <div
                     style={{
