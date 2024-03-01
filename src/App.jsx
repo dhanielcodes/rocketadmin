@@ -569,7 +569,7 @@ function App() {
                   }
                 />
               )}
-              {handleCheckAccess("View Transfer", actualArrayAccess) && (
+              {handleCheckAccess("View Transfers", actualArrayAccess) && (
                 <Route
                   path="/transaction-details"
                   element={

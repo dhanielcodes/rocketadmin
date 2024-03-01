@@ -292,7 +292,7 @@ function PayoutDashboard() {
                   </div>
 
                   <div>
-                    <Link to="/payout-providers">
+                    <Link to="/payout-provider">
                       <div
                         style={{
                           padding: "10%",
