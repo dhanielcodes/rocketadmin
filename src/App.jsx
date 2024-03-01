@@ -581,7 +581,7 @@ function App() {
               )}
             </>
           )}
-          {!userDetails && <Route path="/" element={<Login />} />}
+          <Route path="/" element={<Login />} />
 
           {/* </Route> */}
           <Route path="*" element={<Error />} />
