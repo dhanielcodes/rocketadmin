@@ -51,13 +51,13 @@ export default function ChargesList({ data, refetch }) {
       title: "MIN FIXED CAPPED AMT",
       dataIndex: "minimumFixedCapped",
       width: 220,
-      render: (item) => kFormatter4(item),
+      render: (item) => kFormatter3(item),
     },
     {
       title: "MAX FIXED CAPPED AMT",
       dataIndex: "maximumFixedCapped",
       width: 220,
-      render: (item) => kFormatter4(item),
+      render: (item) => kFormatter3(item),
     },
     {
       title: "DATE ADDED",

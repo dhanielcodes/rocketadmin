@@ -168,7 +168,7 @@ function Dashboard() {
                         <p>Send Money</p>
                       </div>
                     </Link>
-                    <Link className="smallcard" to="/update-rates">
+                    <Link className="smallcard" to="/update-rate-&-fees">
                       <div className="smallcard">
                         <svg
                           width="17"
@@ -190,7 +190,7 @@ function Dashboard() {
                         <p>View Rates</p>
                       </div>
                     </Link>
-                    <Link className="smallcard" to="/transfers">
+                    <Link className="smallcard" to="/view-transfers">
                       <div className="smallcard">
                         <svg
                           width="20"
