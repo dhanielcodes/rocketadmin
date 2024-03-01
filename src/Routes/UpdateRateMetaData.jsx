@@ -28,7 +28,7 @@ function UpdateRateMetaData({ recall, setRecall, setModal, modal }) {
   const [userSelected, setUserSelected] = useState("");
   const [params] = useSearchParams();
 
-  const rateItem = JSON.parse(params.get("item"));
+  const rateItem = JSON.parse(localStorage.getItem("rateMetadata"));
 
   const [step, setStep] = useState(1);
 

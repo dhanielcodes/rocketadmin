@@ -114,7 +114,7 @@ function RateMetadataTable({ recall, setRecall }) {
           onClick={() => {
             localStorage.setItem("rateMetadata", JSON.stringify(item));
           }}
-          to={`/update-meta?item=${JSON.stringify(item)}`}
+          to={`/update-meta`}
           style={{
             textDecoration: "none",
           }}
