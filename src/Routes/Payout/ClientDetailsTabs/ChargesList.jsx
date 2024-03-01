@@ -13,7 +13,7 @@ import {
 import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 import { getClientChargeTypes, getCurrencies } from "../../../services/Auth";
-import { kFormatter4 } from "../../../utils/format";
+import { kFormatter3, kFormatter4 } from "../../../utils/format";
 
 export default function ChargesList({ data, refetch }) {
   const columns = [
@@ -44,7 +44,7 @@ export default function ChargesList({ data, refetch }) {
     {
       title: "AMOUNT",
       dataIndex: "baseValue",
-      render: (item) => kFormatter4(item),
+      render: (item) => kFormatter3(item),
       width: 220,
     },
     {
