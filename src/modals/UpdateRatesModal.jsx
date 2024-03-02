@@ -32,7 +32,6 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
     },
     onError: (data) => {
       //setModal(true);
-      toast.error("Rate Request wasn't created");
 
       setTimeout(() => {
         //  seterr("")

@@ -287,6 +287,7 @@ function Beneficiaries({ userId }) {
         modal={modal}
         setModal={setModal}
         rateItem={rate}
+        setRateItem={setRate}
       />
       <BodyLayout>
         <Content>

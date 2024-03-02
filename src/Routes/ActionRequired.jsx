@@ -461,7 +461,7 @@ function ActionRequired() {
                   }}
                   changeStatus2={() => {
                     setStatus(true);
-                    if (item?.status === "Suspend") {
+                    if (item?.status === "Active") {
                       suspend({
                         userId: item?.userId,
                       });
@@ -548,6 +548,7 @@ function ActionRequired() {
         modal={modal}
         setModal={setModal}
         rateItem={rate}
+        setRateItem={setRate}
       />
       <BodyLayout>
         <Content>

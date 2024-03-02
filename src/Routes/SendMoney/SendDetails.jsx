@@ -369,7 +369,7 @@ const Content = styled.div`
   .cont1,
   .cont3 {
     display: grid;
-    grid-template-columns: 4fr 2fr;
+    grid-template-columns: 3.4fr 4fr;
 
     width: 100%;
     .css-13cymwt-control {

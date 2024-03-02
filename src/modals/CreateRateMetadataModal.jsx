@@ -74,7 +74,7 @@ export default function CreateRateMetadataModal({
     },
     onError: (data) => {
       //setModal(true);
-      toast.error("Rate Request wasn't created");
+      //toast.error("Rate Request wasn't created");
 
       setTimeout(() => {
         //  seterr("")
