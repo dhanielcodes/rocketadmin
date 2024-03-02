@@ -160,7 +160,7 @@ function PaymentProviders() {
                 border: "1px solid #d1d1d1",
                 borderRadius: "10px",
                 textAlign: "left",
-                right: "30px",
+                left: "30px",
                 bottom: index !== 0 && "0",
                 top: index === 0 && "0",
                 background: "#fff",

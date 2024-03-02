@@ -569,7 +569,7 @@ function App() {
                   }
                 />
               )}
-              {handleCheckAccess("View Transfer", actualArrayAccess) && (
+              {handleCheckAccess("View Transfers", actualArrayAccess) && (
                 <Route
                   path="/transaction-details"
                   element={
@@ -581,7 +581,7 @@ function App() {
               )}
             </>
           )}
-          {!userDetails && <Route path="/" element={<Login />} />}
+          <Route path="/" element={<Login />} />
 
           {/* </Route> */}
           <Route path="*" element={<Error />} />

@@ -166,7 +166,7 @@ function PayoutProvidersList() {
                 border: "1px solid #d1d1d1",
                 borderRadius: "10px",
                 textAlign: "left",
-                right: "30px",
+                left: "30px",
                 bottom: index !== 0 && "0",
                 top: index === 0 && "0",
                 background: "#fff",
@@ -303,7 +303,7 @@ function PayoutProvidersList() {
           <div className="header">
             <div className="top">
               <p>Payout Providers</p>
-              <span>This page allows you to manage payment providers</span>
+              <span>This page allows you to manage payout providers</span>
             </div>
             <div className="btn">
               {/*   <button
