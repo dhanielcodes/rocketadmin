@@ -16,6 +16,7 @@ import AmountFormatter from "../reuseables/AmountFormatter";
 export default function UpdateAgentCustomerRates({
   rateItem,
   modal,
+  setRateItem,
   setModal,
   recall,
 }) {
@@ -40,6 +41,7 @@ export default function UpdateAgentCustomerRates({
   const { mutate, isLoading: mutateLoading } = useMutation({
     mutationFn: updateSpecialRate,
     onSuccess: (data) => {
+      setRateItem();
       console.log(data);
       if (data?.status) {
         toast.success("Rate Created Successfully");
@@ -57,7 +59,7 @@ export default function UpdateAgentCustomerRates({
     },
     onError: (data) => {
       //setModal(true);
-      toast.error("Rate Request wasn't created");
+      //toast.error("Rate Request wasn't created");
 
       setTimeout(() => {
         //  seterr("")
@@ -102,6 +104,7 @@ export default function UpdateAgentCustomerRates({
             setSend();
             setReceive();
             setSelectedCountry();
+            setRateItem();
           }}
           maxWidth="1100px"
           heading="Update Rate"

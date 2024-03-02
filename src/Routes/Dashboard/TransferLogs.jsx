@@ -1132,6 +1132,7 @@ function TransferLogsTable({ category }) {
   const {
     data: rates,
     isLoading,
+    refetch: refetchingTwo,
     isFetching,
   } = useQuery({
     queryKey: ["Tranx"],
@@ -1149,6 +1150,7 @@ function TransferLogsTable({ category }) {
       onSuccess: (data) => {
         if (data.status) {
           toast.success(data?.message);
+          refetchingTwo();
           setModal(false);
         } else {
           toast.error(data?.message);
@@ -1165,6 +1167,7 @@ function TransferLogsTable({ category }) {
       onSuccess: (data) => {
         if (data.status) {
           toast.success(data?.message);
+          refetchingTwo();
           setModal(false);
         } else {
           toast.error(data?.message);
@@ -1181,6 +1184,7 @@ function TransferLogsTable({ category }) {
       onSuccess: (data) => {
         if (data.status) {
           toast.success(data?.message);
+          refetchingTwo();
           setModal(false);
         } else {
           toast.error(data?.message);
@@ -1196,6 +1200,7 @@ function TransferLogsTable({ category }) {
     onSuccess: (data) => {
       if (data.status) {
         toast.success(data?.message);
+        refetchingTwo();
         setModal(false);
       } else {
         toast.error(data?.message);
@@ -1211,6 +1216,7 @@ function TransferLogsTable({ category }) {
     onSuccess: (data) => {
       if (data.status) {
         toast.success(data?.message);
+        refetchingTwo();
         setModal(false);
       } else {
         toast.error(data?.message);
@@ -1226,6 +1232,7 @@ function TransferLogsTable({ category }) {
     onSuccess: (data) => {
       if (data.status) {
         toast.success(data?.message);
+        refetchingTwo();
         setModal(false);
       } else {
         toast.error(data?.message);
@@ -1242,6 +1249,7 @@ function TransferLogsTable({ category }) {
       onSuccess: (data) => {
         if (data.status) {
           toast.success(data?.message);
+          refetchingTwo();
 
           setModal(false);
         } else {
@@ -1259,6 +1267,7 @@ function TransferLogsTable({ category }) {
       onSuccess: (data) => {
         if (data.status) {
           toast.success(data?.message);
+          refetchingTwo();
 
           setModal(false);
         } else {

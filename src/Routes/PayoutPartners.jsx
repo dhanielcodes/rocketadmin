@@ -23,7 +23,7 @@ export default function PayoutPartnersPage() {
 
   const [loading, setLoading] = useState(false);
 
-  const [logs, setLogs] = useState();
+  const [logs, setLogs] = useState([]);
 
   const [gateWays, setGateWays] = useState([]);
 
@@ -37,7 +37,7 @@ export default function PayoutPartnersPage() {
       console.log(data?.data);
       setLoading(false);
       if (data?.status) {
-        setLogs(data?.data);
+        setLogs(data?.data || []);
       } else {
         toast.error(data?.message);
       }
@@ -167,7 +167,12 @@ export default function PayoutPartnersPage() {
           </div>
         </DataFields>
 
-        {<PayoutPartnersTable isLoading={loading} data={filtered || logs} />}
+        {
+          <PayoutPartnersTable
+            isLoading={loading}
+            data={filtered || logs || []}
+          />
+        }
       </BodyLayout>
     </>
   );

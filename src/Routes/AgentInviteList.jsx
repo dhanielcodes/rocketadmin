@@ -367,6 +367,7 @@ function AgentInviteList() {
         modal={modal}
         setModal={setModal}
         rateItem={rate}
+        setRateItem={setRate}
       />
       <BodyLayout>
         <Content>

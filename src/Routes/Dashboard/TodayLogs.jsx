@@ -1132,6 +1132,7 @@ function TransferLogsTable() {
 
   const {
     data: rates,
+    refetch: refetchingTwo,
     isLoading,
     isFetching,
   } = useQuery({
@@ -1150,6 +1151,7 @@ function TransferLogsTable() {
       onSuccess: (data) => {
         if (data.status) {
           toast.success(data?.message);
+          refetchingTwo();
           setModal(false);
         } else {
           toast.error(data?.message);
@@ -1166,6 +1168,7 @@ function TransferLogsTable() {
       onSuccess: (data) => {
         if (data.status) {
           toast.success(data?.message);
+          refetchingTwo();
           setModal(false);
         } else {
           toast.error(data?.message);
@@ -1182,6 +1185,7 @@ function TransferLogsTable() {
       onSuccess: (data) => {
         if (data.status) {
           toast.success(data?.message);
+          refetchingTwo();
           setModal(false);
         } else {
           toast.error(data?.message);
@@ -1197,6 +1201,7 @@ function TransferLogsTable() {
     onSuccess: (data) => {
       if (data.status) {
         toast.success(data?.message);
+        refetchingTwo();
         setModal(false);
       } else {
         toast.error(data?.message);
@@ -1212,6 +1217,7 @@ function TransferLogsTable() {
     onSuccess: (data) => {
       if (data.status) {
         toast.success(data?.message);
+        refetchingTwo();
         setModal(false);
       } else {
         toast.error(data?.message);
@@ -1227,6 +1233,7 @@ function TransferLogsTable() {
     onSuccess: (data) => {
       if (data.status) {
         toast.success(data?.message);
+        refetchingTwo();
         setModal(false);
       } else {
         toast.error(data?.message);
@@ -1243,6 +1250,7 @@ function TransferLogsTable() {
       onSuccess: (data) => {
         if (data.status) {
           toast.success(data?.message);
+          refetchingTwo();
 
           setModal(false);
         } else {
@@ -1260,6 +1268,7 @@ function TransferLogsTable() {
       onSuccess: (data) => {
         if (data.status) {
           toast.success(data?.message);
+          refetchingTwo();
 
           setModal(false);
         } else {

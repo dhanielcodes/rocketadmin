@@ -512,6 +512,7 @@ export default function CustomerList({ data }) {
         modal={modal}
         setModal={setModal}
         rateItem={rate}
+        setRateItem={setRate}
       />
       <CustomTable
         noData={customers?.data?.length}

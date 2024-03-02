@@ -452,7 +452,7 @@ function Agent() {
                         userId: item?.userId,
                       });
                     }
-                    if (item?.status === "Unsuspended") {
+                    if (item?.status === "Active") {
                       suspend({
                         userId: item?.userId,
                       });
@@ -559,6 +559,7 @@ function Agent() {
         setModal={setModal}
         rateItem={rate}
         recall={refetch}
+        setRateItem={setRate}
       />
       <BodyLayout active={window.location.pathname}>
         <Content>

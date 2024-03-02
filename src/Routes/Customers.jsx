@@ -477,7 +477,7 @@ function Customers() {
                         userId: item?.userId,
                       });
                     }
-                    if (item?.status === "Unsuspended") {
+                    if (item?.status === "Active") {
                       suspend({
                         userId: item?.userId,
                       });
@@ -564,6 +564,7 @@ function Customers() {
         modal={modal}
         setModal={setModal}
         rateItem={rate}
+        setRateItem={setRate}
       />
       <BodyLayout>
         <Content>

@@ -37,7 +37,33 @@ const CountryList = ({
   return (
     <CountyCont>
       <Select
-        value={value}
+        value={
+          value || newOptions?.data
+            ? collectionStatus
+              ? newOptions?.data
+                  ?.map((item) => {
+                    return {
+                      code: item?.currencyCode,
+                      value: item?.name,
+                      label: item?.name,
+                      id: item?.id,
+                      ...item,
+                    };
+                  })
+                  ?.filter((item) => item.isReceiving)?.[0]
+              : newOptions?.data
+                  ?.map((item) => {
+                    return {
+                      code: item?.currencyCode,
+                      value: item?.name,
+                      label: item?.name,
+                      id: item?.id,
+                      ...item,
+                    };
+                  })
+                  ?.filter((item) => !item.isReceiving)?.[0]
+            : options?.[0]
+        }
         onChange={onChange}
         options={
           newOptions?.data
