@@ -4,7 +4,6 @@ import { useState } from "react";
 import {
   Paymentchannel,
   agentCustomerGetRate,
-  beneficiaries,
   customerRates,
 } from "../../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
@@ -186,10 +185,12 @@ export default function SendDetails({
                     fromCurrencyId: e?.id,
                   });
                 }}
+                setSelected={setSelectedCountry}
                 value={selectedCountry}
               />
               <InputNumber
                 className="input"
+                placeholder="Enter Amount"
                 style={{
                   borderSize: "0.5px",
                   fontSize: "15px",
@@ -226,10 +227,12 @@ export default function SendDetails({
                     toCurrencyId: e?.id,
                   });
                 }}
+                setSelected={setSelectedCountry2}
                 value={selectedCountry2}
               />
               <InputNumber
                 className="input"
+                placeholder="Enter Amount"
                 style={{
                   borderSize: "0.5px",
                   fontSize: "15px",

@@ -3,15 +3,13 @@ import logo from "../../images/logo.svg";
 import { useSearchParams } from "react-router-dom";
 
 export default function CustomerDetailsTop({
-  clientUser,
+  customerDetails,
   profile,
   mail,
   phone,
 }) {
   const [params] = useSearchParams();
   const user = JSON.parse(localStorage.getItem("customer_details"));
-
-  console.log(clientUser);
 
   return (
     <div
@@ -30,9 +28,9 @@ export default function CustomerDetailsTop({
           padding: "0 30px",
         }}
       >
-        {clientUser?.profileImageURL ? (
+        {customerDetails?.profileImageURL ? (
           <img
-            src={clientUser?.profileImageURL}
+            src={customerDetails?.profileImageURL}
             alt=""
             style={{
               width: "120px",

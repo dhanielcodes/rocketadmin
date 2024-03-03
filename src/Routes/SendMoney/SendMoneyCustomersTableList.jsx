@@ -101,11 +101,14 @@ function SendMoneyCustomersTableList({
     return {
       ...item,
       action: (
-        <div
+        <Link
           style={{
             textDecoration: "none",
           }}
-          to={`/customers-details?userId=${JSON.stringify(item)}`}
+          to={`/customers-details?from=customer&userId=${item?.userId}`}
+          onClick={() => {
+            localStorage.setItem("customer_details", JSON.stringify(item));
+          }}
         >
           <p
             onClick={() => {
@@ -118,7 +121,7 @@ function SendMoneyCustomersTableList({
           >
             {item?.firstName}
           </p>
-        </div>
+        </Link>
       ),
       sendMoney: (
         <p

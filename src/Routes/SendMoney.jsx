@@ -320,13 +320,9 @@ function SendMoney() {
                   }
                   if (step === 3) {
                     if (
-                      selectedCountry &&
-                      selectedCountry2 &&
                       rate &&
                       payment &&
                       payout &&
-                      details?.fromCurrencyId &&
-                      details?.toCurrencyId &&
                       details?.amount &&
                       details?.paymentChannelId &&
                       details?.purpose &&
@@ -337,12 +333,18 @@ function SendMoney() {
                         JSON.stringify({
                           fromCurrency: selectedCountry,
                           toCurrency: selectedCountry2,
+
                           rate: rate,
                           payment: payment,
                           payout: payout,
                           ...details,
                         })
                       );
+                      setDetails({
+                        ...details,
+                        fromCurrencyId: selectedCountry?.id,
+                        toCurrencyId: selectedCountry2?.id,
+                      });
 
                       navigate(`/send-money?id=${params.get("id")}&step=${4}`);
                     } else {
@@ -350,7 +352,9 @@ function SendMoney() {
                     }
                   }
                   if (params.get("step") === "4") {
-                    mutate(details);
+                    mutate({
+                      ...details,
+                    });
                   }
                 }}
                 className="confirm"

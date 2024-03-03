@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect } from "react";
 import ReactCountryFlag from "react-country-flag";
 import Select from "react-select";
 import countryList from "react-select-country-list";
@@ -15,7 +15,7 @@ const CountryList = ({
   style,
   defaultValue,
   option,
-  setValue,
+  setSelected,
   disabled,
   collectionStatus = false,
 }) => {
@@ -33,6 +33,36 @@ const CountryList = ({
       console.log(err);
     },
   });
+
+  useEffect(() => {
+    setSelected(
+      newOptions?.data
+        ? collectionStatus
+          ? newOptions?.data
+              ?.map((item) => {
+                return {
+                  code: item?.currencyCode,
+                  value: item?.name,
+                  label: item?.name,
+                  id: item?.id,
+                  ...item,
+                };
+              })
+              ?.filter((item) => item.isReceiving)?.[0]
+          : newOptions?.data
+              ?.map((item) => {
+                return {
+                  code: item?.currencyCode,
+                  value: item?.name,
+                  label: item?.name,
+                  id: item?.id,
+                  ...item,
+                };
+              })
+              ?.filter((item) => !item.isReceiving)?.[0]
+        : options?.[0]
+    );
+  }, [newOptions]);
 
   return (
     <CountyCont>
