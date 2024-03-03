@@ -242,7 +242,7 @@ export default function TransferDetailsPage() {
                 <div className="box_data">
                   <AmountFormatter
                     currency={payload?.senderCurrency}
-                    value={payload?.paymentAmount + payload?.transitionFee || 0}
+                    value={payload?.paymentAmount || 0}
                   />
                 </div>
               </div>

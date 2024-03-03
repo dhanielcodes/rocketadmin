@@ -60,6 +60,7 @@ import IncompleteTransfersPage from "./Routes/PaymentCheck";
 import IncompletePayWithBankTransfersPage from "./Routes/IncompletePayWithBankTransfers";
 import PaymentCheckPage from "./Routes/IncompleteTransfers copy";
 import UpdateEmployee from "./Routes/UpdateEmployee";
+import BeneficiaryDetailsPage from "./Routes/BeneficiaryDetails";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -429,6 +430,16 @@ function App() {
                   element={
                     <AppLogout>
                       <Beneficiary />
+                    </AppLogout>
+                  }
+                />
+              )}
+                {handleCheckAccess("Beneficiary", actualArrayAccess) && (
+                <Route
+                  path="/beneficiary-details"
+                  element={
+                    <AppLogout>
+                      <BeneficiaryDetailsPage />
                     </AppLogout>
                   }
                 />

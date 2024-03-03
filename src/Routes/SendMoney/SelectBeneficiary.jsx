@@ -14,7 +14,7 @@ export default function SelectBeneficiary({ active, setActive }) {
     isLoading,
     isFetching,
   } = useQuery({
-    queryKey: ["beneficiariess"],
+    queryKey: ["beneficiariessw"],
     queryFn: () => beneficiaries(params.get("id")),
   });
   return (

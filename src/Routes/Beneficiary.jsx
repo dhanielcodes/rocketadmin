@@ -88,7 +88,7 @@ function Beneficiaries({ userId }) {
     isLoading,
     isFetching,
   } = useQuery({
-    queryKey: ["beneficiariess"],
+    queryKey: ["beneficiariesos"],
     queryFn: () => beneficiaries(userId),
   });
 
@@ -179,11 +179,14 @@ function Beneficiaries({ userId }) {
     return {
       ...item,
       action: (
-        <div
+        <Link
           style={{
             textDecoration: "none",
           }}
-          to={`/customers-details?userId=${JSON.stringify(item)}`}
+          onClick={() => {
+            localStorage.setItem("beneficiaryDetails", JSON.stringify(item));
+          }}
+          to={`/beneficiary-details`}
         >
           <p
             onClick={() => {
@@ -196,7 +199,7 @@ function Beneficiaries({ userId }) {
           >
             {item?.beneficiaryName}
           </p>
-        </div>
+        </Link>
       ),
       action2: (
         <div
