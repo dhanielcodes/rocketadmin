@@ -15,6 +15,7 @@ import {
   processWalletLog,
 } from "../services/PayoutDashboard";
 import { kFormatter3, kFormatter4, removeDup } from "../utils/format";
+import ReactCountryFlag from "react-country-flag";
 
 function ClientWallLog({ data }) {
   const [sortdate, setSortDate] = useState(0);
@@ -118,9 +119,9 @@ function ClientWallLog({ data }) {
     },
     {
       title: "CURRENNCY",
-      dataIndex: "userWallet['country']['currencyCode']",
+      dataIndex: "countryo",
       //render: () => "Other 1",
-      width: 70,
+      width: 140,
     },
     {
       title: "AMOUNT",
@@ -151,6 +152,24 @@ function ClientWallLog({ data }) {
   const newData = clients?.data?.walletFundindRequests?.map((item, index) => {
     return {
       ...item,
+      countryo: (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <ReactCountryFlag
+            style={{
+              borderRadius: "10000000px",
+              marginRight: "10px",
+            }}
+            countryCode={item?.userWallet?.currency?.code?.slice(0, 2)}
+            svg
+          />
+          {item?.userWallet?.currency?.code}
+        </div>
+      ),
       action: (
         <div
           style={{
