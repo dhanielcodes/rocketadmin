@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 import { getClientChargeTypes, getCurrencies } from "../../../services/Auth";
 import { kFormatter3, kFormatter4 } from "../../../utils/format";
+import { getpayoutclienttransactiontype } from "../../../services/Dashboard";
 
 export default function ChargesList({ data, refetch }) {
   const columns = [
@@ -57,8 +58,9 @@ export default function ChargesList({ data, refetch }) {
       title: "MAX FIXED CAPPED AMT",
       dataIndex: "maximumFixedCapped",
       width: 220,
-      render: (item) => kFormatter3(item),
+      render: (item) => kFormatter3(item || 0),
     },
+
     {
       title: "DATE ADDED",
       dataIndex: "dateCreated",
@@ -83,6 +85,7 @@ export default function ChargesList({ data, refetch }) {
             setCharge(item);
             setCurrency(item?.currency);
             setType(item?.payoutChargeType);
+            setType2(item?.payouttransactionType);
             setBase(item?.baseValue);
             setMax(item?.maximumFixedCapped);
             setMin(item?.minimumFixedCapped);
@@ -131,6 +134,7 @@ export default function ChargesList({ data, refetch }) {
 
   const [currency, setCurrency] = useState();
   const [type, setType] = useState();
+  const [type2, setType2] = useState();
   const [base, setBase] = useState();
   const [max, setMax] = useState();
   const [min, setMin] = useState();
@@ -171,6 +175,10 @@ export default function ChargesList({ data, refetch }) {
   const { data: clientCharges } = useQuery({
     queryKey: ["charges"],
     queryFn: () => getClientChargeTypes(),
+  });
+  const { data: tranTypes } = useQuery({
+    queryKey: ["getpayoutclienttransactiontype"],
+    queryFn: () => getpayoutclienttransactiontype(),
   });
   console.log(countries?.data);
 
@@ -229,7 +237,12 @@ export default function ChargesList({ data, refetch }) {
           }}
           heading="Add New Charge"
         >
-          <div className="name">
+          <div
+            className="name"
+            style={{
+              marginTop: "20px",
+            }}
+          >
             <label>Country</label>
             <CountryDropdown2
               defaultValue={"NGN"}
@@ -247,20 +260,46 @@ export default function ChargesList({ data, refetch }) {
               }}
             />
           </div>
-
-          <AppSelect
-            options={clientCharges?.data?.map((item) => {
-              return {
-                label: item?.typeName,
-                value: item?.typeName,
-                ...item,
-              };
-            })}
-            label="Charge Type"
-            onChange={(e) => {
-              setType(e);
+          <div
+            className="name"
+            style={{
+              marginTop: "20px",
             }}
-          />
+          >
+            <AppSelect
+              options={clientCharges?.data?.map((item) => {
+                return {
+                  label: item?.typeName,
+                  value: item?.typeName,
+                  ...item,
+                };
+              })}
+              label="Charge Type"
+              onChange={(e) => {
+                setType(e);
+              }}
+            />
+          </div>
+          <div
+            className="name"
+            style={{
+              marginTop: "20px",
+            }}
+          >
+            <AppSelect
+              options={tranTypes?.data?.map((item) => {
+                return {
+                  label: item?.typeName,
+                  value: item?.typeName,
+                  ...item,
+                };
+              })}
+              label="Transaction Type"
+              onChange={(e) => {
+                setType2(e);
+              }}
+            />
+          </div>
           <div
             className="name"
             style={{
@@ -345,6 +384,7 @@ export default function ChargesList({ data, refetch }) {
                 setMax();
                 setMin();
                 setType();
+                setType2();
               }}
               className="cancel"
             >
@@ -354,7 +394,7 @@ export default function ChargesList({ data, refetch }) {
             <button
               onClick={() => {
                 mutate({
-                  adminI: userDetails?.userId,
+                  adminId: userDetails?.userId,
                   clientId: params.get("userId"),
                   data: {
                     currency: {
@@ -362,6 +402,9 @@ export default function ChargesList({ data, refetch }) {
                     },
                     payoutChargeType: {
                       id: type?.id,
+                    },
+                    payOutClientTransactionType: {
+                      typeId: type2?.typeId,
                     },
                     baseValue: base,
                     minimumFixedCapped: min,
@@ -394,6 +437,7 @@ export default function ChargesList({ data, refetch }) {
               setMax();
               setMin();
               setType();
+              setType2();
             }}
             heading="Edit Charge"
           >
@@ -539,6 +583,7 @@ export default function ChargesList({ data, refetch }) {
                   setMax();
                   setMin();
                   setType();
+                  setType2();
                 }}
                 className="cancel"
               >

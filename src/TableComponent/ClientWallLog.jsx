@@ -132,6 +132,12 @@ function ClientWallLog({ data }) {
         multiple: 3,
       },
     },
+    {
+      title: "BALANCE BEFORE REQUEST",
+      dataIndex: "balanceBeforeRequest",
+      render: (item) => kFormatter3(item || 0),
+      width: 220,
+    },
 
     {
       title: "DATE",

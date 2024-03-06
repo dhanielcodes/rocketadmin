@@ -43,7 +43,17 @@ export default function Error() {
           alt=""
         />
         <div>
-          <Link to={menu3 ? `/${menu3}` : menu2 ? `/${menu2}` : `/${menu1}`}>
+          <Link
+            to={
+              menu3
+                ? `/${menu3}`
+                : menu2
+                ? `/${menu2}`
+                : menu1
+                ? `/${menu1}`
+                : "/"
+            }
+          >
             <AppButton placeholder="Go to Home Page" />
           </Link>
         </div>

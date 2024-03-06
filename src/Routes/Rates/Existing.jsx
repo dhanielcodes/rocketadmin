@@ -215,7 +215,7 @@ function ExistingRatesTable() {
         <div className="content">
           <div className="heading">Existing Rates </div>
           <div className="sub">
-            This page allows you edit and update clients{" "}
+            This page allows you edit and update existing rates{" "}
           </div>
         </div>
         {/*   <div className="top">

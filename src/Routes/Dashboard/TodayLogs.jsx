@@ -1354,6 +1354,7 @@ function TransferLogsTable() {
 
       //render: () => "Other",
     },
+
     {
       title: "GBP AMOUNT",
       dataIndex: "newPaymentAmount",
