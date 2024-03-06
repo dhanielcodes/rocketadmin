@@ -155,6 +155,12 @@ function TransactionList({ data }) {
 
       width: 120,
     },
+    {
+      title: "WALLET BALANCE",
+      dataIndex: "walletBalance",
+      render: (item) => kFormatter3(item || 0),
+      width: 220,
+    },
   ];
 
   const newData = clients?.data?.payOutTransactions?.map((item) => {

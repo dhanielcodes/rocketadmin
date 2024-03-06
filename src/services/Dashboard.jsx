@@ -22,6 +22,10 @@ export const getCurrencies = async () => {
   const { data } = await Axios.get(`${baseurl}/getcurrency`);
   return data;
 };
+export const getpayoutclienttransactiontype = async () => {
+  const { data } = await Axios.get(`${baseurl}/getpayoutclienttransactiontype`);
+  return data;
+};
 
 export const getBanks = async (userId, bid) => {
   const { data } = await Axios.get(`${baseurl}/getbanks`);

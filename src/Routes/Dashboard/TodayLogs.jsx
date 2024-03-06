@@ -1360,12 +1360,6 @@ function TransferLogsTable() {
       dataIndex: "newPaymentAmount",
       width: 120,
     },
-    {
-      title: "WALLET BALANCE",
-      dataIndex: "walletBalance",
-      render: (item) => kFormatter3(item || 0),
-      width: 220,
-    },
 
     {
       title: "RATE",
