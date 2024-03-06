@@ -57,7 +57,13 @@ export default function ChargesList({ data, refetch }) {
       title: "MAX FIXED CAPPED AMT",
       dataIndex: "maximumFixedCapped",
       width: 220,
-      render: (item) => kFormatter3(item),
+      render: (item) => kFormatter3(item || 0),
+    },
+    {
+      title: "BALANCE BEFORE REQUEST",
+      dataIndex: "balanceBeforeRequest",
+      render: (item) => kFormatter3(item || 0),
+      width: 220,
     },
     {
       title: "DATE ADDED",
@@ -229,7 +235,12 @@ export default function ChargesList({ data, refetch }) {
           }}
           heading="Add New Charge"
         >
-          <div className="name">
+          <div
+            className="name"
+            style={{
+              marginTop: "20px",
+            }}
+          >
             <label>Country</label>
             <CountryDropdown2
               defaultValue={"NGN"}
@@ -247,20 +258,46 @@ export default function ChargesList({ data, refetch }) {
               }}
             />
           </div>
-
-          <AppSelect
-            options={clientCharges?.data?.map((item) => {
-              return {
-                label: item?.typeName,
-                value: item?.typeName,
-                ...item,
-              };
-            })}
-            label="Charge Type"
-            onChange={(e) => {
-              setType(e);
+          <div
+            className="name"
+            style={{
+              marginTop: "20px",
             }}
-          />
+          >
+            <AppSelect
+              options={clientCharges?.data?.map((item) => {
+                return {
+                  label: item?.typeName,
+                  value: item?.typeName,
+                  ...item,
+                };
+              })}
+              label="Charge Type"
+              onChange={(e) => {
+                setType(e);
+              }}
+            />
+          </div>
+          <div
+            className="name"
+            style={{
+              marginTop: "20px",
+            }}
+          >
+            <AppSelect
+              options={clientCharges?.data?.map((item) => {
+                return {
+                  label: item?.typeName,
+                  value: item?.typeName,
+                  ...item,
+                };
+              })}
+              label="Charge Type"
+              onChange={(e) => {
+                setType(e);
+              }}
+            />
+          </div>
           <div
             className="name"
             style={{

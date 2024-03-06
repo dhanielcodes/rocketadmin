@@ -71,6 +71,9 @@ button:focus-visible {
 body{
   height: 100vh;
 }
+body::-webkit-scrollbar{
+  display: none !important;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -118,9 +121,15 @@ p{
 a{
   text-decoration: none;
 }
-
 ::-webkit-scrollbar{
-  width: 0px;
+  width: 10px;
+  padding: 10px;
+  border-radius: 100px;
+
+}
+::-webkit-scrollbar-thumb{
+  background-color: #00a85a52;
+  border-radius: 100px;
 }
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

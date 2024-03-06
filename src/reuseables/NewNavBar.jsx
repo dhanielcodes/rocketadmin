@@ -360,7 +360,7 @@ export default function NewNavBar() {
   }, [active, active2, window.location.pathname]);
 
   return (
-    <div style={{ width: "100%", padding: "10px 20px" }}>
+    <Nave style={{ padding: "10px 10px" }}>
       <img
         src={Logo}
         style={{ height: "90%", width: "60%", marginBottom: "20px" }}
@@ -572,10 +572,16 @@ export default function NewNavBar() {
 
         <p>Logout</p>
       </NavLink>
-    </div>
+    </Nave>
   );
 }
 
+const Nave = styled.div`
+  ::-webkit-scrollbar {
+    display: none !important;
+  }
+  width: fit-content !important;
+`;
 const NavTab = styled.div`
   transition: all 0.1s;
   background: ${(props) =>
@@ -594,6 +600,9 @@ const NavTab = styled.div`
   }
 `;
 const NavLink = styled.div`
+  ::-webkit-scrollbar {
+    display: none !important;
+  }
   display: flex;
   align-items: center;
   padding: 6px 12px;

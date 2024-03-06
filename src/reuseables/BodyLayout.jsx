@@ -48,7 +48,7 @@ const BodyLayout = ({ children, active, onClick }) => {
         //trigger={collapsed ? <IconCaretRight /> : <IconCaretLeft />}
         breakpoint="xl"
         style={{
-          width: collapsed ? "0" : "fit-content",
+          width: collapsed ? "0" : "20%",
           paddingRight: "20px",
         }}
       >
