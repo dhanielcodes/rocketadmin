@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 import {
@@ -16,6 +16,8 @@ import {
 } from "../services/PayoutDashboard";
 import { kFormatter3, kFormatter4, removeDup } from "../utils/format";
 import ReactCountryFlag from "react-country-flag";
+import { IconSearch } from "@arco-design/web-react/icon";
+import { Input } from "@arco-design/web-react";
 
 function ClientWallLog({ data }) {
   const [sortdate, setSortDate] = useState(0);
@@ -52,6 +54,7 @@ function ClientWallLog({ data }) {
       return;
     },
   });
+  const inputRef = useRef(null);
 
   const columns = [
     {
@@ -88,17 +91,45 @@ function ClientWallLog({ data }) {
       title: "CLIENT",
       dataIndex: "clientName",
       width: 130,
-      filters: removeDup(
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Please enter ref"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value
+          ? row.clientName.toUpperCase().indexOf(value.toUpperCase()) !== -1
+          : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
+      /*    filters: removeDup(
         clients?.data?.walletFundindRequests?.map((item) => {
           return {
             text: item?.clientName,
             value: item?.clientName,
           };
         })
-      ),
+      ), */
 
-      onFilter: (value, row) => row.clientName.indexOf(value) > -1,
-      filterMultiple: true,
+      /* onFilter: (value, row) => row.clientName.indexOf(value) > -1,
+      filterMultiple: true, */
     },
     {
       title: "GATEWAY",
