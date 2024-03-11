@@ -483,6 +483,7 @@ function AgentInviteList() {
         </div> */}
 
               <CustomTable
+                showDateFilter={false}
                 noData={customers?.data?.length}
                 loading={isLoading}
                 Apidata={newData}

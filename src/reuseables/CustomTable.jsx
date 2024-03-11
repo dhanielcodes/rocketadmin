@@ -1,4 +1,5 @@
-import { Table } from "@arco-design/web-react";
+import { DatePicker, Table } from "@arco-design/web-react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 const columns = [
   {
@@ -88,21 +89,84 @@ const CustomTable = ({
     x: 1600,
     y: 800,
   },
+  showDateFilter = true,
 }) => {
+  const [date, setDate] = useState(new Date());
+  const [reportData, setReportData] = useState(Apidata);
+
+  useEffect(() => {
+    if (date !== null) {
+      setReportData(
+        Apidata?.filter((obj) => {
+          if (obj?.dateCreated) {
+            return (
+              new Date(obj?.dateCreated).getTime() >=
+                new Date(date?.[0]).getTime() &&
+              new Date(obj?.dateCreated).getTime() <=
+                new Date(date?.[1]).getTime()
+            );
+          }
+          if (obj?.paymentDate) {
+            return (
+              new Date(obj?.paymentDate).getTime() >=
+                new Date(date?.[0]).getTime() &&
+              new Date(obj?.paymentDate).getTime() <=
+                new Date(date?.[1]).getTime()
+            );
+          } else {
+            return;
+          }
+        })
+      );
+    }
+  }, [date?.[1]]);
+
+  console.log(reportData, date, date?.[1] ? true : false, "reportData");
   return (
     <Content>
+      <div
+        style={{
+          padding: "20px",
+          width: "300px",
+        }}
+      >
+        {showDateFilter && (
+          <DatePicker.RangePicker
+            style={{
+              width: "100%",
+              padding: "21px",
+              borderRadius: "8px",
+              borderTop: "1px solid #b3b3b3",
+              borderLeft: "1px solid #b3b3b3",
+              borderRight: "1px solid #b3b3b3",
+              borderBottom: "1px solid #b3b3b3",
+              fontSize: "14px",
+              color: "#000000",
+              fontWeight: 500,
+              backgroundColor: "white",
+            }}
+            /*  onClear={() => {
+              setReportData(Apidata);
+            }} */
+            onChange={(e) => {
+              console.log(e);
+              setDate(e);
+            }}
+          />
+        )}{" "}
+      </div>
       <Table
         loading={loading}
-        noDataElement={noData}
+        noDataElement={reportData?.length || noData}
         columns={tableColumns || columns}
-        data={Apidata || data}
+        data={reportData || data}
         className="table3"
         onChange={(pagination, changedSorter) => {
           console.log(changedSorter);
         }}
         pagination={{
           showTotal: true,
-          total: Apidata?.length,
+          total: reportData?.length,
           pageSize: 10,
           pageSizeChangeResetCurrent: true,
         }}
