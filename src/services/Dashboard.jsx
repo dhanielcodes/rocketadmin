@@ -102,6 +102,58 @@ export const Tranx = async (userId, category) => {
   return data;
 };
 
+export const getpayoutfundrequestbydate = async (start, end) => {
+  const { data } = await Axios.get(
+    `${baseurl}/getpayoutfundrequestbydate${
+      start && end ? `?startDate=${start}&endDate=${end}` : ""
+    }`
+  );
+  return data;
+};
+
+export const getpayoutfundrequestbyref = async (payload) => {
+  const { data } = await Axios.get(
+    `${baseurl}/getpayoutfundrequestbyref${payload ? `?trxRef=${payload}` : ""}`
+  );
+  return data;
+};
+
+export const getpayouttransactionbydate = async (start, end) => {
+  const { data } = await Axios.get(
+    `${baseurl}/getpayouttransactionbydate${
+      start && end ? `?startDate=${start}&endDate=${end}` : ""
+    }`
+  );
+  return data;
+};
+
+export const getpayouttransactionbyref = async (payload) => {
+  const { data } = await Axios.get(
+    `${baseurl}/getpayouttransactionbyref${payload ? `?trxRef=${payload}` : ""}`
+  );
+  return data;
+};
+
+export const gettransactionlogbydate = async (start, end) => {
+  const { data } = await Axios.get(
+    `${baseurl}/gettransactionlogbydate${
+      start && end ? `?startDate=${start}&endDate=${end}` : ""
+    }`
+  );
+  return data;
+};
+
+export const gettransactionlogbyref = async (payload) => {
+  const { data } = await Axios.get(
+    `${baseurl}/gettransactionlogbyref${
+      payload ? `?paymentRef=${payload}` : ""
+    }`
+  );
+  return data;
+};
+
+/*  */
+
 export const cancelTransaction = async (body) => {
   const { data } = await Axios.post(`${baseurl}/canceltransaction/${body}`);
   return data;

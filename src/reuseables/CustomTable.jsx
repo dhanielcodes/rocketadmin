@@ -89,9 +89,10 @@ const CustomTable = ({
     x: 1600,
     y: 800,
   },
-  showDateFilter = true,
+  showDateFilter = false,
+  date,
+  setDate,
 }) => {
-  const [date, setDate] = useState(new Date());
   const [reportData, setReportData] = useState(Apidata);
 
   useEffect(() => {
@@ -145,28 +146,25 @@ const CustomTable = ({
               fontWeight: 500,
               backgroundColor: "white",
             }}
-            /*  onClear={() => {
-              setReportData(Apidata);
-            }} */
             onChange={(e) => {
               console.log(e);
               setDate(e);
             }}
           />
-        )}{" "}
+        )}
       </div>
       <Table
         loading={loading}
-        noDataElement={reportData?.length || noData}
+        noDataElement={noData}
         columns={tableColumns || columns}
-        data={reportData || data}
+        data={Apidata || data}
         className="table3"
         onChange={(pagination, changedSorter) => {
           console.log(changedSorter);
         }}
         pagination={{
           showTotal: true,
-          total: reportData?.length,
+          total: Apidata?.length,
           pageSize: 10,
           pageSizeChangeResetCurrent: true,
         }}
