@@ -12,39 +12,68 @@ import CustomTable from "../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { getPayoutClientDashboard } from "../services/PayoutDashboard";
 import { kFormatter3, kFormatter4, removeDup } from "../utils/format";
-import { Input } from "@arco-design/web-react";
+import { DatePicker, Input } from "@arco-design/web-react";
 import { IconSearch } from "@arco-design/web-react/icon";
+import {
+  getpayouttransactionbydate,
+  getpayouttransactionbyref,
+} from "../services/Dashboard";
 
-function TransactionList({ data }) {
+function TransactionList({ clients, isLoading, isFetching, refetch }) {
   const [sortdate, setSortDate] = useState(0);
-
+  const [date, setDate] = useState();
+  const [ref, setRef] = useState("");
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
-
   const {
-    data: clients,
-    isLoading,
-    isFetching,
-    isError,
+    data,
+    refetch: refetcDate,
+    isLoading: load1,
+    isFetching: fetch1,
   } = useQuery({
-    queryKey: ["clients"],
-    queryFn: () => getPayoutClientDashboard(userDetails?.userId),
+    queryKey: ["getpayouttransactionbydate"],
+    queryFn: () => getpayouttransactionbydate(date?.[0], date?.[1]),
   });
 
-  console.log(clients);
+  const {
+    data: newArr,
+    refetch: refetchRef,
+    isLoading: load2,
+    isFetching: fetch2,
+  } = useQuery({
+    queryKey: ["getpayouttransactionbyref"],
+    queryFn: () => getpayouttransactionbyref(ref),
+  });
+
+  const lowData = ref
+    ? newArr?.data || []
+    : date?.[1]
+    ? data?.data || []
+    : clients;
+
+  console.log(lowData);
+
+  useEffect(() => {
+    refetcDate(date?.[0], date?.[1]);
+  }, [date?.[1]]);
+
+  useEffect(() => {
+    refetchRef(ref);
+  }, [ref]);
+
   const inputRef = useRef(null);
 
   const columns = [
     {
       title: "TRANSACTION REF",
-      dataIndex: "clientRef",
+      dataIndex: "note",
       fixed: "left",
       /*   sorter: {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
       }, */
-      filterIcon: <IconSearch />,
+      /*  filterIcon: <IconSearch />,
       filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
         return (
           <div className="arco-table-custom-filter">
@@ -71,7 +100,7 @@ function TransactionList({ data }) {
         if (visible) {
           setTimeout(() => inputRef.current.focus(), 150);
         }
-      },
+      }, */
       width: 160,
     },
     {
@@ -88,7 +117,7 @@ function TransactionList({ data }) {
       dataIndex: "statusNew",
       width: 200,
       filters: removeDup(
-        clients?.data?.payOutTransactions?.map((item) => {
+        lowData?.map((item) => {
           return {
             text: item?.status,
             value: item?.status,
@@ -109,7 +138,7 @@ function TransactionList({ data }) {
       dataIndex: "payoutClientApp['appName']",
       width: 200,
       filters: removeDup(
-        clients?.data?.payOutTransactions?.map((item) => {
+        lowData?.map((item) => {
           return {
             text: item?.payoutClientApp?.["appName"],
             value: item?.payoutClientApp?.["appName"],
@@ -125,7 +154,7 @@ function TransactionList({ data }) {
       dataIndex: "newGateWay",
       width: 230,
       filters: removeDup(
-        clients?.data?.payOutTransactions?.map((item) => {
+        lowData?.map((item) => {
           return {
             text: item?.payOutProvider?.["name"],
             value: item?.payOutProvider?.["name"],
@@ -159,7 +188,7 @@ function TransactionList({ data }) {
       dataIndex: "currency['code']",
       width: 120,
       filters: removeDup(
-        clients?.data?.payOutTransactions?.map((item) => {
+        lowData?.map((item) => {
           return {
             text: item?.currency?.["code"],
             value: item?.currency?.["code"],
@@ -194,7 +223,7 @@ function TransactionList({ data }) {
     },
   ];
 
-  const newData = clients?.data?.payOutTransactions?.map((item) => {
+  const newData = lowData?.map((item) => {
     return {
       ...item,
       newGateWay: (
@@ -249,7 +278,8 @@ function TransactionList({ data }) {
   });
 
   console.log(newData);
-
+  const [showDate, setShowDate] = useState(false);
+  const [showRef, setShowRef] = useState(false);
   return (
     <Content>
       <div className="tablecontent">
@@ -257,36 +287,71 @@ function TransactionList({ data }) {
           <div className="heading">Payout Transactions List </div>
         </div>
 
+        <div
+          style={{
+            padding: "0 20px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+            }}
+          >
+            <button
+              onClick={() => {
+                setShowRef(false);
+                setShowDate(true);
+                setDate();
+              }}
+            >
+              Filter By Date
+            </button>
+            &nbsp; &nbsp;
+            <button
+              onClick={() => {
+                setShowDate(false);
+                setShowRef(true);
+                setRef();
+              }}
+            >
+              Filter By Ref
+            </button>
+          </div>
+          <br />
+
+          {showRef && (
+            <Input.Search
+              searchButton
+              placeholder="Please enter ref"
+              onChange={(value) => {
+                setRef(value);
+                setDate();
+              }}
+              style={{
+                width: "300px",
+              }}
+            />
+          )}
+
+          {showDate && (
+            <DatePicker.RangePicker
+              style={{}}
+              onChange={(e) => {
+                console.log(e);
+                setDate(e);
+                setRef();
+              }}
+            />
+          )}
+        </div>
         <CustomTable
-          noData={clients?.data?.payOutTransactions?.length}
-          loading={isLoading || isFetching}
+          noData={newData?.length}
+          loading={
+            isLoading || isFetching || load1 || fetch1 || load2 || fetch2
+          }
           Apidata={newData}
           tableColumns={columns}
         />
-
-        {/* <div className="row">
-          <span>Showing 1-5 of entries</span>
-          <div className="pagins">
-            <p>Rows per page:</p>
-            <select>
-              <option>5</option>
-            </select>
-            <div className="arrow">
-              <button
-                onClick={() => {
-                  // setSortDate(sortdate - 1);
-                  // setEnd((prev) => prev - end);
-                }}
-              >
-                <AiOutlineLeft />
-              </button>
-              <button>{sortdate}</button>
-              <button>
-                <AiOutlineRight />
-              </button>
-            </div>
-          </div>
-        </div> */}
       </div>
     </Content>
   );
@@ -294,6 +359,18 @@ function TransactionList({ data }) {
 
 export default TransactionList;
 const Content = styled.div`
+  button {
+    background-color: transparent;
+    border: 1px solid gainsboro;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 7rem;
+    height: 40px;
+    border-radius: 5px;
+    justify-content: center;
+    cursor: pointer;
+  }
   border-radius: 30px;
   .top {
     padding: 10px 30px 30px 20px;

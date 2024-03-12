@@ -191,13 +191,8 @@ function ClientTable() {
       <div className="tablecontent">
         <div className="content">
           <div className="heading">Clients </div>
-          <div className="sub">
-            This page allows you edit and update clients{" "}
-          </div>
         </div>
-        <div className="top">
-          <SearchInput placeholder="Search Records" className="SearchRecords" />
-        </div>
+
         <CustomTable
           noData={clients?.data?.allPayoutClients?.length}
           loading={isLoading || isFetching}

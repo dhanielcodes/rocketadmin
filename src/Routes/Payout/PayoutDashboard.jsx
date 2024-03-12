@@ -39,6 +39,7 @@ import ClientWallLog from "../../TableComponent/ClientWallLog";
 import { Skeleton } from "@arco-design/web-react";
 import Skeleton2 from "../../reuseables/Skeleton2";
 import AppSelect from "../../reuseables/AppSelect";
+import { getpayoutfundrequestbydate } from "../../services/Dashboard";
 function PayoutDashboard() {
   const [userID, setUserID] = useState();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -48,6 +49,7 @@ function PayoutDashboard() {
     data: payoutDashboard,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery({
     queryKey: ["clients"],
     queryFn: () => getPayoutClientDashboard(userDetails?.userId),
@@ -412,8 +414,18 @@ function PayoutDashboard() {
           )}
 
           {/* Transaction Chart Stamp */}
-          <ClientWallLog data={walletLogs} />
-          <TransactionList data={transactionsList} />
+          <ClientWallLog
+            clients={walletLogs}
+            isLoading={isLoading}
+            isFetching={isFetching}
+            refetch={refetch}
+          />
+          <TransactionList
+            clients={transactionsList}
+            isLoading={isLoading}
+            isFetching={isFetching}
+            refetch={refetch}
+          />
           <ClientTable />
         </Content>
       </BodyLayout>

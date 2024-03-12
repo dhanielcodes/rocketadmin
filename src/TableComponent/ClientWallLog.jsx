@@ -17,27 +17,57 @@ import {
 import { kFormatter3, kFormatter4, removeDup } from "../utils/format";
 import ReactCountryFlag from "react-country-flag";
 import { IconSearch } from "@arco-design/web-react/icon";
-import { Input } from "@arco-design/web-react";
+import { DatePicker, Input } from "@arco-design/web-react";
+import {
+  getpayoutfundrequestbydate,
+  getpayoutfundrequestbyref,
+} from "../services/Dashboard";
 
-function ClientWallLog({ data }) {
+function ClientWallLog({ clients, isLoading, isFetching, refetch }) {
   const [sortdate, setSortDate] = useState(0);
+  const [date, setDate] = useState();
+  const [ref, setRef] = useState("");
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
-
   const {
-    data: clients,
-    isLoading,
-    isFetching,
-    refetch,
-    isError,
+    data,
+    refetch: refetcDate,
+    isLoading: load1,
+    isFetching: fetch1,
   } = useQuery({
-    queryKey: ["clients"],
-    queryFn: () => getPayoutClientDashboard(userDetails?.userId),
+    queryKey: ["getpayoutfundrequestbydate"],
+    queryFn: () => getpayoutfundrequestbydate(date?.[0], date?.[1]),
   });
 
-  console.log(clients);
+  const {
+    data: newArr,
+    refetch: refetchRef,
+    isLoading: load2,
+    isFetching: fetch2,
+  } = useQuery({
+    queryKey: ["getpayoutfundrequestbyref"],
+    queryFn: () => getpayoutfundrequestbyref(ref),
+  });
+
+  const lowData = ref
+    ? newArr?.data || []
+    : date?.[1]
+    ? data?.data || []
+    : clients;
+
+  console.log(lowData);
+
+  useEffect(() => {
+    refetcDate(date?.[0], date?.[1]);
+  }, [date?.[1]]);
+
+  useEffect(() => {
+    refetchRef(ref);
+  }, [ref]);
+
+  console.log(data, newArr, "dsdsds");
 
   const { mutate, isLoading: mutateLoading } = useMutation({
     mutationFn: processWalletLog,
@@ -71,7 +101,7 @@ function ClientWallLog({ data }) {
       dataIndex: "statusNew",
       width: 160,
       filters: removeDup(
-        clients?.data?.walletFundindRequests?.map((item) => {
+        lowData?.map((item) => {
           return {
             text: item?.status,
             value: item?.status,
@@ -86,6 +116,12 @@ function ClientWallLog({ data }) {
       title: "CLIENT ID",
       dataIndex: "userId",
       width: 100,
+    },
+
+    {
+      title: "TRANSACTION REF",
+      dataIndex: "id",
+      width: 130,
     },
     {
       title: "CLIENT",
@@ -119,24 +155,13 @@ function ClientWallLog({ data }) {
           setTimeout(() => inputRef.current.focus(), 150);
         }
       },
-      /*    filters: removeDup(
-        clients?.data?.walletFundindRequests?.map((item) => {
-          return {
-            text: item?.clientName,
-            value: item?.clientName,
-          };
-        })
-      ), */
-
-      /* onFilter: (value, row) => row.clientName.indexOf(value) > -1,
-      filterMultiple: true, */
     },
     {
       title: "GATEWAY",
       dataIndex: "userWallet['name']",
       width: 160,
       filters: removeDup(
-        clients?.data?.walletFundindRequests?.map((item) => {
+        lowData?.map((item) => {
           return {
             text: item?.userWallet["name"],
             value: item?.userWallet["name"],
@@ -180,7 +205,7 @@ function ClientWallLog({ data }) {
 
   const [active, setActive] = useState();
 
-  const newData = clients?.data?.walletFundindRequests?.map((item, index) => {
+  const newData = lowData?.map((item, index) => {
     return {
       ...item,
       countryo: (
@@ -363,6 +388,9 @@ function ClientWallLog({ data }) {
 
   console.log(newData);
 
+  const [showDate, setShowDate] = useState(false);
+  const [showRef, setShowRef] = useState(false);
+
   return (
     <Content
       onClick={() => {
@@ -374,36 +402,80 @@ function ClientWallLog({ data }) {
           <div className="heading">Client Fund Request Log </div>
         </div>
 
+        <div
+          style={{
+            padding: "0 20px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+            }}
+          >
+            <button
+              onClick={() => {
+                setShowRef(false);
+                setShowDate(true);
+                setDate();
+              }}
+            >
+              Filter By Date
+            </button>
+            &nbsp; &nbsp;
+            <button
+              onClick={() => {
+                setShowDate(false);
+                setShowRef(true);
+                setRef();
+              }}
+            >
+              Filter By Ref
+            </button>
+          </div>
+          <br />
+
+          {showRef && (
+            <Input.Search
+              searchButton
+              placeholder="Please enter ref"
+              onChange={(value) => {
+                setRef(value);
+                setDate();
+              }}
+              style={{
+                width: "300px",
+              }}
+            />
+          )}
+
+          {showDate && (
+            <DatePicker.RangePicker
+              style={{}}
+              onChange={(e) => {
+                console.log(e);
+                setDate(e);
+                setRef();
+              }}
+            />
+          )}
+        </div>
+
         <CustomTable
           noData={newData?.length}
-          loading={isLoading || isFetching || mutateLoading}
+          loading={
+            isLoading ||
+            isFetching ||
+            mutateLoading ||
+            load1 ||
+            fetch1 ||
+            load2 ||
+            fetch2
+          }
           Apidata={newData}
           tableColumns={columns}
+          date={date}
+          setDate={setDate}
         />
-
-        {/* <div className="row">
-          <span>Showing 1-5 of entries</span>
-          <div className="pagins">
-            <p>Rows per page:</p>
-            <select>
-              <option>5</option>
-            </select>
-            <div className="arrow">
-              <button
-                onClick={() => {
-                  // setSortDate(sortdate - 1);
-                  // setEnd((prev) => prev - end);
-                }}
-              >
-                <AiOutlineLeft />
-              </button>
-              <button>{sortdate}</button>
-              <button>
-                <AiOutlineRight />
-              </button>
-            </div>
-          </div>
-        </div> */}
       </div>
     </Content>
   );
@@ -411,6 +483,18 @@ function ClientWallLog({ data }) {
 
 export default ClientWallLog;
 const Content = styled.div`
+  button {
+    background-color: transparent;
+    border: 1px solid gainsboro;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 7rem;
+    height: 40px;
+    border-radius: 5px;
+    justify-content: center;
+    cursor: pointer;
+  }
   border-radius: 30px;
   .top {
     padding: 10px 30px 30px 20px;

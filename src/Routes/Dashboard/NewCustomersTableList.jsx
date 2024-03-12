@@ -138,11 +138,14 @@ function NewCustomerList() {
     return {
       ...item,
       action: (
-        <div
+        <Link
           style={{
             textDecoration: "none",
           }}
-          to={`/customers-details?userId=${JSON.stringify(item)}`}
+          to={`/customers-details?userId=${item?.userId}&from=customer`}
+          onClick={() => {
+            localStorage.setItem("customer_details", JSON.stringify(item));
+          }}
         >
           <p
             onClick={() => {
@@ -155,7 +158,7 @@ function NewCustomerList() {
           >
             {item?.firstName}
           </p>
-        </div>
+        </Link>
       ),
       idNumber: (
         <div
