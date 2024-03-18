@@ -23,7 +23,7 @@ export default function TransfersListPage() {
             <span>Create Metadata</span>
           </button> */}
         </Header>
-        <TransferLogsTable />
+        <TransferLogsTable showFilter={true} />
       </BodyLayout>
     </>
   );
