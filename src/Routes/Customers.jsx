@@ -13,7 +13,7 @@ import {
   updateUserWatchList,
 } from "../services/Dashboard";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   IconEye,
   IconMoreVertical,
@@ -268,6 +268,12 @@ function Customers() {
       fixed: "left",
     },
     {
+      title: "SEND MONEY",
+      dataIndex: "sendMoney",
+      width: 140,
+      //render: () => "Other 2",
+    },
+    {
       title: "CUSTOMER REF",
       dataIndex: "userId",
       width: 190,
@@ -368,10 +374,26 @@ function Customers() {
     },
   ];
   const [rate, setRate] = useState();
+  const navigate = useNavigate();
 
   const newData = customers?.data?.map((item) => {
     return {
       ...item,
+      sendMoney: (
+        <p
+          onClick={() => {
+            console.log(item?.userId);
+            navigate(`/send-money?id=${item?.userId}&step=2`);
+            localStorage.setItem("userSend", JSON.stringify(item));
+          }}
+          style={{
+            color: "blue",
+            cursor: "pointer",
+          }}
+        >
+          Send Money
+        </p>
+      ),
       action: (
         <Link
           style={{

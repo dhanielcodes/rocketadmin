@@ -11,6 +11,8 @@ import {
   addcommenttotransaction,
   cancelTransaction,
   confirmTransaction,
+  gettransactionlogbydate,
+  gettransactionlogbyref,
   holdtransaction,
   markaspay,
   marktransactionsuspicious,
@@ -20,8 +22,8 @@ import {
 } from "../../services/Dashboard";
 import AmountFormatter from "../../reuseables/AmountFormatter";
 import { IconEye, IconMoreVertical } from "@arco-design/web-react/icon";
-import { Dropdown, Input, Menu } from "@arco-design/web-react";
-import { useState } from "react";
+import { DatePicker, Dropdown, Input, Menu } from "@arco-design/web-react";
+import { useEffect, useState } from "react";
 import ReusableModal from "../../reuseables/ReusableModal";
 import Msg from "../../reuseables/Msg";
 import Btn from "../../reuseables/Btn";
@@ -1120,7 +1122,7 @@ const DroplistCancelled = ({ action, setModal, setUserId, viewDetails }) => (
   </Menu>
 );
 
-function TransferLogsTable({ category }) {
+function TransferLogsTable({ category, showFilter = false }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
@@ -1395,8 +1397,35 @@ function TransferLogsTable({ category }) {
   ];
 
   const navigate = useNavigate();
+  const [date, setDate] = useState();
+  const [ref, setRef] = useState("");
+  const {
+    data,
+    refetch: refetcDate,
+    isLoading: load1,
+    isFetching: fetch1,
+  } = useQuery({
+    queryKey: ["gettransactionlogbydate"],
+    queryFn: () => gettransactionlogbydate(date?.[0], date?.[1]),
+  });
 
-  const newData = rates?.data?.map((item) => {
+  const {
+    data: newArr,
+    refetch: refetchRef,
+    isLoading: load2,
+    isFetching: fetch2,
+  } = useQuery({
+    queryKey: ["gettransactionlogbyref"],
+    queryFn: () => gettransactionlogbyref(ref),
+  });
+  const lowData = ref
+    ? newArr?.data || []
+    : date?.[1]
+    ? data?.data || []
+    : rates?.data;
+
+  console.log(lowData);
+  const newData = lowData?.map((item) => {
     return {
       ...item,
       action2: (
@@ -1615,7 +1644,16 @@ function TransferLogsTable({ category }) {
     };
   });
 
+  useEffect(() => {
+    refetcDate(date?.[0], date?.[1]);
+  }, [date?.[1]]);
+
+  useEffect(() => {
+    refetchRef(ref);
+  }, [ref]);
   console.log(newData);
+  const [showDate, setShowDate] = useState(false);
+  const [showRef, setShowRef] = useState(false);
 
   return (
     <Content>
@@ -1626,9 +1664,69 @@ function TransferLogsTable({ category }) {
         {/*   <div className="top">
           <SearchInput placeholder="Search Records" className="SearchRecords" />
         </div> */}
+        <div
+          style={{
+            padding: "0 20px",
+          }}
+        >
+          {showFilter && (
+            <div
+              style={{
+                display: "flex",
+              }}
+            >
+              <button
+                onClick={() => {
+                  setShowRef(false);
+                  setShowDate(true);
+                  setDate();
+                }}
+              >
+                Filter By Date
+              </button>
+              &nbsp; &nbsp;
+              <button
+                onClick={() => {
+                  setShowDate(false);
+                  setShowRef(true);
+                  setRef();
+                }}
+              >
+                Filter By Ref
+              </button>
+            </div>
+          )}
+          <br />
+          {showRef && (
+            <Input.Search
+              searchButton
+              placeholder="Please enter ref"
+              onChange={(value) => {
+                setRef(value);
+                setDate();
+              }}
+              style={{
+                width: "300px",
+              }}
+            />
+          )}
+
+          {showDate && (
+            <DatePicker.RangePicker
+              style={{}}
+              onChange={(e) => {
+                console.log(e);
+                setDate(e);
+                setRef();
+              }}
+            />
+          )}
+        </div>
         <CustomTable
           noData={rates?.data?.length}
-          loading={isLoading || isFetching}
+          loading={
+            isLoading || isFetching || load1 || fetch1 || load2 || fetch2
+          }
           Apidata={newData || []}
           tableColumns={columns}
         />
@@ -1845,6 +1943,18 @@ function TransferLogsTable({ category }) {
 
 export default TransferLogsTable;
 const Content = styled.div`
+  button {
+    background-color: transparent;
+    border: 1px solid gainsboro;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 7rem;
+    height: 40px;
+    border-radius: 5px;
+    justify-content: center;
+    cursor: pointer;
+  }
   .top {
     padding: 10px 30px 30px 20px;
   }

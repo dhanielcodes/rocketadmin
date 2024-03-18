@@ -63,9 +63,9 @@ function SendMoney() {
   const navigate = useNavigate();
 
   const [active, setActive] = useState("");
-  useEffect(() => {
+  /*  useEffect(() => {
     navigate("/send-money?step=1");
-  }, []);
+  }, []); */
 
   useEffect(() => {
     setDetails({
@@ -325,8 +325,7 @@ function SendMoney() {
                       payout &&
                       details?.amount &&
                       details?.paymentChannelId &&
-                      details?.purpose &&
-                      details?.note
+                      details?.purpose
                     ) {
                       localStorage.setItem(
                         "sendDetails",
