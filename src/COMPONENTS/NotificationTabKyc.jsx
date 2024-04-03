@@ -192,7 +192,15 @@ export default function NotificationTabKyc({ close }) {
                   </div>
                 </div>
               </div>
-              <div>1 min ago</div>
+              <div>
+                {item?.hourDiff}
+                {item?.hourDiff
+                  ? item?.hourDiff === 1
+                    ? "hr"
+                    : "hrs"
+                  : ""}{" "}
+                {item?.minDiff} min ago
+              </div>
             </div>
           );
         })}

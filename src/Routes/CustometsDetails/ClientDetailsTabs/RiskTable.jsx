@@ -223,7 +223,7 @@ export default function RiskTable({ clientDetails, setViewRisk }) {
   const columns = [
     {
       title: "S/N",
-      dataIndex: "id",
+      dataIndex: "sn",
       width: 40,
 
       //render: () => "Other",
@@ -253,9 +253,10 @@ export default function RiskTable({ clientDetails, setViewRisk }) {
 
   const [document, setDocument] = useState();
 
-  const newData = clientDetails?.userRiskAssessment?.map((item) => {
+  const newData = clientDetails?.userRiskAssessment?.map((item, index) => {
     return {
       ...item,
+      sn: index + 1,
       status2: (
         <>
           {" "}
