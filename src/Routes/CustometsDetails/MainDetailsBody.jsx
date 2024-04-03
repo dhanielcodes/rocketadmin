@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../../images/logo.svg";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function CustomerDetailsTop({
   customerDetails,
@@ -10,6 +10,7 @@ export default function CustomerDetailsTop({
 }) {
   const [params] = useSearchParams();
   const user = JSON.parse(localStorage.getItem("customer_details"));
+  const navigate = useNavigate();
 
   return (
     <div
@@ -163,7 +164,7 @@ export default function CustomerDetailsTop({
                   marginBottom: "3%",
                 }}
               >
-                {user?.agentId}
+                {user?.agentId || "None"}
               </div>
             </div>
           </div>
@@ -187,7 +188,6 @@ export default function CustomerDetailsTop({
             >
               {user?.status ? "Active" : "Inactive"}
             </div>
-
             <div
               style={{
                 padding: "6px",
@@ -207,6 +207,42 @@ export default function CustomerDetailsTop({
               }}
             >
               KYC: {user?.isKYCCompleted ? "Verified" : "Not Verified"}
+            </div>
+            <br />
+            <hr />
+            <br />
+            <div>
+              {/*  <div
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "400",
+                  color: "#313131",
+                  marginBottom: "3%",
+                  textAlign: "right",
+                }}
+              >
+                Action
+              </div> */}
+              <div
+                onClick={() => {
+                  navigate(`/send-money?id=${user?.userId}&step=2`);
+                  localStorage.setItem("userSend", JSON.stringify(user));
+                }}
+                style={{
+                  padding: "6px",
+                  borderRadius: "7px",
+                  fontSize: "14px",
+                  background: "#000000",
+                  color: "white",
+                  width: "100px",
+                  textAlign: "center",
+                  fontWeight: "700",
+                  marginLeft: "auto",
+                  cursor: "pointer",
+                }}
+              >
+                Send Money
+              </div>
             </div>
           </div>
         </div>
