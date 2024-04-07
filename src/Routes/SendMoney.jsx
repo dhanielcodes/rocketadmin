@@ -249,40 +249,13 @@ function SendMoney() {
                     navigate(`/send-money?id=${params.get("id")}&step=${1}`);
                   }
                   if (step === 2) {
-                    navigate(
-                      `/send-money?id=${params.get(
-                        "id"
-                      )}&beneficiary=${JSON.stringify(
-                        active
-                      )}&user=${JSON.stringify(userSelected)}&step=${1}`
-                    );
+                    navigate(`/send-money?step=${1}`);
                   }
                   if (step === 3) {
-                    navigate(
-                      `/send-money?id=${params.get(
-                        "id"
-                      )}&beneficiary=${JSON.stringify(
-                        active
-                      )}&user=${JSON.stringify(userSelected)}&step=${2}`
-                    );
+                    navigate(`/send-money?id=${params.get("id")}&step=${2}`);
                   }
                   if (step === 4) {
-                    navigate(
-                      `/send-money?id=${params.get(
-                        "id"
-                      )}&beneficiary=${JSON.stringify(
-                        active
-                      )}&user=${JSON.stringify(
-                        userSelected
-                      )}&fullDetails=${JSON.stringify({
-                        fromCurrency: selectedCountry,
-                        toCurrency: selectedCountry2,
-                        rate: rate,
-                        payment: payment,
-                        payout: payout,
-                        ...details,
-                      })}&step=${3}`
-                    );
+                    navigate(`/send-money?id=${params.get("id")}&step=${3}`);
                   }
                 }}
                 className="cancel"

@@ -64,6 +64,12 @@ export default function NewNavBar() {
             ...item,
             name: item?.menuName,
             path: `/${item?.menuName?.toLowerCase()?.replace(/\s+/g, "-")}`,
+            init:
+              item?.menuName === "Send Money"
+                ? `/${item?.menuName
+                    ?.toLowerCase()
+                    ?.replace(/\s+/g, "-")}?step=1`
+                : "",
             miniLinks: item?.userRoleSubMenuAccess?.map((item) => {
               if (item?.userRoleSuSubbMenuAccess?.length) {
                 return {
