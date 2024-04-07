@@ -118,25 +118,29 @@ export default function Details({ clientDetails, setViewRisk }) {
             <div className="box_bank_card two">
               <div className="box_data">
                 <AmountFormatter
-                  value={newSelected?.lastThirtyDays}
+                  value={newSelected?.lastThirtyDays || 0}
                   currency={newSelected?.currency}
                 />
               </div>
               <div className="">
                 (Fees:{" "}
                 <AmountFormatter
-                  value={newSelected?.lastThirtyDaysTransitionFee}
+                  value={newSelected?.lastThirtyDaysTransitionFee || 0}
                   currency={newSelected?.currency}
                 />{" "}
                 )
               </div>
             </div>
             <div className="box_bank_card two">
-              <div className="box_data">{newSelected?.lastThirtyDaysCount}</div>
+              <div className="box_data">
+                {newSelected?.lastThirtyDaysCount || 0}
+              </div>
               <div>Transfer count</div>
             </div>
             <div className="box_bank_card two">
-              <div className="box_data">{newSelected?.lastThirtyDaysCount}</div>
+              <div className="box_data">
+                {newSelected?.lastThirtyDaysCount || 0}
+              </div>
               <div>Average Transaction Value</div>
             </div>
           </div>
@@ -153,25 +157,29 @@ export default function Details({ clientDetails, setViewRisk }) {
             <div className="box_bank_card two">
               <div className="box_data">
                 <AmountFormatter
-                  value={newSelected?.lastSixtyDays}
+                  value={newSelected?.lastSixtyDays || 0}
                   currency={newSelected?.currency}
                 />
               </div>
               <div className="">
                 (Fees:{" "}
                 <AmountFormatter
-                  value={newSelected?.lastSixtyDaysTransitionFee}
+                  value={newSelected?.lastSixtyDaysTransitionFee || 0}
                   currency={newSelected?.currency}
                 />{" "}
                 )
               </div>
             </div>
             <div className="box_bank_card two">
-              <div className="box_data">{newSelected?.lastSixtyDaysCount}</div>
+              <div className="box_data">
+                {newSelected?.lastSixtyDaysCount || 0}
+              </div>
               <div>Transfer count</div>
             </div>
             <div className="box_bank_card two">
-              <div className="box_data">{newSelected?.lastSixtyDaysCount}</div>
+              <div className="box_data">
+                {newSelected?.lastSixtyDaysCount || 0}
+              </div>
               <div>Average Transaction Value</div>
             </div>
           </div>
@@ -188,25 +196,29 @@ export default function Details({ clientDetails, setViewRisk }) {
             <div className="box_bank_card two">
               <div className="box_data">
                 <AmountFormatter
-                  value={newSelected?.lastNinetyDays}
+                  value={newSelected?.lastNinetyDays || 0}
                   currency={newSelected?.currency}
                 />
               </div>
               <div className="">
                 (Fees:{" "}
                 <AmountFormatter
-                  value={newSelected?.lastNinetyDaysTransitionFee}
+                  value={newSelected?.lastNinetyDaysTransitionFee || 0}
                   currency={newSelected?.currency}
                 />{" "}
                 )
               </div>
             </div>
             <div className="box_bank_card two">
-              <div className="box_data">{newSelected?.lastNinetyDaysCount}</div>
+              <div className="box_data">
+                {newSelected?.lastNinetyDaysCount || 0}
+              </div>
               <div>Transfer count</div>
             </div>
             <div className="box_bank_card two">
-              <div className="box_data">{newSelected?.lastNinetyDaysCount}</div>
+              <div className="box_data">
+                {newSelected?.lastNinetyDaysCount || 0}
+              </div>
               <div>Average Transaction Value</div>
             </div>
           </div>
@@ -223,14 +235,14 @@ export default function Details({ clientDetails, setViewRisk }) {
             <div className="box_bank_card two">
               <div className="box_data">
                 <AmountFormatter
-                  value={newSelected?.lastOneTwentyDays}
+                  value={newSelected?.lastOneTwentyDays || 0}
                   currency={newSelected?.currency}
                 />
               </div>
               <div className="">
                 (Fees:{" "}
                 <AmountFormatter
-                  value={newSelected?.lastOneTwentyDaysTransitionFee}
+                  value={newSelected?.lastOneTwentyDaysTransitionFee || 0}
                   currency={newSelected?.currency}
                 />{" "}
                 )
@@ -238,13 +250,13 @@ export default function Details({ clientDetails, setViewRisk }) {
             </div>
             <div className="box_bank_card two">
               <div className="box_data">
-                {newSelected?.lastOneTwentyDaysCount}
+                {newSelected?.lastOneTwentyDaysCount || 0}
               </div>
               <div>Transfer count</div>
             </div>
             <div className="box_bank_card two">
               <div className="box_data">
-                {newSelected?.lastOneTwentyDaysCount}
+                {newSelected?.lastOneTwentyDaysCount || 0}
               </div>
               <div>Average Transaction Value</div>
             </div>
@@ -259,10 +271,10 @@ export default function Details({ clientDetails, setViewRisk }) {
               <AmountFormatter
                 value={
                   newSelected?.pendingAmount +
-                  newSelected?.processedAmount +
-                  newSelected?.depositedAmount +
-                  newSelected?.failedAmount +
-                  newSelected?.cancelledAmount
+                    newSelected?.processedAmount +
+                    newSelected?.depositedAmount +
+                    newSelected?.failedAmount +
+                    newSelected?.cancelledAmount || 0
                 }
                 currency={newSelected?.currency}
               />
@@ -273,7 +285,9 @@ export default function Details({ clientDetails, setViewRisk }) {
             </div>
           </div>
           <div className="box_bank_card two">
-            <div className="box_data">{newSelected?.lastSixtyDaysCount}</div>
+            <div className="box_data">
+              {newSelected?.lastSixtyDaysCount || 0}
+            </div>
             <div>Transfer count</div>
           </div>
           <div className="box_bank_card two">
@@ -282,7 +296,7 @@ export default function Details({ clientDetails, setViewRisk }) {
                 newSelected?.processed +
                 newSelected?.deposited +
                 newSelected?.failed +
-                newSelected?.cancelled}
+                newSelected?.cancelled || 0}
             </div>
             <div>Average Transaction Value</div>
           </div>

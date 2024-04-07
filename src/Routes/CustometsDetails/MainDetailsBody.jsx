@@ -154,6 +154,31 @@ export default function CustomerDetailsTop({
                   marginBottom: "3%",
                 }}
               >
+                Date of Birth
+              </div>
+              <div
+                style={{
+                  fontSize: "18px",
+                  color: "#333B4A",
+                  fontWeight: "700",
+                  marginBottom: "3%",
+                }}
+              >
+                {user?.dob}
+              </div>
+            </div>
+            <div
+              style={{
+                marginBottom: "10px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "16px",
+                  color: "#63666A",
+                  marginBottom: "3%",
+                }}
+              >
                 Referred By Agent
               </div>
               <div
