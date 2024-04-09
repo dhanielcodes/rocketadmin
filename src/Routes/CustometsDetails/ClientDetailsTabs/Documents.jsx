@@ -62,30 +62,6 @@ const Droplist = ({
         View ID Front Page
       </span>
     </Menu.Item>
-    <Menu.Item
-      onClick={() => {
-        setBack();
-      }}
-      key="4"
-      style={{
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-      <IconEye
-        fontSize={20}
-        style={{
-          margin: 0,
-        }}
-      />
-      <span
-        style={{
-          marginLeft: "10px",
-        }}
-      >
-        View ID Back Page
-      </span>
-    </Menu.Item>
 
     <Menu.Item
       key="2"
@@ -111,30 +87,7 @@ const Droplist = ({
         Download Front ID
       </span>
     </Menu.Item>
-    <Menu.Item
-      key="6"
-      style={{
-        display: "flex",
-        alignItems: "center",
-      }}
-      onClick={() => {
-        download2();
-      }}
-    >
-      <IconDownload
-        fontSize={20}
-        style={{
-          margin: 0,
-        }}
-      />
-      <span
-        style={{
-          marginLeft: "10px",
-        }}
-      >
-        Download Back ID
-      </span>
-    </Menu.Item>
+
     <Menu.Item
       onClick={() => {
         edit();

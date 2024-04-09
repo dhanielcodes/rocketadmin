@@ -327,6 +327,10 @@ export default function RiskTable({ clientDetails, setViewRisk }) {
             noData={newData?.length}
             Apidata={newData || []}
             tableColumns={columns}
+            scroll={{
+              x: 800,
+              y: 800,
+            }}
           />
         </div>
       </div>

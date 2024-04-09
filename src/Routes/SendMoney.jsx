@@ -282,9 +282,9 @@ function SendMoney() {
                       JSON.stringify(userSelected)
                     );
                   }
-                  if (step === 2) {
+                  if (params.get("step") === "2") {
                     if (active) {
-                      setStep((prev) => prev + 1);
+                      setStep(3);
                       localStorage.setItem("userBene", JSON.stringify(active));
                       navigate(`/send-money?id=${params.get("id")}&step=${3}`);
                     } else {
