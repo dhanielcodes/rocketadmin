@@ -1326,7 +1326,7 @@ function TransferLogsTable({ category, showFilter = false }) {
                       refetch(item?.sn);
                     }}
                   />
-                ) : item?.paymentStatus === "Cancelled" ? (
+                ) : item?.paymentStatus.toLocaleLowerCase() === "cancelled" ? (
                   <DroplistCancelled
                     action={setCall}
                     setModal={setModal}
@@ -1690,7 +1690,13 @@ function TransferLogsTable({ category, showFilter = false }) {
                         background: "#b0b0b0",
                       }}
                     >
-                      Cancel
+                      <span
+                        style={{
+                          color: "#fff",
+                        }}
+                      >
+                        Cancel
+                      </span>
                     </Btn>
                     &nbsp; &nbsp;
                     <Btn
@@ -1755,15 +1761,21 @@ function TransferLogsTable({ category, showFilter = false }) {
                         fontWeight: "600",
                       }}
                     >
-                      {loading1 ||
-                      loading2 ||
-                      loading3 ||
-                      loading4 ||
-                      loading5 ||
-                      loading6 ||
-                      loading7
-                        ? "loading..."
-                        : "Confirm"}
+                      <span
+                        style={{
+                          color: "#fff",
+                        }}
+                      >
+                        {loading1 ||
+                        loading2 ||
+                        loading3 ||
+                        loading4 ||
+                        loading5 ||
+                        loading6 ||
+                        loading7
+                          ? "loading..."
+                          : "Confirm"}
+                      </span>
                     </Btn>
                   </div>
                 )}

@@ -22,6 +22,13 @@ export const getCurrencies = async () => {
   const { data } = await Axios.get(`${baseurl}/getcurrency`);
   return data;
 };
+
+export const getUserCurrencies = async (userId) => {
+  const { data } = await Axios.get(
+    `${baseurl}/getusercurrency/${userId?.queryKey[0]}`
+  );
+  return data;
+};
 export const getpayoutclienttransactiontype = async () => {
   const { data } = await Axios.get(`${baseurl}/getpayoutclienttransactiontype`);
   return data;
@@ -501,6 +508,22 @@ export const updateUserSubMenu = async (body) => {
   const { data } = await Axios.post(
     `${baseurl}/updateuserrolesubmenuaccess`,
     body
+  );
+  return data;
+};
+
+export const addcommenttouserkycdocument = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/addcommenttouserkycdocument`,
+    body
+  );
+  return data;
+};
+
+export const viewuserkycdocumentcomment = async (userId) => {
+  console.log("🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:md", userId);
+  const { data } = await Axios.get(
+    `${baseurl}/viewuserkycdocumentcomment/${userId}`
   );
   return data;
 };
