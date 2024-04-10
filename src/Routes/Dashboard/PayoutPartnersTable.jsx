@@ -46,7 +46,7 @@ function PayoutPartnersTable({ data, isLoading }) {
     {
       title: "STATUS",
       dataIndex: "status",
-      width: 140,
+      width: 190,
     },
     {
       title: "CHARGES",
@@ -71,6 +71,34 @@ function PayoutPartnersTable({ data, isLoading }) {
     },
   ];
 
+  const newData = data?.map((item) => {
+    return {
+      ...item,
+      status: (
+        <>
+          {" "}
+          <div
+            style={{
+              padding: "6px 14px",
+              borderRadius: "7px",
+              background:
+                item?.status === "Successful"
+                  ? "#37d744"
+                  : item?.status === "Pending"
+                  ? "#ffe063"
+                  : "#ff6363",
+              color: "white",
+              width: "fit-content",
+              fontWeight: "700",
+            }}
+          >
+            {item?.status}
+          </div>
+        </>
+      ),
+    };
+  });
+
   return (
     <Content>
       <div className="tablecontent">
@@ -79,9 +107,9 @@ function PayoutPartnersTable({ data, isLoading }) {
           <SearchInput placeholder="Search Records" className="SearchRecords" />
         </div> */}
         <CustomTable
-          noData={data?.length}
+          noData={newData?.length}
           loading={isLoading}
-          Apidata={data}
+          Apidata={newData}
           tableColumns={columns}
         />
       </div>
