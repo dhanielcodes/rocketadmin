@@ -159,7 +159,7 @@ function EditNewDocument({}) {
                   <label>Document Number</label>
                   <AppInput
                     placeholder=""
-                    type="number"
+                    type="text"
                     onChange={(e) => {
                       setDocNumber(e.target.value);
                     }}

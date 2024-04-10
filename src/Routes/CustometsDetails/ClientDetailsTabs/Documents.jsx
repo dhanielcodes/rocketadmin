@@ -14,12 +14,18 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { updateFile } from "../../../services/PayoutDashboard";
 import CustomTable from "../../../reuseables/CustomTable";
 import SectionHeader from "../../../reuseables/SectionHeader";
-import { Dropdown, Menu } from "@arco-design/web-react";
+import { Dropdown, Menu, Input } from "@arco-design/web-react";
 import {
   IconDownload,
   IconEye,
   IconMoreVertical,
 } from "@arco-design/web-react/icon";
+import {
+  addcommenttouserkycdocument,
+  viewuserkycdocumentcomment,
+} from "../../../services/Dashboard";
+import Btn from "../../../reuseables/Btn";
+const TextArea = Input.TextArea;
 
 const Droplist = ({
   action,
@@ -29,6 +35,7 @@ const Droplist = ({
   edit,
   setFront,
   setBack,
+  setAdd,
 }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
@@ -155,8 +162,7 @@ const Droplist = ({
     </Menu.Item>
     <Menu.Item
       onClick={() => {
-        setModal(true);
-        action("cancelTransaction");
+        setAdd();
       }}
       key="5"
       style={{
@@ -203,6 +209,8 @@ export default function Documents({ clientDetails, refetch }) {
 
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
+  const [modal2, setModal2] = useState(false);
+  const [modal3, setModal3] = useState(false);
   const [image, setImage] = useState();
 
   const columns = [
@@ -290,6 +298,33 @@ export default function Documents({ clientDetails, refetch }) {
   ];
 
   const [document, setDocument] = useState();
+  const [commentId, setCommentId] = useState(false);
+
+  const [note, setNote] = useState("");
+  const {
+    data: comments,
+    isLoading: viewloading,
+    refetch: refetchDocComments,
+  } = useQuery({
+    queryKey: [commentId],
+    queryFn: () => viewuserkycdocumentcomment(commentId),
+    enabled: commentId ? true : false,
+  });
+  const { mutate, isLoading } = useMutation({
+    mutationFn: addcommenttouserkycdocument,
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success(data?.message);
+        setNote();
+        setModal3(false);
+      } else {
+        toast.error(data?.message);
+      }
+    },
+    onError: (data) => {
+      toast.error(data?.message);
+    },
+  });
 
   const newData = clientDetails?.userKYCDocuments?.map((item) => {
     return {
@@ -319,8 +354,13 @@ export default function Documents({ clientDetails, refetch }) {
                     setModal(true);
                   }}
                   setBack={() => {
-                    setImage(item?.documentBackPageURL);
-                    setModal(true);
+                    setModal2(true);
+                    setCommentId(item?.id);
+                    refetchDocComments();
+                  }}
+                  setAdd={() => {
+                    setCommentId(item?.id);
+                    setModal3(true);
                   }}
                   download={() => {
                     saveAs(item?.documentFrontPageURL, "id_front"); // Put your image URL here.
@@ -383,6 +423,108 @@ export default function Documents({ clientDetails, refetch }) {
               src={image}
             />
           </div>
+        </AppModal>
+      </div>
+
+      <div
+        style={{
+          opacity: modal2 ? "1" : "0",
+          pointerEvents: modal2 ? "all" : "none",
+          transition: "all 0.3s",
+        }}
+      >
+        <AppModal
+          padding="40px"
+          closeModal={() => {
+            setModal2(false);
+          }}
+          heading={"View Comments"}
+        >
+          {comments?.data?.map((item) => {
+            return viewloading ? (
+              "loading..."
+            ) : comments?.data?.length === 0 ? (
+              "No Comments"
+            ) : (
+              <div
+                key={item}
+                style={{
+                  background: "#e5e5e5",
+                  width: "410px",
+                  color: "#000000",
+                  borderRadius: "12px",
+                  padding: "18px",
+                  display: "grid",
+                  marginTop: "20px",
+                  fontSize: "14px",
+                }}
+              >
+                <span>{item?.comment}</span>
+                <span
+                  style={{
+                    marginLeft: "auto",
+                    fontWeight: "700",
+                    marginTop: "5px",
+                    fontSize: "12px",
+                  }}
+                >
+                  {item?.commentDate}
+                </span>
+              </div>
+            );
+          })}
+        </AppModal>
+      </div>
+
+      <div
+        style={{
+          opacity: modal3 ? "1" : "0",
+          pointerEvents: modal3 ? "all" : "none",
+          transition: "all 0.3s",
+        }}
+      >
+        <AppModal
+          padding="40px"
+          closeModal={() => {
+            setModal3(false);
+          }}
+          heading={"Add Comment"}
+        >
+          <TextArea
+            name="address"
+            className="textarea"
+            placeholder="Enter comments ..."
+            style={{
+              minHeight: 104,
+              background: "transparent",
+              border: "1px solid #d8d8d8",
+              borderRadius: "8px",
+            }}
+            onChange={(e) => {
+              setNote(e);
+            }}
+          />
+          <br />
+          <br />
+          <Btn
+            clicking={() => {
+              mutate({
+                userId: params.get("userId"),
+                documentId: commentId,
+                commentBy: 0,
+                comment: note,
+              });
+            }}
+            disabled={isLoading || !note}
+          >
+            <span
+              style={{
+                color: "#fff",
+              }}
+            >
+              {isLoading ? "Adding comment..." : "Add Comment"}
+            </span>
+          </Btn>
         </AppModal>
       </div>
       <div>

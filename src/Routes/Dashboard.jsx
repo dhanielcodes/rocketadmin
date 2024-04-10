@@ -79,7 +79,7 @@ function Dashboard() {
             <div className="content1">
               <a className="contside1" href="#logs">
                 <div className="contside1Text">
-                  <h1>{newVolume?.todayTransferCount || 0}</h1>
+                  <h1>{dashboard?.data?.todayTransferCount || 0}</h1>
                   <p>Today’s transfer</p>
                 </div>
               </a>

@@ -12,11 +12,12 @@ import { Input, Skeleton } from "@arco-design/web-react";
 import SendDetailsTop from "./SendDetailsTop";
 import CustomSelect from "../../reuseables/CustomSelect";
 import { Payoutchannel, TransferPurpose } from "../../services/PayoutDashboard";
-import CountryDropdown from "../../reuseables/CountryList";
 import InputNumber from "rc-input-number";
 import AppSelect from "../../reuseables/AppSelect";
 import AppInput from "../../reuseables/AppInput";
 import AmountFormatter from "../../reuseables/AmountFormatter";
+import CountryListSendMoney from "../../reuseables/CountryListSendMoney";
+import CountryList from "../../reuseables/CountryList";
 
 export default function SendDetails({
   details,
@@ -177,7 +178,7 @@ export default function SendDetails({
             <p className="">Sending Currency</p>
 
             <div className="cont1">
-              <CountryDropdown
+              <CountryListSendMoney
                 onChange={(e) => {
                   setSelectedCountry(e);
                   setDetails({
@@ -215,7 +216,7 @@ export default function SendDetails({
           <div>
             <p className="">Receiving Currency</p>
             <div className="cont3">
-              <CountryDropdown
+              <CountryList
                 collectionStatus
                 style={{
                   width: "100%",

@@ -15,7 +15,7 @@ export default function FileUpload2({
 }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [params] = useSearchParams();
-  const userId = JSON.parse(params.get("userId"));
+  const userId = params.get("userId");
 
   const { mutate, isLoading } = useMutation({
     mutationFn: uploadFile,
@@ -117,7 +117,7 @@ export default function FileUpload2({
               const formData = new FormData();
               formData.append("file", e.target.files[0]);
               setLoading(true);
-              mutate({ file: formData, id: userId?.userId });
+              mutate({ file: formData, id: userId });
             }}
             placeholder="placeholder"
             accept=".jpeg, .png, jpg"

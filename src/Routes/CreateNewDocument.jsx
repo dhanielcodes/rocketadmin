@@ -145,7 +145,7 @@ function CreateNewDocument({}) {
                   <label>Document Number</label>
                   <AppInput
                     placeholder=""
-                    type="number"
+                    type="text"
                     onChange={(e) => {
                       setDocNumber(e.target.value);
                     }}
