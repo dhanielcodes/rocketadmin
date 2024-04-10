@@ -156,6 +156,10 @@ function OurRatesTable() {
           loading={isLoading || isFetching}
           Apidata={newData}
           tableColumns={columns}
+          scroll={{
+            x: 800,
+            y: 800,
+          }}
         />
 
         {/* <div className="row">

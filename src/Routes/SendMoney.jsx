@@ -241,6 +241,8 @@ function SendMoney() {
           >
             {params.get("step") === "1" ? (
               <div></div>
+            ) : data?.status ? (
+              ""
             ) : (
               <button
                 onClick={() => {
@@ -327,6 +329,42 @@ function SendMoney() {
                     mutate({
                       ...details,
                     });
+                  }
+                  const userDetails = JSON.parse(
+                    localStorage.getItem("userDetails")
+                  );
+
+                  const navAccess = userDetails?.userRoleMenuAccess
+                    ?.map((item) => {
+                      if (item?.menuAccessType?.id !== 1) {
+                        return {
+                          ...item,
+                        };
+                      }
+                    })
+                    .filter((item) => item !== undefined);
+                  console.log(navAccess?.filter((item) => item !== undefined));
+                  const menu1 = navAccess?.[0]?.menuName
+                    ?.toLowerCase()
+                    ?.replace(/\s+/g, "-");
+                  const menu2 =
+                    navAccess?.[0]?.userRoleSubMenuAccess[0]?.subMenuName
+                      .toLowerCase()
+                      ?.replace(/\s+/g, "-");
+                  const menu3 =
+                    navAccess?.[0]?.userRoleSubMenuAccess[0]?.userRoleSuSubbMenuAccess[0]?.subMenuName
+                      ?.toLowerCase()
+                      ?.replace(/\s+/g, "-");
+                  if (data?.status) {
+                    navigate(
+                      menu3
+                        ? `/${menu3}`
+                        : menu2
+                        ? `/${menu2}`
+                        : menu1
+                        ? `/${menu1}`
+                        : "/"
+                    );
                   }
                 }}
                 className="confirm"
