@@ -5,6 +5,35 @@ import toast from "react-hot-toast";
 import MDeleteIcon from "../assets/icons/MDeleteIcon";
 import { useSearchParams } from "react-router-dom";
 
+const Spinner = styled.div`
+  border: 4px solid rgba(0, 168, 90, 1);
+  border-top: 4px #a6a6a6 solid;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  animation: spin 2s linear infinite;
+  position: absolute;
+  top: 30%;
+  left: 45%;
+  /* 
+  border: 16px solid #f3f3f3; 
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite; */
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
 export default function FileUpload2({
   value,
   setValue,
@@ -44,8 +73,11 @@ export default function FileUpload2({
     <div
       style={{
         width: "100%",
+        position: "relative",
       }}
     >
+      {isLoading && <Spinner />}
+
       {!value ? (
         <label
           for="name"
