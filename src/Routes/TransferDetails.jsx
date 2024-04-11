@@ -65,7 +65,7 @@ export default function TransferDetailsPage() {
               }}
             >
               <QRCode
-                value={`https://dashboard.transferrocket.co.uk/view-transaction?tid=${payload?.paymentRef}`}
+                value={`https://dashboard.transferrocket.co.uk/confirm-transaction?tid=${payload?.paymentRef}`}
               />
               <div
                 style={{
@@ -76,7 +76,7 @@ export default function TransferDetailsPage() {
                 }}
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `https://dashboard.transferrocket.co.uk/view-transaction?tid=${payload?.paymentRef}`
+                    `https://dashboard.transferrocket.co.uk/confirm-transaction?tid=${payload?.paymentRef}`
                   );
                   toast.success("Transaction Link Copied!");
                 }}
