@@ -291,8 +291,7 @@ function CreateNewDocument({}) {
                     issueDate &&
                     expiryDate &&
                     imageOne &&
-                    imageTwo &&
-                    comments
+                    imageTwo
                   ) {
                     mutate({
                       userId: JSON.parse(params.get("userId"))?.userId,
