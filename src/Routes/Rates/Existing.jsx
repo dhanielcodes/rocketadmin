@@ -23,6 +23,7 @@ function ExistingRatesTable() {
     data: rates,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery({
     queryKey: ["getRatesList"],
     queryFn: () => getRatesList(),
@@ -222,7 +223,12 @@ function ExistingRatesTable() {
           <SearchInput placeholder="Search Records" className="SearchRecords" />
         </div> */}
 
-        <UpdateRatesModal modal={modal} setModal={setModal} rateItem={rate} />
+        <UpdateRatesModal
+          modal={modal}
+          setModal={setModal}
+          rateItem={rate}
+          recall={refetch}
+        />
         <CustomTable
           noData={rates?.data?.length}
           loading={isLoading || isFetching}
