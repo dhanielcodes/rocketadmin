@@ -65,7 +65,11 @@ function UpdateRateMetaData({ recall, setRecall, setModal, modal }) {
     rateItem?.allowAboveMaximum || false
   );
 
-  const [autoPayout, setAutoPayout] = useState(rateItem?.autoPayout || false);
+  const [autoPayout, setAutoPayout] = useState();
+
+  useEffect(() => {
+    setAutoPayout(rateItem?.autoPayout);
+  }, []);
 
   const [allowMinTf, setAllowMinTf] = useState(false);
   const [allowMaxTf, setAllowMaxTf] = useState(false);
@@ -856,7 +860,7 @@ function UpdateRateMetaData({ recall, setRecall, setModal, modal }) {
                       aboveMaximumLimitCharges:
                         allowMaxFee || rateItem?.aboveMaximumLimitCharges,
                       bonusRateValue: bonusRate || rateItem?.bonusRateValue,
-                      autopayout: autoPayout || rateItem?.autoPayout,
+                      autoPayout: autoPayout,
                     });
                   }
                 }}

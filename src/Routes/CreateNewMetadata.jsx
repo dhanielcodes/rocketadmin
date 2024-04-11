@@ -908,7 +908,7 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                         allowAboveMaximum: allowMax,
                         aboveMaximumChargeType: allowMaxTf || "",
                         aboveMaximumLimitCharges: allowMaxFee || "",
-                        autopayout: autoPayout,
+                        autoPayout: autoPayout,
                         kycThreshold: kycThreshold || 0,
                         bonusRateValue: bonusRate || 0,
                       });
