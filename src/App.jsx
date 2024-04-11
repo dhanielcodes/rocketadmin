@@ -230,9 +230,9 @@ function App() {
                   </AppLogout>
                 }
               />
-              {handleCheckAccess("Agents", actualArrayAccess) && (
+              {handleCheckAccess("Agent", actualArrayAccess) && (
                 <Route
-                  path="/agents"
+                  path="/agent"
                   element={
                     <AppLogout>
                       <Agent />
@@ -434,7 +434,7 @@ function App() {
                   }
                 />
               )}
-                {handleCheckAccess("Beneficiary", actualArrayAccess) && (
+              {handleCheckAccess("Beneficiary", actualArrayAccess) && (
                 <Route
                   path="/beneficiary-details"
                   element={

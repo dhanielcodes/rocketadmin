@@ -9,7 +9,12 @@ import AppInput from "../reuseables/AppInput";
 import ReactCountryFlag from "react-country-flag";
 import styled from "styled-components";
 
-export default function UpdateRatesModal({ rateItem, modal, setModal }) {
+export default function UpdateRatesModal({
+  rateItem,
+  modal,
+  setModal,
+  recall,
+}) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   const [rate, setRate] = useState();
@@ -25,6 +30,7 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
       if (data?.status) {
         toast.success("Rate Updated Successfully");
         setModal(false);
+        recall();
         //refetch();
       } else {
         toast.error(data?.message);
@@ -193,7 +199,7 @@ export default function UpdateRatesModal({ rateItem, modal, setModal }) {
                     userId: userDetails?.userId,
                     firstName: "Admin",
                   },
-                  conversionRate: rateItem?.conversionRate || rate,
+                  conversionRate: rate || rateItem?.conversionRate,
                   fromCurrency: {
                     id: rateItem?.fromCurrency?.id,
                   },

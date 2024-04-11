@@ -67,7 +67,7 @@ function AddPaymentProcessorModal({ closeinviteAgent, type, item, setItem }) {
       processor?.paymentChannel?.id &&
       processor?.paymentProvider?.id
     ) {
-      mutate(processor);
+      mutate({ ...processor, status: active });
     } else {
       toast.error("Fill all fields");
     }
@@ -94,6 +94,10 @@ function AddPaymentProcessorModal({ closeinviteAgent, type, item, setItem }) {
   });
 
   console.log(item);
+
+  useEffect(() => {
+    setActive(item?.status);
+  }, [item]);
   return (
     <Content>
       <Modal
@@ -117,7 +121,7 @@ function AddPaymentProcessorModal({ closeinviteAgent, type, item, setItem }) {
                 onClick={() => {
                   setActive(!active);
                 }}
-                checked={active || item?.status}
+                checked={active}
               />
             </div>
           )}
