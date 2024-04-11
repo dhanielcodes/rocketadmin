@@ -4,6 +4,7 @@ import { uploadFile } from "./Auth";
 import toast from "react-hot-toast";
 import MDeleteIcon from "../assets/icons/MDeleteIcon";
 import { useSearchParams } from "react-router-dom";
+import styled from "styled-components";
 
 const Spinner = styled.div`
   border: 4px solid rgba(0, 168, 90, 1);
