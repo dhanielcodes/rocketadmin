@@ -240,6 +240,16 @@ function App() {
                   }
                 />
               )}
+              {handleCheckAccess("Agents", actualArrayAccess) && (
+                <Route
+                  path="/agents"
+                  element={
+                    <AppLogout>
+                      <Agent />
+                    </AppLogout>
+                  }
+                />
+              )}
               <Route
                 path="/new-document"
                 element={

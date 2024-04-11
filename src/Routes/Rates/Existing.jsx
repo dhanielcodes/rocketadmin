@@ -14,7 +14,7 @@ import { IconSearch } from "@arco-design/web-react/icon";
 import { Input } from "@arco-design/web-react";
 import { removeDup } from "../../utils/format";
 
-function ExistingRatesTable() {
+function ExistingRatesTable({ setRecall, recall }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
@@ -227,7 +227,10 @@ function ExistingRatesTable() {
           modal={modal}
           setModal={setModal}
           rateItem={rate}
-          recall={refetch}
+          recall={() => {
+            refetch();
+            setRecall((prev) => prev + 1);
+          }}
         />
         <CustomTable
           noData={rates?.data?.length}

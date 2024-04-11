@@ -8,8 +8,9 @@ import { getOurRates } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
 import { kFormatter3, removeDup } from "../../utils/format";
 import { countryObjectsArray } from "../../../config/CountryCodes";
+import { useEffect } from "react";
 
-function OurRatesTable() {
+function OurRatesTable({ recall }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
@@ -18,12 +19,17 @@ function OurRatesTable() {
     data: rates,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery({
     queryKey: ["getOurRates"],
     queryFn: () => getOurRates(),
   });
 
   console.log(rates);
+  useEffect(() => {
+    refetch();
+    //eslint-disable-next-line
+  }, [recall]);
 
   const columns = [
     {

@@ -13,11 +13,11 @@ import {
   removeDup,
 } from "../../utils/format";
 import { countryObjectsArray } from "../../../config/CountryCodes";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { IconSearch } from "@arco-design/web-react/icon";
 import { Input } from "@arco-design/web-react";
 
-function AgentRatesTable() {
+function AgentRatesTable({ recall }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
@@ -26,11 +26,16 @@ function AgentRatesTable() {
     data: rates,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery({
     queryKey: ["getAgentRates"],
     queryFn: () => getAgentRates(),
   });
 
+  useEffect(() => {
+    refetch();
+    //eslint-disable-next-line
+  }, [recall]);
   console.log(rates);
   const inputRef = useRef(null);
 

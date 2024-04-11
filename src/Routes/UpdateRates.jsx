@@ -8,6 +8,7 @@ import CreateRateModal from "../modals/CreateRateModal";
 
 export default function UpdateRatesPage() {
   const [modal, setModal] = useState();
+  const [recall, setRecall] = useState(1);
   return (
     <>
       <BodyLayout>
@@ -30,10 +31,10 @@ export default function UpdateRatesPage() {
             <span>Create Rate</span>
           </button>
         </Header>
-        <ExistingRatesTable />
+        <ExistingRatesTable recall={recall} setRecall={setRecall} />
 
-        <OurRatesTable />
-        <AgentRatesTable />
+        <OurRatesTable recall={recall} />
+        <AgentRatesTable recall={recall} />
       </BodyLayout>
     </>
   );
