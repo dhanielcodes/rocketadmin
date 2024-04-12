@@ -1209,7 +1209,11 @@ function TransferLogsTable({ category, showFilter = false }) {
 
       //render: () => "Other",
     },
-
+    {
+      title: "TNX LOCATION",
+      dataIndex: "transactionSource",
+      width: 200,
+    },
     {
       title: "BRANCH",
       dataIndex: "transactionSource",
@@ -1222,6 +1226,12 @@ function TransferLogsTable({ category, showFilter = false }) {
       dataIndex: "paymentDate",
       width: 260,
       //render: () => "Other 2",
+    },
+
+    {
+      title: "COMMENT",
+      dataIndex: "comment",
+      width: 220,
     },
   ];
 

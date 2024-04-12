@@ -53,9 +53,8 @@ function UpdateRateMetaData({ recall, setRecall, setModal, modal }) {
   const [bonusRate, setBonusRate] = useState();
   const [selectedCountry, setSelectedCountry] = useState();
   const [rateMeta, setRateMeta] = useState();
-  const [allowKyc, setAllowKyc] = useState(
-    rateItem?.allowTransferPreKCY || false
-  );
+  const [allowKyc, setAllowKyc] = useState();
+  const [outsideCountry, setOutsideCountry] = useState();
   const [kycThreshold, setKycThreshold] = useState();
 
   const [allowMin, setAllowMin] = useState(
@@ -69,6 +68,8 @@ function UpdateRateMetaData({ recall, setRecall, setModal, modal }) {
 
   useEffect(() => {
     setAutoPayout(rateItem?.autoPayout);
+    setAllowKyc(rateItem?.allowTransferPreKCY);
+    setOutsideCountry(rateItem?.allowTransactionOutsideCountryOfResidence);
   }, []);
 
   const [allowMinTf, setAllowMinTf] = useState(false);
@@ -752,6 +753,25 @@ function UpdateRateMetaData({ recall, setRecall, setModal, modal }) {
                     }}
                   >
                     <div>
+                      <div>Allow Transaction outside country of residence</div>
+                      <div style={{ color: "#6b6b6b", fontSize: "12px" }}>
+                        This is to allow transfers outside country of residence
+                      </div>
+                    </div>
+                    <Switch
+                      onClick={() => {
+                        setOutsideCountry(!outsideCountry);
+                      }}
+                      checked={outsideCountry}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div>
                       <div>Allow KYC Threshold</div>
                       <div style={{ color: "#6b6b6b", fontSize: "12px" }}>
                         All Users in this category are to transfer pre KYC
@@ -838,8 +858,8 @@ function UpdateRateMetaData({ recall, setRecall, setModal, modal }) {
                         transferBonusThresh || rateItem?.transferBonusThreshold,
                       transferBonusRateValue:
                         bonusRate || rateItem?.transferBonusRateValue,
-                      allowTransferPreKCY:
-                        allowKyc?.value || rateItem?.allowTransferPreKCY,
+                      allowTransferPreKCY: allowKyc,
+                      allowTransactionOutsideCountryOfResidence: outsideCountry,
                       kycThreshold: kycThreshold || rateItem?.kycThreshold,
                       currency: {
                         id: selectedCountry?.id || rateItem?.currency?.id,
