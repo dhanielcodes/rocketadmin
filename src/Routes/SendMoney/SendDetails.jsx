@@ -75,7 +75,7 @@ export default function SendDetails({
       console.log(err);
     },
   });
-  console.log(details);
+  console.log(details, user);
   console.log(rates, "jklssds");
   return (
     <Content>
@@ -178,17 +178,31 @@ export default function SendDetails({
             <p className="">Sending Currency</p>
 
             <div className="cont1">
-              <CountryListSendMoney
-                onChange={(e) => {
-                  setSelectedCountry(e);
-                  setDetails({
-                    ...details,
-                    fromCurrencyId: e?.id,
-                  });
-                }}
-                setSelected={setSelectedCountry}
-                value={selectedCountry}
-              />
+              {user?.allowMultiCurrencyTrading ? (
+                <CountryList
+                  onChange={(e) => {
+                    setSelectedCountry(e);
+                    setDetails({
+                      ...details,
+                      fromCurrencyId: e?.id,
+                    });
+                  }}
+                  setSelected={setSelectedCountry}
+                  value={selectedCountry}
+                />
+              ) : (
+                <CountryListSendMoney
+                  onChange={(e) => {
+                    setSelectedCountry(e);
+                    setDetails({
+                      ...details,
+                      fromCurrencyId: e?.id,
+                    });
+                  }}
+                  setSelected={setSelectedCountry}
+                  value={selectedCountry}
+                />
+              )}
               <InputNumber
                 className="input"
                 placeholder="Enter Amount"

@@ -7,7 +7,9 @@ import CustomTable from "../reuseables/CustomTable";
 import { kFormatter3, removeDup } from "../utils/format";
 import {
   activateAccount,
+  allowusermulticurrency,
   deactivateAccount,
+  disallowusermulticurrency,
   getUsers,
   suspendAccount,
   updateUserWatchList,
@@ -21,6 +23,8 @@ import {
 } from "@arco-design/web-react/icon";
 import { Dropdown, Input, Menu } from "@arco-design/web-react";
 import UpdateAgentCustomerRates from "../modals/UpdateAgentCustomerRates";
+import { Switch } from "@arco-design/web-react";
+
 const Droplist = ({
   id,
   name,
@@ -256,6 +260,40 @@ function Customers() {
     },
   });
 
+  const {
+    mutate: allowMultiCurrencyMutation,
+    isLoading: allowMultiCurrencyLoading,
+  } = useMutation({
+    mutationFn: allowusermulticurrency,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
+  const {
+    mutate: disallowusermulticurrencyMutation,
+    isLoading: disallowusermulticurrencyLoading,
+  } = useMutation({
+    mutationFn: disallowusermulticurrency,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
   console.log(customers);
   const inputRef = useRef(null);
 
@@ -288,6 +326,11 @@ function Customers() {
       title: "ID VERIFICATION",
       dataIndex: "idNumber",
       width: 190,
+    },
+    {
+      title: "MULTIPLE CURRENCY TRADING",
+      dataIndex: "multiCurrencySwitch",
+      width: 220,
     },
     {
       title: "EMAIL",
@@ -538,6 +581,26 @@ function Customers() {
               </Link>
             </Dropdown>
           </p>
+        </div>
+      ),
+      multiCurrencySwitch: (
+        <div>
+          <Switch
+            loading={
+              disallowusermulticurrencyLoading || allowMultiCurrencyLoading
+            }
+            /* disabled={
+              disallowusermulticurrencyLoading || allowMultiCurrencyLoading
+            } */
+            onClick={() => {
+              if (item?.allowMultiCurrencyTrading) {
+                disallowusermulticurrencyMutation(item?.userId);
+              } else {
+                allowMultiCurrencyMutation(item?.userId);
+              }
+            }}
+            checked={item?.allowMultiCurrencyTrading}
+          />
         </div>
       ),
       idNumber: (
