@@ -7,6 +7,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import CountryFlag from "react-country-flag";
 import { kFormatter3, kFormatter2, kFormatter4 } from "../../utils/format";
 import {
+  TodayLogss,
   Tranx,
   addcommenttotransaction,
   cancelTransaction,
@@ -957,7 +958,7 @@ const DroplistCancelled = ({ action, setModal, setUserId, viewDetails }) => (
   </Menu>
 );
 
-function TransferLogsTable({ category, showFilter = false }) {
+function TransferLogsTable({ category, showFilter = false, typeee }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
@@ -972,8 +973,9 @@ function TransferLogsTable({ category, showFilter = false }) {
     refetch: refetchingTwo,
     isFetching,
   } = useQuery({
-    queryKey: ["Tranx"],
-    queryFn: () => Tranx(userWe, category),
+    queryKey: typeee === "Today" ? ["TodayLogss"] : ["Tranx"],
+    queryFn: () =>
+      typeee === "Today" ? TodayLogss() : Tranx(userWe, category),
   });
 
   const [modal, setModal] = useState(false);
@@ -1197,7 +1199,7 @@ function TransferLogsTable({ category, showFilter = false }) {
       width: 200,
     },
     {
-      title: "GBP AMOUNT",
+      title: "AMOUNT",
       dataIndex: "newPaymentAmount",
       width: 120,
     },
@@ -1209,7 +1211,7 @@ function TransferLogsTable({ category, showFilter = false }) {
       width: 120,
     },
     {
-      title: "FOREIGN CURRENCY AMOUNT",
+      title: "FOREX AMOUNT",
       dataIndex: "receivedAmount",
       render: (ire) => kFormatter3(ire),
       width: 260,
@@ -1581,7 +1583,54 @@ function TransferLogsTable({ category, showFilter = false }) {
           {item?.transactionLocation?.currency?.code || "NGN"}
         </div>
       ),
-
+      paymentRef: (
+        <div
+          style={{
+            textDecoration: "none",
+          }}
+          onClick={() => {
+            localStorage.setItem("transDetails", JSON.stringify(item));
+            navigate("/transaction-details");
+          }}
+        >
+          <p
+            style={{
+              color: "blue",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {item?.paymentRef}
+          </p>
+        </div>
+      ),
+      userId: (
+        <div
+          style={{
+            textDecoration: "none",
+          }}
+          onClick={() => {
+            //localStorage.setItem("customer_details", JSON.stringify(item));
+            navigate(
+              `/customers-details?from=customer&userId=${JSON.stringify(
+                item?.userId
+              )}`
+            );
+          }}
+        >
+          <p
+            style={{
+              color: "blue",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {item?.userId}
+          </p>
+        </div>
+      ),
       countryo: (
         <div
           style={{
@@ -1645,7 +1694,9 @@ function TransferLogsTable({ category, showFilter = false }) {
     <Content>
       <div className="tablecontent">
         <div className="content">
-          <div className="heading">Transfer List</div>
+          <div className="heading">
+            {typeee === "Today" ? "Today's Logs" : "Transfer List"}
+          </div>
         </div>
         {/*   <div className="top">
           <SearchInput placeholder="Search Records" className="SearchRecords" />
