@@ -1166,6 +1166,24 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
       width: 190,
     },
     {
+      title: "AMOUNT",
+      dataIndex: "newPaymentAmount",
+      width: 120,
+    },
+
+    {
+      title: "RATE",
+      dataIndex: "rate",
+      render: (ire) => kFormatter3(ire),
+      width: 120,
+    },
+    {
+      title: "FOREX AMOUNT",
+      dataIndex: "receivedAmount",
+      render: (ire) => kFormatter3(ire),
+      width: 260,
+    },
+    {
       title: "SENDER",
       dataIndex: "senderName",
       width: 190,
@@ -1198,24 +1216,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
       dataIndex: "tnxLocation",
       width: 200,
     },
-    {
-      title: "AMOUNT",
-      dataIndex: "newPaymentAmount",
-      width: 120,
-    },
 
-    {
-      title: "RATE",
-      dataIndex: "rate",
-      render: (ire) => kFormatter3(ire),
-      width: 120,
-    },
-    {
-      title: "FOREX AMOUNT",
-      dataIndex: "receivedAmount",
-      render: (ire) => kFormatter3(ire),
-      width: 260,
-    },
     {
       title: "COLLECTION TYPE",
       dataIndex: "collectionType",
