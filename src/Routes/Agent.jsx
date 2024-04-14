@@ -5,7 +5,9 @@ import { styled } from "styled-components";
 import InviteAgent from "../COMPONENTS/InviteAgent";
 import {
   activateAccount,
+  allowusermulticurrency,
   deactivateAccount,
+  disallowusermulticurrency,
   getAgents,
   suspendAccount,
   updateUserWatchList,
@@ -14,7 +16,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import CustomTable from "../reuseables/CustomTable";
 import { Link } from "react-router-dom";
 import { removeDup } from "../utils/format";
-import { Dropdown, Input, Menu } from "@arco-design/web-react";
+import { Dropdown, Input, Menu, Switch } from "@arco-design/web-react";
 import {
   IconEye,
   IconMoreVertical,
@@ -281,6 +283,11 @@ function Agent() {
       width: 190,
     },
     {
+      title: "MULTIPLE CURRENCY TRADING",
+      dataIndex: "multiCurrencySwitch",
+      width: 220,
+    },
+    {
       title: "EMAIL",
       dataIndex: "email",
       width: 220,
@@ -361,6 +368,40 @@ function Agent() {
       //render: () => "Other 2",
     },
   ];
+  const {
+    mutate: allowMultiCurrencyMutation,
+    isLoading: allowMultiCurrencyLoading,
+  } = useMutation({
+    mutationFn: allowusermulticurrency,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
+  const {
+    mutate: disallowusermulticurrencyMutation,
+    isLoading: disallowusermulticurrencyLoading,
+  } = useMutation({
+    mutationFn: disallowusermulticurrency,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
 
   const [rate, setRate] = useState();
   const newData = agents?.data?.map((item) => {
@@ -505,6 +546,26 @@ function Agent() {
           }}
         >
           {item?.isKYCCompleted ? "Verified" : "Not Verified"}
+        </div>
+      ),
+      multiCurrencySwitch: (
+        <div>
+          <Switch
+            loading={
+              disallowusermulticurrencyLoading || allowMultiCurrencyLoading
+            }
+            /* disabled={
+              disallowusermulticurrencyLoading || allowMultiCurrencyLoading
+            } */
+            onClick={() => {
+              if (item?.allowMultiCurrencyTrading) {
+                disallowusermulticurrencyMutation(item?.userId);
+              } else {
+                allowMultiCurrencyMutation(item?.userId);
+              }
+            }}
+            checked={item?.allowMultiCurrencyTrading}
+          />
         </div>
       ),
       userStatus: (

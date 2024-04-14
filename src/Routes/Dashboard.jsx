@@ -494,7 +494,7 @@ function Dashboard() {
             <CountryRates />
           </div> */}
           <div id="logs">
-            <TodayLogs />
+            <TransferLogsTable typeee="Today" />
           </div>
           <NewCustomerList />
         </Content>

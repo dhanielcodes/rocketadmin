@@ -88,7 +88,7 @@ export default function CustomerDetailsTop({
                 marginRight: "10px",
               }}
             >
-              {user?.firstName + " " + user?.surName}
+              {customerDetails?.firstName + " " + customerDetails?.surName}
             </div>
 
             <div
@@ -113,7 +113,7 @@ export default function CustomerDetailsTop({
                   marginBottom: "3%",
                 }}
               >
-                {user?.userId}
+                {customerDetails?.userId}
               </div>
             </div>
 
@@ -139,7 +139,7 @@ export default function CustomerDetailsTop({
                   marginBottom: "3%",
                 }}
               >
-                {user?.dateCreated}
+                {customerDetails?.dateCreated}
               </div>
             </div>
             <div
@@ -164,7 +164,7 @@ export default function CustomerDetailsTop({
                   marginBottom: "3%",
                 }}
               >
-                {user?.dob}
+                {customerDetails?.dob}
               </div>
             </div>
             <div
@@ -189,7 +189,7 @@ export default function CustomerDetailsTop({
                   marginBottom: "3%",
                 }}
               >
-                {user?.agentId || "None"}
+                {customerDetails?.agentId || "None"}
               </div>
             </div>
           </div>
@@ -204,23 +204,23 @@ export default function CustomerDetailsTop({
               style={{
                 padding: "6px",
                 borderRadius: "7px",
-                background: user?.status ? "#2dda58" : "#ff6363",
+                background: customerDetails?.status ? "#2dda58" : "#ff6363",
                 color: "white",
                 width: "fit-content",
                 fontWeight: "700",
                 marginLeft: "auto",
               }}
             >
-              {user?.status ? "Active" : "Inactive"}
+              {customerDetails?.status ? "Active" : "Inactive"}
             </div>
             <div
               style={{
                 padding: "6px",
                 borderRadius: "7px",
                 fontSize: "14px",
-                background: user?.isKYCCompleted
+                background: customerDetails?.isKYCCompleted
                   ? "#2dda58"
-                  : user?.isKYCCompleted
+                  : customerDetails?.isKYCCompleted
                   ? "#ffe063"
                   : "#ff6363",
                 color: "white",
@@ -231,7 +231,8 @@ export default function CustomerDetailsTop({
                 marginLeft: "auto",
               }}
             >
-              KYC: {user?.isKYCCompleted ? "Verified" : "Not Verified"}
+              KYC:{" "}
+              {customerDetails?.isKYCCompleted ? "Verified" : "Not Verified"}
             </div>
             <br />
             <hr />
@@ -250,7 +251,7 @@ export default function CustomerDetailsTop({
               </div> */}
               <div
                 onClick={() => {
-                  navigate(`/send-money?id=${user?.userId}&step=2`);
+                  navigate(`/send-money?id=${customerDetails?.userId}&step=2`);
                   localStorage.setItem("userSend", JSON.stringify(user));
                 }}
                 style={{
@@ -307,7 +308,7 @@ export default function CustomerDetailsTop({
                 marginBottom: "3%",
               }}
             >
-              {user?.address}
+              {customerDetails?.address}
             </div>
           </div>
 
@@ -333,7 +334,7 @@ export default function CustomerDetailsTop({
                 marginBottom: "3%",
               }}
             >
-              {user?.phone}
+              {customerDetails?.phone}
             </div>
           </div>
           <div
@@ -358,7 +359,7 @@ export default function CustomerDetailsTop({
                 marginBottom: "3%",
               }}
             >
-              {user?.email}
+              {customerDetails?.email}
             </div>
           </div>
         </div>
