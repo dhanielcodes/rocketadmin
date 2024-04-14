@@ -1513,14 +1513,19 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
             cursor: "pointer",
           }}
           onClick={() => {
+            const select =
+              typeof item?.transactionLocation === "string"
+                ? JSON.parse(item?.transactionLocation)
+                : item?.transactionLocation;
+
             setMarkers([
               {
-                lat: item?.transactionLocation?.latitude || 6.52438,
-                lng: item?.transactionLocation?.longitude || 3.37921,
+                lat: Number(select?.latitude) || 6.52438,
+                lng: Number(select?.longitude) || 3.37921,
               },
             ]);
             setShowLocation(
-              item?.transactionLocation || {
+              select || {
                 ip: "197.210.8.165",
                 continent_code: "AF",
                 continent_name: "Africa",
@@ -1532,7 +1537,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                 state_prov: "Lagos",
                 state_code: "NG-LA",
                 district: "",
-                city: "Somolu",
+                city: "Obalende",
                 zipcode: "101245",
                 latitude: "6.52438",
                 longitude: "3.37921",
@@ -1652,7 +1657,10 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     };
   });
 
-  console.log(showLocation);
+  const selectedLocation =
+    typeof showLocation === "string" ? JSON.parse(showLocation) : showLocation;
+
+  console.log(selectedLocation, "hello");
   useEffect(() => {
     refetcDate(date?.[0], date?.[1]);
   }, [date?.[1]]);
@@ -1853,7 +1861,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                   }}
                 >
                   <div>Country</div>
-                  <div>{showLocation?.country_name}</div>
+                  <div>{selectedLocation?.country_name}</div>
                 </div>
                 <div
                   style={{
@@ -1864,7 +1872,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                   }}
                 >
                   <div>State</div>
-                  <div>{showLocation?.state_prov}</div>
+                  <div>{selectedLocation?.state_prov}</div>
                 </div>
                 <div
                   style={{
@@ -1875,7 +1883,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                   }}
                 >
                   <div>City</div>
-                  <div>{showLocation?.city}</div>
+                  <div>{selectedLocation?.city}</div>
                 </div>
                 <div
                   style={{
@@ -1886,7 +1894,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                   }}
                 >
                   <div>IP Address</div>
-                  <div>{showLocation?.ip}</div>
+                  <div>{selectedLocation?.ip}</div>
                 </div>
                 <div
                   style={{
@@ -1897,7 +1905,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                   }}
                 >
                   <div>Currency</div>
-                  <div>{showLocation?.currency?.code}</div>
+                  <div>{selectedLocation?.currency?.code}</div>
                 </div>
                 <div
                   style={{
@@ -1908,7 +1916,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                   }}
                 >
                   <div>TImezone</div>
-                  <div>{showLocation?.time_zone?.name}</div>
+                  <div>{selectedLocation?.time_zone?.name}</div>
                 </div>
               </div>
             </div>
