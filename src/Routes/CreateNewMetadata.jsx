@@ -56,6 +56,8 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
   const [allowKyc, setAllowKyc] = useState(
     rateItem?.allowTransferPreKCY || false
   );
+  const [outsideCountry, setOutsideCountry] = useState(false);
+
   const [kycThreshold, setKycThreshold] = useState();
 
   const [allowMin, setAllowMin] = useState(
@@ -749,6 +751,25 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                     }}
                   >
                     <div>
+                      <div>Allow Transaction outside country of residence</div>
+                      <div style={{ color: "#6b6b6b", fontSize: "12px" }}>
+                        This is to allow transfers outside country of residence
+                      </div>
+                    </div>
+                    <Switch
+                      onClick={() => {
+                        setOutsideCountry(!outsideCountry);
+                      }}
+                      checked={outsideCountry}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div>
                       <div>Allow KYC Threshold</div>
                       <div style={{ color: "#6b6b6b", fontSize: "12px" }}>
                         All Users in this category are to transfer pre KYC
@@ -830,89 +851,42 @@ function CreateNewMetadata({ recall, setRecall, setModal, modal }) {
                     }
                   }
                   if (step === 3) {
-                    if (rateItem) {
-                      mutate({
-                        id: rateItem?.id,
-                        updatedBy: userDetails?.userId,
-                        name: name || rateItem?.name,
-                        description: desc || rateItem?.description,
-                        minTransferLimit:
-                          minTransfer || rateItem?.minTransferLimit,
-                        maxTransferLimit:
-                          maxTransfer || rateItem?.maxTransferLimit,
-                        dailyLimit: dailyTransfer || rateItem?.dailyLimit,
-                        weeklyLimit: weeklyTransfer || rateItem?.weeklyLimit,
-                        monthlyLimit: monthlyTransfer || rateItem?.monthlyLimit,
-                        annualLimit: annualTransfer || rateItem?.annualLimit,
-                        proofOfPaymentThresholdAmount:
-                          popThresh || rateItem?.proofOfPaymentThresholdAmount,
-                        sourceOfFundThresholdAmount:
-                          sofThresh || rateItem?.sourceOfFundThresholdAmount,
-                        transferBonusThreshold:
-                          transferBonusThresh ||
-                          rateItem?.transferBonusThreshold,
-                        transferBonusRateValue:
-                          bonusRate || rateItem?.transferBonusRateValue,
-                        allowTransferPreKCY:
-                          allowKyc?.value || rateItem?.allowTransferPreKCY,
-                        kycThreshold: kycThreshold || rateItem?.kycThreshold,
-                        currency: {
-                          id: selectedCountry?.id || rateItem?.currency?.id,
-                        },
-                        role: {
-                          id: rateMeta?.value || rateItem?.role?.id,
-                        },
-                        allowBelowMinimum:
-                          allowMin || rateItem?.allowBelowMinimum,
-                        belowMinimumChargeType:
-                          allowMinTf || rateItem?.belowMinimumChargeType,
-                        belowMinimumCharges:
-                          allowMinFee || rateItem?.belowMinimumCharges,
-                        allowAboveMaximum:
-                          allowMax || rateItem?.allowAboveMaximum,
-                        aboveMaximumChargeType:
-                          allowMaxTf || rateItem?.aboveMaximumChargeType,
-                        aboveMaximumLimitCharges:
-                          allowMaxFee || rateItem?.aboveMaximumLimitCharges,
-                        bonusRateValue: bonusRate || rateItem?.bonusRateValue,
-                      });
-                    } else {
-                      mutate({
-                        updatedBy: userDetails?.userId,
-                        currency: {
-                          id: selectedCountry?.id,
-                        },
-                        role: {
-                          id: rateMeta?.value,
-                        },
-                        name: name,
-                        description: desc,
+                    mutate({
+                      updatedBy: userDetails?.userId,
+                      currency: {
+                        id: selectedCountry?.id,
+                      },
+                      role: {
+                        id: rateMeta?.value,
+                      },
+                      name: name,
+                      description: desc,
 
-                        dailyLimit: dailyTransfer,
-                        weeklyLimit: weeklyTransfer,
-                        monthlyLimit: monthlyTransfer,
-                        annualLimit: annualTransfer,
+                      dailyLimit: dailyTransfer,
+                      weeklyLimit: weeklyTransfer,
+                      monthlyLimit: monthlyTransfer,
+                      annualLimit: annualTransfer,
 
-                        proofOfPaymentThresholdAmount: popThresh,
-                        sourceOfFundThresholdAmount: sofThresh,
+                      proofOfPaymentThresholdAmount: popThresh,
+                      sourceOfFundThresholdAmount: sofThresh,
 
-                        transferBonusThreshold: transferBonusThresh,
-                        allowTransferPreKCY: allowKyc?.value,
+                      transferBonusThreshold: transferBonusThresh,
+                      allowTransferPreKCY: allowKyc?.value,
 
-                        minTransferLimit: minTransfer,
-                        allowBelowMinimum: allowMin,
-                        belowMinimumChargeType: allowMinTf || "",
-                        belowMinimumCharges: allowMinFee || "",
+                      minTransferLimit: minTransfer,
+                      allowBelowMinimum: allowMin,
+                      belowMinimumChargeType: allowMinTf || "",
+                      belowMinimumCharges: allowMinFee || "",
+                      allowTransactionOutsideCountryOfResidence: outsideCountry,
 
-                        maxTransferLimit: maxTransfer,
-                        allowAboveMaximum: allowMax,
-                        aboveMaximumChargeType: allowMaxTf || "",
-                        aboveMaximumLimitCharges: allowMaxFee || "",
-                        autoPayout: autoPayout,
-                        kycThreshold: kycThreshold || 0,
-                        bonusRateValue: bonusRate || 0,
-                      });
-                    }
+                      maxTransferLimit: maxTransfer,
+                      allowAboveMaximum: allowMax,
+                      aboveMaximumChargeType: allowMaxTf || "",
+                      aboveMaximumLimitCharges: allowMaxFee || "",
+                      autoPayout: autoPayout,
+                      kycThreshold: kycThreshold || 0,
+                      bonusRateValue: bonusRate || 0,
+                    });
                   }
                 }}
                 className="confirm"

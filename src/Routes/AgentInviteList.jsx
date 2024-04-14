@@ -183,6 +183,11 @@ function AgentInviteList() {
 
   const columns = [
     {
+      title: "S/N",
+      dataIndex: "index",
+      width: 100,
+    },
+    {
       title: "ACTION",
       dataIndex: "action2",
       width: 170,
@@ -193,11 +198,6 @@ function AgentInviteList() {
       width: 140,
 
       //render: () => "Other 2",
-    },
-    {
-      title: "AGENT ID",
-      dataIndex: "id",
-      width: 100,
     },
 
     {
@@ -275,9 +275,10 @@ function AgentInviteList() {
   ];
   const [rate, setRate] = useState();
 
-  const newData = customers?.data?.map((item) => {
+  const newData = customers?.data?.map((item, index) => {
     return {
       ...item,
+      index: index + 1,
       action: (
         <p
           onClick={() => {

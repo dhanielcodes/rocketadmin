@@ -17,15 +17,28 @@ const modalStyles = {
     alignItems: "center",
   },
 
-  modal: {
-    backgroundColor: "#fff",
-    borderRadius: "10px",
-    boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
-    position: "relative",
-    padding: "20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+  modal: (width) => {
+    return {
+      backgroundColor: "#fff",
+      borderRadius: "10px",
+      boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+      position: "relative",
+      padding: "20px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      width,
+    };
+  },
+  modal2: (width) => {
+    return {
+      backgroundColor: "#fff",
+      borderRadius: "10px",
+      boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+      position: "relative",
+      padding: "20px",
+      width,
+    };
   },
 
   closeButton: {
@@ -36,24 +49,46 @@ const modalStyles = {
     cursor: "pointer",
   },
 
-  span: {
-    width: "300px",
-    display: "grid",
-    placeItems: "center",
-    justifyContent: "center",
+  span: (width) => {
+    return {
+      width: width || "300px",
+      display: "grid",
+      placeItems: "center",
+      justifyContent: "center",
+    };
+  },
+  span2: (width) => {
+    return {
+      width: width || "300px",
+    };
   },
 };
 
-function ReusableModal({ isOpen, onClose, children, width }) {
+function ReusableModal({
+  isOpen,
+  onClose,
+  children,
+  width,
+  center = true,
+  spanWidth,
+}) {
   if (!isOpen) return null;
 
   return (
     <div style={modalStyles.overlay}>
-      <div style={{ ...modalStyles.modal, width: width }}>
+      <div
+        style={center ? modalStyles.modal(width) : modalStyles.modal2(width)}
+      >
         <span onClick={onClose} style={modalStyles.closeButton}>
           &#x2715;
         </span>
-        <div style={modalStyles.span}>{children}</div>
+        <div
+          style={
+            center ? modalStyles.span(spanWidth) : modalStyles.span2(spanWidth)
+          }
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

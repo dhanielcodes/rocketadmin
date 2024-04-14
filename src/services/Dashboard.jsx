@@ -240,6 +240,19 @@ export const deactivateAccount = async (body) => {
   return data;
 };
 
+export const allowusermulticurrency = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/allowusermulticurrency/${body}`
+  );
+  return data;
+};
+
+export const disallowusermulticurrency = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/disallowusermulticurrency/${body}`
+  );
+  return data;
+};
 export const getUsers = async (id = 5) => {
   const { data } = await Axios.get(`${baseurl}/getuserbyrole/6`);
   return data;

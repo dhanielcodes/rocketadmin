@@ -23,11 +23,17 @@ import {
 import AmountFormatter from "../../reuseables/AmountFormatter";
 import { IconEye, IconMoreVertical } from "@arco-design/web-react/icon";
 import { DatePicker, Dropdown, Input, Menu } from "@arco-design/web-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReusableModal from "../../reuseables/ReusableModal";
 import Msg from "../../reuseables/Msg";
 import Btn from "../../reuseables/Btn";
 import toast from "react-hot-toast";
+import {
+  GoogleMap,
+  InfoWindow,
+  useJsApiLoader,
+  Marker,
+} from "@react-google-maps/api";
 const TextArea = Input.TextArea;
 
 const Droplist = ({ action, setModal, setUserId, viewDetails }) => (
@@ -1173,16 +1179,22 @@ function TransferLogsTable({ category, showFilter = false }) {
     {
       title: "COUNTRY",
       dataIndex: "countryo",
-      width: 240,
+      width: 110,
 
       //render: () => "Other",
     },
+
     {
       title: "MOBILE",
       dataIndex: "beneficiaryPhone",
       width: 140,
 
       //render: () => "Other",
+    },
+    {
+      title: "TRX LOCATION",
+      dataIndex: "tnxLocation",
+      width: 200,
     },
     {
       title: "GBP AMOUNT",
@@ -1223,6 +1235,12 @@ function TransferLogsTable({ category, showFilter = false }) {
       width: 260,
       //render: () => "Other 2",
     },
+
+    {
+      title: "COMMENT",
+      dataIndex: "comment",
+      width: 220,
+    },
   ];
 
   const navigate = useNavigate();
@@ -1253,6 +1271,7 @@ function TransferLogsTable({ category, showFilter = false }) {
     ? data?.data || []
     : rates?.data;
 
+  const [showLocation, setShowLocation] = useState();
   console.log(lowData);
   const newData = lowData?.map((item) => {
     return {
@@ -1484,6 +1503,85 @@ function TransferLogsTable({ category, showFilter = false }) {
         </>
       ),
 
+      tnxLocation: (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            setMarkers([
+              {
+                lat: item?.transactionLocation?.latitude || 6.52438,
+                lng: item?.transactionLocation?.longitude || 3.37921,
+              },
+            ]);
+            setShowLocation(
+              item?.transactionLocation || {
+                ip: "197.210.8.165",
+                continent_code: "AF",
+                continent_name: "Africa",
+                country_code2: "NG",
+                country_code3: "NGA",
+                country_name: "Nigeria",
+                country_name_official: "Federal Republic of Nigeria",
+                country_capital: "Abuja",
+                state_prov: "Lagos",
+                state_code: "NG-LA",
+                district: "",
+                city: "Somolu",
+                zipcode: "101245",
+                latitude: "6.52438",
+                longitude: "3.37921",
+                is_eu: false,
+                calling_code: "+234",
+                country_tld: ".ng",
+                languages: "en-NG,ha,yo,ig,ff",
+                country_flag: "https://ipgeolocation.io/static/flags/ng_64.png",
+                geoname_id: "10482923",
+                isp: "MTN Nigeria",
+                connection_type: "",
+                organization: "MTN NIGERIA PREFIX",
+                country_emoji: "🇳🇬",
+                currency: {
+                  code: "NGN",
+                  name: "Nigerian Naira",
+                  symbol: "₦",
+                },
+                time_zone: {
+                  name: "Africa/Lagos",
+                  offset: 1,
+                  offset_with_dst: 1,
+                  current_time: "2024-04-12 12:07:03.673+0100",
+                  current_time_unix: 1712920023.673,
+                  is_dst: false,
+                  dst_savings: 0,
+                  dst_exists: false,
+                  dst_start: "",
+                  dst_end: "",
+                },
+              }
+            );
+          }}
+        >
+          <img
+            style={{
+              width: "14px",
+              height: "14px",
+              borderRadius: "1000px",
+            }}
+            src={
+              item?.transactionLocation?.country_flag ||
+              "https://ipgeolocation.io/static/flags/ng_64.png"
+            }
+            alt=""
+          />
+          &nbsp; &nbsp;
+          {item?.transactionLocation?.currency?.code || "NGN"}
+        </div>
+      ),
+
       countryo: (
         <div
           style={{
@@ -1505,6 +1603,7 @@ function TransferLogsTable({ category, showFilter = false }) {
     };
   });
 
+  console.log(showLocation);
   useEffect(() => {
     refetcDate(date?.[0], date?.[1]);
   }, [date?.[1]]);
@@ -1515,6 +1614,32 @@ function TransferLogsTable({ category, showFilter = false }) {
   console.log(newData);
   const [showDate, setShowDate] = useState(false);
   const [showRef, setShowRef] = useState(false);
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    /*   googleMapsApiKey: "AIzaSyD-_l9nxSDNe8aCG5iBVYjREj-R1DFyg2I", */
+    googleMapsApiKey: "AIzaSyC6wfkl5KXXDBYuP7BBVI8UbsC6xNfupZQ",
+  });
+
+  const onLoad = (map) => {
+    const bounds = new window.google.maps.LatLngBounds();
+    markers?.forEach(({ lat, lng }) => bounds.extend({ lat, lng }));
+    map.fitBounds(bounds);
+  };
+  const onLoad2 = (infoWindow) => {
+    console.log("infoWindow: ", infoWindow);
+  };
+
+  const onUnmount = useCallback(function callback(map) {
+    console.log(map);
+  }, []);
+
+  const [markers, setMarkers] = useState([]);
+
+  const containerStyle = {
+    width: "100%",
+    height: "100%",
+  };
 
   return (
     <Content>
@@ -1591,6 +1716,153 @@ function TransferLogsTable({ category, showFilter = false }) {
           Apidata={newData || []}
           tableColumns={columns}
         />
+
+        <ReusableModal
+          isOpen={showLocation}
+          width={"70%"}
+          spanWidth={"100%"}
+          center={false}
+          onClose={() => {
+            setShowLocation();
+            setMarkers([]);
+          }}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              position: "relative",
+              gridGap: "20px",
+              width: "100%",
+              marginTop: "30px",
+            }}
+          >
+            <div
+              style={{
+                width: "100%",
+              }}
+            >
+              {
+                <Map>
+                  {isLoaded && (
+                    <GoogleMap
+                      mapContainerStyle={containerStyle}
+                      onLoad={onLoad}
+                      onUnmount={onUnmount}
+                    >
+                      {markers?.map((item) => {
+                        return (
+                          <>
+                            <Marker
+                              position={{ lat: item?.lat, lng: item?.lng }}
+                              icon={
+                                "https://img.icons8.com/fluency/48/null/maps.png"
+                              }
+                            />
+                            <InfoWindow
+                              onLoad={onLoad2}
+                              position={{ lat: item?.lat, lng: item?.lng }}
+                            >
+                              <div>
+                                <h1>{item?.state}</h1>
+                              </div>
+                            </InfoWindow>
+                          </>
+                        );
+                      })}
+                    </GoogleMap>
+                  )}
+                </Map>
+              }
+            </div>
+            <div>
+              <div
+                style={{
+                  textAlign: "center",
+                  fontSize: "20px",
+                  marginBottom: "20px",
+                }}
+              >
+                Location Details
+              </div>
+              <div
+                style={{
+                  padding: " 0 20px",
+                  background: "#f1f1f1",
+                  borderRadius: "20px",
+                  border: "1px solid #dadada",
+                }}
+              >
+                <div
+                  style={{
+                    padding: "20px 0",
+                    borderBottom: "1px solid #dadada",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>Country</div>
+                  <div>{showLocation?.country_name}</div>
+                </div>
+                <div
+                  style={{
+                    padding: "20px 0",
+                    borderBottom: "1px solid #dadada",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>State</div>
+                  <div>{showLocation?.state_prov}</div>
+                </div>
+                <div
+                  style={{
+                    padding: "20px 0",
+                    borderBottom: "1px solid #dadada",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>City</div>
+                  <div>{showLocation?.city}</div>
+                </div>
+                <div
+                  style={{
+                    padding: "20px 0",
+                    borderBottom: "1px solid #dadada",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>IP Address</div>
+                  <div>{showLocation?.ip}</div>
+                </div>
+                <div
+                  style={{
+                    padding: "20px 0",
+                    borderBottom: "1px solid #dadada",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>Currency</div>
+                  <div>{showLocation?.currency?.code}</div>
+                </div>
+                <div
+                  style={{
+                    padding: "20px 0",
+                    borderBottom: "1px solid #dadada",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>TImezone</div>
+                  <div>{showLocation?.time_zone?.name}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ReusableModal>
 
         {modal && (
           <ReusableModal
@@ -1815,6 +2087,17 @@ function TransferLogsTable({ category, showFilter = false }) {
 }
 
 export default TransferLogsTable;
+
+const Map = styled.div`
+  height: 116.7%;
+  width: 51%;
+  transform: translate(-3.4%, -10.23%);
+  border-radius: 14px 0 0 14px;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+`;
 const Content = styled.div`
   button {
     background-color: transparent;
