@@ -417,6 +417,7 @@ function Customers() {
     },
   ];
   const [rate, setRate] = useState();
+  const [cus, setCus] = useState();
   const navigate = useNavigate();
 
   const newData = customers?.data?.map((item) => {
@@ -587,12 +588,14 @@ function Customers() {
         <div>
           <Switch
             loading={
-              disallowusermulticurrencyLoading || allowMultiCurrencyLoading
+              (item === cus && disallowusermulticurrencyLoading) ||
+              (item === cus && allowMultiCurrencyLoading)
             }
             /* disabled={
               disallowusermulticurrencyLoading || allowMultiCurrencyLoading
             } */
             onClick={() => {
+              setCus(item);
               if (item?.allowMultiCurrencyTrading) {
                 disallowusermulticurrencyMutation(item?.userId);
               } else {
