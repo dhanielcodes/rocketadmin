@@ -29,12 +29,7 @@ import ReusableModal from "../../reuseables/ReusableModal";
 import Msg from "../../reuseables/Msg";
 import Btn from "../../reuseables/Btn";
 import toast from "react-hot-toast";
-import {
-  GoogleMap,
-  InfoWindow,
-  useJsApiLoader,
-  Marker,
-} from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 const TextArea = Input.TextArea;
 
 const Droplist = ({ action, setModal, setUserId, viewDetails }) => (
@@ -1519,74 +1514,40 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                 ? JSON.parse(item?.transactionLocation)
                 : item?.transactionLocation;
 
-            setMarkers([
-              {
+            if (select) {
+              setShowLocation(select);
+              setMarkers({
                 lat: Number(select?.latitude) || 6.52438,
                 lng: Number(select?.longitude) || 3.37921,
-              },
-            ]);
-            setShowLocation(
-              select || {
-                ip: "197.210.8.165",
-                continent_code: "AF",
-                continent_name: "Africa",
-                country_code2: "NG",
-                country_code3: "NGA",
-                country_name: "Nigeria",
-                country_name_official: "Federal Republic of Nigeria",
-                country_capital: "Abuja",
-                state_prov: "Lagos",
-                state_code: "NG-LA",
-                district: "",
-                city: "Obalende",
-                zipcode: "101245",
-                latitude: "6.52438",
-                longitude: "3.37921",
-                is_eu: false,
-                calling_code: "+234",
-                country_tld: ".ng",
-                languages: "en-NG,ha,yo,ig,ff",
-                country_flag: "https://ipgeolocation.io/static/flags/ng_64.png",
-                geoname_id: "10482923",
-                isp: "MTN Nigeria",
-                connection_type: "",
-                organization: "MTN NIGERIA PREFIX",
-                country_emoji: "🇳🇬",
-                currency: {
-                  code: "NGN",
-                  name: "Nigerian Naira",
-                  symbol: "₦",
-                },
-                time_zone: {
-                  name: "Africa/Lagos",
-                  offset: 1,
-                  offset_with_dst: 1,
-                  current_time: "2024-04-12 12:07:03.673+0100",
-                  current_time_unix: 1712920023.673,
-                  is_dst: false,
-                  dst_savings: 0,
-                  dst_exists: false,
-                  dst_start: "",
-                  dst_end: "",
-                },
-              }
-            );
+              });
+            }
           }}
         >
-          <img
-            style={{
-              width: "14px",
-              height: "14px",
-              borderRadius: "1000px",
-            }}
-            src={
-              item?.transactionLocation?.country_flag ||
-              "https://ipgeolocation.io/static/flags/ng_64.png"
-            }
-            alt=""
-          />
+          {typeof item?.transactionLocation === "string" ? (
+            <img
+              style={{
+                width: "14px",
+                height: "14px",
+                borderRadius: "1000px",
+              }}
+              src={JSON.parse(item?.transactionLocation)?.country_flag}
+              alt=""
+            />
+          ) : (
+            <img
+              style={{
+                width: "14px",
+                height: "14px",
+                borderRadius: "1000px",
+              }}
+              src={item?.transactionLocation?.country_flag}
+              alt=""
+            />
+          )}
           &nbsp; &nbsp;
-          {item?.transactionLocation?.currency?.code || "NGN"}
+          {typeof item?.transactionLocation === "string"
+            ? JSON.parse(item?.transactionLocation)?.currency?.code
+            : item?.transactionLocation?.currency?.code || "-"}
         </div>
       ),
       paymentRef: (
@@ -1676,28 +1637,26 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     /*   googleMapsApiKey: "AIzaSyD-_l9nxSDNe8aCG5iBVYjREj-R1DFyg2I", */
-    googleMapsApiKey: "AIzaSyC6wfkl5KXXDBYuP7BBVI8UbsC6xNfupZQ",
+    googleMapsApiKey: "AIzaSyD-_l9nxSDNe8aCG5iBVYjREj-R1DFyg2I",
   });
+
+  const [markers, setMarkers] = useState({});
 
   const onLoad = (map) => {
     const bounds = new window.google.maps.LatLngBounds();
-    markers?.forEach(({ lat, lng }) => bounds.extend({ lat, lng }));
+    bounds.extend(markers);
     map.fitBounds(bounds);
-  };
-  const onLoad2 = (infoWindow) => {
-    console.log("infoWindow: ", infoWindow);
   };
 
   const onUnmount = useCallback(function callback(map) {
     console.log(map);
   }, []);
 
-  const [markers, setMarkers] = useState([]);
-
   const containerStyle = {
     width: "100%",
     height: "100%",
   };
+  console.log(markers);
 
   return (
     <Content>
@@ -1784,7 +1743,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
           center={false}
           onClose={() => {
             setShowLocation();
-            setMarkers([]);
+            setMarkers({});
           }}
         >
           <div
@@ -1810,26 +1769,10 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                       onLoad={onLoad}
                       onUnmount={onUnmount}
                     >
-                      {markers?.map((item) => {
-                        return (
-                          <>
-                            <Marker
-                              position={{ lat: item?.lat, lng: item?.lng }}
-                              icon={
-                                "https://img.icons8.com/fluency/48/null/maps.png"
-                              }
-                            />
-                            <InfoWindow
-                              onLoad={onLoad2}
-                              position={{ lat: item?.lat, lng: item?.lng }}
-                            >
-                              <div>
-                                <h1>{item?.state}</h1>
-                              </div>
-                            </InfoWindow>
-                          </>
-                        );
-                      })}
+                      <Marker
+                        position={markers}
+                        icon={"https://img.icons8.com/fluency/48/null/maps.png"}
+                      />
                     </GoogleMap>
                   )}
                 </Map>
