@@ -91,7 +91,12 @@ export default function Details({ clientDetails, setViewRisk }) {
           <div
             style={{
               fontSize: "32px",
-              color: "#FDA333",
+              color:
+                clientDetails?.userRiskLevel === "Low"
+                  ? "#37d744"
+                  : clientDetails?.userRiskLevel === "Medium"
+                  ? "#FFC371"
+                  : "#ff6363",
               textTransform: "uppercase",
               fontWeight: 600,
               textAlign: "center",

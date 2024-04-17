@@ -40,7 +40,7 @@ function OurRatesTable({ recall }) {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
       }, */
-      width: 40,
+      width: 80,
     },
     {
       title: "CREATED BY",
