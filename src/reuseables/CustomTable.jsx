@@ -125,13 +125,14 @@ const CustomTable = ({
   console.log(reportData, date, date?.[1] ? true : false, "reportData");
   return (
     <Content>
-      <div
-        style={{
-          padding: "20px",
-          width: "300px",
-        }}
-      >
-        {showDateFilter && (
+      {showDateFilter && (
+        <div
+          style={{
+            padding: "20px",
+            width: "300px",
+          }}
+        >
+          (
           <DatePicker.RangePicker
             style={{
               width: "100%",
@@ -151,8 +152,9 @@ const CustomTable = ({
               setDate(e);
             }}
           />
-        )}
-      </div>
+          )
+        </div>
+      )}
       <Table
         loading={loading}
         noDataElement={noData}

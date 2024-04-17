@@ -2,27 +2,29 @@ import { useRef, useState } from "react";
 import BodyLayout from "../reuseables/BodyLayout";
 import { styled } from "styled-components";
 //import SearchInput from "../reuseables/SearchInput";
-import InviteAgent from "../COMPONENTS/InviteAgent";
+import CustomerFilter from "../COMPONENTS/CustomerFilter";
+import CustomTable from "../reuseables/CustomTable";
+import { kFormatter3, removeDup } from "../utils/format";
 import {
   activateAccount,
   allowusermulticurrency,
   deactivateAccount,
   disallowusermulticurrency,
-  getAgents,
+  getUsers,
   suspendAccount,
   updateUserWatchList,
 } from "../services/Dashboard";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import CustomTable from "../reuseables/CustomTable";
-import { Link } from "react-router-dom";
-import { removeDup } from "../utils/format";
-import { Dropdown, Input, Menu, Switch } from "@arco-design/web-react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   IconEye,
   IconMoreVertical,
   IconSearch,
 } from "@arco-design/web-react/icon";
+import { Dropdown, Input, Menu } from "@arco-design/web-react";
 import UpdateAgentCustomerRates from "../modals/UpdateAgentCustomerRates";
+import { Switch } from "@arco-design/web-react";
+
 const Droplist = ({
   id,
   name,
@@ -134,7 +136,7 @@ const Droplist = ({
           marginLeft: "10px",
         }}
       >
-        {stateStatus === "Active" ? "Deactivate Agent" : "Activate Agent"}
+        {stateStatus === "Active" ? "Deactivate Customer" : "Activate Customer"}
       </span>
     </Menu.Item>
     <Menu.Item
@@ -150,7 +152,9 @@ const Droplist = ({
           marginLeft: "10px",
         }}
       >
-        {stateStatus === "Suspended" ? " Unsuspend Agent" : "Suspend Agent"}
+        {stateStatus === "Suspended"
+          ? " Unsuspend Customer"
+          : "Suspend Customer"}
       </span>
     </Menu.Item>
     <Menu.Item
@@ -172,27 +176,28 @@ const Droplist = ({
           marginLeft: "10px",
         }}
       >
-        {watchStatus ? "Unwatch Agent" : "Watch Agent"}
+        {watchStatus ? "Unwatch Customer" : "Watch Customer"}
       </span>
     </Menu.Item>
   </Menu>
 );
-// hhhhhhh
-function Agent() {
-  const [inviteAgent, setInviteAgent] = useState(false);
+function CustomersTable() {
+  const [filter, setFilter] = useState(false);
+  const AppData = JSON.parse(localStorage?.getItem("AppData"));
+  console.log(AppData);
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails);
 
   const {
-    data: agents,
-    isLoading: mutateLoading,
-    isFetching: mutateFetching,
+    data: customers,
+    isLoading,
+    isFetching,
     refetch,
   } = useQuery({
-    queryKey: ["getAgents"],
-    queryFn: () => getAgents(),
+    queryKey: ["getUsers"],
+    queryFn: () => getUsers(),
   });
 
   const { mutate: updateUser, isLoading: updateUserLoading } = useMutation({
@@ -239,6 +244,7 @@ function Agent() {
       return;
     },
   });
+
   const { mutate: deactivate, isLoading: deactivateLoading } = useMutation({
     mutationFn: deactivateAccount,
     onSuccess: (data) => {
@@ -254,124 +260,6 @@ function Agent() {
     },
   });
 
-  console.log(agents);
-  const inputRef = useRef(null);
-
-  const columns = [
-    {
-      title: "ACTION",
-      dataIndex: "action2",
-      width: 70,
-      fixed: "left",
-
-      //render: () => "Other 2",
-    },
-    {
-      title: "CUSTOMER REF",
-      dataIndex: "userId",
-      width: 190,
-    },
-    {
-      title: "STATUS",
-      dataIndex: "userStatus",
-      width: 190,
-      //render: () => "Other 2",
-    },
-    {
-      title: "ID VERIFICATION",
-      dataIndex: "idNumber",
-      width: 190,
-    },
-    {
-      title: "MULTIPLE CURRENCY TRADING",
-      dataIndex: "multiCurrencySwitch",
-      width: 220,
-    },
-    {
-      title: "EMAIL",
-      dataIndex: "email",
-      width: 220,
-    },
-
-    {
-      title: "NAME",
-      dataIndex: "action",
-      /*   sorter: {
-        compare: (a, b) => a.name - b.name,
-        multiple: 1,
-      }, */
-
-      filterIcon: <IconSearch />,
-      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
-        return (
-          <div className="arco-table-custom-filter">
-            <Input.Search
-              ref={inputRef}
-              searchButton
-              placeholder="Please enter name"
-              value={filterKeys[0] || ""}
-              onChange={(value) => {
-                setFilterKeys(value ? [value] : []);
-              }}
-              onSearch={() => {
-                confirm();
-              }}
-            />
-          </div>
-        );
-      },
-      onFilter: (value, row) =>
-        value
-          ? row.firstName.toUpperCase().indexOf(value.toUpperCase()) !== -1
-          : true,
-      onFilterDropdownVisibleChange: (visible) => {
-        if (visible) {
-          setTimeout(() => inputRef.current.focus(), 150);
-        }
-      },
-
-      width: 200,
-    },
-    {
-      title: "ADDRESS",
-      dataIndex: "address",
-      width: 190,
-      filters: removeDup(
-        agents?.data?.map((item) => {
-          return {
-            text: item?.country?.name,
-            value: item?.country?.name,
-          };
-        })
-      ),
-      onFilter: (value, row) => row.address.indexOf(value) > -1,
-      filterMultiple: true,
-    },
-    {
-      title: "COUNTRY",
-      dataIndex: "country[name]",
-      width: 180,
-    },
-    {
-      title: "MOBILE NO",
-      dataIndex: "phone",
-      width: 160,
-    },
-    {
-      title: "DATE CREATED",
-      dataIndex: "dateCreated",
-      width: 190,
-
-      //render: () => "Other",
-    },
-
-    {
-      title: "EMAIL VERIFIED",
-      dataIndex: "status",
-      width: 220,
-      //render: () => "Other 2",
-    },
-  ];
   const {
     mutate: allowMultiCurrencyMutation,
     isLoading: allowMultiCurrencyLoading,
@@ -406,11 +294,155 @@ function Agent() {
       return;
     },
   });
+  console.log(customers);
+  const inputRef = useRef(null);
 
+  const columns = [
+    {
+      title: "ACTION",
+      dataIndex: "action2",
+      width: 70,
+      //render: () => "Other 2",
+      fixed: "left",
+    },
+    {
+      title: "SEND MONEY",
+      dataIndex: "sendMoney",
+      width: 140,
+      //render: () => "Other 2",
+    },
+    {
+      title: "CUSTOMER REF",
+      dataIndex: "userId",
+      width: 190,
+    },
+    {
+      title: "NAME",
+      dataIndex: "action",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      sorter: (a, b) => a.firstName.length - b.firstName.length,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Please enter name"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value
+          ? row.firstName.toUpperCase().indexOf(value.toUpperCase()) !== -1
+          : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
+
+      width: 270,
+    },
+    {
+      title: "STATUS",
+      dataIndex: "userStatus",
+      width: 190,
+      //render: () => "Other 2",
+    },
+    {
+      title: "ID VERIFICATION",
+      dataIndex: "idNumber",
+      width: 190,
+    },
+    {
+      title: "MULTIPLE CURRENCY TRADING",
+      dataIndex: "multiCurrencySwitch",
+      width: 220,
+    },
+    {
+      title: "EMAIL",
+      dataIndex: "email",
+      width: 260,
+      sorter: (a, b) => a.email.length - b.email.length,
+    },
+
+    {
+      title: "ADDRESS",
+      dataIndex: "address",
+      width: 280,
+      filters: removeDup(
+        customers?.data?.map((item) => {
+          return {
+            text: item?.country?.name,
+            value: item?.country?.name,
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row.address.indexOf(value) > -1,
+      filterMultiple: true,
+    },
+    {
+      title: "COUNTRY",
+      dataIndex: "country[name]",
+      width: 180,
+    },
+
+    {
+      title: "MOBILE NO",
+      dataIndex: "phone",
+      width: 160,
+    },
+    {
+      title: "DATE CREATED",
+      dataIndex: "dateCreated",
+      width: 190,
+
+      //render: () => "Other",
+    },
+
+    {
+      title: "EMAIL VERIFIED",
+      dataIndex: "status",
+      width: 220,
+
+      //render: () => "Other 2",
+    },
+  ];
   const [rate, setRate] = useState();
-  const newData = agents?.data?.map((item) => {
+  const [cus, setCus] = useState();
+  const navigate = useNavigate();
+
+  const newData = customers?.data?.map((item) => {
     return {
       ...item,
+      sendMoney: (
+        <p
+          onClick={() => {
+            console.log(item?.userId);
+            navigate(`/send-money?id=${item?.userId}&step=2`);
+            localStorage.setItem("userSend", JSON.stringify(item));
+          }}
+          style={{
+            color: "blue",
+            cursor: "pointer",
+          }}
+        >
+          Send Money
+        </p>
+      ),
       action: (
         <Link
           style={{
@@ -419,7 +451,7 @@ function Agent() {
           onClick={() => {
             localStorage.setItem("customer_details", JSON.stringify(item));
           }}
-          to={`/customers-details?from=agent&userId=${JSON.stringify(
+          to={`/customers-details?from=customer&userId=${JSON.stringify(
             item?.userId
           )}`}
         >
@@ -439,6 +471,25 @@ function Agent() {
             {item?.watchListStatus && <IconEye fontSize={20} />}
           </p>
         </Link>
+      ),
+      userStatus: (
+        <div
+          style={{
+            padding: "6px 14px",
+            borderRadius: "7px",
+            background:
+              item?.status === "InActive"
+                ? "#ff6363"
+                : item?.status === "Active"
+                ? "#37d744"
+                : "#d7ac37",
+            color: "white",
+            width: "fit-content",
+            fontWeight: "700",
+          }}
+        >
+          {item?.status}
+        </div>
       ),
       action2: (
         <div
@@ -538,6 +589,28 @@ function Agent() {
           </p>
         </div>
       ),
+      multiCurrencySwitch: (
+        <div>
+          <Switch
+            loading={
+              (item === cus && disallowusermulticurrencyLoading) ||
+              (item === cus && allowMultiCurrencyLoading)
+            }
+            /* disabled={
+              disallowusermulticurrencyLoading || allowMultiCurrencyLoading
+            } */
+            onClick={() => {
+              setCus(item);
+              if (item?.allowMultiCurrencyTrading) {
+                disallowusermulticurrencyMutation(item?.userId);
+              } else {
+                allowMultiCurrencyMutation(item?.userId);
+              }
+            }}
+            checked={item?.allowMultiCurrencyTrading}
+          />
+        </div>
+      ),
       idNumber: (
         <div
           style={{
@@ -552,45 +625,6 @@ function Agent() {
           {item?.isKYCCompleted ? "Verified" : "Not Verified"}
         </div>
       ),
-      multiCurrencySwitch: (
-        <div>
-          <Switch
-            loading={
-              disallowusermulticurrencyLoading || allowMultiCurrencyLoading
-            }
-            /* disabled={
-              disallowusermulticurrencyLoading || allowMultiCurrencyLoading
-            } */
-            onClick={() => {
-              if (item?.allowMultiCurrencyTrading) {
-                disallowusermulticurrencyMutation(item?.userId);
-              } else {
-                allowMultiCurrencyMutation(item?.userId);
-              }
-            }}
-            checked={item?.allowMultiCurrencyTrading}
-          />
-        </div>
-      ),
-      userStatus: (
-        <div
-          style={{
-            padding: "6px 14px",
-            borderRadius: "7px",
-            background:
-              item?.status === "InActive"
-                ? "#ff6363"
-                : item?.status === "Active"
-                ? "#37d744"
-                : "#d7ac37",
-            color: "white",
-            width: "fit-content",
-            fontWeight: "700",
-          }}
-        >
-          {item?.status}
-        </div>
-      ),
       status: (
         <>
           {" "}
@@ -598,13 +632,13 @@ function Agent() {
             style={{
               padding: "6px 14px",
               borderRadius: "7px",
-              background: item?.isEmailVerified ? "#37d7446c" : "#ff63634b",
-              color: item?.isEmailVerified ? "green" : "red",
+              background: item?.status ? "#37d744" : "#ff6363",
+              color: "white",
               width: "fit-content",
               fontWeight: "700",
             }}
           >
-            {item?.isEmailVerified ? "True" : "False"}
+            {item?.status ? "True" : "False"}
           </div>
         </>
       ),
@@ -612,29 +646,24 @@ function Agent() {
   });
 
   console.log(newData);
-
   const [modal, setModal] = useState(false);
   const [status, setStatus] = useState(false);
   const [watch, setWatch] = useState(false);
+
   return (
     <>
-      {inviteAgent && <InviteAgent closeinviteAgent={setInviteAgent} />}
+      {filter && <CustomerFilter closeCustomer={setFilter} />}
       <UpdateAgentCustomerRates
         modal={modal}
         setModal={setModal}
         rateItem={rate}
-        recall={refetch}
         setRateItem={setRate}
       />
-      <BodyLayout active={window.location.pathname}>
-        <Content>
-          <div className="header">
-            <div className="top">
-              <p>Agents</p>
-              <span>This page allows you to manage agents</span>
-            </div>
-            <div className="btn">
-              {/*   <button
+      <Content>
+        <div className="header">
+          <div className="btn">
+            {/*
+              <button
                 style={{
                   backgroundColor: "white",
                   color: "#464F60",
@@ -672,17 +701,13 @@ function Agent() {
                     stroke-linejoin="round"
                   />
                 </svg>
-              </button> */}
+              </button>
               <button
                 style={{
                   backgroundColor: "#00A85A",
                   color: "white",
                 }}
-                onClick={() => {
-                  setInviteAgent(true);
-                }}
               >
-                {/* <AiOutlinePlus size={18} style={{ color: "white" }} /> */}
                 <svg
                   width="16"
                   height="16"
@@ -691,56 +716,26 @@ function Agent() {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
                     d="M7.99999 2C8.4142 2 8.74999 2.33579 8.74999 2.75V7.25H13.25C13.6642 7.25 14 7.58579 14 8C14 8.41422 13.6642 8.75 13.25 8.75H8.74999V13.25C8.74999 13.6642 8.4142 14 7.99999 14C7.58578 14 7.24999 13.6642 7.24999 13.25V8.75H2.75C2.33579 8.75 2 8.41422 2 8C2 7.58579 2.33579 7.25 2.75 7.25H7.24999V2.75C7.24999 2.33579 7.58578 2 7.99999 2Z"
                     fill="white"
                   />
                 </svg>
-                Invite Agent
+                New Customers
               </button>
-            </div>
+             */}
           </div>
-          <div className="main">
-            <div className="head">
-              {/*               <SearchInput placeholder="Search" style={{ width: "30vw" }} />
-               */}{" "}
-              {/*  <button>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M2.5 5.83301H17.5"
-                    stroke="#344054"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    d="M5 10H15"
-                    stroke="#344054"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    d="M8.33337 14.167H11.6667"
-                    stroke="#344054"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                </svg>
-                Filter
-              </button> */}
-            </div>
+        </div>
 
+        <div className="main">
+          <div className="tablecontent">
             <CustomTable
-              noData={agents?.data?.length}
+              noData={customers?.data?.length}
               loading={
-                mutateLoading ||
-                mutateFetching ||
+                isLoading ||
+                isFetching ||
+                updateUserLoading ||
                 activateLoading ||
                 deactivateLoading ||
                 suspendLoading
@@ -748,42 +743,39 @@ function Agent() {
               Apidata={newData}
               tableColumns={columns}
             />
+
+            {/* <div className="row">
+          <span>Showing 1-5 of entries</span>
+          <div className="pagins">
+            <p>Rows per page:</p>
+            <select>
+              <option>5</option>
+            </select>
+            <div className="arrow">
+              <button
+                onClick={() => {
+                  // setSortDate(sortdate - 1);
+                  // setEnd((prev) => prev - end);
+                }}
+              >
+                <AiOutlineLeft />
+              </button>
+              <button>{sortdate}</button>
+              <button>
+                <AiOutlineRight />
+              </button>
+            </div>
           </div>
-        </Content>
-      </BodyLayout>
+        </div> */}
+          </div>
+        </div>
+      </Content>
     </>
   );
 }
 
-export default Agent;
-
+export default CustomersTable;
 const Content = styled.div`
-  .head {
-    padding: 30px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .head button {
-    background-color: transparent;
-    border: 1px solid gainsboro;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 5px;
-  }
-  .search {
-    display: flex;
-    justify-content: space-between;
-  }
-  .main {
-    background-color: white;
-    width: 100%;
-    margin-top: 30px;
-    border-radius: 10px;
-  }
   .header {
     display: flex;
     justify-content: space-between;
@@ -813,6 +805,13 @@ const Content = styled.div`
     cursor: pointer;
     font-size: 16px;
   }
+
+  .main {
+    background-color: white;
+    width: 100%;
+    margin-top: 30px;
+    border-radius: 10px;
+  }
   .table {
     border-collapse: collapse;
     font-size: 11.5px;
@@ -839,6 +838,7 @@ const Content = styled.div`
     font-weight: 400;
     color: #667085;
   }
+
   .row {
     display: flex;
     justify-content: space-between;
@@ -849,7 +849,24 @@ const Content = styled.div`
     font-size: 15px;
     color: #687182;
   }
-
+  .arrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tabledata {
+    td {
+      font-size: small;
+      font-weight: 400;
+    }
+  }
+  .arrow button {
+    width: 28.8px;
+    height: 24px;
+    background-color: transparent;
+    border: 1px solid gainsboro;
+    border-radius: 3px;
+  }
   .pagins {
     display: flex;
     gap: 7px;
@@ -867,20 +884,6 @@ const Content = styled.div`
     background-color: transparent;
     border: 1px solid gainsboro;
     padding: 2px;
-    border-radius: 3px;
-  }
-
-  .arrow {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .arrow button {
-    width: 28.8px;
-    height: 24px;
-    background-color: transparent;
-    border: 1px solid gainsboro;
     border-radius: 3px;
   }
 `;
