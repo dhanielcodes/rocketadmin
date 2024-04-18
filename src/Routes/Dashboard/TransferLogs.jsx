@@ -1173,10 +1173,21 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
       width: 120,
     },
     {
+      title: "FEE",
+      dataIndex: "fee",
+      width: 120,
+    },
+    {
       title: "FOREX AMOUNT",
       dataIndex: "receivedAmount",
       render: (ire) => kFormatter3(ire),
-      width: 260,
+      width: 170,
+    },
+    {
+      title: "AGENT COMMISSION",
+      dataIndex: "senderAgentCommission",
+      render: (ire) => kFormatter3(ire),
+      width: 160,
     },
     {
       title: "SENDER",
@@ -1449,6 +1460,17 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
             <AmountFormatter
               currency={item?.senderCurrency}
               value={item?.paymentAmount}
+            />
+          </div>
+        </>
+      ),
+      fee: (
+        <>
+          {" "}
+          <div>
+            <AmountFormatter
+              currency={item?.senderCurrency}
+              value={item?.transitionFee}
             />
           </div>
         </>
