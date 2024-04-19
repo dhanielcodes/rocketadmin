@@ -973,6 +973,11 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
       typeee === "Today" ? TodayLogss() : Tranx(userWe, category),
   });
 
+  setInterval(() => {
+    if (typeee === "Today") {
+      refetchingTwo();
+    }
+  }, 300000);
   const [modal, setModal] = useState(false);
   const [note, setNote] = useState(false);
 
