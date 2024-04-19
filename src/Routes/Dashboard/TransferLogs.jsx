@@ -1166,6 +1166,11 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
       width: 190,
     },
     {
+      title: "CUSTOMER TYPE",
+      dataIndex: "type",
+      width: 190,
+    },
+    {
       title: "AMOUNT",
       dataIndex: "newPaymentAmount",
       width: 120,
@@ -1178,16 +1183,17 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
       width: 120,
     },
     {
-      title: "FEE",
-      dataIndex: "fee",
-      width: 120,
-    },
-    {
       title: "FOREX AMOUNT",
       dataIndex: "receivedAmount",
       render: (ire) => kFormatter3(ire),
       width: 170,
     },
+    {
+      title: "FEE",
+      dataIndex: "fee",
+      width: 120,
+    },
+
     {
       title: "AGENT COMMISSION",
       dataIndex: "senderAgentCommission",
@@ -1625,6 +1631,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
           </p>
         </div>
       ),
+      type: <div>{item?.senderAgentId === 0 ? "DIR-TRX" : "AGENT-TRX"}</div>,
       countryo: (
         <div
           style={{
