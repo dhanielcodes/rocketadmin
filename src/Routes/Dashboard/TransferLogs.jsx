@@ -667,8 +667,10 @@ const DroplistPending = ({ action, setModal, setUserId, viewDetails }) => (
         Hold Transaction
       </span>
     </Menu.Item>
+  </Menu>
+);
 
-    <Menu.Item
+/*  <Menu.Item
       onClick={() => {
         setModal(true);
         action("payTransaction");
@@ -710,9 +712,7 @@ const DroplistPending = ({ action, setModal, setUserId, viewDetails }) => (
       >
         Pay Transaction
       </span>
-    </Menu.Item>
-  </Menu>
-);
+    </Menu.Item> */
 
 const DroplistProcessed = ({ action, setModal, setUserId, viewDetails }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
