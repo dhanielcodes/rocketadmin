@@ -1,11 +1,10 @@
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { styled } from "styled-components";
 
-import SearchInput from "../../reuseables/SearchInput";
 import CustomTable from "../../reuseables/CustomTable";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import CountryFlag from "react-country-flag";
-import { kFormatter3, kFormatter2, kFormatter4 } from "../../utils/format";
+import { kFormatter3 } from "../../utils/format";
 import {
   TodayLogss,
   Tranx,
@@ -917,7 +916,7 @@ const DroplistHold = ({ action, setModal, setUserId, viewDetails }) => (
   </Menu>
 );
 
-const DroplistCancelled = ({ action, setModal, setUserId, viewDetails }) => (
+const DroplistCancelled = ({ viewDetails }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
     style={{
@@ -1520,6 +1519,8 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                 item?.collectStatus === "Received"
                   ? "#37d744"
                   : item?.collectStatus === "Pending"
+                  ? "#ffe063"
+                  : item?.collectStatus === "Processing"
                   ? "#ffe063"
                   : item?.collectStatus === ""
                   ? "#939393"
