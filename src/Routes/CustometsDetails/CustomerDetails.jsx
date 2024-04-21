@@ -17,6 +17,9 @@ import { GetUserDetails } from "../../services/Dashboard";
 import AuditLogs from "./ClientDetailsTabs/AuditLogs";
 import RiskTable from "./ClientDetailsTabs/RiskTable";
 import CustomerList from "./ClientDetailsTabs/CustomerList";
+import { kFormatter3 } from "../../utils/format";
+import AmountFormatter from "../../reuseables/AmountFormatter";
+import CountryFlag from "react-country-flag";
 
 export default function CustomerDetailsPage() {
   const [params] = useSearchParams();
@@ -56,6 +59,7 @@ export default function CustomerDetailsPage() {
     "Transfer List",
     "Customers List",
     "Audit Logs",
+    "Agent Wallets",
   ];
 
   return (
@@ -249,6 +253,24 @@ export default function CustomerDetailsPage() {
                     {active === "Gateways" && (
                       <Gateways data={customerDetails}></Gateways>
                     )}
+                    {active === "Agent Wallets" && (
+                      <Body>
+                        {customerDetails?.wallet?.map((item) => {
+                          return (
+                            <div className="body_card">
+                              <div className="card_top">{item?.name}</div>
+
+                              <div className="card_bottom">
+                                <AmountFormatter
+                                  currency={item?.currency?.code}
+                                  value={item?.balance}
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </Body>
+                    )}
                   </div>
                 )}
               </div>
@@ -259,6 +281,34 @@ export default function CustomerDetailsPage() {
   );
 }
 
+const Body = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  .body_card {
+    padding: 60px;
+    background-color: white;
+    border: 1px solid #d6d6d6;
+    border-radius: 20px;
+    text-align: center;
+    margin-right: 10px;
+
+    .card_top {
+      font-weight: 500;
+      font-size: 16px;
+      color: #5a6376;
+    }
+    .card_middle {
+      font-size: 16px;
+      margin: 10px 0;
+      color: #5a6376;
+      font-weight: 500;
+    }
+    .card_bottom {
+      font-size: 36px;
+    }
+  }
+`;
 const Client = styled.div`
   width: 100%;
   .topBar {
