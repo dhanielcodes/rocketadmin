@@ -9,6 +9,7 @@ import {
   activateAccount,
   getAgentInviteList,
   getUsers,
+  sendAgentInvite,
   suspendAccount,
   updateUserWatchList,
 } from "../services/Dashboard";
@@ -275,6 +276,17 @@ function AgentInviteList() {
   ];
   const [rate, setRate] = useState();
 
+  const { mutate, isLoading: isResending } = useMutation({
+    mutationFn: sendAgentInvite,
+    onSuccess: (data) => {
+      console.log(data);
+      toast.success(data?.message || "Invite Resent");
+    },
+    onError: (data) => {
+      toast.error(data?.message);
+    },
+  });
+
   const newData = customers?.data?.map((item, index) => {
     return {
       ...item,
@@ -319,6 +331,12 @@ function AgentInviteList() {
 
       action2: (
         <div
+          onClick={() => {
+            mutate({
+              firstName: item?.name,
+              email: item?.email,
+            });
+          }}
           style={{
             padding: "6px 14px",
             borderRadius: "10px",
@@ -486,7 +504,7 @@ function AgentInviteList() {
               <CustomTable
                 showDateFilter={false}
                 noData={customers?.data?.length}
-                loading={isLoading}
+                loading={isLoading || isResending}
                 Apidata={newData}
                 tableColumns={columns}
               />
