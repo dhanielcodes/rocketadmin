@@ -712,7 +712,42 @@ const DroplistPending = ({ action, setModal, setUserId, viewDetails }) => (
         Pay Transaction
       </span>
     </Menu.Item> */
+const DroplistProcessing = ({ action, setModal, setUserId, viewDetails }) => (
+  //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
 
+  <Menu
+    style={{
+      borderRadius: "10px",
+      paddingTop: "6px",
+      // width: "150px",
+    }}
+  >
+    <Menu.Item
+      onClick={() => {
+        viewDetails();
+      }}
+      key="3"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <IconEye
+        fontSize={20}
+        style={{
+          margin: 0,
+        }}
+      />
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        View Details
+      </span>
+    </Menu.Item>
+  </Menu>
+);
 const DroplistProcessed = ({ action, setModal, setUserId, viewDetails }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
 
@@ -972,11 +1007,14 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
       typeee === "Today" ? TodayLogss() : Tranx(userWe, category),
   });
 
-  setInterval(() => {
-    if (typeee === "Today") {
-      refetchingTwo();
-    }
-  }, 300000);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (window.location.pathname === "/dashboard") {
+        refetchingTwo();
+      }
+    }, 300000);
+    return () => clearInterval(intervalId);
+  }, []);
   const [modal, setModal] = useState(false);
   const [note, setNote] = useState(false);
 
@@ -1141,16 +1179,22 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     {
       title: "TRANSACTION STATUS",
       dataIndex: "status",
-      width: 190,
+      width: 160,
 
       //render: () => "Other",
     },
     {
       title: "COLLECTION STATUS",
       dataIndex: "status2",
-      width: 190,
+      width: 170,
 
       //render: () => "Other",
+    },
+    {
+      title: "PAYMENT DATE",
+      dataIndex: "paymentDate",
+      width: 210,
+      //render: () => "Other 2",
     },
     {
       title: "TRANSACTION REF",
@@ -1162,12 +1206,12 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     {
       title: "CUSTOMER REF",
       dataIndex: "userId",
-      width: 190,
+      width: 120,
     },
     {
       title: "CUSTOMER TYPE",
       dataIndex: "type",
-      width: 190,
+      width: 130,
     },
     {
       title: "AMOUNT",
@@ -1230,13 +1274,13 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     {
       title: "TRX LOCATION",
       dataIndex: "tnxLocation",
-      width: 200,
+      width: 130,
     },
 
     {
       title: "COLLECTION TYPE",
       dataIndex: "collectionType",
-      width: 200,
+      width: 160,
 
       //render: () => "Other",
     },
@@ -1244,21 +1288,15 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     {
       title: "BRANCH",
       dataIndex: "transactionSource",
-      width: 140,
+      width: 100,
 
       //render: () => "Other",
-    },
-    {
-      title: "PAYMENT DATE",
-      dataIndex: "paymentDate",
-      width: 260,
-      //render: () => "Other 2",
     },
 
     {
       title: "COMMENT",
       dataIndex: "comment",
-      width: 220,
+      width: 550,
     },
   ];
 
@@ -1350,6 +1388,38 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                   />
                 ) : item?.paymentStatus === "Processed" ? (
                   <DroplistProcessed
+                    action={setCall}
+                    setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
+                    setUserId={() => {
+                      setUserIdd(item?.userId);
+                      refetch(item?.sn);
+                    }}
+                  />
+                ) : item?.collectionStatus === "Processing" ? (
+                  <DroplistProcessing
+                    action={setCall}
+                    setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
+                    setUserId={() => {
+                      setUserIdd(item?.userId);
+                      refetch(item?.sn);
+                    }}
+                  />
+                ) : item?.collectionStatus === "Received" ? (
+                  <DroplistProcessing
                     action={setCall}
                     setModal={setModal}
                     viewDetails={() => {
@@ -1521,7 +1591,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                   : item?.collectStatus === "Pending"
                   ? "#ffe063"
                   : item?.collectStatus === "Processing"
-                  ? "#ffe063"
+                  ? "#d7ac37"
                   : item?.collectStatus === ""
                   ? "#939393"
                   : "#ff6363",
@@ -2148,6 +2218,12 @@ const Content = styled.div`
     border-radius: 5px;
     justify-content: center;
     cursor: pointer;
+  }
+  .arco-btn-primary {
+    background-color: #00a85a !important;
+    svg {
+      stroke: #ffffff !important;
+    }
   }
   .top {
     padding: 10px 30px 30px 20px;
