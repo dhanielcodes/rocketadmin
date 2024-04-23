@@ -38,6 +38,11 @@ export const getBanks = async (userId, bid) => {
   const { data } = await Axios.get(`${baseurl}/getbanks`);
   return data;
 };
+
+export const getCompanyBanks = async (userId, bid) => {
+  const { data } = await Axios.get(`${baseurl}/getsystemofflinepaymentbanks`);
+  return data;
+};
 export const nameEnquiry = async (query) => {
   console.log(
     "🚀 ~ file: Dashboard.jsx:24 ~ nameEnquiry ~ query:",
@@ -474,6 +479,22 @@ export const sendMoney = async (body) => {
 };
 export const sendAgentInvite = async (body) => {
   const { data } = await Axios.post(`${baseurl}/sendagentinvite`, body);
+  return data;
+};
+
+export const addCompanyBank = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/addsystemofflinepaymentbank`,
+    body
+  );
+  return data;
+};
+
+export const editCompanyBank = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updatesystemofflinepaymentbank`,
+    body
+  );
   return data;
 };
 
