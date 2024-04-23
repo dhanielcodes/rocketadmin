@@ -61,6 +61,8 @@ import IncompletePayWithBankTransfersPage from "./Routes/IncompletePayWithBankTr
 import PaymentCheckPage from "./Routes/IncompleteTransfers copy";
 import UpdateEmployee from "./Routes/UpdateEmployee";
 import BeneficiaryDetailsPage from "./Routes/BeneficiaryDetails";
+import BanksPage from "./Routes/Banks";
+import CompanyBanksPage from "./Routes/CompanyBanks";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -542,6 +544,26 @@ function App() {
                   element={
                     <AppLogout>
                       <NotificationsPage />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Banks", actualArrayAccess) && (
+                <Route
+                  path="/banks"
+                  element={
+                    <AppLogout>
+                      <BanksPage />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("Company Bank", actualArrayAccess) && (
+                <Route
+                  path="/company-bank"
+                  element={
+                    <AppLogout>
+                      <CompanyBanksPage />
                     </AppLogout>
                   }
                 />

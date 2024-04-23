@@ -5,14 +5,21 @@ import { styled } from "styled-components";
 import CustomTable from "../reuseables/CustomTable";
 import AddPaymentProcessorModal from "../modals/AddPaymentProcessorModal";
 import { Select, Switch } from "@arco-design/web-react";
-import { getBanks, getRoles, updateUserMenu } from "../services/Dashboard";
+import {
+  getBanks,
+  getCompanyBanks,
+  getRoles,
+  updateUserMenu,
+} from "../services/Dashboard";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import AppSelect from "../reuseables/AppSelect";
 import toast from "react-hot-toast";
 import AddBank from "../COMPONENTS/AddBank";
+import ReactCountryFlag from "react-country-flag";
+import AddBankCompany from "../COMPONENTS/AddBankCompany";
 
 // hhhhhhh
-function BanksPage() {
+function CompanyBanksPage() {
   const [inviteAgent, setInviteAgent] = useState(false);
 
   const [selectedRole, setSelectedRole] = useState();
@@ -20,32 +27,17 @@ function BanksPage() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   console.log(userDetails?.userRoleMenuAccess);
-  const { data } = useQuery({
-    queryKey: ["getBanksss"],
-    queryFn: () => getBanks(),
-  });
-
-  const { mutate, isLoading } = useMutation({
-    mutationFn: updateUserMenu,
-    onSuccess: (data) => {
-      if (data.status) {
-        console.log(data);
-        toast.success(data?.message);
-      } else {
-        toast.error(data?.message);
-      }
-    },
-    onError: (data) => {
-      toast.error(data?.message);
-    },
+  const { data, isLoading, refetch, isFetching } = useQuery({
+    queryKey: ["getCompanyBanks"],
+    queryFn: () => getCompanyBanks(),
   });
 
   console.log(data?.data);
   const columns = [
     {
       title: "S/N",
-      dataIndex: "bankId",
-      width: 80,
+      dataIndex: "sn",
+      width: 50,
     },
 
     {
@@ -56,14 +48,33 @@ function BanksPage() {
     },
 
     {
-      title: "BANK CODE",
-      dataIndex: "bankCode",
+      title: "ACCOUNT HOLDER NAME",
+      dataIndex: "accountName",
+      width: 150,
+      //render: () => "Other 2",
+    },
+    {
+      title: "CURRENCY NAME",
+      dataIndex: "sending",
+      width: 130,
+      //render: () => "Other 2",
+    },
+
+    {
+      title: "STATUS",
+      dataIndex: "status",
       width: 100,
       //render: () => "Other 2",
     },
     {
       title: "DATE ADDED",
-      dataIndex: "dateAdded",
+      dataIndex: "dateCreated",
+      width: 170,
+      //render: () => "Other 2",
+    },
+    {
+      title: "ACTIONS",
+      dataIndex: "edit",
       width: 100,
       //render: () => "Other 2",
     },
@@ -73,7 +84,49 @@ function BanksPage() {
   const newData = data?.data?.map((item) => {
     return {
       ...item,
-
+      edit: (
+        <div
+          style={{
+            textDecoration: "none",
+          }}
+          onClick={() => {
+            setItem(item);
+            setInviteAgent(true);
+          }}
+        >
+          <p
+            onClick={() => {
+              console.log(item?.userId);
+            }}
+            style={{
+              color: "blue",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            Edit Details
+          </p>
+        </div>
+      ),
+      sending: (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <ReactCountryFlag
+            style={{
+              borderRadius: "10000000px",
+              marginRight: "10px",
+            }}
+            countryCode={item?.currency?.code?.slice(0, 2)}
+            svg
+          />
+          {item?.currency["name"]}
+        </div>
+      ),
       status: (
         <>
           {" "}
@@ -96,14 +149,53 @@ function BanksPage() {
 
   console.log(newData);
 
+  const [item, setItem] = useState();
+
   return (
     <>
+      {inviteAgent && (
+        <AddBankCompany
+          closeinviteAgent={setInviteAgent}
+          item={item}
+          setItem={setItem}
+          recall={refetch}
+        />
+      )}
+
       <BodyLayout active={window.location.pathname}>
         <Content>
           <div className="header">
             <div className="top">
-              <p>Banks</p>
-              <span>This page allows you to manage all banks</span>
+              <p>Company Banks</p>
+              <span>This page allows you to manage all company banks</span>
+            </div>
+            <div className="btn">
+              <button
+                style={{
+                  backgroundColor: "#00A85A",
+                  color: "white",
+                }}
+                onClick={() => {
+                  setInviteAgent(true);
+                }}
+              >
+                {/* <AiOutlinePlus size={18} style={{ color: "white" }} /> */}
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M7.99999 2C8.4142 2 8.74999 2.33579 8.74999 2.75V7.25H13.25C13.6642 7.25 14 7.58579 14 8C14 8.41422 13.6642 8.75 13.25 8.75H8.74999V13.25C8.74999 13.6642 8.4142 14 7.99999 14C7.58578 14 7.24999 13.6642 7.24999 13.25V8.75H2.75C2.33579 8.75 2 8.41422 2 8C2 7.58579 2.33579 7.25 2.75 7.25H7.24999V2.75C7.24999 2.33579 7.58578 2 7.99999 2Z"
+                    fill="white"
+                  />
+                </svg>
+                Add Bank
+              </button>
             </div>
           </div>
           <div className="main">
@@ -113,6 +205,7 @@ function BanksPage() {
               noData={newData?.length}
               Apidata={newData || []}
               tableColumns={columns}
+              loading={isLoading || isFetching}
               scroll={{
                 x: 800,
                 y: 800,
@@ -127,7 +220,7 @@ function BanksPage() {
   );
 }
 
-export default BanksPage;
+export default CompanyBanksPage;
 
 const Content = styled.div`
   .head {
