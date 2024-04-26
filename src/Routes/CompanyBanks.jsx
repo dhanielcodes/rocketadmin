@@ -54,12 +54,17 @@ function CompanyBanksPage() {
       //render: () => "Other 2",
     },
     {
-      title: "CURRENCY NAME",
-      dataIndex: "sending",
+      title: "ACCOUNT NUMBER",
+      dataIndex: "accountNumber",
       width: 130,
       //render: () => "Other 2",
     },
-
+    {
+      title: "SORT CODE",
+      dataIndex: "sortCode",
+      width: 130,
+      //render: () => "Other 2",
+    },
     {
       title: "STATUS",
       dataIndex: "status",
