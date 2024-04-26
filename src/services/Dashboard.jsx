@@ -4,6 +4,7 @@ import { Axios } from "../utils/Axios";
 import { BASE_URL } from "../../config/config";
 
 const baseurl = BASE_URL;
+const UserData = JSON.parse(localStorage.getItem("userDetails"));
 
 export const getAdminDashboard = async (userId = 0) => {
   const { data } = await Axios.get(`${baseurl}/getuserdashboard/${userId}`);
@@ -167,39 +168,58 @@ export const gettransactionlogbyref = async (payload) => {
 /*  */
 
 export const cancelTransaction = async (body) => {
-  const { data } = await Axios.post(`${baseurl}/canceltransaction/${body}`);
+  const { data } = await Axios.post(`${baseurl}/canceltransaction/${body}`, {
+    userId: UserData?.userId,
+  });
   return data;
 };
 
 export const confirmTransaction = async (body) => {
   const { data } = await Axios.post(
-    `${baseurl}/confirmtransactionpayment/${body}`
+    `${baseurl}/confirmtransactionpayment/${body}`,
+    {
+      userId: UserData?.userId,
+    }
   );
   return data;
 };
 
 export const marktransactionsuspicious = async (body) => {
   const { data } = await Axios.post(
-    `${baseurl}/marktransactionsuspicious/${body}`
+    `${baseurl}/marktransactionsuspicious/${body}`,
+    {
+      userId: UserData?.userId,
+    }
   );
   return data;
 };
 
 export const markaspay = async (body) => {
-  const { data } = await Axios.post(`${baseurl}/markaspaid/${body}`);
+  const { data } = await Axios.post(`${baseurl}/markaspaid/${body}`, {
+    userId: UserData?.userId,
+  });
   return data;
 };
 
 export const paytransaction = async (body) => {
-  const { data } = await Axios.post(`${baseurl}/paytransaction/${body}`);
+  const { data } = await Axios.post(`${baseurl}/paytransaction/${body}`, {
+    userId: UserData?.userId,
+  });
   return data;
 };
 export const holdtransaction = async (body) => {
-  const { data } = await Axios.post(`${baseurl}/holdtransaction/${body}`);
+  const { data } = await Axios.post(`${baseurl}/holdtransaction/${body}`, {
+    userId: UserData?.userId,
+  });
   return data;
 };
 export const revertholdtransaction = async (body) => {
-  const { data } = await Axios.post(`${baseurl}/revertholdtransaction/${body}`);
+  const { data } = await Axios.post(
+    `${baseurl}/revertholdtransaction/${body}`,
+    {
+      userId: UserData?.userId,
+    }
+  );
   return data;
 };
 
