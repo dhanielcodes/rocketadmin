@@ -1296,7 +1296,17 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     {
       title: "COMMENT",
       dataIndex: "comment",
-      width: 550,
+      width: 350,
+    },
+    {
+      title: "RELEASED BY",
+      dataIndex: "releaseBy",
+      render: (row) => (
+        <div>
+          {row?.firstName} {row?.lastName}
+        </div>
+      ),
+      width: 250,
     },
   ];
 
