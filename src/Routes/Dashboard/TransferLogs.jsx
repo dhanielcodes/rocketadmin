@@ -1179,7 +1179,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     {
       title: "TRANSACTION STATUS",
       dataIndex: "status",
-      width: 160,
+      width: 170,
 
       //render: () => "Other",
     },
@@ -1199,19 +1199,19 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     {
       title: "TRANSACTION REF",
       dataIndex: "paymentRef",
-      width: 140,
+      width: 150,
 
       //render: () => "Other",
     },
     {
       title: "CUSTOMER REF",
       dataIndex: "userId",
-      width: 120,
+      width: 130,
     },
     {
       title: "CUSTOMER TYPE",
       dataIndex: "type",
-      width: 130,
+      width: 140,
     },
     {
       title: "AMOUNT",
@@ -1292,6 +1292,20 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
 
       //render: () => "Other",
     },
+    {
+      title: "PAYMENT TYPE",
+      dataIndex: "paymentType",
+      width: 140,
+
+      //render: () => "Other",
+    },
+    {
+      title: "COLLECTION TYPE",
+      dataIndex: "collectionType",
+      width: 160,
+
+      //render: () => "Other",
+    },
 
     {
       title: "COMMENT",
@@ -1300,10 +1314,10 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     },
     {
       title: "RELEASED BY",
-      dataIndex: "releaseBy",
+      dataIndex: "releasedBy",
       render: (row) => (
         <div>
-          {row?.firstName} {row?.lastName}
+          {row?.firstName} {row?.surName}
         </div>
       ),
       width: 250,
