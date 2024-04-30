@@ -48,7 +48,7 @@ const CountryList = ({
                   ...item,
                 };
               })
-              ?.filter((item) => item.isReceiving)?.[0]
+              ?.filter((item) => item.isSending)?.[0]
           : newOptions?.data
               ?.map((item) => {
                 return {
@@ -59,7 +59,7 @@ const CountryList = ({
                   ...item,
                 };
               })
-              ?.filter((item) => !item.isReceiving)?.[0]
+              ?.filter((item) => item.isReceiving)?.[0]
         : options?.[0]
     );
   }, [newOptions]);
@@ -80,7 +80,7 @@ const CountryList = ({
                       ...item,
                     };
                   })
-                  ?.filter((item) => item.isReceiving)?.[0]
+                  ?.filter((item) => item.isSending)?.[0]
               : newOptions?.data
                   ?.map((item) => {
                     return {
@@ -91,7 +91,7 @@ const CountryList = ({
                       ...item,
                     };
                   })
-                  ?.filter((item) => !item.isReceiving)?.[0]
+                  ?.filter((item) => item.isReceiving)?.[0]
             : options?.[0]
         }
         onChange={onChange}
@@ -108,7 +108,7 @@ const CountryList = ({
                       ...item,
                     };
                   })
-                  ?.filter((item) => item.isReceiving)
+                  ?.filter((item) => item.isSending)
               : newOptions?.data
                   ?.map((item) => {
                     return {
@@ -119,7 +119,7 @@ const CountryList = ({
                       ...item,
                     };
                   })
-                  ?.filter((item) => !item.isReceiving)
+                  ?.filter((item) => item.isReceiving)
             : options
         }
         defaultValue={defaultValue}

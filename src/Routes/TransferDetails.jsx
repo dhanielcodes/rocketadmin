@@ -237,7 +237,18 @@ export default function TransferDetailsPage() {
 
             <div className="box_bank">
               <div className="box_bank_card">
-                <div>Account Name</div>
+                <div>Bank Name</div>
+                <div className="box_data">{payload?.beneficiaryBankName}</div>
+              </div>
+
+              <div className="box_bank_card">
+                <div>Bank Account No.</div>
+                <div className="box_data">
+                  {payload?.beneficiaryBankAccountNumber}
+                </div>
+              </div>
+              <div className="box_bank_card">
+                <div>Bank Account Name</div>
                 <div className="box_data">{payload?.beneficiaryName}</div>
               </div>
 
@@ -331,7 +342,7 @@ const Content = styled.div`
     padding: 40px 0px;
     text-align: center;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     .box_bank_card {
       border-right: 1px solid #c7c7c7;
       padding: 0 26px;

@@ -52,7 +52,7 @@ const CountryDropdown = ({
                       ...item,
                     };
                   })
-                  ?.filter((item) => item.isReceiving)
+                  ?.filter((item) => item.isSending)
               : newOptions?.data
                   ?.map((item) => {
                     return {
@@ -62,7 +62,7 @@ const CountryDropdown = ({
                       ...item,
                     };
                   })
-                  ?.filter((item) => !item.isReceiving)
+                  ?.filter((item) => item.isReceiving)
             : options
         }
         defaultValue={defaultValue}

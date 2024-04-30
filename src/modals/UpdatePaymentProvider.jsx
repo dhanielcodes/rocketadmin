@@ -86,12 +86,16 @@ function UpdatePaymentProvider({ closeinviteAgent, item }) {
             collectionStatus
             onChange={(e) => {
               setSelectedCountry(e);
-              setArray([
-                ...array,
-                {
-                  ...e,
-                },
-              ]);
+              if (array?.map((item) => item?.id)?.includes(e?.id)) {
+                return;
+              } else {
+                setArray([
+                  ...array,
+                  {
+                    ...e,
+                  },
+                ]);
+              }
             }}
           />
         </div>
