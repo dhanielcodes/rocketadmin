@@ -15,7 +15,6 @@ const CountryDropdownDash = ({
   defaultValue,
   option,
   disabled,
-  collectionStatus = false,
 }) => {
   const options = option || countryList().getData();
   const { data: newOptions } = useQuery({

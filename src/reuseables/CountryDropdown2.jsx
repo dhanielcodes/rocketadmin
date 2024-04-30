@@ -60,7 +60,7 @@ const CountryDropdown2 = ({
                       ...item,
                     };
                   })
-                  ?.filter((item) => !item.isSending)
+                  ?.filter((item) => item.isReceiving)
             : options
         }
         defaultValue={defaultValue}
