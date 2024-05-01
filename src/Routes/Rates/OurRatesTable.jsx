@@ -6,7 +6,7 @@ import CustomTable from "../../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { getOurRates } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
-import { kFormatter3, removeDup } from "../../utils/format";
+import { kFormatter3, numberWithCommas, removeDup } from "../../utils/format";
 import { countryObjectsArray } from "../../../config/CountryCodes";
 import { useEffect } from "react";
 
@@ -87,7 +87,7 @@ function OurRatesTable({ recall }) {
     {
       title: "RATE",
       dataIndex: "rate",
-      render: (ire) => kFormatter3(ire),
+      render: (ire) => ire,
       width: 120,
 
       sorter: {
