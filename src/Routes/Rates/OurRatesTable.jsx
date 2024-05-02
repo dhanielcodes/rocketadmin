@@ -89,7 +89,15 @@ function OurRatesTable({ recall }) {
       onFilter: (value, row) => row?.toCurrency.indexOf(value) > -1,
       filterMultiple: true,
     },
-
+    {
+      title: "CATEGORY",
+      dataIndex: "currencyRateMetaData['name']",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 230,
+    },
     {
       title: "RATE",
       dataIndex: "sn",
