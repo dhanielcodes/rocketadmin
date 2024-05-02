@@ -1,3 +1,5 @@
+import getSymbolFromCurrency from "currency-symbol-map";
+
 export const kFormatter2 = (num) => {
     return `${num?.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}`;
   };
@@ -7,6 +9,13 @@ export function numberWithCommas(x) {
   while (pattern.test(x))
       x = x.replace(pattern, "$1,$2");
   return x;
+}
+export function Gsh(n) {
+  return (n + "").split(".")[1]
+}
+export function FormatCorrect(value, currency) {
+console.log(Gsh(value)?.length,'jllllll')
+  return Gsh(value)?.length >3 ? getSymbolFromCurrency(currency)+value : getSymbolFromCurrency(currency) + `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 

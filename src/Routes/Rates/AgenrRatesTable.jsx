@@ -11,6 +11,7 @@ import {
   kFormatter2,
   kFormatter4,
   removeDup,
+  FormatCorrect,
 } from "../../utils/format";
 import { countryObjectsArray } from "../../../config/CountryCodes";
 import { useEffect, useRef } from "react";
@@ -137,8 +138,12 @@ function AgentRatesTable({ recall }) {
     },
     {
       title: "INITIAL RATE",
-      dataIndex: "conversionRate",
-      render: (ire) => kFormatter3(ire),
+      dataIndex: "id",
+      render: (ire) =>
+        FormatCorrect(
+          rates?.data?.find((item) => item?.id === ire)?.conversionRate,
+          rates?.data?.find((item) => item?.id === ire)?.toCurrency?.code
+        ),
       width: 120,
 
       sorter: {
@@ -148,8 +153,12 @@ function AgentRatesTable({ recall }) {
     },
     {
       title: "AGENT RATE",
-      dataIndex: "agentRate",
-      render: (ire) => kFormatter3(ire),
+      dataIndex: "id",
+      render: (ire) =>
+        FormatCorrect(
+          rates?.data?.find((item) => item?.id === ire)?.agentRate,
+          rates?.data?.find((item) => item?.id === ire)?.toCurrency?.code
+        ),
       width: 120,
 
       sorter: {
