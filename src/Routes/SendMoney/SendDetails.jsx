@@ -180,6 +180,7 @@ export default function SendDetails({
             <div className="cont1">
               {user?.allowMultiCurrencyTrading ? (
                 <CountryList
+                  userCode={user?.country?.currencyCode}
                   onChange={(e) => {
                     setSelectedCountry(e);
                     setDetails({
@@ -192,6 +193,7 @@ export default function SendDetails({
                 />
               ) : (
                 <CountryListSendMoney
+                  userCode={user?.country?.currencyCode}
                   onChange={(e) => {
                     setSelectedCountry(e);
                     setDetails({

@@ -18,6 +18,7 @@ const CountryListSendMoney = ({
   option,
   setSelected,
   disabled,
+  userCode,
   collectionStatus = false,
 }) => {
   const options = option || countryList().getData();
@@ -41,9 +42,10 @@ const CountryListSendMoney = ({
       newOptions?.data
         ? collectionStatus
           ? newOptions?.data
+              ?.filter((item) => item?.code === userCode)
               ?.map((item) => {
                 return {
-                  code: item?.currencyCode,
+                  code: item?.code,
                   value: item?.name,
                   label: item?.name,
                   id: item?.id,
@@ -52,9 +54,11 @@ const CountryListSendMoney = ({
               })
               ?.filter((item) => item.isSending)?.[0]
           : newOptions?.data
+              ?.filter((item) => item?.code === userCode)
+
               ?.map((item) => {
                 return {
-                  code: item?.currencyCode,
+                  code: item?.code,
                   value: item?.name,
                   label: item?.name,
                   id: item?.id,
@@ -69,41 +73,17 @@ const CountryListSendMoney = ({
   return (
     <CountyCont>
       <Select
-        value={
-          value || newOptions?.data
-            ? collectionStatus
-              ? newOptions?.data
-                  ?.map((item) => {
-                    return {
-                      code: item?.currencyCode,
-                      value: item?.name,
-                      label: item?.name,
-                      id: item?.id,
-                      ...item,
-                    };
-                  })
-                  ?.filter((item) => item.isSending)?.[0]
-              : newOptions?.data
-                  ?.map((item) => {
-                    return {
-                      code: item?.currencyCode,
-                      value: item?.name,
-                      label: item?.name,
-                      id: item?.id,
-                      ...item,
-                    };
-                  })
-                  ?.filter((item) => item.isReceiving)?.[0]
-            : options?.[0]
-        }
+        value={value}
         onChange={onChange}
         options={
           newOptions?.data
             ? collectionStatus
               ? newOptions?.data
+                  ?.filter((item) => item?.code === userCode)
+
                   ?.map((item) => {
                     return {
-                      code: item?.currencyCode,
+                      code: item?.code,
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
@@ -112,9 +92,11 @@ const CountryListSendMoney = ({
                   })
                   ?.filter((item) => item.isSending)
               : newOptions?.data
+                  ?.filter((item) => item?.code === userCode)
+
                   ?.map((item) => {
                     return {
-                      code: item?.currencyCode,
+                      code: item?.code,
                       value: item?.name,
                       label: item?.name,
                       id: item?.id,
@@ -144,7 +126,7 @@ const CountryListSendMoney = ({
               svg
             />{" "}
             &nbsp;
-            {country.label}
+            {country.code}
           </span>
         )}
         styles={{
