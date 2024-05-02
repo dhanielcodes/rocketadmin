@@ -6,7 +6,7 @@ import CustomTable from "../../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { getRatesList } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
-import { kFormatter3 } from "../../utils/format";
+import { FormatCorrect, kFormatter3 } from "../../utils/format";
 import { useState } from "react";
 import UpdateRatesModal from "../../modals/UpdateRatesModal";
 import { countryObjectsArray } from "../../../config/CountryCodes";
@@ -100,8 +100,12 @@ function ExistingRatesTable({ setRecall, recall }) {
     },
     {
       title: "RATE",
-      dataIndex: "conversionRate",
-      render: (ire) => kFormatter3(ire),
+      dataIndex: "id",
+      render: (ire) =>
+        FormatCorrect(
+          rates?.data?.find((item) => item?.id === ire)?.conversionRate,
+          rates?.data?.find((item) => item?.id === ire)?.toCurrency?.code
+        ),
       width: 120,
 
       sorter: {

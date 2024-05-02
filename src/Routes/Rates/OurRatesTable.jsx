@@ -6,7 +6,13 @@ import CustomTable from "../../reuseables/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { getOurRates } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
-import { kFormatter3, removeDup } from "../../utils/format";
+import {
+  FormatCorrect,
+  Gsh,
+  kFormatter3,
+  numberWithCommas,
+  removeDup,
+} from "../../utils/format";
 import { countryObjectsArray } from "../../../config/CountryCodes";
 import { useEffect } from "react";
 
@@ -86,8 +92,12 @@ function OurRatesTable({ recall }) {
 
     {
       title: "RATE",
-      dataIndex: "rate",
-      render: (ire) => kFormatter3(ire),
+      dataIndex: "sn",
+      render: (ire) =>
+        FormatCorrect(
+          rates?.data?.find((item) => item?.sn === ire)?.rate,
+          rates?.data?.find((item) => item?.sn === ire)?.toCurrency
+        ),
       width: 120,
 
       sorter: {
@@ -119,7 +129,7 @@ function OurRatesTable({ recall }) {
               borderRadius: "10000000px",
               marginRight: "10px",
             }}
-            countryCode={countryObjectsArray(item?.fromCountry)}
+            countryCode={item?.fromCurrency?.slice(0, 2)}
             svg
           />
           {item?.fromCurrency}
@@ -137,7 +147,7 @@ function OurRatesTable({ recall }) {
               marginRight: "10px",
               borderRadius: "10000000px",
             }}
-            countryCode={countryObjectsArray(item?.toCountry)}
+            countryCode={item?.toCurrency?.slice(0, 2)}
             svg
           />
           {item?.toCurrency}
@@ -152,7 +162,7 @@ function OurRatesTable({ recall }) {
     <Content>
       <div className="tablecontent">
         <div className="content">
-          <div className="heading">Our Rates </div>
+          <div className="heading">Our Rates</div>
         </div>
         {/*   <div className="top">
           <SearchInput placeholder="Search Records" className="SearchRecords" />
