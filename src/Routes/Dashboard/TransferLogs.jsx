@@ -1221,14 +1221,12 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
 
     {
       title: "RATE",
-      dataIndex: "rate",
-      render: (ire) => kFormatter3(ire),
+      dataIndex: "newRate",
       width: 120,
     },
     {
       title: "FOREX AMOUNT",
-      dataIndex: "receivedAmount",
-      render: (ire) => kFormatter3(ire),
+      dataIndex: "forexAmt",
       width: 170,
     },
     {
@@ -1556,6 +1554,28 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
             </Dropdown>
           </p>
         </div>
+      ),
+      forexAmt: (
+        <>
+          {" "}
+          <div>
+            <AmountFormatter
+              currency={item?.beneficiaryCurrency}
+              value={item?.receivedAmount}
+            />
+          </div>
+        </>
+      ),
+      newRate: (
+        <>
+          {" "}
+          <div>
+            <AmountFormatter
+              currency={item?.beneficiaryCurrency}
+              value={item?.rate}
+            />
+          </div>
+        </>
       ),
       newPaymentAmount: (
         <>
