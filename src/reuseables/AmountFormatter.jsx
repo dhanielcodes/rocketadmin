@@ -1,16 +1,9 @@
-import React from 'react';
-import { FormattedNumber } from 'react-intl';
+import React from "react";
+import { FormattedNumber } from "react-intl";
+import { FormatCorrect } from "../utils/format";
 
 const AmountFormatter = ({ value, currency }) => {
-  return (
-    <FormattedNumber
-      value={value}
-      style="currency"
-     currency={currency && currency}
-      minimumFractionDigits={2}
-      
-    />
-  );
+  return FormatCorrect(value, currency);
 };
 
 export default AmountFormatter;
