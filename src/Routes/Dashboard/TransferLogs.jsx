@@ -1558,6 +1558,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
       forexAmt: (
         <>
           {" "}
+          {/* ß */}
           <div>
             <AmountFormatter
               currency={item?.beneficiaryCurrency}
