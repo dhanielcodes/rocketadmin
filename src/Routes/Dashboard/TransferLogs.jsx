@@ -1582,7 +1582,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
           {" "}
           <div>
             <AmountFormatter
-              currency={item?.beneficiaryCurrency}
+              currency={"NGN"}
               value={item?.senderAgentCommission}
             />
           </div>
