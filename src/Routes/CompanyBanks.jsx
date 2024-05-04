@@ -43,20 +43,20 @@ function CompanyBanksPage() {
     {
       title: "BANK NAME",
       dataIndex: "bankName",
-      width: 100,
+      width: 130,
       //render: () => "Other 2",
     },
 
     {
       title: "ACCOUNT HOLDER NAME",
       dataIndex: "accountName",
-      width: 150,
+      width: 230,
       //render: () => "Other 2",
     },
     {
       title: "ACCOUNT NUMBER",
       dataIndex: "accountNumber",
-      width: 130,
+      width: 160,
       //render: () => "Other 2",
     },
     {
@@ -66,21 +66,27 @@ function CompanyBanksPage() {
       //render: () => "Other 2",
     },
     {
+      title: "CURRENCY",
+      dataIndex: "sending",
+      width: 130,
+      //render: () => "Other 2",
+    },
+    {
       title: "STATUS",
       dataIndex: "status",
-      width: 100,
+      width: 150,
       //render: () => "Other 2",
     },
     {
       title: "DATE ADDED",
       dataIndex: "dateCreated",
-      width: 170,
+      width: 240,
       //render: () => "Other 2",
     },
     {
       title: "ACTIONS",
       dataIndex: "edit",
-      width: 100,
+      width: 130,
       //render: () => "Other 2",
     },
   ];
@@ -129,7 +135,7 @@ function CompanyBanksPage() {
             countryCode={item?.currency?.code?.slice(0, 2)}
             svg
           />
-          {item?.currency["name"]}
+          {item?.currency["code"]}
         </div>
       ),
       status: (

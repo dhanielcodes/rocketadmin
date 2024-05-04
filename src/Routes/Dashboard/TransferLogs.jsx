@@ -1237,8 +1237,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
 
     {
       title: "AGENT COMMISSION",
-      dataIndex: "senderAgentCommission",
-      render: (ire) => kFormatter3(ire),
+      dataIndex: "agentCommission",
       width: 160,
     },
     {
@@ -1574,6 +1573,17 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
             <AmountFormatter
               currency={item?.beneficiaryCurrency}
               value={item?.rate}
+            />
+          </div>
+        </>
+      ),
+      agentCommission: (
+        <>
+          {" "}
+          <div>
+            <AmountFormatter
+              currency={item?.beneficiaryCurrency}
+              value={item?.senderAgentCommission}
             />
           </div>
         </>
