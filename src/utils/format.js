@@ -13,9 +13,13 @@ export function numberWithCommas(x) {
 export function Gsh(n) {
   return (n + "").split(".")[1]
 }
+
+export function Gsh2(n) {
+  return (n + "").split(".")[0]
+}
 export function FormatCorrect(value, currency) {
-console.log(Gsh(value)?.length,'jllllll')
-  return Gsh(value)?.length >3 ? getSymbolFromCurrency(currency)+value : getSymbolFromCurrency(currency) + `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+console.log(Gsh2(4000.7000)?.length > 3,'jllllhkdlsll')
+  return Gsh(value)?.length >3 ? getSymbolFromCurrency(currency)+ Gsh2(`${value}`).replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'.' +Gsh(value) : getSymbolFromCurrency(currency) + `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 
