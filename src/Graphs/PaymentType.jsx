@@ -9,9 +9,9 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { kFormatter4 } from "../utils/format";
+import { FormatCorrect } from "../utils/format";
 
-function PaymentType({ apiData }) {
+function PaymentType({ apiData, currency }) {
   const data = [
     {
       name: "Jan",
@@ -97,20 +97,20 @@ function PaymentType({ apiData }) {
         <p>
           Manual Bank Transfer:{" "}
           <span style={{ color: payload?.[0]?.stroke }}>
-            {kFormatter4(payload?.[0]?.value)}
+            {FormatCorrect(payload?.[0]?.value, currency)}
           </span>
         </p>
         <p>
           Pay With Bank:{" "}
           <span style={{ color: payload?.[1]?.stroke }}>
-            {kFormatter4(payload?.[1]?.value)}
+            {FormatCorrect(payload?.[1]?.value, currency)}
           </span>
         </p>
 
         <p>
           Wallet:{" "}
           <span style={{ color: payload?.[2]?.stroke }}>
-            {kFormatter4(payload?.[2]?.value)}
+            {FormatCorrect(payload?.[2]?.value, currency)}
           </span>
         </p>
       </div>

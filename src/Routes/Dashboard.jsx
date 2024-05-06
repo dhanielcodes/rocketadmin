@@ -1,25 +1,18 @@
 import { useState, useEffect } from "react";
-import reactLogo from "../assets/react.svg";
-import viteLogo from "/vite.svg";
 import BodyLayout from "../reuseables/BodyLayout";
-import CountryFlag from "react-country-flag";
 
 import { styled } from "styled-components";
-import CountryDropdown from "../reuseables/CountryDropdown";
-import CustomTable from "../reuseables/CustomTable";
 import PaymentType from "../Graphs/PaymentType";
-import { loadericon } from "../../public/ICON";
-import Transactions from "../Graphs/Transactions";
 import TransactionRecord from "../ChartComponent/TransactionRecord";
 import PaymentTypeRecord from "../ChartComponent/PaymentTypeRecord";
-import BranchWise from "../TableComponent/BranchWise";
-import CountryRates from "../TableComponent/CountryRates";
-import Transferlist from "../TableComponent/Transferlist";
-import { getAdminDashboard } from "../services/Dashboard";
+
+import {
+  getAdminDashboard,
+  getAdminDashboardAnalytics,
+} from "../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import Skeleton2 from "../reuseables/Skeleton2";
-import CountryDropdown2 from "../reuseables/CountryDropdown2";
-import { kFormatter2 } from "../utils/format";
+import { FormatCorrect, kFormatter2 } from "../utils/format";
 import DeleteIcon from "../assets/icons/DeleteIcon";
 import YellowCardIcon from "../assets/icons/YellowCardIcon";
 import GreenCardIcon from "../assets/icons/GreenCard";
@@ -28,11 +21,9 @@ import { Link } from "react-router-dom";
 import TransferLogsTable from "./Dashboard/TransferLogs";
 import NewCustomerList from "./Dashboard/NewCustomersTableList";
 import CountryDropdownDash from "../reuseables/CountryDropdownDash";
-import TodayLogs from "./Dashboard/TodayLogs";
 function Dashboard() {
-  const [count, setCount] = useState(0);
-
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [selectedVolume, setSelectedVolume] = useState();
 
   //const [params] = useSearchParams()
   const {
@@ -44,10 +35,33 @@ function Dashboard() {
     queryFn: () => getAdminDashboard(userDetails?.userId),
   });
 
-  const [selectedVolume, setSelectedVolume] = useState();
-  const transactions = dashboard?.data?.analyticByTransactionStatus;
-  const transactionsChannels = dashboard?.data?.analyticByTransactionChannels;
-  const paymentTypes = dashboard?.data?.analyticByPaymentTypes;
+  const {
+    data: dashboardAnalytics,
+    isLoading: isLoadingAna,
+    isFetching: isFetchingAna,
+    refetch,
+  } = useQuery({
+    queryKey: ["getAdminDashboardAnalytics"],
+    queryFn: () =>
+      getAdminDashboardAnalytics(
+        selectedVolume?.currency ||
+          dashboard?.data?.transactionVolumeByCurrency?.map((item) => {
+            return {
+              label: item?.currency,
+              value: item?.currency,
+              ...item,
+            };
+          })[0]?.currency
+      ),
+    enabled: dashboard?.data ? true : false,
+  });
+
+  console.log(dashboardAnalytics);
+
+  const transactions = dashboardAnalytics?.data?.analyticByTransactionStatus;
+  const transactionsChannels =
+    dashboardAnalytics?.data?.analyticsByTransactionChannel;
+  const paymentTypes = dashboardAnalytics?.data?.analyticByPaymentTypes;
 
   const volumeList = dashboard?.data?.transactionVolumeByCurrency;
 
@@ -63,6 +77,10 @@ function Dashboard() {
 
   console.log(dashboard);
   console.log(selectedVolume);
+
+  useEffect(() => {
+    refetch();
+  }, [selectedVolume]);
 
   return (
     <>
@@ -123,26 +141,53 @@ function Dashboard() {
                     <div className="contside2child2">
                       <div className="box">
                         <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                          {kFormatter2(
-                            Math.ceil(newVolume?.lastSixtyDays || 0)
+                          {FormatCorrect(
+                            Math.ceil(newVolume?.lastSixtyDays || 0),
+                            newVolume?.currency
                           )}
                         </div>{" "}
+                        <br />
+                        <div style={{ fontSize: "16px", fontWeight: "500" }}>
+                          Count:{" "}
+                          {kFormatter2(
+                            Math.ceil(newVolume?.lastSixtyDaysCount || 0)
+                          )}
+                        </div>
+                        <br />
                         <span>Last 60 Days</span>
                       </div>
                       <div className="box">
                         <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                          {kFormatter2(
-                            Math.ceil(newVolume?.lastNinetyDays || 0)
+                          {FormatCorrect(
+                            Math.ceil(newVolume?.lastNinetyDays || 0),
+                            newVolume?.currency
                           )}
                         </div>{" "}
+                        <br />
+                        <div style={{ fontSize: "16px", fontWeight: "500" }}>
+                          Count:{" "}
+                          {kFormatter2(
+                            Math.ceil(newVolume?.lastNinetyDaysCount || 0)
+                          )}
+                        </div>
+                        <br />
                         <span>Last 90 Days</span>
                       </div>
                       <div className="box">
                         <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                          {kFormatter2(
-                            Math.ceil(newVolume?.lastOneTwentyDays || 0)
+                          {FormatCorrect(
+                            Math.ceil(newVolume?.lastOneTwentyDays || 0),
+                            newVolume?.currency
                           )}
                         </div>{" "}
+                        <br />
+                        <div style={{ fontSize: "16px", fontWeight: "500" }}>
+                          Count:{" "}
+                          {kFormatter2(
+                            Math.ceil(newVolume?.lastOneTwentyDaysCount || 0)
+                          )}
+                        </div>
+                        <br />
                         <span>Last 120 Days</span>
                       </div>
                     </div>
@@ -274,15 +319,29 @@ function Dashboard() {
                           }}
                         >
                           {" "}
-                          Total Transaction Count
+                          Total Transactions
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter2(
+                        {FormatCorrect(
                           Math.ceil(
                             newVolume?.depositedAmount +
                               newVolume?.pendingAmount +
                               newVolume?.failedAmount || 0
+                          ),
+                          newVolume?.currency
+                        )}
+                      </div>
+
+                      <br />
+
+                      <div style={{ fontSize: "16px", fontWeight: "500" }}>
+                        Count:{" "}
+                        {kFormatter2(
+                          Math.ceil(
+                            newVolume?.deposited +
+                              newVolume?.pending +
+                              newVolume?.failed || 0
                           )
                         )}
                       </div>
@@ -313,9 +372,16 @@ function Dashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter2(
-                          Math.ceil(newVolume?.depositedAmount || 0)
+                        {FormatCorrect(
+                          Math.ceil(newVolume?.depositedAmount || 0),
+                          newVolume?.currency
                         )}
+                      </div>
+                      <br />
+
+                      <div style={{ fontSize: "16px", fontWeight: "500" }}>
+                        Count:{" "}
+                        {kFormatter2(Math.ceil(newVolume?.deposited || 0))}
                       </div>
                     </div>
                     <div
@@ -344,7 +410,14 @@ function Dashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter2(Math.ceil(newVolume?.pendingAmount || 0))}
+                        {FormatCorrect(
+                          Math.ceil(newVolume?.pendingAmount || 0),
+                          newVolume?.currency
+                        )}
+                      </div>
+                      <br />
+                      <div style={{ fontSize: "16px", fontWeight: "500" }}>
+                        Count: {kFormatter2(Math.ceil(newVolume?.pending || 0))}
                       </div>
                     </div>
                     <div
@@ -372,7 +445,15 @@ function Dashboard() {
                         </div>
                       </div>
                       <div style={{ fontSize: "2vw", fontWeight: "600" }}>
-                        {kFormatter2(Math.ceil(newVolume?.failedAmount || 0))}
+                        {FormatCorrect(
+                          Math.ceil(newVolume?.failedAmount || 0),
+                          newVolume?.currency
+                        )}
+                      </div>
+                      <br />
+
+                      <div style={{ fontSize: "16px", fontWeight: "500" }}>
+                        Count: {kFormatter2(Math.ceil(newVolume?.failed || 0))}
                       </div>
                     </div>
                   </div>
@@ -382,7 +463,7 @@ function Dashboard() {
           )}
           {/* Bar Chart Components Stamp */}
           <div className="PaymentTypeChart">
-            {isLoading || isFetching ? (
+            {isLoading || isFetching || isLoadingAna || isFetchingAna ? (
               <Skeleton2
                 height="400px"
                 style={{
@@ -397,78 +478,18 @@ function Dashboard() {
                     Shows a snapshot of payment types of your business
                   </span>
                 </div>
-                {/*  <div className="paymentmethod">
-                  <div className="card">
-                    <div className="color1"></div>
-                    <span>Pay By Card</span>
-                  </div>
-                  <div className="card">
-                    <div className="color2"></div>
-                    <span>Pay By Cash</span>
-                  </div>
-                  <div className="card">
-                    <div className="color3"></div>
-                    <span>Bank Transfer</span>
-                  </div>
-                  <div className="card">
-                    <div className="color4"></div>
-                    <span>Pay By Bank</span>
-                  </div>
-                </div> */}
-                <PaymentType apiData={paymentTypes} />
+
+                <PaymentType
+                  currency={newVolume?.currency}
+                  apiData={paymentTypes}
+                />
               </div>
             )}
-            {/* Three Shold Stamp */}
-
-            {/* <>
-            {isLoading || isFetching ? (
-              <Skeleton2
-                height="400px"
-                style={{
-                  marginBottom: "20px",
-                }}
-              />
-            ) : (
-              <div className="monthlyThreshold">
-                <div className="flexhold">
-                  <div className="type">
-                    <p>Monthly Threshold</p>
-                    <span>
-                      Shows a snapshot of monthly threshold on your system
-                    </span>
-                  </div>
-                  <CountryDropdown
-                    defaultValue={"Nigeria"}
-                    style={{ padding: "20px" }}
-                  />
-                </div>
-
-                <div className="score">
-                  <span>Threshold Score</span>
-                  <img src={loadericon} alt="" />
-                </div>
-                <div className="feeslimit">
-                  <div className="limit">
-                    <p>Threshold Limit</p>
-                    <span>2,350,000,90</span>
-                  </div>
-                  <div className="limit">
-                    <p>Total amount (including fee)</p>
-                    <span>115,439,.09</span>
-                  </div>
-                  <div className="limit">
-                    <p>Total fee</p>
-                    <span>0.00</span>
-                  </div>
-                </div>
-              </div>
-            )}
-            </> */}
           </div>
 
           {/* Transaction Chart Stamp */}
           <div className="PaymentTypeChart2">
-            {isLoading || isFetching ? (
+            {isLoading || isFetching || isLoadingAna || isFetchingAna ? (
               <Skeleton2
                 height="400px"
                 style={{
@@ -476,9 +497,12 @@ function Dashboard() {
                 }}
               />
             ) : (
-              <TransactionRecord apidata={transactions} />
+              <TransactionRecord
+                currency={newVolume?.currency}
+                apidata={transactions}
+              />
             )}
-            {isLoading || isFetching ? (
+            {isLoading || isFetching || isLoadingAna || isFetchingAna ? (
               <Skeleton2
                 height="400px"
                 style={{
@@ -486,7 +510,10 @@ function Dashboard() {
                 }}
               />
             ) : (
-              <PaymentTypeRecord apiData={transactionsChannels} />
+              <PaymentTypeRecord
+                currency={newVolume?.currency}
+                apiData={transactionsChannels}
+              />
             )}
           </div>
           {/*    <div className="PaymentTypeChart2">
@@ -715,7 +742,7 @@ const Content = styled.div`
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    padding: 2em;
+    padding: 2em 1em;
     border-radius: 10px;
     width: 100%;
     gap: 20px;
@@ -724,7 +751,7 @@ const Content = styled.div`
 
       .box {
         border-right: 1px solid rgba(213, 219, 229, 1);
-        padding-inline-start: 30px;
+        padding-inline-start: 20px;
         &:last-of-type {
           border-right: none;
         }

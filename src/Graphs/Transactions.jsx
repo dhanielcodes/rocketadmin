@@ -9,9 +9,9 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { kFormatter4 } from "../utils/format";
+import { FormatCorrect } from "../utils/format";
 
-function Transactions({ apiData }) {
+function Transactions({ apiData, currency }) {
   const data = [
     {
       name: "Jan",
@@ -97,20 +97,20 @@ function Transactions({ apiData }) {
         <p>
           Success:{" "}
           <span style={{ color: payload?.[0]?.stroke }}>
-            {kFormatter4(payload?.[0]?.value)}
+            {FormatCorrect(payload?.[0]?.value, currency)}
           </span>
         </p>
         <p>
           Pending:{" "}
           <span style={{ color: payload?.[1]?.stroke }}>
-            {kFormatter4(payload?.[1]?.value)}
+            {FormatCorrect(payload?.[1]?.value, currency)}
           </span>
         </p>
 
         <p>
           Failed:{" "}
           <span style={{ color: payload?.[2]?.stroke }}>
-            {kFormatter4(payload?.[2]?.value)}
+            {FormatCorrect(payload?.[2]?.value, currency)}
           </span>
         </p>
       </div>

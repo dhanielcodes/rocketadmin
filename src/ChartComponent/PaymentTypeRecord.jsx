@@ -2,7 +2,7 @@ import React from "react";
 import { styled } from "styled-components";
 import PaymentType2 from "../Graphs/PaymentType2";
 
-function PaymentTypeRecord({ apiData }) {
+function PaymentTypeRecord({ apiData, currency }) {
   const AppData = JSON.parse(localStorage.getItem("AppData"));
   console.log(
     "🚀 ~ file: PaymentTypeRecord.jsx:7 ~ PaymentTypeRecord ~ AppData:",
@@ -29,7 +29,7 @@ function PaymentTypeRecord({ apiData }) {
             <span>App</span>
           </div>
         </div> */}
-        <PaymentType2 apiData={apiData} />
+        <PaymentType2 apiData={apiData} currency={currency} />
       </div>
     </Content>
   );
