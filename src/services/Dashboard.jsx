@@ -10,6 +10,10 @@ export const getAdminDashboard = async (userId = 0) => {
   const { data } = await Axios.get(`${baseurl}/getuserdashboard/${userId}`);
   return data;
 };
+export const getAdminDashboardAnalytics = async (userId = 0) => {
+  const { data } = await Axios.get(`${baseurl}/analytics/${userId}`);
+  return data;
+};
 
 export const beneficiaries = async (userId, bid) => {
   const { data } = await Axios.get(
