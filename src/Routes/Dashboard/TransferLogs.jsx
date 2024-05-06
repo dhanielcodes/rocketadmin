@@ -1275,14 +1275,6 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     },
 
     {
-      title: "COLLECTION TYPE",
-      dataIndex: "collectionType",
-      width: 160,
-
-      //render: () => "Other",
-    },
-
-    {
       title: "BRANCH",
       dataIndex: "transactionSource",
       width: 100,
