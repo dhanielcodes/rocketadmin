@@ -142,19 +142,7 @@ function PaymentType({ apiData, currency }) {
           axisLine={false}
           tickLine={false}
           tickFormatter={function (val) {
-            return Math.abs(val) > 999999999
-              ? `${("amount" === "amount" && "₦") || ""}${
-                  Math.sign(val) * (Math.abs(val) / 1000000000).toFixed(1)
-                }B`
-              : Math.abs(val) > 999999
-              ? `${("amount" === "amount" && "₦") || ""}${
-                  Math.sign(val) * (Math.abs(val) / 1000000).toFixed(1)
-                }M`
-              : Math.abs(val) > 999
-              ? `${("amount" === "amount" && "₦") || ""}${
-                  Math.sign(val) * (Math.abs(val) / 1000).toFixed(1)
-                }k`
-              : Math.sign(val) * Math.abs(val);
+            return FormatCorrect(val, currency);
           }}
         />
         <Tooltip content={<CustomTooltip />} /> {/* <Tooltip /> */}
