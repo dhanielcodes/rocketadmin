@@ -58,10 +58,10 @@ function Dashboard() {
 
   console.log(dashboardAnalytics);
 
-  const transactions = dashboardAnalytics?.data?.analyticByTransactionStatus;
+  const transactions = dashboardAnalytics?.data?.analyticsByTransactionStatus;
   const transactionsChannels =
     dashboardAnalytics?.data?.analyticsByTransactionChannel;
-  const paymentTypes = dashboardAnalytics?.data?.analyticByPaymentTypes;
+  const paymentTypes = dashboardAnalytics?.data?.analyticsByPaymentTypes;
 
   const volumeList = dashboard?.data?.transactionVolumeByCurrency;
 
