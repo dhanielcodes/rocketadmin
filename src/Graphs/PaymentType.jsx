@@ -148,13 +148,13 @@ function PaymentType({ apiData, currency }) {
         <Tooltip content={<CustomTooltip />} /> {/* <Tooltip /> */}
         {/* <Legend /> */}
         <Bar
-          dataKey="pv"
+          dataKey="amt"
           stackId="a"
           fill="#5E5ADB"
           barSize={10}
           radius={[3, 3, 0, 0]}
         />
-        <Bar dataKey="amt" fill="#110bce" barSize={10} radius={[3, 3, 0, 0]} />
+        <Bar dataKey="pv" fill="#110bce" barSize={10} radius={[3, 3, 0, 0]} />
         <Bar dataKey="uv" fill="#1f1d66" barSize={10} radius={[3, 3, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
