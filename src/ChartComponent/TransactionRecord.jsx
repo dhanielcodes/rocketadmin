@@ -8,7 +8,7 @@ function TransactionRecord({ apidata, currency }) {
       <div className="Payment">
         <div className="type">
           <p>Transactions</p>
-          <span>Shows a snapshot of payment types on your system</span>
+          <span>Shows a snapshot of transaction by status on your system</span>
         </div>
         {/*     <div className="paymentmethod">
           <div className="card">
