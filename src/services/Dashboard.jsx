@@ -169,6 +169,14 @@ export const gettransactionlogbyref = async (payload) => {
   return data;
 };
 
+export const togglecurrencyrateconversion = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/togglecurrencyrateconversion`,
+    body
+  );
+  return data;
+};
+
 /*  */
 
 export const cancelTransaction = async (body) => {

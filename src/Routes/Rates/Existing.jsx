@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 
 import SearchInput from "../../reuseables/SearchInput";
 import CustomTable from "../../reuseables/CustomTable";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getRatesList } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
 import { FormatCorrect, kFormatter3 } from "../../utils/format";
@@ -11,8 +11,9 @@ import { useState } from "react";
 import UpdateRatesModal from "../../modals/UpdateRatesModal";
 import { countryObjectsArray } from "../../../config/CountryCodes";
 import { IconSearch } from "@arco-design/web-react/icon";
-import { Input } from "@arco-design/web-react";
+import { Input, Switch } from "@arco-design/web-react";
 import { removeDup } from "../../utils/format";
+import { togglecurrencyrateconversion } from "../../services/Dashboard";
 
 function ExistingRatesTable({ setRecall, recall }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -28,7 +29,21 @@ function ExistingRatesTable({ setRecall, recall }) {
     queryKey: ["getRatesList"],
     queryFn: () => getRatesList(),
   });
+  const { mutate, isLoading: togglecurrencyrateconversionLoading } =
+    useMutation({
+      mutationFn: togglecurrencyrateconversion,
+      onSuccess: (data) => {
+        refetch();
+      },
+      onError: (data) => {
+        //setModal(true);
 
+        setTimeout(() => {
+          //  seterr("")
+        }, 2000);
+        return;
+      },
+    });
   console.log(rates);
 
   const columns = [
@@ -114,6 +129,13 @@ function ExistingRatesTable({ setRecall, recall }) {
       },
     },
     {
+      title: "CURRENCY RATE CONVERSION",
+      dataIndex: "toggleRateConversion",
+      width: 190,
+
+      //render: () => "Other",
+    },
+    {
       title: "ENTRY DATE",
       dataIndex: "dateCreated",
       width: 220,
@@ -122,6 +144,7 @@ function ExistingRatesTable({ setRecall, recall }) {
   ];
   const [modal, setModal] = useState();
   const [rate, setRate] = useState();
+  const [cus, setCus] = useState();
 
   const newData = rates?.data?.map((item) => {
     return {
@@ -187,6 +210,34 @@ function ExistingRatesTable({ setRecall, recall }) {
           {item?.toCurrency["code"]}
         </div>
       ),
+      toggleRateConversion: (
+        <div>
+          <Switch
+            loading={
+              (item === cus && togglecurrencyrateconversionLoading) ||
+              (item === cus && togglecurrencyrateconversionLoading)
+            }
+            /* disabled={
+              disallowusermulticurrencyLoading || allowMultiCurrencyLoading
+            } */
+            onClick={() => {
+              setCus(item);
+              if (item?.status) {
+                mutate({
+                  action: 0,
+                  objectId: item?.id,
+                });
+              } else {
+                mutate({
+                  action: 1,
+                  objectId: item?.id,
+                });
+              }
+            }}
+            checked={item?.status}
+          />
+        </div>
+      ),
 
       currencyCode: (
         <div
@@ -208,7 +259,7 @@ function ExistingRatesTable({ setRecall, recall }) {
           />
           {item?.currencyRateMetaData?.currency?.["code"]}
         </div>
-      ),
+      ) /*  */,
     };
   });
 
