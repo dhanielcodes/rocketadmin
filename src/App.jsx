@@ -128,6 +128,9 @@ function App() {
     <Router>
       <Toaster
         position="top-center"
+        containerStyle={{
+          zIndex: 100000000000,
+        }}
         toastOptions={{
           success: {
             style: {
