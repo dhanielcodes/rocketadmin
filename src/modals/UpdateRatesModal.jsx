@@ -101,31 +101,7 @@ export default function UpdateRatesModal({
       }, */
       width: 130,
     },
-    {
-      title: "CURRENCY RATE ID",
-      dataIndex: "currencyRateId",
-      /*   sorter: {
-        compare: (a, b) => a.name - b.name,
-        multiple: 1,
-      }, */
-      width: 130,
-    },
 
-    {
-      title: "MAXIMUM AMOUNT",
-      dataIndex: "id",
-      render: (ire) =>
-        FormatCorrect(
-          rateItem?.adminRateBands?.find((item) => item?.id === ire)
-            ?.maximumAmount,
-          null
-        ),
-      /*   sorter: {
-        compare: (a, b) => a.name - b.name,
-        multiple: 1,
-      }, */
-      width: 130,
-    },
     {
       title: "MINIMUM AMOUNT",
       dataIndex: "id",
@@ -141,6 +117,22 @@ export default function UpdateRatesModal({
       }, */
       width: 130,
     },
+    {
+      title: "MAXIMUM AMOUNT",
+      dataIndex: "id",
+      render: (ire) =>
+        FormatCorrect(
+          rateItem?.adminRateBands?.find((item) => item?.id === ire)
+            ?.maximumAmount,
+          null
+        ),
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+
     {
       title: "RATE",
       dataIndex: "id",
@@ -243,6 +235,34 @@ export default function UpdateRatesModal({
                 gridGap: "40px",
               }}
             >
+              <div>
+                <label
+                  style={{
+                    width: "60%",
+                    display: "block",
+                  }}
+                >
+                  Category
+                </label>
+                <AppSelect
+                  options={[
+                    {
+                      label: "Agent",
+                      value: 5,
+                    },
+                    {
+                      label: "Customer",
+                      value: 6,
+                    },
+                  ]}
+                  disabled
+                  defaultValue={{
+                    ...rateItem?.currencyRateMetaData,
+                    label: rateItem?.currencyRateMetaData?.name,
+                    value: rateItem?.currencyRateMetaData?.name,
+                  }}
+                />
+              </div>
               <div className="name">
                 <label>Sending Currency</label>
                 <CountryDropdown2
@@ -311,15 +331,7 @@ export default function UpdateRatesModal({
                   //defaultValue={charge?.baseValue}
                 />
               </div>
-            </div>
-            <br />
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr",
-                gridGap: "40px",
-              }}
-            >
+
               <div className="name" style={{}}>
                 <label>Charge Percentage</label>
                 <AppInput
