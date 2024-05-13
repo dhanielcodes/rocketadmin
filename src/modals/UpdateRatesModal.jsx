@@ -8,6 +8,9 @@ import { getCurrencies } from "../services/Auth";
 import AppInput from "../reuseables/AppInput";
 import ReactCountryFlag from "react-country-flag";
 import styled from "styled-components";
+import CustomTable from "../reuseables/CustomTable";
+import { IconPen } from "@arco-design/web-react/icon";
+import { FormatCorrect } from "../utils/format";
 
 export default function UpdateRatesModal({
   rateItem,
@@ -56,6 +59,124 @@ export default function UpdateRatesModal({
   });
 
   console.log(countries?.data);
+
+  const columns = [
+    {
+      title: "ACTIONS",
+      dataIndex: "action",
+      fixed: "left",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "ID",
+      dataIndex: "id",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "CHARGE TYPE",
+      dataIndex: "chargeType",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "CHARGE",
+      dataIndex: "charge",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "CURRENCY RATE ID",
+      dataIndex: "currencyRateId",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+
+    {
+      title: "MAXIMUM AMOUNT",
+      dataIndex: "id",
+      render: (ire) =>
+        FormatCorrect(
+          rateItem?.adminRateBands?.find((item) => item?.id === ire)
+            ?.maximumAmount,
+          null
+        ),
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "MINIMUM AMOUNT",
+      dataIndex: "id",
+      render: (ire) =>
+        FormatCorrect(
+          rateItem?.adminRateBands?.find((item) => item?.id === ire)
+            ?.minimumAmount,
+          null
+        ),
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "RATE",
+      dataIndex: "id",
+      render: (ire) =>
+        FormatCorrect(
+          rateItem?.adminRateBands?.find((item) => item?.id === ire)?.rate,
+          rateItem?.toCountryCurrency?.code
+        ),
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 170,
+    },
+  ];
+  const [cus, setCus] = useState();
+
+  const newData = rateItem?.adminRateBands?.map((item) => {
+    return {
+      ...item,
+      action: (
+        <div
+          style={{
+            textDecoration: "none",
+          }}
+        >
+          <p
+            style={{
+              color: "blue",
+              cursor: "pointer",
+            }}
+          >
+            <IconPen />
+          </p>
+        </div>
+      ),
+    };
+  });
+
   return (
     <div
       style={{
@@ -68,92 +189,128 @@ export default function UpdateRatesModal({
           closeModal={() => {
             setModal(false);
           }}
+          maxWidth={`1400px`}
           heading="Update Rate"
         >
-          <div className="name">
-            <label>Sending Currency</label>
-            <CountryDropdown2
-              disabled={true}
-              value={{
-                ...rateItem,
-                label:
-                  rateItem?.fromCurrency?.name +
-                  " - " +
-                  rateItem?.fromCurrency?.code,
-                value: rateItem?.fromCurrency?.name,
-              }}
-              option={
-                countries?.data?.map((item) => {
-                  return {
-                    label: item?.name + " - " + item?.code,
-                    value: item?.name,
-                    ...item,
-                  };
-                }) || []
-              }
-              onChange={(e) => {
-                setSend(e);
-              }}
-            />
-          </div>
           <div
-            className="name"
             style={{
-              marginTop: "20px",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gridGap: "40px",
             }}
           >
-            <label>Receiving Currency</label>
-            <CountryDropdown2
-              disabled={true}
-              collectionStatus
-              value={{
-                label:
-                  rateItem?.toCurrency?.name +
-                  " - " +
-                  rateItem?.toCurrency?.code,
-                value: rateItem?.toCurrency?.name,
-                ...rateItem,
-              }}
-              option={
-                countries?.data?.map((item) => {
-                  return {
-                    label: item?.name + " - " + item?.code,
-                    value: item?.name,
-                    ...item,
-                  };
-                }) || []
-              }
-              onChange={(e) => {
-                setReceive(e);
-              }}
-            />
-          </div>
+            <div className="name">
+              <label>Sending Currency</label>
+              <CountryDropdown2
+                disabled={true}
+                value={{
+                  ...rateItem,
+                  label:
+                    rateItem?.fromCountryCurrency?.name +
+                    " - " +
+                    rateItem?.fromCountryCurrency?.code,
+                  value: rateItem?.fromCountryCurrency?.name,
+                }}
+                option={
+                  countries?.data?.map((item) => {
+                    return {
+                      label: item?.name + " - " + item?.code,
+                      value: item?.name,
+                      ...item,
+                    };
+                  }) || []
+                }
+                onChange={(e) => {
+                  setSend(e);
+                }}
+              />
+            </div>
+            <div className="name" style={{}}>
+              <label>Receiving Currency</label>
+              <CountryDropdown2
+                collectionStatus
+                disabled={true}
+                value={{
+                  label:
+                    rateItem?.toCountryCurrency?.name +
+                    " - " +
+                    rateItem?.toCountryCurrency?.code,
+                  value: rateItem?.toCountryCurrency?.name,
+                  ...rateItem,
+                }}
+                option={
+                  countries?.data?.map((item) => {
+                    return {
+                      label: item?.name + " - " + item?.code,
+                      value: item?.name,
+                      ...item,
+                    };
+                  }) || []
+                }
+                onChange={(e) => {
+                  setReceive(e);
+                }}
+              />
+            </div>
 
+            <div className="name" style={{}}>
+              <label>New Rate</label>
+              <AppInput
+                placeholder="How much"
+                type="number"
+                onChange={(e) => {
+                  setRate(e.target.value);
+                }}
+                width="95%"
+                name="username"
+                defaultValue={rateItem?.conversionRate}
+                //defaultValue={charge?.baseValue}
+              />
+            </div>
+          </div>
+          <br />
           <div
-            className="name"
             style={{
-              marginTop: "20px",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gridGap: "40px",
             }}
           >
-            <label>New Rate</label>
-            <AppInput
-              placeholder="How much"
-              type="number"
-              onChange={(e) => {
-                setRate(e.target.value);
-              }}
-              width="95%"
-              name="username"
-              defaultValue={rateItem?.conversionRate}
-              //defaultValue={charge?.baseValue}
-            />
+            <div className="name" style={{}}>
+              <label>Charge Percentage</label>
+              <AppInput
+                placeholder="How much"
+                type="number"
+                onChange={(e) => {
+                  setRate(e.target.value);
+                }}
+                width="95%"
+                name="username"
+                defaultValue={rateItem?.feePercentage}
+                //defaultValue={charge?.baseValue}
+              />
+            </div>
+            <div className="name" style={{}}>
+              <label>Charge Threshold</label>
+              <AppInput
+                placeholder="How much"
+                type="number"
+                onChange={(e) => {
+                  setRate(e.target.value);
+                }}
+                width="95%"
+                name="username"
+                defaultValue={rateItem?.transactionFeeThreshold}
+                //defaultValue={charge?.baseValue}
+              />
+            </div>
           </div>
 
           <Container>
             <div className="rates">
               <div className="pri">
                 <ReactCountryFlag
-                  countryCode={rateItem?.fromCurrency?.code.slice(0, 2)}
+                  countryCode={rateItem?.fromCountryCurrency?.code.slice(0, 2)}
                   style={{
                     width: "40px",
                     height: "40px",
@@ -166,12 +323,22 @@ export default function UpdateRatesModal({
               <div style={{ color: "#000" }}>=</div>
               <div className="sec">
                 <ReactCountryFlag
-                  countryCode={rateItem?.toCurrency?.code.slice(0, 2)}
+                  countryCode={rateItem?.toCountryCurrency?.code.slice(0, 2)}
                   svg
                 />
               </div>
             </div>
           </Container>
+
+          <CustomTable
+            noData={rateItem?.data?.length}
+            Apidata={newData}
+            tableColumns={columns}
+            scroll={{
+              x: 800,
+              y: 800,
+            }}
+          />
 
           <div
             style={{
@@ -200,12 +367,15 @@ export default function UpdateRatesModal({
                     firstName: "Admin",
                   },
                   conversionRate: rate || rateItem?.conversionRate,
-                  fromCurrency: {
-                    id: rateItem?.fromCurrency?.id,
+                  fromCountryCurrency: {
+                    id: rateItem?.fromCountryCurrency?.id,
                   },
-                  toCurrency: {
-                    id: rateItem?.toCurrency?.id,
+                  toCountryCurrency: {
+                    id: rateItem?.toCountryCurrency?.id,
                   },
+                  feePercentage: 0.0,
+                  transactionFeeThreshold: 1000,
+                  adminRateBands: [],
                 });
               }}
               className="confirm"

@@ -87,11 +87,11 @@ const Content = styled.div`
   width: 100%;
 
   .top {
-    padding: 0;
+    padding: 0 !important;
   }
 
   .top input {
-    padding: 12px;
+    padding: 11px;
     width: 100%;
     font-size: 14px;
     color: #000000;
