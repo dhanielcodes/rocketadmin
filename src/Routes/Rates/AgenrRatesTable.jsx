@@ -98,13 +98,14 @@ function AgentRatesTable({ recall }) {
       filters: removeDup(
         rates?.data?.map((item) => {
           return {
-            text: item?.fromCurrency["code"],
-            value: item?.fromCurrency["code"],
+            text: item?.fromCountryCurrency["code"],
+            value: item?.fromCountryCurrency["code"],
           };
         })
       ),
 
-      onFilter: (value, row) => row?.fromCurrency["code"].indexOf(value) > -1,
+      onFilter: (value, row) =>
+        row?.fromCountryCurrency["code"].indexOf(value) > -1,
       filterMultiple: true,
     },
     {
@@ -114,13 +115,14 @@ function AgentRatesTable({ recall }) {
       filters: removeDup(
         rates?.data?.map((item) => {
           return {
-            text: item?.toCurrency["code"],
-            value: item?.toCurrency["code"],
+            text: item?.toCountryCurrency["code"],
+            value: item?.toCountryCurrency["code"],
           };
         })
       ),
 
-      onFilter: (value, row) => row?.toCurrency["code"].indexOf(value) > -1,
+      onFilter: (value, row) =>
+        row?.toCountryCurrency["code"].indexOf(value) > -1,
       filterMultiple: true,
     },
 
@@ -142,7 +144,7 @@ function AgentRatesTable({ recall }) {
       render: (ire) =>
         FormatCorrect(
           rates?.data?.find((item) => item?.id === ire)?.conversionRate,
-          rates?.data?.find((item) => item?.id === ire)?.toCurrency?.code
+          rates?.data?.find((item) => item?.id === ire)?.toCountryCurrency?.code
         ),
       width: 120,
 
@@ -157,7 +159,7 @@ function AgentRatesTable({ recall }) {
       render: (ire) =>
         FormatCorrect(
           rates?.data?.find((item) => item?.id === ire)?.agentRate,
-          rates?.data?.find((item) => item?.id === ire)?.toCurrency?.code
+          rates?.data?.find((item) => item?.id === ire)?.toCountryCurrency?.code
         ),
       width: 120,
 
@@ -190,10 +192,10 @@ function AgentRatesTable({ recall }) {
               borderRadius: "10000000px",
               marginRight: "10px",
             }}
-            countryCode={item?.fromCurrency?.code?.slice(0, 2)}
+            countryCode={item?.fromCountryCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.fromCurrency["code"]}
+          {item?.fromCountryCurrency["code"]}
         </div>
       ),
       receiving: (
@@ -208,10 +210,10 @@ function AgentRatesTable({ recall }) {
               marginRight: "10px",
               borderRadius: "10000000px",
             }}
-            countryCode={item?.toCurrency?.code?.slice(0, 2)}
+            countryCode={item?.toCountryCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.toCurrency["code"]}
+          {item?.toCountryCurrency["code"]}
         </div>
       ),
 

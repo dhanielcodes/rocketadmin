@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { updateRate } from "../services/PayoutDashboard";
 import AppModal from "../COMPONENTS/AppModal";
@@ -8,6 +8,10 @@ import { getCurrencies } from "../services/Auth";
 import AppInput from "../reuseables/AppInput";
 import ReactCountryFlag from "react-country-flag";
 import styled from "styled-components";
+import CustomTable from "../reuseables/CustomTable";
+import { IconPen } from "@arco-design/web-react/icon";
+import { FormatCorrect } from "../utils/format";
+import AppSelect from "../reuseables/AppSelect";
 
 export default function UpdateRatesModal({
   rateItem,
@@ -21,6 +25,8 @@ export default function UpdateRatesModal({
   const [send, setSend] = useState();
   const [receive, setReceive] = useState();
 
+  const [thresh, setThresh] = useState();
+  const [fee, setFee] = useState(null);
   console.log(rateItem);
 
   const { mutate, isLoading: mutateLoading } = useMutation({
@@ -56,122 +62,477 @@ export default function UpdateRatesModal({
   });
 
   console.log(countries?.data);
-  return (
-    <div
-      style={{
-        opacity: modal ? "1" : "0",
-        pointerEvents: modal ? "all" : "none",
-      }}
-    >
-      {modal && (
-        <AppModal
-          closeModal={() => {
-            setModal(false);
+
+  const columns = [
+    {
+      title: "ACTIONS",
+      dataIndex: "action",
+      fixed: "left",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "ID",
+      dataIndex: "id",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "CHARGE TYPE",
+      dataIndex: "chargeType",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "CHARGE",
+      dataIndex: "charge",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "CURRENCY RATE ID",
+      dataIndex: "currencyRateId",
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+
+    {
+      title: "MAXIMUM AMOUNT",
+      dataIndex: "id",
+      render: (ire) =>
+        FormatCorrect(
+          rateItem?.adminRateBands?.find((item) => item?.id === ire)
+            ?.maximumAmount,
+          null
+        ),
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "MINIMUM AMOUNT",
+      dataIndex: "id",
+      render: (ire) =>
+        FormatCorrect(
+          rateItem?.adminRateBands?.find((item) => item?.id === ire)
+            ?.minimumAmount,
+          null
+        ),
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 130,
+    },
+    {
+      title: "RATE",
+      dataIndex: "id",
+      render: (ire) =>
+        FormatCorrect(
+          rateItem?.adminRateBands?.find((item) => item?.id === ire)?.rate,
+          rateItem?.toCountryCurrency?.code
+        ),
+      /*   sorter: {
+        compare: (a, b) => a.name - b.name,
+        multiple: 1,
+      }, */
+      width: 170,
+    },
+  ];
+
+  const [rateBands, setRateBands] = useState([]);
+  const [rateBand, setRateBand] = useState({});
+  const [modal2, setModal2] = useState(false);
+
+  useEffect(() => {
+    setRateBands(rateItem?.adminRateBands);
+    setFee(rateItem?.feePercentage);
+    setThresh(rateItem?.transactionFeeThreshold);
+    setRate(rateItem?.conversionRate);
+  }, [rateItem]);
+  const updateRateBandsArray = () => {
+    const newState = rateBands?.map((obj) => {
+      // 👇️ if id equals 2, update country property
+      setModal2(false);
+
+      if (obj?.id === rateBand?.id) {
+        toast.success(`Rate Column Updated`);
+        setModal2(false);
+        return {
+          ...obj,
+          minimumAmount: rateBand?.minimumAmount,
+          maximumAmount: rateBand?.maximumAmount,
+          rate: rateBand?.rate,
+          chargeType: rateBand?.chargeType,
+          charge: rateBand?.charge,
+        };
+      }
+
+      // 👇️ otherwise return the object as is
+      return obj;
+    });
+
+    console.log(newState, "fkks");
+
+    setRateBands(newState);
+  };
+  console.log(rateBands, "fkks");
+
+  const newData = rateBands?.map((item) => {
+    return {
+      ...item,
+      action: (
+        <div
+          style={{
+            textDecoration: "none",
           }}
-          heading="Update Rate"
+          onClick={() => {
+            setRateBand(item);
+            setModal2(true);
+          }}
         >
-          <div className="name">
-            <label>Sending Currency</label>
-            <CountryDropdown2
-              disabled={true}
-              value={{
-                ...rateItem,
-                label:
-                  rateItem?.fromCurrency?.name +
-                  " - " +
-                  rateItem?.fromCurrency?.code,
-                value: rateItem?.fromCurrency?.name,
-              }}
-              option={
-                countries?.data?.map((item) => {
-                  return {
-                    label: item?.name + " - " + item?.code,
-                    value: item?.name,
-                    ...item,
-                  };
-                }) || []
-              }
-              onChange={(e) => {
-                setSend(e);
-              }}
-            />
-          </div>
-          <div
-            className="name"
+          <p
             style={{
-              marginTop: "20px",
+              color: "blue",
+              cursor: "pointer",
             }}
           >
-            <label>Receiving Currency</label>
-            <CountryDropdown2
-              disabled={true}
-              collectionStatus
-              value={{
-                label:
-                  rateItem?.toCurrency?.name +
-                  " - " +
-                  rateItem?.toCurrency?.code,
-                value: rateItem?.toCurrency?.name,
-                ...rateItem,
-              }}
-              option={
-                countries?.data?.map((item) => {
-                  return {
-                    label: item?.name + " - " + item?.code,
-                    value: item?.name,
-                    ...item,
-                  };
-                }) || []
-              }
-              onChange={(e) => {
-                setReceive(e);
-              }}
-            />
-          </div>
-
-          <div
-            className="name"
-            style={{
-              marginTop: "20px",
+            <IconPen />
+          </p>
+        </div>
+      ),
+    };
+  });
+  return (
+    <>
+      <div
+        style={{
+          opacity: modal ? "1" : "0",
+          pointerEvents: modal ? "all" : "none",
+        }}
+      >
+        {modal && (
+          <AppModal
+            closeModal={() => {
+              setModal(false);
             }}
+            maxWidth={`1400px`}
+            heading="Update Rate"
           >
-            <label>New Rate</label>
-            <AppInput
-              placeholder="How much"
-              type="number"
-              onChange={(e) => {
-                setRate(e.target.value);
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                gridGap: "40px",
               }}
-              width="95%"
-              name="username"
-              defaultValue={rateItem?.conversionRate}
-              //defaultValue={charge?.baseValue}
-            />
-          </div>
-
-          <Container>
-            <div className="rates">
-              <div className="pri">
-                <ReactCountryFlag
-                  countryCode={rateItem?.fromCurrency?.code.slice(0, 2)}
-                  style={{
-                    width: "40px",
-                    height: "40px",
+            >
+              <div className="name">
+                <label>Sending Currency</label>
+                <CountryDropdown2
+                  disabled={true}
+                  value={{
+                    ...rateItem,
+                    label:
+                      rateItem?.fromCountryCurrency?.name +
+                      " - " +
+                      rateItem?.fromCountryCurrency?.code,
+                    value: rateItem?.fromCountryCurrency?.name,
                   }}
-                  svg
+                  option={
+                    countries?.data?.map((item) => {
+                      return {
+                        label: item?.name + " - " + item?.code,
+                        value: item?.name,
+                        ...item,
+                      };
+                    }) || []
+                  }
+                  onChange={(e) => {
+                    setSend(e);
+                  }}
                 />
-
-                {/* <p>{rates?.data?.fromAmount}</p> */}
               </div>
-              <div style={{ color: "#000" }}>=</div>
-              <div className="sec">
-                <ReactCountryFlag
-                  countryCode={rateItem?.toCurrency?.code.slice(0, 2)}
-                  svg
+              <div className="name" style={{}}>
+                <label>Receiving Currency</label>
+                <CountryDropdown2
+                  collectionStatus
+                  disabled={true}
+                  value={{
+                    label:
+                      rateItem?.toCountryCurrency?.name +
+                      " - " +
+                      rateItem?.toCountryCurrency?.code,
+                    value: rateItem?.toCountryCurrency?.name,
+                    ...rateItem,
+                  }}
+                  option={
+                    countries?.data?.map((item) => {
+                      return {
+                        label: item?.name + " - " + item?.code,
+                        value: item?.name,
+                        ...item,
+                      };
+                    }) || []
+                  }
+                  onChange={(e) => {
+                    setReceive(e);
+                  }}
+                />
+              </div>
+
+              <div className="name" style={{}}>
+                <label>New Rate</label>
+                <AppInput
+                  placeholder="How much"
+                  type="number"
+                  onChange={(e) => {
+                    setRate(e.target.value);
+                  }}
+                  width="95%"
+                  name="username"
+                  value={rate}
+                  //defaultValue={charge?.baseValue}
                 />
               </div>
             </div>
-          </Container>
+            <br />
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                gridGap: "40px",
+              }}
+            >
+              <div className="name" style={{}}>
+                <label>Charge Percentage</label>
+                <AppInput
+                  placeholder="How much"
+                  type="number"
+                  onChange={(e) => {
+                    setRate(e.target.value);
+                  }}
+                  width="95%"
+                  name="username"
+                  value={fee}
+                  //defaultValue={charge?.baseValue}
+                />
+              </div>
+              <div className="name" style={{}}>
+                <label>Charge Threshold</label>
+                <AppInput
+                  placeholder="How much"
+                  type="number"
+                  onChange={(e) => {
+                    setRate(e.target.value);
+                  }}
+                  width="95%"
+                  name="username"
+                  value={thresh}
+                  //defaultValue={charge?.baseValue}
+                />
+              </div>
+            </div>
+
+            <Container>
+              <div className="rates">
+                <div className="pri">
+                  <ReactCountryFlag
+                    countryCode={rateItem?.fromCountryCurrency?.code.slice(
+                      0,
+                      2
+                    )}
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                    }}
+                    svg
+                  />
+
+                  {/* <p>{rates?.data?.fromAmount}</p> */}
+                </div>
+                <div style={{ color: "#000" }}>=</div>
+                <div className="sec">
+                  <ReactCountryFlag
+                    countryCode={rateItem?.toCountryCurrency?.code.slice(0, 2)}
+                    svg
+                  />
+                </div>
+              </div>
+            </Container>
+
+            <CustomTable
+              noData={newData?.length}
+              Apidata={newData}
+              tableColumns={columns}
+              scroll={{
+                x: 800,
+                y: 800,
+              }}
+            />
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                gridGap: "10px",
+                marginTop: "30px",
+              }}
+            >
+              <div></div>
+              <button
+                onClick={() => {
+                  setModal(false);
+                }}
+                className="cancel"
+              >
+                {" "}
+                <span>Cancel</span>
+              </button>
+              <button
+                onClick={() => {
+                  mutate({
+                    id: rateItem?.id,
+                    updatedBy: {
+                      userId: userDetails?.userId,
+                      firstName: "Admin",
+                    },
+                    conversionRate: rate,
+                    fromCountryCurrency: {
+                      id: rateItem?.fromCountryCurrency?.id,
+                    },
+                    toCountryCurrency: {
+                      id: rateItem?.toCountryCurrency?.id,
+                    },
+                    feePercentage: fee,
+                    transactionFeeThreshold: thresh,
+                    adminRateBands: rateBands,
+                  });
+                }}
+                className="confirm"
+              >
+                {" "}
+                <span>{mutateLoading ? "updating..." : "Update"}</span>
+              </button>
+            </div>
+          </AppModal>
+        )}
+      </div>
+      {modal2 && (
+        <AppModal
+          closeModal={() => {
+            setModal2(false);
+            setRateBand({});
+          }}
+          heading="Update Fees"
+          maxWidth="980px"
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gridGap: "10px",
+            }}
+          >
+            <div
+              style={{
+                width: "100%",
+              }}
+            >
+              <label>Maximum Amount</label>
+              <AppInput
+                value={rateBand?.maximumAmount}
+                type="number"
+                name="username"
+                padding="12px"
+                width="88%"
+                onChange={(e) => {
+                  setRateBand({
+                    ...rateBand,
+                    maximumAmount: Number(e.target.value),
+                  });
+                }}
+              />
+            </div>
+            <div
+              style={{
+                width: "100%",
+              }}
+            >
+              <label>Minimum Amount</label>
+              <AppInput
+                value={rateBand?.minimumAmount}
+                type="number"
+                name="username"
+                padding="12px"
+                width="90%"
+                onChange={(e) => {
+                  setRateBand({
+                    ...rateBand,
+                    minimumAmount: Number(e.target.value),
+                  });
+                }}
+              />
+            </div>
+
+            <div
+              style={{
+                width: "100%",
+              }}
+            >
+              <label>Rate</label>
+              <AppInput
+                value={rateBand?.rate}
+                type="number"
+                name="username"
+                padding="12px"
+                width="90%"
+                disabled
+                onChange={(e) => {
+                  setRateBand({
+                    ...rateBand,
+                    rate: Number(e.target.value),
+                  });
+                }}
+              />
+            </div>
+            <div
+              style={{
+                width: "100%",
+              }}
+            >
+              <label>Transfer Fee</label>
+              <AppInput
+                value={rateBand?.charge}
+                type="number"
+                name="username"
+                padding="12px"
+                width="88%"
+                onChange={(e) => {
+                  setRateBand({
+                    ...rateBand,
+                    charge: Number(e.target.value),
+                  });
+                }}
+              />
+            </div>
+          </div>
 
           <div
             style={{
@@ -184,7 +545,8 @@ export default function UpdateRatesModal({
             <div></div>
             <button
               onClick={() => {
-                setModal(false);
+                setModal2(false);
+                setRateBand({});
               }}
               className="cancel"
             >
@@ -192,31 +554,18 @@ export default function UpdateRatesModal({
               <span>Cancel</span>
             </button>
             <button
-              onClick={() => {
-                mutate({
-                  id: rateItem?.id,
-                  updatedBy: {
-                    userId: userDetails?.userId,
-                    firstName: "Admin",
-                  },
-                  conversionRate: rate || rateItem?.conversionRate,
-                  fromCurrency: {
-                    id: rateItem?.fromCurrency?.id,
-                  },
-                  toCurrency: {
-                    id: rateItem?.toCurrency?.id,
-                  },
-                });
-              }}
               className="confirm"
+              onClick={() => {
+                updateRateBandsArray();
+              }}
             >
               {" "}
-              <span>{mutateLoading ? "updating..." : "Update"}</span>
+              <span>Update</span>
             </button>
           </div>
         </AppModal>
       )}
-    </div>
+    </>
   );
 }
 

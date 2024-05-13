@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 
 import SearchInput from "../../reuseables/SearchInput";
 import CustomTable from "../../reuseables/CustomTable";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getRatesList } from "../../services/PayoutDashboard";
 import CountryFlag from "react-country-flag";
 import { FormatCorrect, kFormatter3 } from "../../utils/format";
@@ -11,8 +11,9 @@ import { useState } from "react";
 import UpdateRatesModal from "../../modals/UpdateRatesModal";
 import { countryObjectsArray } from "../../../config/CountryCodes";
 import { IconSearch } from "@arco-design/web-react/icon";
-import { Input } from "@arco-design/web-react";
+import { Input, Switch } from "@arco-design/web-react";
 import { removeDup } from "../../utils/format";
+import { togglecurrencyrateconversion } from "../../services/Dashboard";
 
 function ExistingRatesTable({ setRecall, recall }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -28,7 +29,21 @@ function ExistingRatesTable({ setRecall, recall }) {
     queryKey: ["getRatesList"],
     queryFn: () => getRatesList(),
   });
+  const { mutate, isLoading: togglecurrencyrateconversionLoading } =
+    useMutation({
+      mutationFn: togglecurrencyrateconversion,
+      onSuccess: (data) => {
+        refetch();
+      },
+      onError: (data) => {
+        //setModal(true);
 
+        setTimeout(() => {
+          //  seterr("")
+        }, 2000);
+        return;
+      },
+    });
   console.log(rates);
 
   const columns = [
@@ -49,13 +64,14 @@ function ExistingRatesTable({ setRecall, recall }) {
       filters: removeDup(
         rates?.data?.map((item) => {
           return {
-            text: item?.fromCurrency?.["code"],
-            value: item?.fromCurrency?.["code"],
+            text: item?.fromCountryCurrency?.["code"],
+            value: item?.fromCountryCurrency?.["code"],
           };
         })
       ),
 
-      onFilter: (value, row) => row?.fromCurrency?.["code"].indexOf(value) > -1,
+      onFilter: (value, row) =>
+        row?.fromCountryCurrency?.["code"].indexOf(value) > -1,
       filterMultiple: true,
     },
     {
@@ -65,13 +81,14 @@ function ExistingRatesTable({ setRecall, recall }) {
       filters: removeDup(
         rates?.data?.map((item) => {
           return {
-            text: item?.toCurrency?.["code"],
-            value: item?.toCurrency?.["code"],
+            text: item?.toCountryCurrency?.["code"],
+            value: item?.toCountryCurrency?.["code"],
           };
         })
       ),
 
-      onFilter: (value, row) => row?.toCurrency?.["code"].indexOf(value) > -1,
+      onFilter: (value, row) =>
+        row?.toCountryCurrency?.["code"].indexOf(value) > -1,
       filterMultiple: true,
     },
     {
@@ -104,7 +121,7 @@ function ExistingRatesTable({ setRecall, recall }) {
       render: (ire) =>
         FormatCorrect(
           rates?.data?.find((item) => item?.id === ire)?.conversionRate,
-          rates?.data?.find((item) => item?.id === ire)?.toCurrency?.code
+          rates?.data?.find((item) => item?.id === ire)?.toCountryCurrency?.code
         ),
       width: 120,
 
@@ -112,6 +129,13 @@ function ExistingRatesTable({ setRecall, recall }) {
         compare: (a, b) => a.conversionRate - b.conversionRate,
         multiple: 3,
       },
+    },
+    {
+      title: "CURRENCY RATE CONVERSION",
+      dataIndex: "toggleRateConversion",
+      width: 190,
+
+      //render: () => "Other",
     },
     {
       title: "ENTRY DATE",
@@ -122,6 +146,7 @@ function ExistingRatesTable({ setRecall, recall }) {
   ];
   const [modal, setModal] = useState();
   const [rate, setRate] = useState();
+  const [cus, setCus] = useState();
 
   const newData = rates?.data?.map((item) => {
     return {
@@ -163,10 +188,10 @@ function ExistingRatesTable({ setRecall, recall }) {
               borderRadius: "10000000px",
               marginRight: "10px",
             }}
-            countryCode={item?.fromCurrency?.code?.slice(0, 2)}
+            countryCode={item?.fromCountryCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.fromCurrency["code"]}
+          {item?.fromCountryCurrency["code"]}
         </div>
       ),
       receiving: (
@@ -181,10 +206,38 @@ function ExistingRatesTable({ setRecall, recall }) {
               marginRight: "10px",
               borderRadius: "10000000px",
             }}
-            countryCode={item?.toCurrency?.code?.slice(0, 2)}
+            countryCode={item?.toCountryCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.toCurrency["code"]}
+          {item?.toCountryCurrency["code"]}
+        </div>
+      ),
+      toggleRateConversion: (
+        <div>
+          <Switch
+            loading={
+              (item === cus && togglecurrencyrateconversionLoading) ||
+              (item === cus && togglecurrencyrateconversionLoading)
+            }
+            /* disabled={
+              disallowusermulticurrencyLoading || allowMultiCurrencyLoading
+            } */
+            onClick={() => {
+              setCus(item);
+              if (item?.status) {
+                mutate({
+                  action: 0,
+                  objectId: item?.id,
+                });
+              } else {
+                mutate({
+                  action: 1,
+                  objectId: item?.id,
+                });
+              }
+            }}
+            checked={item?.status}
+          />
         </div>
       ),
 
@@ -208,7 +261,7 @@ function ExistingRatesTable({ setRecall, recall }) {
           />
           {item?.currencyRateMetaData?.currency?.["code"]}
         </div>
-      ),
+      ) /*  */,
     };
   });
 
