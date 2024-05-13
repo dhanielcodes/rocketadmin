@@ -64,14 +64,13 @@ function ExistingRatesTable({ setRecall, recall }) {
       filters: removeDup(
         rates?.data?.map((item) => {
           return {
-            text: item?.fromCountryCurrency?.["code"],
-            value: item?.fromCountryCurrency?.["code"],
+            text: item?.fromCurrency?.["code"],
+            value: item?.fromCurrency?.["code"],
           };
         })
       ),
 
-      onFilter: (value, row) =>
-        row?.fromCountryCurrency?.["code"].indexOf(value) > -1,
+      onFilter: (value, row) => row?.fromCurrency?.["code"].indexOf(value) > -1,
       filterMultiple: true,
     },
     {
@@ -81,14 +80,13 @@ function ExistingRatesTable({ setRecall, recall }) {
       filters: removeDup(
         rates?.data?.map((item) => {
           return {
-            text: item?.toCountryCurrency?.["code"],
-            value: item?.toCountryCurrency?.["code"],
+            text: item?.toCurrency?.["code"],
+            value: item?.toCurrency?.["code"],
           };
         })
       ),
 
-      onFilter: (value, row) =>
-        row?.toCountryCurrency?.["code"].indexOf(value) > -1,
+      onFilter: (value, row) => row?.toCurrency?.["code"].indexOf(value) > -1,
       filterMultiple: true,
     },
     {
@@ -121,7 +119,7 @@ function ExistingRatesTable({ setRecall, recall }) {
       render: (ire) =>
         FormatCorrect(
           rates?.data?.find((item) => item?.id === ire)?.conversionRate,
-          rates?.data?.find((item) => item?.id === ire)?.toCountryCurrency?.code
+          rates?.data?.find((item) => item?.id === ire)?.toCurrency?.code
         ),
       width: 120,
 
@@ -188,10 +186,10 @@ function ExistingRatesTable({ setRecall, recall }) {
               borderRadius: "10000000px",
               marginRight: "10px",
             }}
-            countryCode={item?.fromCountryCurrency?.code?.slice(0, 2)}
+            countryCode={item?.fromCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.fromCountryCurrency["code"]}
+          {item?.fromCurrency["code"]}
         </div>
       ),
       receiving: (
@@ -206,10 +204,10 @@ function ExistingRatesTable({ setRecall, recall }) {
               marginRight: "10px",
               borderRadius: "10000000px",
             }}
-            countryCode={item?.toCountryCurrency?.code?.slice(0, 2)}
+            countryCode={item?.toCurrency?.code?.slice(0, 2)}
             svg
           />
-          {item?.toCountryCurrency["code"]}
+          {item?.toCurrency["code"]}
         </div>
       ),
       toggleRateConversion: (

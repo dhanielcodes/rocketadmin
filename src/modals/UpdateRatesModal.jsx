@@ -139,7 +139,7 @@ export default function UpdateRatesModal({
       render: (ire) =>
         FormatCorrect(
           rateItem?.adminRateBands?.find((item) => item?.id === ire)?.rate,
-          rateItem?.toCountryCurrency?.code
+          rateItem?.toCurrency?.code
         ),
       /*   sorter: {
         compare: (a, b) => a.name - b.name,
@@ -270,10 +270,10 @@ export default function UpdateRatesModal({
                   value={{
                     ...rateItem,
                     label:
-                      rateItem?.fromCountryCurrency?.name +
+                      rateItem?.fromCurrency?.name +
                       " - " +
-                      rateItem?.fromCountryCurrency?.code,
-                    value: rateItem?.fromCountryCurrency?.name,
+                      rateItem?.fromCurrency?.code,
+                    value: rateItem?.fromCurrency?.name,
                   }}
                   option={
                     countries?.data?.map((item) => {
@@ -296,10 +296,10 @@ export default function UpdateRatesModal({
                   disabled={true}
                   value={{
                     label:
-                      rateItem?.toCountryCurrency?.name +
+                      rateItem?.toCurrency?.name +
                       " - " +
-                      rateItem?.toCountryCurrency?.code,
-                    value: rateItem?.toCountryCurrency?.name,
+                      rateItem?.toCurrency?.code,
+                    value: rateItem?.toCurrency?.name,
                     ...rateItem,
                   }}
                   option={
@@ -366,10 +366,7 @@ export default function UpdateRatesModal({
               <div className="rates">
                 <div className="pri">
                   <ReactCountryFlag
-                    countryCode={rateItem?.fromCountryCurrency?.code.slice(
-                      0,
-                      2
-                    )}
+                    countryCode={rateItem?.fromCurrency?.code.slice(0, 2)}
                     style={{
                       width: "40px",
                       height: "40px",
@@ -382,7 +379,7 @@ export default function UpdateRatesModal({
                 <div style={{ color: "#000" }}>=</div>
                 <div className="sec">
                   <ReactCountryFlag
-                    countryCode={rateItem?.toCountryCurrency?.code.slice(0, 2)}
+                    countryCode={rateItem?.toCurrency?.code.slice(0, 2)}
                     svg
                   />
                 </div>
@@ -426,11 +423,11 @@ export default function UpdateRatesModal({
                       firstName: "Admin",
                     },
                     conversionRate: rate,
-                    fromCountryCurrency: {
-                      id: rateItem?.fromCountryCurrency?.id,
+                    fromCurrency: {
+                      id: rateItem?.fromCurrency?.id,
                     },
-                    toCountryCurrency: {
-                      id: rateItem?.toCountryCurrency?.id,
+                    toCurrency: {
+                      id: rateItem?.toCurrency?.id,
                     },
                     feePercentage: fee,
                     transactionFeeThreshold: thresh,
