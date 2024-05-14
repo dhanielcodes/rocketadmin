@@ -93,7 +93,7 @@ export default function UpdateRatesModal({
       width: 130,
     },
     {
-      title: "CHARGE",
+      title: "CHARGE/FEE",
       dataIndex: "charge",
       /*   sorter: {
         compare: (a, b) => a.name - b.name,
@@ -338,7 +338,7 @@ export default function UpdateRatesModal({
                   placeholder="How much"
                   type="number"
                   onChange={(e) => {
-                    setRate(e.target.value);
+                    setFee(e.target.value);
                   }}
                   width="95%"
                   name="username"
@@ -352,7 +352,7 @@ export default function UpdateRatesModal({
                   placeholder="How much"
                   type="number"
                   onChange={(e) => {
-                    setRate(e.target.value);
+                    setThresh(e.target.value);
                   }}
                   width="95%"
                   name="username"
