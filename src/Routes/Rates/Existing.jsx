@@ -129,7 +129,7 @@ function ExistingRatesTable({ setRecall, recall }) {
       },
     },
     {
-      title: "CURRENCY RATE CONVERSION",
+      title: "STOP TRADING",
       dataIndex: "toggleRateConversion",
       width: 190,
 
