@@ -104,13 +104,13 @@ export default function UpdateRatesModal({
 
     {
       title: "MINIMUM AMOUNT",
-      dataIndex: "id",
-      render: (ire) =>
+      dataIndex: "minimumAmount",
+      /*  render: (ire) =>
         FormatCorrect(
           rateItem?.adminRateBands?.find((item) => item?.id === ire)
             ?.minimumAmount,
           null
-        ),
+        ), */
       /*   sorter: {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
@@ -119,13 +119,13 @@ export default function UpdateRatesModal({
     },
     {
       title: "MAXIMUM AMOUNT",
-      dataIndex: "id",
-      render: (ire) =>
+      dataIndex: "minimumAmount",
+      /*  render: (ire) =>
         FormatCorrect(
           rateItem?.adminRateBands?.find((item) => item?.id === ire)
-            ?.maximumAmount,
+            ?.minimumAmount,
           null
-        ),
+        ), */
       /*   sorter: {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
@@ -135,12 +135,12 @@ export default function UpdateRatesModal({
 
     {
       title: "RATE",
-      dataIndex: "id",
-      render: (ire) =>
+      dataIndex: "rate",
+      /* render: (ire) =>
         FormatCorrect(
           rateItem?.adminRateBands?.find((item) => item?.id === ire)?.rate,
           rateItem?.toCurrency?.code
-        ),
+        ), */
       /*   sorter: {
         compare: (a, b) => a.name - b.name,
         multiple: 1,
@@ -169,8 +169,8 @@ export default function UpdateRatesModal({
         setModal2(false);
         return {
           ...obj,
-          minimumAmount: rateBand?.minimumAmount,
           maximumAmount: rateBand?.maximumAmount,
+          minimumAmount: rateBand?.minimumAmount,
           rate: rateBand?.rate,
           chargeType: rateBand?.chargeType,
           charge: rateBand?.charge,
@@ -464,13 +464,31 @@ export default function UpdateRatesModal({
                 width: "100%",
               }}
             >
-              <label>Maximum Amount</label>
+              <label>Minimum Amount</label>
               <AppInput
-                value={rateBand?.maximumAmount}
                 type="number"
-                name="username"
                 padding="12px"
                 width="88%"
+                defaultValue={rateBand?.minimumAmount}
+                onChange={(e) => {
+                  setRateBand({
+                    ...rateBand,
+                    minimumAmount: Number(e.target.value),
+                  });
+                }}
+              />
+            </div>
+            <div
+              style={{
+                width: "100%",
+              }}
+            >
+              <label>Maximum Amount</label>
+              <AppInput
+                type="number"
+                padding="12px"
+                width="90%"
+                defaultValue={rateBand?.maximumAmount}
                 onChange={(e) => {
                   setRateBand({
                     ...rateBand,
@@ -484,35 +502,12 @@ export default function UpdateRatesModal({
                 width: "100%",
               }}
             >
-              <label>Minimum Amount</label>
-              <AppInput
-                value={rateBand?.minimumAmount}
-                type="number"
-                name="username"
-                padding="12px"
-                width="90%"
-                onChange={(e) => {
-                  setRateBand({
-                    ...rateBand,
-                    minimumAmount: Number(e.target.value),
-                  });
-                }}
-              />
-            </div>
-
-            <div
-              style={{
-                width: "100%",
-              }}
-            >
               <label>Rate</label>
               <AppInput
-                value={rateBand?.rate}
                 type="number"
-                name="username"
                 padding="12px"
                 width="90%"
-                disabled
+                defaultValue={rateBand?.rate}
                 onChange={(e) => {
                   setRateBand({
                     ...rateBand,
@@ -528,9 +523,8 @@ export default function UpdateRatesModal({
             >
               <label>Transfer Fee</label>
               <AppInput
-                value={rateBand?.charge}
+                defaultValue={rateBand?.charge}
                 type="number"
-                name="username"
                 padding="12px"
                 width="88%"
                 onChange={(e) => {
