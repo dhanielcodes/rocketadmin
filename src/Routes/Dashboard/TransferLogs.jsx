@@ -1168,6 +1168,8 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
 
   console.log(rates, userId);
 
+  const [details, setDetails] = useState();
+
   const columns = [
     {
       title: "ACTION",
@@ -1208,6 +1210,13 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
       dataIndex: "userId",
       width: 130,
     },
+
+    {
+      title: "BENEFICIARY NAME",
+      dataIndex: "nameNew",
+      width: 360,
+    },
+
     {
       title: "CUSTOMER TYPE",
       dataIndex: "type",
@@ -1749,6 +1758,36 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
           </p>
         </div>
       ),
+      nameNew: (
+        <div
+          onClick={() => {
+            setDetails(item);
+          }}
+        >
+          <p
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {item?.beneficiaryName}
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <div
+              style={{
+                padding: "8px",
+                borderRadius: "5px",
+                background: "#00A85A",
+                fontSize: "12px",
+                cursor: "pointer",
+                width: "fit-content",
+                color: "#fff !important",
+              }}
+            >
+              View Details
+            </div>
+          </p>
+        </div>
+      ),
       type: <div>{item?.senderAgentId === 0 ? "DIR-TRX" : "AGENT-TRX"}</div>,
       countryo: (
         <div
@@ -2019,6 +2058,37 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
           </div>
         </ReusableModal>
 
+        <ReusableModal
+          isOpen={details}
+          width={400}
+          onClose={() => {
+            setDetails();
+          }}
+        >
+          <center>
+            <span
+              style={{
+                fontSize: "15px",
+                color: "#757575",
+              }}
+            >
+              Beneficiary Bank Details
+            </span>
+            <br />
+            <h2>
+              Bank - <b>{details?.beneficiaryBankName}</b>
+            </h2>
+            <hr></hr>
+            <h4>
+              Account Name - <b>{details?.beneficiaryName}</b>
+            </h4>
+            <hr></hr>
+
+            <h3>
+              Account Number - <b>{details?.beneficiaryBankAccountNumber}</b>
+            </h3>
+          </center>
+        </ReusableModal>
         {modal && (
           <ReusableModal
             isOpen={modal}
@@ -2268,6 +2338,7 @@ const Content = styled.div`
   }
   .arco-btn-primary {
     background-color: #00a85a !important;
+    color: white !important;
     svg {
       stroke: #ffffff !important;
     }
