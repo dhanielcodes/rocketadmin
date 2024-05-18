@@ -119,11 +119,11 @@ export default function UpdateRatesModal({
     },
     {
       title: "MAXIMUM AMOUNT",
-      dataIndex: "minimumAmount",
+      dataIndex: "maximumAmount",
       /*  render: (ire) =>
         FormatCorrect(
           rateItem?.adminRateBands?.find((item) => item?.id === ire)
-            ?.minimumAmount,
+            ?.maximumAmount,
           null
         ), */
       /*   sorter: {

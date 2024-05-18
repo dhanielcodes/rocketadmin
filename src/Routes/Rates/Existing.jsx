@@ -44,6 +44,22 @@ function ExistingRatesTable({ setRecall, recall }) {
         return;
       },
     });
+
+  const { mutate: mutate2, isLoading: togglecurrencyrateconversionLoading2 } =
+    useMutation({
+      mutationFn: togglecurrencyrateconversion,
+      onSuccess: (data) => {
+        refetch();
+      },
+      onError: (data) => {
+        //setModal(true);
+
+        setTimeout(() => {
+          //  seterr("")
+        }, 2000);
+        return;
+      },
+    });
   console.log(rates);
 
   const columns = [
@@ -274,6 +290,53 @@ function ExistingRatesTable({ setRecall, recall }) {
             This page allows you edit and update existing rates{" "}
           </div>
         </div>
+        <div
+          style={{
+            position: "absolute",
+            right: "2%",
+            top: "3%",
+            display: "flex",
+          }}
+        >
+          <button
+            onClick={() => {
+              mutate({
+                action: 0,
+                objectId: 0,
+              });
+            }}
+            disabled={togglecurrencyrateconversionLoading}
+            className="confirm"
+            style={{
+              background: "#7b7b7b",
+            }}
+          >
+            {" "}
+            <span>
+              {togglecurrencyrateconversionLoading
+                ? "deactivating rates..."
+                : "Deactivate All Rates"}
+            </span>
+          </button>
+          &nbsp; &nbsp;
+          <button
+            disabled={togglecurrencyrateconversionLoading2}
+            onClick={() => {
+              mutate2({
+                action: 1,
+                objectId: 0,
+              });
+            }}
+            className="confirm"
+          >
+            {" "}
+            <span>
+              {togglecurrencyrateconversionLoading2
+                ? "activating rates..."
+                : "Activate All Rates"}
+            </span>{" "}
+          </button>
+        </div>
         {/*   <div className="top">
           <SearchInput placeholder="Search Records" className="SearchRecords" />
         </div> */}
@@ -336,6 +399,7 @@ const Content = styled.div`
     background-color: white;
     margin-bottom: 30px;
     border-radius: 10px;
+    position: relative;
   }
   .content {
     padding: 15px 20px 0px 20px;
