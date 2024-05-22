@@ -29,6 +29,10 @@ import Msg from "../../reuseables/Msg";
 import Btn from "../../reuseables/Btn";
 import toast from "react-hot-toast";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import { saveAs } from "file-saver";
+import AppModal from "../../COMPONENTS/AppModal";
+import SmallDownload from "../../assets/icons/Download";
+import { TiEye } from "react-icons/ti";
 const TextArea = Input.TextArea;
 
 const Droplist = ({ action, setModal, setUserId, viewDetails }) => (
@@ -1212,11 +1216,15 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     },
 
     {
-      title: "BENEFICIARY NAME",
+      title: "BENEFICIARY",
       dataIndex: "nameNew",
       width: 360,
     },
-
+    {
+      title: "DOCUMENT",
+      dataIndex: "doc",
+      width: 200,
+    },
     {
       title: "CUSTOMER TYPE",
       dataIndex: "type",
@@ -1257,7 +1265,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
 
     {
       title: "RECEIVER",
-      dataIndex: "beneficiaryName",
+      dataIndex: "userBeneficiary[beneficiaryBank][accountName]",
       width: 280,
 
       //render: () => "Other",
@@ -1352,6 +1360,11 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
 
   const [showLocation, setShowLocation] = useState();
   console.log(lowData);
+  const downloadImage = (image_url, image) => {
+    saveAs(image_url, image); // Put your image URL here.
+  };
+  const [modal2, setModal2] = useState(false);
+
   const newData = lowData?.map((item) => {
     return {
       ...item,
@@ -1567,6 +1580,44 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
           </div>
         </>
       ),
+      doc: (
+        <>
+          {" "}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              textTransform: "capitalize",
+            }}
+          >
+            {item?.transactionAttachedDocumentName}
+            &nbsp; &nbsp; &nbsp;
+            <TiEye
+              size="20px"
+              onClick={() => {
+                setModal2(item?.transactionAttachedDocumentURL);
+              }}
+              style={{
+                cursor: "pointer",
+              }}
+            ></TiEye>
+            &nbsp; &nbsp;
+            <SmallDownload
+              onClick={(e) => {
+                e.stopPropagation();
+                downloadImage(
+                  item?.transactionAttachedDocumentURL,
+                  `${item?.transactionAttachedDocumentName}.png`
+                );
+              }}
+              style={{
+                marginRight: "14px",
+                cursor: "pointer",
+              }}
+            />
+          </div>
+        </>
+      ),
       newRate: (
         <>
           {" "}
@@ -1770,8 +1821,8 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
               alignItems: "center",
             }}
           >
-            {item?.beneficiaryName}
-            &nbsp; &nbsp; &nbsp; &nbsp;
+            {item?.userBeneficiary?.beneficiaryBank?.accountName}
+            &nbsp; &nbsp;
             <div
               style={{
                 padding: "8px",
@@ -1927,6 +1978,31 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
           tableColumns={columns}
         />
 
+        <div
+          style={{
+            opacity: modal2 ? "1" : "0",
+            pointerEvents: modal2 ? "all" : "none",
+            transition: "all 0.3s",
+          }}
+        >
+          <AppModal
+            padding="40px"
+            closeModal={() => {
+              setModal2();
+            }}
+            heading={"Document"}
+          >
+            <div style={{ width: "100%", textAlign: "center" }}>
+              <img
+                style={{
+                  width: "100%",
+                }}
+                src={modal2}
+              />
+            </div>
+          </AppModal>
+        </div>
+
         <ReusableModal
           isOpen={showLocation}
           width={"70%"}
@@ -2076,17 +2152,59 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
             </span>
             <br />
             <h2>
-              Bank - <b>{details?.beneficiaryBankName}</b>
+              Bank -{" "}
+              <b>{details?.userBeneficiary?.beneficiaryBank?.bankName}</b>
             </h2>
             <hr></hr>
             <h4>
-              Account Name - <b>{details?.beneficiaryName}</b>
+              Account Name -{" "}
+              <b>{details?.userBeneficiary?.beneficiaryBank?.accountName}</b>
             </h4>
             <hr></hr>
 
             <h3>
-              Account Number - <b>{details?.beneficiaryBankAccountNumber}</b>
+              Account Number -{" "}
+              <b>{details?.userBeneficiary?.beneficiaryBank?.accountNumber}</b>
             </h3>
+
+            {details?.userBeneficiary?.correspondenceBank && (
+              <>
+                <span
+                  style={{
+                    fontSize: "15px",
+                    color: "#757575",
+                  }}
+                >
+                  Correspondence Bank Details
+                </span>
+                <br />
+                <h2>
+                  Bank -{" "}
+                  <b>
+                    {details?.userBeneficiary?.correspondenceBank?.bankName}
+                  </b>
+                </h2>
+                <hr></hr>
+                <h4>
+                  IBAN/BIC -{" "}
+                  <b>
+                    {details?.userBeneficiary?.correspondenceBank?.bic ||
+                      details?.userBeneficiary?.correspondenceBank?.iban}
+                  </b>
+                </h4>
+                <hr></hr>
+
+                <h3>
+                  Account Number -{" "}
+                  <b>
+                    {
+                      details?.userBeneficiary?.correspondenceBank
+                        ?.accountNumber
+                    }
+                  </b>
+                </h3>
+              </>
+            )}
           </center>
         </ReusableModal>
         {modal && (
