@@ -29,6 +29,10 @@ import Msg from "../../reuseables/Msg";
 import Btn from "../../reuseables/Btn";
 import toast from "react-hot-toast";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import { saveAs } from "file-saver";
+import AppModal from "../../COMPONENTS/AppModal";
+import SmallDownload from "../../assets/icons/Download";
+import { TiEye } from "react-icons/ti";
 const TextArea = Input.TextArea;
 
 const Droplist = ({ action, setModal, setUserId, viewDetails }) => (
@@ -1212,11 +1216,15 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     },
 
     {
-      title: "BENEFICIARY NAME",
+      title: "BENEFICIARY",
       dataIndex: "nameNew",
       width: 360,
     },
-
+    {
+      title: "DOCUMENT",
+      dataIndex: "doc",
+      width: 200,
+    },
     {
       title: "CUSTOMER TYPE",
       dataIndex: "type",
@@ -1257,7 +1265,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
 
     {
       title: "RECEIVER",
-      dataIndex: "beneficiaryName",
+      dataIndex: "userBeneficiary[beneficiaryBank][accountName]",
       width: 280,
 
       //render: () => "Other",
@@ -1352,6 +1360,11 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
 
   const [showLocation, setShowLocation] = useState();
   console.log(lowData);
+  const downloadImage = (image_url, image) => {
+    saveAs(image_url, image); // Put your image URL here.
+  };
+  const [modal2, setModal2] = useState(false);
+
   const newData = lowData?.map((item) => {
     return {
       ...item,
@@ -1567,6 +1580,44 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
           </div>
         </>
       ),
+      doc: (
+        <>
+          {" "}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              textTransform: "capitalize",
+            }}
+          >
+            {item?.transactionAttachedDocumentName}
+            &nbsp; &nbsp; &nbsp;
+            <TiEye
+              size="20px"
+              onClick={() => {
+                setModal2(item?.transactionAttachedDocumentURL);
+              }}
+              style={{
+                cursor: "pointer",
+              }}
+            ></TiEye>
+            &nbsp; &nbsp;
+            <SmallDownload
+              onClick={(e) => {
+                e.stopPropagation();
+                downloadImage(
+                  item?.transactionAttachedDocumentURL,
+                  `${item?.transactionAttachedDocumentName}.png`
+                );
+              }}
+              style={{
+                marginRight: "14px",
+                cursor: "pointer",
+              }}
+            />
+          </div>
+        </>
+      ),
       newRate: (
         <>
           {" "}
@@ -1770,8 +1821,8 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
               alignItems: "center",
             }}
           >
-            {item?.beneficiaryName}
-            &nbsp; &nbsp; &nbsp; &nbsp;
+            {item?.userBeneficiary?.beneficiaryBank?.accountName}
+            &nbsp; &nbsp;
             <div
               style={{
                 padding: "8px",
@@ -1927,6 +1978,31 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
           tableColumns={columns}
         />
 
+        <div
+          style={{
+            opacity: modal2 ? "1" : "0",
+            pointerEvents: modal2 ? "all" : "none",
+            transition: "all 0.3s",
+          }}
+        >
+          <AppModal
+            padding="40px"
+            closeModal={() => {
+              setModal2();
+            }}
+            heading={"Document"}
+          >
+            <div style={{ width: "100%", textAlign: "center" }}>
+              <img
+                style={{
+                  width: "100%",
+                }}
+                src={modal2}
+              />
+            </div>
+          </AppModal>
+        </div>
+
         <ReusableModal
           isOpen={showLocation}
           width={"70%"}
@@ -2076,17 +2152,138 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
             </span>
             <br />
             <h2>
-              Bank - <b>{details?.beneficiaryBankName}</b>
+              Bank -{" "}
+              <b>{details?.userBeneficiary?.beneficiaryBank?.bankName}</b>
             </h2>
             <hr></hr>
             <h4>
-              Account Name - <b>{details?.beneficiaryName}</b>
+              Account Name -{" "}
+              <b>{details?.userBeneficiary?.beneficiaryBank?.accountName}</b>
             </h4>
             <hr></hr>
 
             <h3>
-              Account Number - <b>{details?.beneficiaryBankAccountNumber}</b>
+              Account Number -{" "}
+              <b>
+                {details?.userBeneficiary?.beneficiaryBank?.accountNumber}{" "}
+                <svg
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      details?.userBeneficiary?.beneficiaryBank?.accountNumber
+                    );
+                    toast.success("Copied!");
+                  }}
+                  width="15"
+                  height="16"
+                  viewBox="0 0 15 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12.834 5.9987H6.83398C6.09761 5.9987 5.50065 6.59565 5.50065 7.33203V13.332C5.50065 14.0684 6.09761 14.6654 6.83398 14.6654H12.834C13.5704 14.6654 14.1673 14.0684 14.1673 13.332V7.33203C14.1673 6.59565 13.5704 5.9987 12.834 5.9987Z"
+                    fill="#00A85A"
+                  />
+                  <path
+                    d="M3.49104 9.60817C3.13742 9.60817 1.90039 9.60817 1.22451 9.60817C0.97446 9.35813 0.833984 9.01899 0.833984 8.66536V2.66536C0.833984 2.31174 0.97446 1.9726 1.22451 1.72256C1.47456 1.47251 1.8137 1.33203 2.16732 1.33203H8.16732C8.52094 1.33203 8.86008 1.47251 9.11013 1.72256C9.36018 1.9726 9.50065 2.31174 9.50065 2.66536V3.33203M6.83398 5.9987H12.834C13.5704 5.9987 14.1673 6.59565 14.1673 7.33203V13.332C14.1673 14.0684 13.5704 14.6654 12.834 14.6654H6.83398C6.09761 14.6654 5.50065 14.0684 5.50065 13.332V7.33203C5.50065 6.59565 6.09761 5.9987 6.83398 5.9987Z"
+                    stroke="#00A85A"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </b>
             </h3>
+            <br />
+            {details?.userBeneficiary?.correspondenceBank && (
+              <>
+                <span
+                  style={{
+                    fontSize: "15px",
+                    color: "#757575",
+                  }}
+                >
+                  Correspondence Bank Details
+                </span>
+                <br />
+                <h2>
+                  Bank -{" "}
+                  <b>
+                    {details?.userBeneficiary?.correspondenceBank?.bankName}
+                  </b>
+                </h2>
+                <hr></hr>
+                <h4>
+                  IBAN/BIC -{" "}
+                  <b>
+                    {details?.userBeneficiary?.correspondenceBank?.bic ||
+                      details?.userBeneficiary?.correspondenceBank?.iban}{" "}
+                    <svg
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          details?.userBeneficiary?.correspondenceBank?.bic ||
+                            details?.userBeneficiary?.correspondenceBank?.iban
+                        );
+                        toast.success("Copied!");
+                      }}
+                      width="15"
+                      height="16"
+                      viewBox="0 0 15 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12.834 5.9987H6.83398C6.09761 5.9987 5.50065 6.59565 5.50065 7.33203V13.332C5.50065 14.0684 6.09761 14.6654 6.83398 14.6654H12.834C13.5704 14.6654 14.1673 14.0684 14.1673 13.332V7.33203C14.1673 6.59565 13.5704 5.9987 12.834 5.9987Z"
+                        fill="#00A85A"
+                      />
+                      <path
+                        d="M3.49104 9.60817C3.13742 9.60817 1.90039 9.60817 1.22451 9.60817C0.97446 9.35813 0.833984 9.01899 0.833984 8.66536V2.66536C0.833984 2.31174 0.97446 1.9726 1.22451 1.72256C1.47456 1.47251 1.8137 1.33203 2.16732 1.33203H8.16732C8.52094 1.33203 8.86008 1.47251 9.11013 1.72256C9.36018 1.9726 9.50065 2.31174 9.50065 2.66536V3.33203M6.83398 5.9987H12.834C13.5704 5.9987 14.1673 6.59565 14.1673 7.33203V13.332C14.1673 14.0684 13.5704 14.6654 12.834 14.6654H6.83398C6.09761 14.6654 5.50065 14.0684 5.50065 13.332V7.33203C5.50065 6.59565 6.09761 5.9987 6.83398 5.9987Z"
+                        stroke="#00A85A"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </b>
+                </h4>
+                <hr></hr>
+
+                <h3>
+                  Account Number -{" "}
+                  <b>
+                    {
+                      details?.userBeneficiary?.correspondenceBank
+                        ?.accountNumber
+                    }{" "}
+                    <svg
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          details?.userBeneficiary?.correspondenceBank
+                            ?.accountNumber
+                        );
+                        toast.success("Copied!");
+                      }}
+                      width="15"
+                      height="16"
+                      viewBox="0 0 15 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12.834 5.9987H6.83398C6.09761 5.9987 5.50065 6.59565 5.50065 7.33203V13.332C5.50065 14.0684 6.09761 14.6654 6.83398 14.6654H12.834C13.5704 14.6654 14.1673 14.0684 14.1673 13.332V7.33203C14.1673 6.59565 13.5704 5.9987 12.834 5.9987Z"
+                        fill="#00A85A"
+                      />
+                      <path
+                        d="M3.49104 9.60817C3.13742 9.60817 1.90039 9.60817 1.22451 9.60817C0.97446 9.35813 0.833984 9.01899 0.833984 8.66536V2.66536C0.833984 2.31174 0.97446 1.9726 1.22451 1.72256C1.47456 1.47251 1.8137 1.33203 2.16732 1.33203H8.16732C8.52094 1.33203 8.86008 1.47251 9.11013 1.72256C9.36018 1.9726 9.50065 2.31174 9.50065 2.66536V3.33203M6.83398 5.9987H12.834C13.5704 5.9987 14.1673 6.59565 14.1673 7.33203V13.332C14.1673 14.0684 13.5704 14.6654 12.834 14.6654H6.83398C6.09761 14.6654 5.50065 14.0684 5.50065 13.332V7.33203C5.50065 6.59565 6.09761 5.9987 6.83398 5.9987Z"
+                        stroke="#00A85A"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </b>
+                </h3>
+              </>
+            )}
           </center>
         </ReusableModal>
         {modal && (

@@ -314,8 +314,8 @@ function ExistingRatesTable({ setRecall, recall }) {
             {" "}
             <span>
               {togglecurrencyrateconversionLoading
-                ? "deactivating rates..."
-                : "Deactivate All Rates"}
+                ? "stop trading..."
+                : "Stop Trading"}
             </span>
           </button>
           &nbsp; &nbsp;
@@ -332,8 +332,8 @@ function ExistingRatesTable({ setRecall, recall }) {
             {" "}
             <span>
               {togglecurrencyrateconversionLoading2
-                ? "activating rates..."
-                : "Activate All Rates"}
+                ? "starting trading..."
+                : "Start Trading"}
             </span>{" "}
           </button>
         </div>
