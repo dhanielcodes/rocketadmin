@@ -1820,13 +1820,8 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
             &nbsp; &nbsp;
             <div
               style={{
-                padding: "8px",
-                borderRadius: "5px",
-                background: "#00A85A",
-                fontSize: "12px",
-                cursor: "pointer",
                 width: "fit-content",
-                color: "#fff !important",
+                color: "blue",
               }}
             >
               View Details
