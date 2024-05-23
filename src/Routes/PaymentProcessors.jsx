@@ -7,13 +7,15 @@ import {
   getAgents,
   getPaymentProcessors,
   getPayoutProcessors,
+  togglepaymentchannelprovider,
 } from "../services/Dashboard";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import CustomTable from "../reuseables/CustomTable";
 import { Link } from "react-router-dom";
 import ReactCountryFlag from "react-country-flag";
 import AddPaymentProcessorModal from "../modals/AddPaymentProcessorModal";
 import { removeDup } from "../utils/format";
+import { Switch } from "@arco-design/web-react";
 
 // hhhhhhh
 function PaymentProcessors() {
@@ -117,12 +119,45 @@ function PaymentProcessors() {
 
     {
       title: "STATUS",
-      dataIndex: "status",
+      dataIndex: "toggle",
       width: 220,
       //render: () => "Other 2",
     },
   ];
+
+  const { mutate, isLoading: togglecurrencyrateconversionLoading } =
+    useMutation({
+      mutationFn: togglepaymentchannelprovider,
+      onSuccess: (data) => {
+        refetch();
+      },
+      onError: (data) => {
+        //setModal(true);
+
+        setTimeout(() => {
+          //  seterr("")
+        }, 2000);
+        return;
+      },
+    });
+
+  const { mutate: mutate2, isLoading: togglecurrencyrateconversionLoading2 } =
+    useMutation({
+      mutationFn: togglepaymentchannelprovider,
+      onSuccess: (data) => {
+        refetch();
+      },
+      onError: (data) => {
+        //setModal(true);
+
+        setTimeout(() => {
+          //  seterr("")
+        }, 2000);
+        return;
+      },
+    });
   const [type, setType] = useState("add");
+  const [cus, setCus] = useState();
   const [item, setItem] = useState("");
   const newData = !payouts?.data
     ? []
@@ -192,7 +227,34 @@ function PaymentProcessors() {
               </p>
             </div>
           ),
-
+          toggle: (
+            <div>
+              <Switch
+                loading={
+                  (item === cus && togglecurrencyrateconversionLoading) ||
+                  (item === cus && togglecurrencyrateconversionLoading)
+                }
+                /* disabled={
+                  disallowusermulticurrencyLoading || allowMultiCurrencyLoading
+                } */
+                onClick={() => {
+                  setCus(item);
+                  if (item?.status) {
+                    mutate({
+                      action: 0,
+                      objectId: item?.id,
+                    });
+                  } else {
+                    mutate({
+                      action: 1,
+                      objectId: item?.id,
+                    });
+                  }
+                }}
+                checked={item?.status}
+              />
+            </div>
+          ),
           status: (
             <>
               {" "}
@@ -303,37 +365,51 @@ function PaymentProcessors() {
           </div>
           <div className="main">
             <div className="head">
-              {/*               <SearchInput placeholder="Search" style={{ width: "30vw" }} />
-               */}{" "}
-              {/*  <button>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+              <div></div>
+              <div
+                style={{
+                  display: "flex",
+                }}
+              >
+                <button
+                  onClick={() => {
+                    mutate({
+                      action: 0,
+                      objectId: 0,
+                    });
+                  }}
+                  disabled={togglecurrencyrateconversionLoading}
+                  className="confirm"
+                  style={{
+                    background: "#7b7b7b",
+                  }}
                 >
-                  <path
-                    d="M2.5 5.83301H17.5"
-                    stroke="#344054"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    d="M5 10H15"
-                    stroke="#344054"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    d="M8.33337 14.167H11.6667"
-                    stroke="#344054"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                </svg>
-                Filter
-              </button> */}
+                  {" "}
+                  <span>
+                    {togglecurrencyrateconversionLoading
+                      ? "disabling channels..."
+                      : "Disable Channels"}
+                  </span>
+                </button>
+                &nbsp; &nbsp;
+                <button
+                  disabled={togglecurrencyrateconversionLoading2}
+                  onClick={() => {
+                    mutate2({
+                      action: 1,
+                      objectId: 0,
+                    });
+                  }}
+                  className="confirm"
+                >
+                  {" "}
+                  <span>
+                    {togglecurrencyrateconversionLoading2
+                      ? "activating channels..."
+                      : "Activate Channels"}
+                  </span>{" "}
+                </button>
+              </div>
             </div>
 
             <CustomTable
@@ -358,7 +434,6 @@ const Content = styled.div`
     justify-content: space-between;
   }
   .head button {
-    background-color: transparent;
     border: 1px solid gainsboro;
     display: flex;
     align-items: center;
