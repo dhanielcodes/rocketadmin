@@ -3,13 +3,18 @@ import BodyLayout from "../reuseables/BodyLayout";
 import { styled } from "styled-components";
 //import SearchInput from "../reuseables/SearchInput";
 import InviteAgent from "../COMPONENTS/InviteAgent";
-import { getAgents, getPayoutProcessors } from "../services/Dashboard";
-import { useQuery } from "@tanstack/react-query";
+import {
+  getAgents,
+  getPayoutProcessors,
+  togglepayoutchannelprovider,
+} from "../services/Dashboard";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import CustomTable from "../reuseables/CustomTable";
 import { Link } from "react-router-dom";
 import ReactCountryFlag from "react-country-flag";
 import AddPayoutProcessorModal from "../modals/AddPayoutProcessorModal";
 import { removeDup } from "../utils/format";
+import { Switch } from "@arco-design/web-react";
 
 // hhhhhhh
 function PayoutProcessors() {
@@ -124,13 +129,46 @@ function PayoutProcessors() {
 
     {
       title: "STATUS",
-      dataIndex: "status",
+      dataIndex: "toggle",
       width: 220,
       //render: () => "Other 2",
     },
   ];
+
+  const { mutate, isLoading: togglecurrencyrateconversionLoading } =
+    useMutation({
+      mutationFn: togglepayoutchannelprovider,
+      onSuccess: (data) => {
+        refetch();
+      },
+      onError: (data) => {
+        //setModal(true);
+
+        setTimeout(() => {
+          //  seterr("")
+        }, 2000);
+        return;
+      },
+    });
+
+  const { mutate: mutate2, isLoading: togglecurrencyrateconversionLoading2 } =
+    useMutation({
+      mutationFn: togglepayoutchannelprovider,
+      onSuccess: (data) => {
+        refetch();
+      },
+      onError: (data) => {
+        //setModal(true);
+
+        setTimeout(() => {
+          //  seterr("")
+        }, 2000);
+        return;
+      },
+    });
   const [type, setType] = useState("add");
   const [item, setItem] = useState("");
+  const [cus, setCus] = useState();
 
   const newData = payouts?.data?.map((item) => {
     return {
@@ -198,7 +236,34 @@ function PayoutProcessors() {
           </p>
         </div>
       ),
-
+      toggle: (
+        <div>
+          <Switch
+            loading={
+              (item === cus && togglecurrencyrateconversionLoading) ||
+              (item === cus && togglecurrencyrateconversionLoading)
+            }
+            /* disabled={
+              disallowusermulticurrencyLoading || allowMultiCurrencyLoading
+            } */
+            onClick={() => {
+              setCus(item);
+              if (item?.status) {
+                mutate({
+                  action: 0,
+                  objectId: item?.id,
+                });
+              } else {
+                mutate({
+                  action: 1,
+                  objectId: item?.id,
+                });
+              }
+            }}
+            checked={item?.status}
+          />
+        </div>
+      ),
       status: (
         <>
           {" "}
@@ -309,37 +374,51 @@ function PayoutProcessors() {
           </div>
           <div className="main">
             <div className="head">
-              {/*               <SearchInput placeholder="Search" style={{ width: "30vw" }} />
-               */}{" "}
-              {/*  <button>
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+              <div></div>
+              <div
+                style={{
+                  display: "flex",
+                }}
+              >
+                <button
+                  onClick={() => {
+                    mutate({
+                      action: 0,
+                      objectId: 0,
+                    });
+                  }}
+                  disabled={togglecurrencyrateconversionLoading}
+                  className="confirm"
+                  style={{
+                    background: "#7b7b7b",
+                  }}
                 >
-                  <path
-                    d="M2.5 5.83301H17.5"
-                    stroke="#344054"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    d="M5 10H15"
-                    stroke="#344054"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                  <path
-                    d="M8.33337 14.167H11.6667"
-                    stroke="#344054"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                </svg>
-                Filter
-              </button> */}
+                  {" "}
+                  <span>
+                    {togglecurrencyrateconversionLoading
+                      ? "disabling channels..."
+                      : "Disable Channels"}
+                  </span>
+                </button>
+                &nbsp; &nbsp;
+                <button
+                  disabled={togglecurrencyrateconversionLoading2}
+                  onClick={() => {
+                    mutate2({
+                      action: 1,
+                      objectId: 0,
+                    });
+                  }}
+                  className="confirm"
+                >
+                  {" "}
+                  <span>
+                    {togglecurrencyrateconversionLoading2
+                      ? "activating channels..."
+                      : "Activate Channels"}
+                  </span>{" "}
+                </button>
+              </div>
             </div>
 
             <CustomTable
@@ -364,7 +443,6 @@ const Content = styled.div`
     justify-content: space-between;
   }
   .head button {
-    background-color: transparent;
     border: 1px solid gainsboro;
     display: flex;
     align-items: center;

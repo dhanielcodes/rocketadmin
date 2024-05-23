@@ -177,6 +177,22 @@ export const togglecurrencyrateconversion = async (body) => {
   return data;
 };
 
+export const togglepaymentchannelprovider = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/togglepaymentchannelprovider`,
+    body
+  );
+  return data;
+};
+
+export const togglepayoutchannelprovider = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/togglepayoutchannelprovider`,
+    body
+  );
+  return data;
+};
+
 /*  */
 
 export const cancelTransaction = async (body) => {
