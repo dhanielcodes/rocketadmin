@@ -19,8 +19,9 @@ import RiskTable from "./ClientDetailsTabs/RiskTable";
 import CustomerList from "./ClientDetailsTabs/CustomerList";
 import { kFormatter3 } from "../../utils/format";
 import AmountFormatter from "../../reuseables/AmountFormatter";
-import CountryFlag from "react-country-flag";
+import CountryFlag, { ReactCountryFlag } from "react-country-flag";
 import CustomTable from "../../reuseables/CustomTable";
+import CountryListAgent from "../../reuseables/CountryListAgent";
 
 export default function CustomerDetailsPage() {
   const [params] = useSearchParams();
@@ -45,6 +46,7 @@ export default function CustomerDetailsPage() {
 
   const [active, setActive] = useState("Overview");
   const [viewRisk, setViewRisk] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState();
 
   const tab = [
     "Overview",
@@ -290,9 +292,60 @@ export default function CustomerDetailsPage() {
                           </Body>
                           <br />
                           <div>
+                            <div
+                              style={{
+                                width: "300px",
+                                marginLeft: "auto",
+                                position: "relative",
+                                zIndex: "1000",
+                              }}
+                            >
+                              <CountryListAgent
+                                optionsNew={customerDetails?.wallet}
+                                formatter={(country) => (
+                                  <div
+                                    style={{
+                                      fontSize: "16px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    {" "}
+                                    <ReactCountryFlag
+                                      className="flag"
+                                      countryCode={country?.currency?.code?.slice(
+                                        0,
+                                        2
+                                      )}
+                                      svg
+                                    />{" "}
+                                    &nbsp; &nbsp;
+                                    {country?.currency?.code}
+                                    &nbsp; (
+                                    <AmountFormatter
+                                      currency={country?.currency?.code}
+                                      value={country?.balance}
+                                    />
+                                    )
+                                  </div>
+                                )}
+                                value={selectedCountry}
+                                setValue={setSelectedCountry}
+                                onChange={(e) => {
+                                  setSelectedCountry(e);
+                                }}
+                              />
+                            </div>
+                            <br />
                             <CustomTable
-                              Apidata={customerDetails?.walletTransactions?.map(
-                                (item) => {
+                              Apidata={customerDetails?.walletTransactions
+                                ?.filter((item) =>
+                                  selectedCountry
+                                    ? item?.walletId ===
+                                      selectedCountry?.walletId
+                                    : item
+                                )
+                                ?.map((item) => {
                                   return {
                                     ...item,
                                     countryo: (
@@ -339,8 +392,7 @@ export default function CustomerDetailsPage() {
                                       </>
                                     ),
                                   };
-                                }
-                              )}
+                                })}
                               tableColumns={[
                                 {
                                   title: "TXID",
