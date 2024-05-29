@@ -45,7 +45,10 @@ export const updateSpecialRate = async (body) => {
   );
   return data;
 };
-
+export const fundWallet = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/funduserwallet`, body);
+  return data;
+};
 export const createRate = async (body) => {
   const { data } = await Axios.post(`${baseurl}/addnewrate`, body);
   return data;
