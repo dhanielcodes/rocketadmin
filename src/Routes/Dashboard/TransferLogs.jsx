@@ -18,6 +18,7 @@ import {
   marktransactionsuspicious,
   paytransaction,
   revertholdtransaction,
+  revertpayment,
   viewCommentsTransaction,
 } from "../../services/Dashboard";
 import AmountFormatter from "../../reuseables/AmountFormatter";
@@ -766,6 +767,49 @@ const DroplistProcessed = ({ action, setModal, setUserId, viewDetails }) => (
       onClick={() => {
         setModal(true);
         setUserId();
+        action("revertPay");
+      }}
+      key="4"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_4000_16424)">
+          <path
+            d="M11.334 1.99955C11.5091 1.82445 11.7169 1.68556 11.9457 1.5908C12.1745 1.49604 12.4197 1.44727 12.6673 1.44727C12.9149 1.44727 13.1601 1.49604 13.3889 1.5908C13.6177 1.68556 13.8256 1.82445 14.0007 1.99955C14.1757 2.17465 14.3146 2.38252 14.4094 2.61129C14.5042 2.84006 14.5529 3.08526 14.5529 3.33288C14.5529 3.58051 14.5042 3.8257 14.4094 4.05448C14.3146 4.28325 14.1757 4.49112 14.0007 4.66622L5.00065 13.6662L1.33398 14.6662L2.33398 10.9995L11.334 1.99955Z"
+            stroke="#464F60"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_4000_16424">
+            <rect width="16" height="16" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Revert Payment
+      </span>
+    </Menu.Item>
+    <Menu.Item
+      onClick={() => {
+        setModal(true);
+        setUserId();
         action("holdTransaction");
       }}
       key="4"
@@ -1027,6 +1071,23 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
   const { mutate: cancelTransactionMutation, isLoading: loading1 } =
     useMutation({
       mutationFn: cancelTransaction,
+      onSuccess: (data) => {
+        if (data.status) {
+          toast.success(data?.message);
+          refetchingTwo();
+          setModal(false);
+        } else {
+          toast.error(data?.message);
+        }
+      },
+      onError: (data) => {
+        toast.error(data?.message);
+      },
+    });
+
+  const { mutate: revertpaymentMutation, isLoading: loadingrevertpayment } =
+    useMutation({
+      mutationFn: revertpayment,
       onSuccess: (data) => {
         if (data.status) {
           toast.success(data?.message);
@@ -2402,6 +2463,8 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                     ? "Are you sure you want to Pay Transaction?"
                     : call === "addComment"
                     ? "Add Comment"
+                    : call === "revertPay"
+                    ? "Are you sure you want to Revert this Payment?"
                     : ""}
                 </p>
                 <br />
@@ -2474,6 +2537,8 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                           ? "Confirm Transaction"
                           : call === "payTransaction"
                           ? "Pay Transaction"
+                          : call === "revertPay"
+                          ? "Revert Payment"
                           : "Add Comment";
 
                         if (call === "markAsSuspicious") {
@@ -2492,6 +2557,8 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                           confirmTransactionMutation(userIdd.paymentRef);
                         } else if (call === "payTransaction") {
                           payTransactionMutation(userIdd.paymentRef);
+                        } else if (call === "revertPay") {
+                          revertpaymentMutation(userIdd.paymentRef);
                         } else {
                           addcommenttotransactionMutation({
                             customerId: userId,
@@ -2510,6 +2577,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                         loading5 ||
                         loading6 ||
                         loading7 ||
+                        loadingrevertpayment ||
                         loading8
                       }
                       styles={{
@@ -2531,6 +2599,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                         loading4 ||
                         loading5 ||
                         loading6 ||
+                        loadingrevertpayment ||
                         loading7
                           ? "loading..."
                           : "Confirm"}

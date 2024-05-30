@@ -12,7 +12,9 @@ const CountryListAgent = ({
   style,
   defaultValue,
   removeNaira = false,
+  formatter,
   agentRates,
+  optionsNew,
 }) => {
   const [cList, setClist] = useState([]);
 
@@ -26,23 +28,32 @@ const CountryListAgent = ({
   // const newOptions =
   const Userdata = JSON.parse(localStorage.getItem("userDetails"));
 
-  const newRates = agentRates?.map((item) => {
-    return {
-      ...item,
-      label:
-        item?.currencyRate?.fromCurrency?.name +
-        " to " +
-        item?.currencyRate?.toCurrency?.name +
-        " " +
-        item?.id,
-      value:
-        item?.currencyRate?.fromCurrency?.name +
-        " to " +
-        item?.currencyRate?.toCurrency?.name +
-        " " +
-        item?.id,
-    };
-  });
+  const newRates = formatter
+    ? optionsNew?.map((item) => {
+        return {
+          ...item,
+          label: item?.name,
+
+          value: item?.name,
+        };
+      })
+    : agentRates?.map((item) => {
+        return {
+          ...item,
+          label:
+            item?.currencyRate?.fromCurrency?.name +
+            " to " +
+            item?.currencyRate?.toCurrency?.name +
+            " " +
+            item?.id,
+          value:
+            item?.currencyRate?.fromCurrency?.name +
+            " to " +
+            item?.currencyRate?.toCurrency?.name +
+            " " +
+            item?.id,
+        };
+      });
 
   return (
     <CountyCont>
@@ -51,57 +62,65 @@ const CountryListAgent = ({
         onChange={onChange}
         options={newRates}
         isSearchable={true}
-        getOptionLabel={(country) => (
-          <div
-            className="dropdown"
-            style={{ fontSize: "16px", display: "flex", alignItems: "center" }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <CountryFlag
-                className="flag"
-                countryCode={country?.currencyRate?.fromCurrency?.code?.slice(
-                  0,
-                  2
-                )}
-                svg
-              />{" "}
-              &nbsp;
-              <span className="countryName">
-                {country?.currencyRate?.fromCurrency?.name}
-              </span>
-            </div>
-            &nbsp; &nbsp;
-            <span className="countryName" style={{ fontWeight: "bold" }}>
-              to
-            </span>{" "}
-            &nbsp;&nbsp;
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              {" "}
-              <CountryFlag
-                className="flag"
-                countryCode={country?.currencyRate?.toCurrency?.code?.slice(
-                  0,
-                  2
-                )}
-                svg
-              />{" "}
-              &nbsp;
-              <span className="countryName">
-                {country?.currencyRate?.toCurrency?.name}
-              </span>
-            </div>
-          </div>
-        )}
+        getOptionLabel={
+          formatter
+            ? formatter
+            : (country) => (
+                <div
+                  className="dropdown"
+                  style={{
+                    fontSize: "16px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <CountryFlag
+                      className="flag"
+                      countryCode={country?.currencyRate?.fromCurrency?.code?.slice(
+                        0,
+                        2
+                      )}
+                      svg
+                    />{" "}
+                    &nbsp;
+                    <span className="countryName">
+                      {country?.currencyRate?.fromCurrency?.name}
+                    </span>
+                  </div>
+                  &nbsp; &nbsp;
+                  <span className="countryName" style={{ fontWeight: "bold" }}>
+                    to
+                  </span>{" "}
+                  &nbsp;&nbsp;
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    {" "}
+                    <CountryFlag
+                      className="flag"
+                      countryCode={country?.currencyRate?.toCurrency?.code?.slice(
+                        0,
+                        2
+                      )}
+                      svg
+                    />{" "}
+                    &nbsp;
+                    <span className="countryName">
+                      {country?.currencyRate?.toCurrency?.name}
+                    </span>
+                  </div>
+                </div>
+              )
+        }
         styles={{
           option: (styles) => ({
             ...styles,

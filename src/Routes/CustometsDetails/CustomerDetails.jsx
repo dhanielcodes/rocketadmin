@@ -19,7 +19,9 @@ import RiskTable from "./ClientDetailsTabs/RiskTable";
 import CustomerList from "./ClientDetailsTabs/CustomerList";
 import { kFormatter3 } from "../../utils/format";
 import AmountFormatter from "../../reuseables/AmountFormatter";
-import CountryFlag from "react-country-flag";
+import CountryFlag, { ReactCountryFlag } from "react-country-flag";
+import CustomTable from "../../reuseables/CustomTable";
+import CountryListAgent from "../../reuseables/CountryListAgent";
 
 export default function CustomerDetailsPage() {
   const [params] = useSearchParams();
@@ -44,6 +46,7 @@ export default function CustomerDetailsPage() {
 
   const [active, setActive] = useState("Overview");
   const [viewRisk, setViewRisk] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState();
 
   const tab = [
     "Overview",
@@ -51,6 +54,7 @@ export default function CustomerDetailsPage() {
     "Transfer List",
     "Beneficiary List",
     "Audit Logs",
+    "Wallets",
   ];
 
   const tabAAgent = [
@@ -59,7 +63,7 @@ export default function CustomerDetailsPage() {
     "Transfer List",
     "Customers List",
     "Audit Logs",
-    "Agent Wallets",
+    "Wallets",
   ];
 
   return (
@@ -253,24 +257,180 @@ export default function CustomerDetailsPage() {
                     {active === "Gateways" && (
                       <Gateways data={customerDetails}></Gateways>
                     )}
-                    {active === "Agent Wallets" && (
-                      <Body>
-                        {customerDetails?.wallet?.map((item) => {
-                          return (
-                            <div className="body_card">
-                              <div className="card_top">{item?.name}</div>
+                    {"" ||
+                      (active === "Wallets" && (
+                        <>
+                          <Body>
+                            {customerDetails?.wallet?.map((item) => {
+                              return (
+                                <div className="body_card">
+                                  <div className="card_top">
+                                    {" "}
+                                    <CountryFlag
+                                      style={{
+                                        borderRadius: "10000000px",
+                                        marginRight: "10px",
+                                      }}
+                                      countryCode={item?.currency?.code?.slice(
+                                        0,
+                                        2
+                                      )}
+                                      svg
+                                    />
+                                    {item?.name}
+                                  </div>
 
-                              <div className="card_bottom">
-                                <AmountFormatter
-                                  currency={item?.currency?.code}
-                                  value={item?.balance}
-                                />
-                              </div>
+                                  <div className="card_bottom">
+                                    <AmountFormatter
+                                      currency={item?.currency?.code}
+                                      value={item?.balance}
+                                    />
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </Body>
+                          <br />
+                          <div>
+                            <div
+                              style={{
+                                width: "300px",
+                                marginLeft: "auto",
+                                position: "relative",
+                                zIndex: "1000",
+                              }}
+                            >
+                              <CountryListAgent
+                                optionsNew={customerDetails?.wallet}
+                                formatter={(country) => (
+                                  <div
+                                    style={{
+                                      fontSize: "16px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    {" "}
+                                    <ReactCountryFlag
+                                      className="flag"
+                                      countryCode={country?.currency?.code?.slice(
+                                        0,
+                                        2
+                                      )}
+                                      svg
+                                    />{" "}
+                                    &nbsp; &nbsp;
+                                    {country?.currency?.code}
+                                    &nbsp; (
+                                    <AmountFormatter
+                                      currency={country?.currency?.code}
+                                      value={country?.balance}
+                                    />
+                                    )
+                                  </div>
+                                )}
+                                value={selectedCountry}
+                                setValue={setSelectedCountry}
+                                onChange={(e) => {
+                                  setSelectedCountry(e);
+                                }}
+                              />
                             </div>
-                          );
-                        })}
-                      </Body>
-                    )}
+                            <br />
+                            <CustomTable
+                              Apidata={customerDetails?.walletTransactions
+                                ?.filter((item) =>
+                                  selectedCountry
+                                    ? item?.walletId ===
+                                      selectedCountry?.walletId
+                                    : item
+                                )
+                                ?.map((item) => {
+                                  return {
+                                    ...item,
+                                    countryo: (
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <CountryFlag
+                                          style={{
+                                            borderRadius: "10000000px",
+                                            marginRight: "10px",
+                                          }}
+                                          countryCode={item?.currency?.slice(
+                                            0,
+                                            2
+                                          )}
+                                          svg
+                                        />
+                                        {item?.currency}
+                                      </div>
+                                    ),
+                                    status: (
+                                      <>
+                                        {" "}
+                                        <div
+                                          style={{
+                                            padding: "6px 14px",
+                                            borderRadius: "7px",
+                                            background:
+                                              item?.status === "Successful"
+                                                ? "#37d744"
+                                                : item?.status === "Pending"
+                                                ? "#ffe063"
+                                                : "#ff6363",
+                                            color: "white",
+                                            width: "fit-content",
+                                            fontWeight: "700",
+                                          }}
+                                        >
+                                          {item?.status}
+                                        </div>
+                                      </>
+                                    ),
+                                  };
+                                })}
+                              tableColumns={[
+                                {
+                                  title: "TXID",
+                                  dataIndex: "id",
+                                  width: 110,
+                                },
+                                {
+                                  title: "CURRENCY",
+                                  dataIndex: "countryo",
+                                  width: 140,
+                                },
+                                {
+                                  title: "NOTE",
+                                  dataIndex: "note",
+                                  width: 140,
+                                },
+                                {
+                                  title: "REQUEST TYPE",
+                                  dataIndex: "requestType",
+                                  width: 140,
+                                },
+                                {
+                                  title: "FEE",
+                                  dataIndex: "fee",
+                                  width: 140,
+                                },
+                                {
+                                  title: "TRANSACTION STATUS",
+                                  dataIndex: "status",
+                                  width: 170,
+
+                                  //render: () => "Other",
+                                },
+                              ]}
+                            />
+                          </div>
+                        </>
+                      ))}
                   </div>
                 )}
               </div>

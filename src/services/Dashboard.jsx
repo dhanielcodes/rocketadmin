@@ -222,6 +222,13 @@ export const marktransactionsuspicious = async (body) => {
   return data;
 };
 
+export const revertpayment = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/revertpayment/${body}`, {
+    userId: UserData?.userId,
+  });
+  return data;
+};
+
 export const markaspay = async (body) => {
   const { data } = await Axios.post(`${baseurl}/markaspaid/${body}`, {
     userId: UserData?.userId,
