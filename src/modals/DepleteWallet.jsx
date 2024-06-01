@@ -16,6 +16,7 @@ import AppSelect from "../reuseables/AppSelect";
 import { GetDetails, GetUserDetails, getRoleMeta } from "../services/Dashboard";
 import CountryListAgent from "../reuseables/CountryListAgent";
 import AmountFormatter from "../reuseables/AmountFormatter";
+import InputNumber from "rc-input-number";
 
 export default function DepleteWallet({
   rateItem,
@@ -171,17 +172,26 @@ export default function DepleteWallet({
               }}
             >
               <label>Amount</label>
-              <AppInput
-                placeholder="How much"
-                type="number"
-                onChange={(e) => {
-                  setRate(e.target.value);
-                }}
-                width="95%"
-                name="username"
-                //value={selectedCountry?.specialRate}
-                defaultValue={selectedCountry?.specialRate}
-              />
+              <Container>
+                <InputNumber
+                  className="input"
+                  placeholder="Enter Amount"
+                  style={{
+                    borderSize: "0.5px",
+                    fontSize: "15px",
+                    borderRadius: "8px",
+                    border: "1px solid #939393",
+                    background: "#ffffff",
+                    color: "#000000",
+                  }}
+                  onChange={(e) => {
+                    setRate(e);
+                  }}
+                  formatter={(value) => {
+                    return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                  }}
+                />
+              </Container>
             </div>
             <div
               className="name"
@@ -254,50 +264,12 @@ export default function DepleteWallet({
 }
 
 const Container = styled.div`
-  .rates {
-    display: flex;
-    width: 40%;
-    margin: 0 auto;
-    justify-content: space-between;
-    align-items: center;
-    height: 100px;
-    @media screen and (max-width: 40em) {
-      padding: 0 !important;
-    }
-
-    .pri,
-    .sec {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
-      p {
-        font-weight: 400;
-        color: #000;
-      }
-    }
-
-    > .pri img {
-      width: 50px !important;
-      vertical-align: middle;
-      height: 50px !important;
-      border-radius: 50%;
-      @media screen and (max-width: 40em) {
-        height: 50px !important;
-        width: 50px !important;
-      }
-    }
-
-    > .sec img {
-      width: 50px !important;
-      vertical-align: middle;
-      height: 50px !important;
-      border-radius: 50%;
-      @media screen and (max-width: 40em) {
-        height: 50px !important;
-        width: 50px !important;
-      }
-    }
+  .rc-input-number-input {
+    background: #fff;
+    border: none;
+    color: black;
+    width: 95%;
+    border-radius: 8px;
+    padding: 12px;
   }
 `;

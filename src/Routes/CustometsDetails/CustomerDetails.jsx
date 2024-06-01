@@ -93,7 +93,7 @@ export default function CustomerDetailsPage() {
                     className="back_buttton"
                     onClick={() => {
                       if (from === "agent") {
-                        navigate("/agents");
+                        navigate("/agent");
                       } else {
                         navigate("/customers");
                       }
@@ -369,6 +369,26 @@ export default function CustomerDetailsPage() {
                                         {item?.currency}
                                       </div>
                                     ),
+                                    type: (
+                                      <>
+                                        {" "}
+                                        <div
+                                          style={{
+                                            padding: "6px 14px",
+                                            borderRadius: "7px",
+                                            background:
+                                              item?.requestType === "Credit"
+                                                ? "#37d744"
+                                                : "#ff6363",
+                                            color: "white",
+                                            width: "fit-content",
+                                            fontWeight: "700",
+                                          }}
+                                        >
+                                          {item?.requestType}
+                                        </div>
+                                      </>
+                                    ),
                                     status: (
                                       <>
                                         {" "}
@@ -400,6 +420,11 @@ export default function CustomerDetailsPage() {
                                   width: 110,
                                 },
                                 {
+                                  title: "DATE",
+                                  dataIndex: "dateCreated",
+                                  width: 140,
+                                },
+                                {
                                   title: "CURRENCY",
                                   dataIndex: "countryo",
                                   width: 140,
@@ -411,12 +436,13 @@ export default function CustomerDetailsPage() {
                                 },
                                 {
                                   title: "REQUEST TYPE",
-                                  dataIndex: "requestType",
+                                  dataIndex: "type",
                                   width: 140,
                                 },
                                 {
-                                  title: "FEE",
-                                  dataIndex: "fee",
+                                  title: "AMOUNT",
+                                  dataIndex: "amount",
+                                  render: (i) => <AmountFormatter value={i} />,
                                   width: 140,
                                 },
                                 {
