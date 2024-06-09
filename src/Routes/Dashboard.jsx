@@ -94,12 +94,77 @@ function Dashboard() {
             />
           ) : (
             <div className="content1">
-              <a className="contside1" href="#logs">
-                <div className="contside1Text">
-                  <h1>{dashboard?.data?.todayTransferCount || 0}</h1>
-                  <p>Today’s transfer</p>
-                </div>
-              </a>
+              <div>
+                <a
+                  className="contside1"
+                  href="#logs"
+                  style={{
+                    height: "51%",
+                  }}
+                >
+                  <div className="contside1Text">
+                    <h1>{dashboard?.data?.todayTransferCount || 0}</h1>
+                    <p>Today’s transfer</p>
+                  </div>
+                </a>
+                <a
+                  className="contside1"
+                  style={{
+                    marginTop: "6%",
+
+                    padding: "20px",
+                  }}
+                  href="#logs"
+                >
+                  <div>
+                    <div className="contside1Text">
+                      <p
+                        style={{
+                          textAlign: "center",
+                          fontSize: "22px",
+                        }}
+                      >
+                        <div>Balance </div>
+                        <b>
+                          {dashboard?.data?.systemSuspenseAccount?.balance || 0}
+                        </b>
+                      </p>
+                      <br />
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "1fr 1fr",
+                          gridGap: "20px",
+                        }}
+                      >
+                        <p
+                          style={{
+                            textAlign: "center",
+                            fontSize: "15px",
+                          }}
+                        >
+                          <div>Credit </div>
+                          <b>
+                            {dashboard?.data?.systemSuspenseAccount?.credit ||
+                              0}
+                          </b>{" "}
+                        </p>
+                        <p
+                          style={{
+                            textAlign: "center",
+                            fontSize: "15px",
+                          }}
+                        >
+                          <div>Debit </div>
+                          <b>
+                            {dashboard?.data?.systemSuspenseAccount?.debit || 0}
+                          </b>{" "}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
               <div className="contside2">
                 <div className="contside22">
                   <div className="contside2up">
