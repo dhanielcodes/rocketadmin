@@ -7,9 +7,9 @@ import {
   processuserwithdrawalrequest,
 } from "../../services/Dashboard";
 import AmountFormatter from "../../reuseables/AmountFormatter";
-import { IconMoreVertical } from "@arco-design/web-react/icon";
-import { Dropdown, Menu } from "@arco-design/web-react";
-import { useState } from "react";
+import { IconMoreVertical, IconSearch } from "@arco-design/web-react/icon";
+import { Dropdown, Input, Menu } from "@arco-design/web-react";
+import { useRef, useState } from "react";
 import ReusableModal from "../../reuseables/ReusableModal";
 import Btn from "../../reuseables/Btn";
 import toast from "react-hot-toast";
@@ -117,7 +117,7 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
       toast.error(data?.message);
     },
   });
-
+  //const inputRef = useRef();
   const columns = [
     {
       title: "ACTION",
@@ -129,9 +129,19 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
     {
       title: "TRANSACTION ID",
       dataIndex: "id",
-      width: 150,
+      width: 180,
 
       //render: () => "Other",
+    },
+    {
+      title: "DATE APPROVED",
+      dataIndex: "dateApproved",
+      width: 200,
+    },
+    {
+      title: "DATE CREATED",
+      dataIndex: "dateCreated",
+      width: 200,
     },
     {
       title: "TRANSACTION STATUS",
@@ -153,18 +163,17 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
     {
       title: "AGENT ACCOUNT DETAILS",
       dataIndex: "nameNew",
-      width: 280,
-    },
-
-    {
-      title: "DATE APPROVED",
-      dataIndex: "dateApproved",
-      width: 170,
+      width: 330,
     },
     {
-      title: "DATE CREATED",
-      dataIndex: "dateCreated",
-      width: 170,
+      title: "COMMENT",
+      dataIndex: "comment",
+      width: 270,
+    },
+    {
+      title: "TREATED BY",
+      dataIndex: "lastUpdatedBy",
+      width: 270,
     },
   ];
   const [details, setDetails] = useState();
@@ -267,6 +276,7 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
     queryFn: () => getPayoutPartner(),
   });
   const [selectedPartner, setSelectedPartner] = useState();
+  const [approve, setApprove] = useState(false);
 
   console.log(selectedPartner, "selectedPartner");
 
@@ -528,6 +538,8 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
               onClose={() => {
                 setModal(false);
                 setCall();
+                setAmount();
+                setApprove(false);
               }}
             >
               <p>
@@ -535,10 +547,14 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
                   <h1 style={{ fontSize: "20px" }}>
                     Are you sure you want to Decline this Request?
                   </h1>
+                ) : approve ? (
+                  <h1 style={{ fontSize: "20px" }}>
+                    Are you sure you want to Approve this Request?
+                  </h1>
                 ) : (
                   <div style={{}}>
                     <h1 style={{ fontSize: "20px" }}>
-                      Are you sure you want to Decline this Request?
+                      Request Withdrawal Approval Form
                     </h1>{" "}
                     <br />
                     <div style={{}}>
@@ -597,6 +613,8 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
                   clicking={() => {
                     setModal(false);
                     setCall();
+                    setApprove(false);
+                    setAmount();
                   }}
                   size={30}
                   styles={{
@@ -619,16 +637,19 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
                 <Btn
                   clicking={() => {
                     if (call === "approve") {
-                      mutate({
-                        adminId: 0,
-                        updateType: 1,
-                        userId: item?.userBeneficiary?.id,
-                        pamentGatewayId: selectedPartner?.id,
-                        WithdrawalRequest: {
-                          id: item?.id,
-                          amountPaid: amount || item?.amountRequested,
-                        },
-                      });
+                      setApprove(true);
+                      if (approve) {
+                        mutate({
+                          adminId: 0,
+                          updateType: 1,
+                          userId: item?.userBeneficiary?.id,
+                          pamentGatewayId: selectedPartner?.id,
+                          WithdrawalRequest: {
+                            id: item?.id,
+                            amountPaid: amount || item?.amountRequested,
+                          },
+                        });
+                      }
                     } else {
                       mutate({
                         adminId: 0,
