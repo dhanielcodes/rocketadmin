@@ -1866,11 +1866,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
         </div>
       ),
       nameNew: (
-        <div
-          onClick={() => {
-            setDetails(item);
-          }}
-        >
+        <div>
           <p
             style={{
               display: "flex",
@@ -1880,9 +1876,13 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
             {item?.userBeneficiary?.beneficiaryBank?.accountName}
             &nbsp; &nbsp;
             <div
+              onClick={() => {
+                setDetails(item);
+              }}
               style={{
                 width: "fit-content",
                 color: "blue",
+                cursor: "pointer",
               }}
             >
               View Details

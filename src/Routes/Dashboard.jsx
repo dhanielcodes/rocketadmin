@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 import TransferLogsTable from "./Dashboard/TransferLogs";
 import NewCustomerList from "./Dashboard/NewCustomersTableList";
 import CountryDropdownDash from "../reuseables/CountryDropdownDash";
+import WalletWithdrawLogs from "./Dashboard/WalletWithdrawLogs";
 function Dashboard() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [selectedVolume, setSelectedVolume] = useState();
@@ -30,6 +31,7 @@ function Dashboard() {
     data: dashboard,
     isLoading,
     isFetching,
+    refetch: refetchD,
   } = useQuery({
     queryKey: ["getAdminDashboard"],
     queryFn: () => getAdminDashboard(userDetails?.userId),
@@ -74,9 +76,6 @@ function Dashboard() {
         ...item,
       };
     })[0];
-
-  console.log(dashboard);
-  console.log(selectedVolume);
 
   useEffect(() => {
     refetch();
@@ -515,6 +514,18 @@ function Dashboard() {
           <div id="logs">
             <TransferLogsTable typeee="Today" />
           </div>
+
+          <div id="logs">
+            <WalletWithdrawLogs
+              data={
+                dashboard?.data?.userWithdrawalRequest ||
+                userDetails?.userWithdrawalRequest
+              }
+              refetch={refetchD}
+              loading={isLoading || isFetching}
+            />
+          </div>
+
           <NewCustomerList />
         </Content>
       </BodyLayout>
