@@ -270,6 +270,14 @@ export const viewCommentsTransaction = async (userId) => {
   return data;
 };
 
+export const processuserwithdrawalrequest = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/processuserwithdrawalrequest`,
+    body
+  );
+  return data;
+};
+
 export const TodayLogss = async (userId) => {
   console.log(
     "🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:",
