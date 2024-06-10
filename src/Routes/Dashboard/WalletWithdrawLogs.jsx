@@ -134,15 +134,16 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
       //render: () => "Other",
     },
     {
-      title: "DATE APPROVED",
-      dataIndex: "dateApproved",
-      width: 200,
-    },
-    {
       title: "DATE CREATED",
       dataIndex: "dateCreated",
-      width: 200,
+      width: 220,
     },
+    {
+      title: "LAST UPDATED",
+      dataIndex: "lastUpdated",
+      width: 220,
+    },
+
     {
       title: "TRANSACTION STATUS",
       dataIndex: "statuss",

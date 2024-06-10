@@ -94,77 +94,12 @@ function Dashboard() {
             />
           ) : (
             <div className="content1">
-              <div>
-                <a
-                  className="contside1"
-                  href="#logs"
-                  style={{
-                    height: "51%",
-                  }}
-                >
-                  <div className="contside1Text">
-                    <h1>{dashboard?.data?.todayTransferCount || 0}</h1>
-                    <p>Today’s transfer</p>
-                  </div>
-                </a>
-                <a
-                  className="contside1"
-                  style={{
-                    marginTop: "6%",
-
-                    padding: "20px",
-                  }}
-                  href="#logs"
-                >
-                  <div>
-                    <div className="contside1Text">
-                      <p
-                        style={{
-                          textAlign: "center",
-                          fontSize: "22px",
-                        }}
-                      >
-                        <div>Balance </div>
-                        <b>
-                          {dashboard?.data?.systemSuspenseAccount?.balance || 0}
-                        </b>
-                      </p>
-                      <br />
-                      <div
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns: "1fr 1fr",
-                          gridGap: "20px",
-                        }}
-                      >
-                        <p
-                          style={{
-                            textAlign: "center",
-                            fontSize: "15px",
-                          }}
-                        >
-                          <div>Credit </div>
-                          <b>
-                            {dashboard?.data?.systemSuspenseAccount?.credit ||
-                              0}
-                          </b>{" "}
-                        </p>
-                        <p
-                          style={{
-                            textAlign: "center",
-                            fontSize: "15px",
-                          }}
-                        >
-                          <div>Debit </div>
-                          <b>
-                            {dashboard?.data?.systemSuspenseAccount?.debit || 0}
-                          </b>{" "}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </div>
+              <a className="contside1" href="#logs">
+                <div className="contside1Text">
+                  <h1>{dashboard?.data?.todayTransferCount || 0}</h1>
+                  <p>Today’s transfer</p>
+                </div>
+              </a>
               <div className="contside2">
                 <div className="contside22">
                   <div className="contside2up">
@@ -517,6 +452,130 @@ function Dashboard() {
               </div>
             </div>
           )}
+          {isLoading || isFetching ? (
+            <Skeleton2
+              height="350px"
+              style={{
+                marginBottom: "20px",
+              }}
+            />
+          ) : (
+            <>
+              <h1>System Suspense Account</h1>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1.4fr",
+                  marginTop: "10px",
+                  gridGap: "10px",
+                }}
+              >
+                <div className="boxsd">
+                  <div>
+                    <p
+                      style={{
+                        textAlign: "left",
+                        fontSize: "22px",
+                      }}
+                    >
+                      <div
+                        className=""
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          transform: "translateX(-8px)",
+                        }}
+                      >
+                        <PersonIcon />
+                        <div
+                          style={{
+                            color: "#4c4c4c",
+                          }}
+                        >
+                          Balance
+                        </div>
+                      </div>{" "}
+                      <h2>
+                        {dashboard?.data?.systemSuspenseAccount?.balance || 0}
+                      </h2>
+                    </p>
+                  </div>
+                </div>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gridGap: "10px",
+                  }}
+                >
+                  <div className="boxsd">
+                    <div>
+                      <p
+                        style={{
+                          textAlign: "left",
+                          fontSize: "22px",
+                        }}
+                      >
+                        <div
+                          className=""
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            transform: "translateX(-8px)",
+                          }}
+                        >
+                          <GreenCardIcon />
+                          <div
+                            style={{
+                              color: "#4c4c4c",
+                            }}
+                          >
+                            Credit
+                          </div>
+                        </div>{" "}
+                        <h2>
+                          {dashboard?.data?.systemSuspenseAccount?.credit || 0}
+                        </h2>{" "}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="boxsd">
+                    <div>
+                      <p
+                        style={{
+                          textAlign: "left",
+                          fontSize: "22px",
+                        }}
+                      >
+                        <div
+                          className=""
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            transform: "translateX(-8px)",
+                          }}
+                        >
+                          <DeleteIcon />
+                          <div
+                            style={{
+                              color: "#4c4c4c",
+                            }}
+                          >
+                            Debit
+                          </div>
+                        </div>{" "}
+                        <h2>
+                          {dashboard?.data?.systemSuspenseAccount?.debit || 0}
+                        </h2>{" "}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
           {/* Bar Chart Components Stamp */}
           <div className="PaymentTypeChart">
             {isLoading || isFetching || isLoadingAna || isFetchingAna ? (
@@ -745,7 +804,12 @@ const Content = styled.div`
       }
     }
   }
-
+  .boxsd {
+    background-color: #fff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+  }
   .contside1 {
     display: flex;
     flex-direction: column;
