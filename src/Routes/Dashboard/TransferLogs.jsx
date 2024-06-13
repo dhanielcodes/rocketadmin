@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 import CustomTable from "../../reuseables/CustomTable";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import CountryFlag from "react-country-flag";
-import { kFormatter3 } from "../../utils/format";
+import Logo from "../../assets/logo.png.svg";
 import {
   TodayLogss,
   Tranx,
@@ -34,6 +34,8 @@ import { saveAs } from "file-saver";
 import AppModal from "../../COMPONENTS/AppModal";
 import SmallDownload from "../../assets/icons/Download";
 import { TiEye } from "react-icons/ti";
+import * as htmlToImage from "html-to-image";
+
 const TextArea = Input.TextArea;
 
 const Droplist = ({ action, setModal, setUserId, viewDetails }) => (
@@ -1244,6 +1246,13 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
       fixed: "left",
     },
     {
+      title: "",
+      dataIndex: "receipt",
+      width: 150,
+      //render: () => "Other 2",
+      fixed: "left",
+    },
+    {
       title: "TRANSACTION STATUS",
       dataIndex: "status",
       width: 170,
@@ -1420,10 +1429,26 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     saveAs(image_url, image); // Put your image URL here.
   };
   const [modal2, setModal2] = useState(false);
+  const [modal3, setModal3] = useState();
+  const [modalShow3, setModalShow3] = useState(false);
 
   const newData = lowData?.map((item) => {
     return {
       ...item,
+      receipt: (
+        <div
+          onClick={() => {
+            setModal3(item);
+            setModalShow3(true);
+          }}
+          style={{
+            color: "blue",
+            cursor: "pointer",
+          }}
+        >
+          View Receipt
+        </div>
+      ),
       action2: (
         <div
           style={{
@@ -2053,6 +2078,205 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
             </div>
           </AppModal>
         </div>
+        {modalShow3 && (
+          <AppModal
+            padding="40px"
+            maxWidth={600}
+            closeModal={() => {
+              setModal3();
+              setModalShow3(false);
+            }}
+            heading={""}
+          >
+            <div style={{ width: "100%", background: "white" }}>
+              <div
+                onClick={() => {
+                  htmlToImage
+                    .toJpeg(document.getElementById("my-node"), {
+                      quality: 0.95,
+                    })
+                    .then(function (dataUrl) {
+                      var link = document.createElement("a");
+                      link.download = "receipt.jpeg";
+                      link.href = dataUrl;
+                      link.click();
+                    });
+                }}
+                style={{
+                  padding: "8px 14px",
+                  borderRadius: "7px",
+                  border: "1px solid #cdcdcd",
+                  color: "#000",
+                  width: "fit-content",
+                  fontWeight: "700",
+                  display: "flex",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 17 17"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M14.4766 10.6563V13.3229C14.4766 13.6765 14.3361 14.0157 14.086 14.2657C13.836 14.5158 13.4969 14.6563 13.1432 14.6563H3.8099C3.45627 14.6563 3.11714 14.5158 2.86709 14.2657C2.61704 14.0157 2.47656 13.6765 2.47656 13.3229V10.6563M5.14323 7.32292L8.47656 10.6563M8.47656 10.6563L11.8099 7.32292M8.47656 10.6563V2.65625"
+                    stroke="#464F60"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                &nbsp;&nbsp;&nbsp; Download Receipt
+              </div>
+
+              <div
+                id="my-node"
+                style={{
+                  background: "white",
+                }}
+              >
+                <center style={{}}>
+                  <img
+                    src={Logo}
+                    style={{ width: "30%", marginBottom: "20px" }}
+                  />
+                  <h1>Transfer Rocket Ltd</h1>
+                  <div
+                    style={{
+                      color: "#5A6376",
+                      marginTop: "-20px",
+                    }}
+                  >
+                    {modal3?.senderAddress}
+                  </div>
+                  <br />
+                  <br />
+
+                  <h1>Payment Advice</h1>
+                  <div
+                    style={{
+                      color: "#5A6376",
+                      marginTop: "-10px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {modal3?.paymentDate}
+                  </div>
+                  <div
+                    style={{
+                      padding: "6px 14px",
+                      borderRadius: "7000px",
+                      background:
+                        modal3?.paymentStatus === "Deposited"
+                          ? "#37d744"
+                          : modal3?.paymentStatus === "Pending"
+                          ? "#ffe063"
+                          : "#ff6363",
+                      color: "white",
+                      width: "fit-content",
+                      fontWeight: "700",
+                    }}
+                  >
+                    {modal3?.paymentStatus}
+                  </div>
+                  <br />
+                  <br />
+                  <h1>From</h1>
+                  <div
+                    style={{
+                      color: "#5A6376",
+                      marginTop: "-20px",
+                    }}
+                  >
+                    {modal3?.senderName}
+                  </div>
+
+                  <div
+                    style={{
+                      color: "#5A6376",
+                      marginTop: "0px",
+                    }}
+                  >
+                    {modal3?.senderCountry}
+                  </div>
+                </center>
+
+                <CustomTable
+                  scroll={{ x: 400 }}
+                  pagination={false}
+                  tableColumns={[
+                    {
+                      title: "DATE",
+                      dataIndex: "date",
+                      width: 100,
+                      //render: () => "Other 2",
+                      fixed: "left",
+                    },
+                    {
+                      title: "REFERENCE",
+                      dataIndex: "ref",
+                      width: 100,
+                      //render: () => "Other 2",
+                      fixed: "left",
+                    },
+                    {
+                      title: "BENEFICIARY DETAILS",
+                      dataIndex: "bene",
+                      width: 100,
+
+                      //render: () => "Other",
+                    },
+                    {
+                      title: "AMOUNT",
+                      dataIndex: "newPaymentAmount",
+                      width: 100,
+
+                      //render: () => "Other",
+                    },
+                  ]}
+                  Apidata={[
+                    {
+                      date: (
+                        <>
+                          <div>{modal3?.paymentDate}</div>
+                        </>
+                      ),
+                      bene: (
+                        <>
+                          <div>
+                            {
+                              modal3?.userBeneficiary?.beneficiaryBank
+                                ?.accountName
+                            }
+                          </div>
+                        </>
+                      ),
+                      ref: (
+                        <>
+                          <div>{modal3?.paymentRef}</div>
+                        </>
+                      ),
+                      newPaymentAmount: (
+                        <>
+                          {" "}
+                          <div>
+                            <AmountFormatter
+                              currency={modal3?.senderCurrency}
+                              value={modal3?.paymentAmount}
+                            />
+                          </div>
+                        </>
+                      ),
+                    },
+                  ]}
+                />
+              </div>
+            </div>
+          </AppModal>
+        )}
 
         <ReusableModal
           isOpen={showLocation}

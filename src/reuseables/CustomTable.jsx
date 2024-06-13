@@ -92,6 +92,7 @@ const CustomTable = ({
   showDateFilter = false,
   date,
   setDate,
+  pagination = true,
 }) => {
   const [reportData, setReportData] = useState(Apidata);
 
@@ -164,12 +165,16 @@ const CustomTable = ({
         onChange={(pagination, changedSorter) => {
           console.log(changedSorter);
         }}
-        pagination={{
-          showTotal: true,
-          total: Apidata?.length,
-          pageSize: 10,
-          pageSizeChangeResetCurrent: true,
-        }}
+        pagination={
+          pagination
+            ? {
+                showTotal: true,
+                total: Apidata?.length,
+                pageSize: 10,
+                pageSizeChangeResetCurrent: true,
+              }
+            : false
+        }
         style={{
           padding: "12px 0",
         }}
