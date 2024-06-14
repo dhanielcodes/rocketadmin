@@ -2143,7 +2143,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                     src={Logo}
                     style={{ width: "30%", marginBottom: "20px" }}
                   />
-                  <h1>Transfer Rocket Ltd</h1>
+                  <h1>Transfer Rocket Limited</h1>
                   <div
                     style={{
                       color: "#5A6376",
