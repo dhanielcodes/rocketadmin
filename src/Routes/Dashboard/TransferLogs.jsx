@@ -1435,20 +1435,23 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
   const newData = lowData?.map((item) => {
     return {
       ...item,
-      receipt: (
-        <div
-          onClick={() => {
-            setModal3(item);
-            setModalShow3(true);
-          }}
-          style={{
-            color: "blue",
-            cursor: "pointer",
-          }}
-        >
-          View Receipt
-        </div>
-      ),
+      receipt:
+        item?.paymentStatus === "Deposited" ? (
+          <div
+            onClick={() => {
+              setModal3(item);
+              setModalShow3(true);
+            }}
+            style={{
+              color: "blue",
+              cursor: "pointer",
+            }}
+          >
+            View Receipt
+          </div>
+        ) : (
+          ""
+        ),
       action2: (
         <div
           style={{
@@ -2080,8 +2083,8 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
         </div>
         {modalShow3 && (
           <AppModal
-            padding="40px"
-            maxWidth={600}
+            padding="20px 40px"
+            maxWidth={900}
             closeModal={() => {
               setModal3();
               setModalShow3(false);
@@ -2141,34 +2144,32 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                 <center style={{}}>
                   <img
                     src={Logo}
-                    style={{ width: "30%", marginBottom: "20px" }}
+                    style={{ width: "20%", marginBottom: "20px" }}
                   />
-                  <h1>Transfer Rocket Ltd</h1>
+                  <h2>Transfer Rocket Limited</h2>
                   <div
                     style={{
                       color: "#5A6376",
                       marginTop: "-20px",
                     }}
                   >
-                    {modal3?.senderAddress}
+                    F39 Waterfront Studios, Dock Road London, E16 United Kingdom
                   </div>
-                  <br />
-                  <br />
 
-                  <h1>Payment Advice</h1>
+                  <h2>Payment Advice</h2>
                   <div
                     style={{
                       color: "#5A6376",
-                      marginTop: "-10px",
+                      marginTop: "-20px",
                       marginBottom: "10px",
                     }}
                   >
-                    {modal3?.paymentDate}
+                    {modal3?.paymentDate?.slice(0, 10)}
                   </div>
                   <div
                     style={{
                       padding: "6px 14px",
-                      borderRadius: "7000px",
+                      borderRadius: "7px",
                       background:
                         modal3?.paymentStatus === "Deposited"
                           ? "#37d744"
@@ -2180,11 +2181,11 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                       fontWeight: "700",
                     }}
                   >
-                    {modal3?.paymentStatus}
+                    {modal3?.paymentStatus === "Deposited"
+                      ? "Completed"
+                      : modal3?.paymentStatus}
                   </div>
-                  <br />
-                  <br />
-                  <h1>From</h1>
+                  <h2>From</h2>
                   <div
                     style={{
                       color: "#5A6376",
@@ -2193,7 +2194,14 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                   >
                     {modal3?.senderName}
                   </div>
-
+                  <div
+                    style={{
+                      color: "#5A6376",
+                      marginTop: "-0px",
+                    }}
+                  >
+                    {modal3?.senderAddress}
+                  </div>
                   <div
                     style={{
                       color: "#5A6376",
@@ -2211,7 +2219,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                     {
                       title: "DATE",
                       dataIndex: "date",
-                      width: 100,
+                      width: 60,
                       //render: () => "Other 2",
                       fixed: "left",
                     },
@@ -2225,7 +2233,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                     {
                       title: "BENEFICIARY DETAILS",
                       dataIndex: "bene",
-                      width: 100,
+                      width: 190,
 
                       //render: () => "Other",
                     },
@@ -2241,16 +2249,116 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                     {
                       date: (
                         <>
-                          <div>{modal3?.paymentDate}</div>
+                          <div>{modal3?.paymentDate?.slice(0, 10)}</div>
                         </>
                       ),
                       bene: (
                         <>
                           <div>
-                            {
-                              modal3?.userBeneficiary?.beneficiaryBank
-                                ?.accountName
-                            }
+                            Bank -{" "}
+                            <b>
+                              {
+                                modal3?.userBeneficiary?.beneficiaryBank
+                                  ?.bankName
+                              }{" "}
+                              <svg
+                                onClick={() => {
+                                  navigator.clipboard.writeText(
+                                    modal3?.userBeneficiary?.beneficiaryBank
+                                      ?.bankName
+                                  );
+                                  toast.success("Copied!");
+                                }}
+                                width="15"
+                                height="16"
+                                viewBox="0 0 15 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M12.834 5.9987H6.83398C6.09761 5.9987 5.50065 6.59565 5.50065 7.33203V13.332C5.50065 14.0684 6.09761 14.6654 6.83398 14.6654H12.834C13.5704 14.6654 14.1673 14.0684 14.1673 13.332V7.33203C14.1673 6.59565 13.5704 5.9987 12.834 5.9987Z"
+                                  fill="#00A85A"
+                                />
+                                <path
+                                  d="M3.49104 9.60817C3.13742 9.60817 1.90039 9.60817 1.22451 9.60817C0.97446 9.35813 0.833984 9.01899 0.833984 8.66536V2.66536C0.833984 2.31174 0.97446 1.9726 1.22451 1.72256C1.47456 1.47251 1.8137 1.33203 2.16732 1.33203H8.16732C8.52094 1.33203 8.86008 1.47251 9.11013 1.72256C9.36018 1.9726 9.50065 2.31174 9.50065 2.66536V3.33203M6.83398 5.9987H12.834C13.5704 5.9987 14.1673 6.59565 14.1673 7.33203V13.332C14.1673 14.0684 13.5704 14.6654 12.834 14.6654H6.83398C6.09761 14.6654 5.50065 14.0684 5.50065 13.332V7.33203C5.50065 6.59565 6.09761 5.9987 6.83398 5.9987Z"
+                                  stroke="#00A85A"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </b>
+                          </div>
+                          <div>
+                            Account Name -{" "}
+                            <b>
+                              {
+                                modal3?.userBeneficiary?.beneficiaryBank
+                                  ?.accountName
+                              }
+                              <svg
+                                onClick={() => {
+                                  navigator.clipboard.writeText(
+                                    modal3?.userBeneficiary?.beneficiaryBank
+                                      ?.accountName
+                                  );
+                                  toast.success("Copied!");
+                                }}
+                                width="15"
+                                height="16"
+                                viewBox="0 0 15 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M12.834 5.9987H6.83398C6.09761 5.9987 5.50065 6.59565 5.50065 7.33203V13.332C5.50065 14.0684 6.09761 14.6654 6.83398 14.6654H12.834C13.5704 14.6654 14.1673 14.0684 14.1673 13.332V7.33203C14.1673 6.59565 13.5704 5.9987 12.834 5.9987Z"
+                                  fill="#00A85A"
+                                />
+                                <path
+                                  d="M3.49104 9.60817C3.13742 9.60817 1.90039 9.60817 1.22451 9.60817C0.97446 9.35813 0.833984 9.01899 0.833984 8.66536V2.66536C0.833984 2.31174 0.97446 1.9726 1.22451 1.72256C1.47456 1.47251 1.8137 1.33203 2.16732 1.33203H8.16732C8.52094 1.33203 8.86008 1.47251 9.11013 1.72256C9.36018 1.9726 9.50065 2.31174 9.50065 2.66536V3.33203M6.83398 5.9987H12.834C13.5704 5.9987 14.1673 6.59565 14.1673 7.33203V13.332C14.1673 14.0684 13.5704 14.6654 12.834 14.6654H6.83398C6.09761 14.6654 5.50065 14.0684 5.50065 13.332V7.33203C5.50065 6.59565 6.09761 5.9987 6.83398 5.9987Z"
+                                  stroke="#00A85A"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </b>
+                          </div>
+
+                          <div>
+                            Account Number -{" "}
+                            <b>
+                              {
+                                modal3?.userBeneficiary?.beneficiaryBank
+                                  ?.accountNumber
+                              }{" "}
+                              <svg
+                                onClick={() => {
+                                  navigator.clipboard.writeText(
+                                    modal3?.userBeneficiary?.beneficiaryBank
+                                      ?.accountNumber
+                                  );
+                                  toast.success("Copied!");
+                                }}
+                                width="15"
+                                height="16"
+                                viewBox="0 0 15 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M12.834 5.9987H6.83398C6.09761 5.9987 5.50065 6.59565 5.50065 7.33203V13.332C5.50065 14.0684 6.09761 14.6654 6.83398 14.6654H12.834C13.5704 14.6654 14.1673 14.0684 14.1673 13.332V7.33203C14.1673 6.59565 13.5704 5.9987 12.834 5.9987Z"
+                                  fill="#00A85A"
+                                />
+                                <path
+                                  d="M3.49104 9.60817C3.13742 9.60817 1.90039 9.60817 1.22451 9.60817C0.97446 9.35813 0.833984 9.01899 0.833984 8.66536V2.66536C0.833984 2.31174 0.97446 1.9726 1.22451 1.72256C1.47456 1.47251 1.8137 1.33203 2.16732 1.33203H8.16732C8.52094 1.33203 8.86008 1.47251 9.11013 1.72256C9.36018 1.9726 9.50065 2.31174 9.50065 2.66536V3.33203M6.83398 5.9987H12.834C13.5704 5.9987 14.1673 6.59565 14.1673 7.33203V13.332C14.1673 14.0684 13.5704 14.6654 12.834 14.6654H6.83398C6.09761 14.6654 5.50065 14.0684 5.50065 13.332V7.33203C5.50065 6.59565 6.09761 5.9987 6.83398 5.9987Z"
+                                  stroke="#00A85A"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </b>
                           </div>
                         </>
                       ),
@@ -2264,8 +2372,8 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                           {" "}
                           <div>
                             <AmountFormatter
-                              currency={modal3?.senderCurrency}
-                              value={modal3?.paymentAmount}
+                              currency={modal3?.beneficiaryCurrency}
+                              value={modal3?.receivedAmount}
                             />
                           </div>
                         </>
@@ -2523,7 +2631,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
               </b>
             </h3>
             <br />
-            {details?.userBeneficiary?.correspondenceBank && (
+            {details?.userBeneficiary?.correspondenceBank?.bankName && (
               <>
                 <span
                   style={{
