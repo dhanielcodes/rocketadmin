@@ -35,6 +35,7 @@ import AppModal from "../../COMPONENTS/AppModal";
 import SmallDownload from "../../assets/icons/Download";
 import { TiEye } from "react-icons/ti";
 import * as htmlToImage from "html-to-image";
+import { usePDF } from "react-to-pdf";
 
 const TextArea = Input.TextArea;
 
@@ -1979,6 +1980,8 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
   };
   console.log(markers);
 
+  const { toPDF, targetRef } = usePDF({ filename: "receipt.pdf" });
+
   return (
     <Content>
       <div className="tablecontent">
@@ -2094,16 +2097,17 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
             <div style={{ width: "100%", background: "white" }}>
               <div
                 onClick={() => {
-                  htmlToImage
+                  /*   htmlToImage
                     .toJpeg(document.getElementById("my-node"), {
                       quality: 0.95,
                     })
                     .then(function (dataUrl) {
                       var link = document.createElement("a");
-                      link.download = "receipt.jpeg";
+                      link.download = "receipt.pdf";
                       link.href = dataUrl;
                       link.click();
-                    });
+                    }); */
+                  toPDF();
                 }}
                 style={{
                   padding: "8px 14px",
@@ -2137,6 +2141,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
 
               <div
                 id="my-node"
+                ref={targetRef}
                 style={{
                   background: "white",
                 }}
@@ -2255,116 +2260,38 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                       bene: (
                         <>
                           <div>
-                            Bank -{" "}
-                            <b>
-                              {
-                                modal3?.userBeneficiary?.beneficiaryBank
-                                  ?.bankName
-                              }{" "}
-                              <svg
-                                onClick={() => {
-                                  navigator.clipboard.writeText(
-                                    modal3?.userBeneficiary?.beneficiaryBank
-                                      ?.bankName
-                                  );
-                                  toast.success("Copied!");
-                                }}
-                                width="15"
-                                height="16"
-                                viewBox="0 0 15 16"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M12.834 5.9987H6.83398C6.09761 5.9987 5.50065 6.59565 5.50065 7.33203V13.332C5.50065 14.0684 6.09761 14.6654 6.83398 14.6654H12.834C13.5704 14.6654 14.1673 14.0684 14.1673 13.332V7.33203C14.1673 6.59565 13.5704 5.9987 12.834 5.9987Z"
-                                  fill="#00A85A"
-                                />
-                                <path
-                                  d="M3.49104 9.60817C3.13742 9.60817 1.90039 9.60817 1.22451 9.60817C0.97446 9.35813 0.833984 9.01899 0.833984 8.66536V2.66536C0.833984 2.31174 0.97446 1.9726 1.22451 1.72256C1.47456 1.47251 1.8137 1.33203 2.16732 1.33203H8.16732C8.52094 1.33203 8.86008 1.47251 9.11013 1.72256C9.36018 1.9726 9.50065 2.31174 9.50065 2.66536V3.33203M6.83398 5.9987H12.834C13.5704 5.9987 14.1673 6.59565 14.1673 7.33203V13.332C14.1673 14.0684 13.5704 14.6654 12.834 14.6654H6.83398C6.09761 14.6654 5.50065 14.0684 5.50065 13.332V7.33203C5.50065 6.59565 6.09761 5.9987 6.83398 5.9987Z"
-                                  stroke="#00A85A"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                />
-                              </svg>
-                            </b>
-                          </div>
-                          <div>
-                            Account Name -{" "}
                             <b>
                               {
                                 modal3?.userBeneficiary?.beneficiaryBank
                                   ?.accountName
                               }
-                              <svg
-                                onClick={() => {
-                                  navigator.clipboard.writeText(
-                                    modal3?.userBeneficiary?.beneficiaryBank
-                                      ?.accountName
-                                  );
-                                  toast.success("Copied!");
-                                }}
-                                width="15"
-                                height="16"
-                                viewBox="0 0 15 16"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M12.834 5.9987H6.83398C6.09761 5.9987 5.50065 6.59565 5.50065 7.33203V13.332C5.50065 14.0684 6.09761 14.6654 6.83398 14.6654H12.834C13.5704 14.6654 14.1673 14.0684 14.1673 13.332V7.33203C14.1673 6.59565 13.5704 5.9987 12.834 5.9987Z"
-                                  fill="#00A85A"
-                                />
-                                <path
-                                  d="M3.49104 9.60817C3.13742 9.60817 1.90039 9.60817 1.22451 9.60817C0.97446 9.35813 0.833984 9.01899 0.833984 8.66536V2.66536C0.833984 2.31174 0.97446 1.9726 1.22451 1.72256C1.47456 1.47251 1.8137 1.33203 2.16732 1.33203H8.16732C8.52094 1.33203 8.86008 1.47251 9.11013 1.72256C9.36018 1.9726 9.50065 2.31174 9.50065 2.66536V3.33203M6.83398 5.9987H12.834C13.5704 5.9987 14.1673 6.59565 14.1673 7.33203V13.332C14.1673 14.0684 13.5704 14.6654 12.834 14.6654H6.83398C6.09761 14.6654 5.50065 14.0684 5.50065 13.332V7.33203C5.50065 6.59565 6.09761 5.9987 6.83398 5.9987Z"
-                                  stroke="#00A85A"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                />
-                              </svg>
                             </b>
                           </div>
 
                           <div>
-                            Account Number -{" "}
                             <b>
                               {
                                 modal3?.userBeneficiary?.beneficiaryBank
                                   ?.accountNumber
                               }{" "}
-                              <svg
-                                onClick={() => {
-                                  navigator.clipboard.writeText(
-                                    modal3?.userBeneficiary?.beneficiaryBank
-                                      ?.accountNumber
-                                  );
-                                  toast.success("Copied!");
-                                }}
-                                width="15"
-                                height="16"
-                                viewBox="0 0 15 16"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M12.834 5.9987H6.83398C6.09761 5.9987 5.50065 6.59565 5.50065 7.33203V13.332C5.50065 14.0684 6.09761 14.6654 6.83398 14.6654H12.834C13.5704 14.6654 14.1673 14.0684 14.1673 13.332V7.33203C14.1673 6.59565 13.5704 5.9987 12.834 5.9987Z"
-                                  fill="#00A85A"
-                                />
-                                <path
-                                  d="M3.49104 9.60817C3.13742 9.60817 1.90039 9.60817 1.22451 9.60817C0.97446 9.35813 0.833984 9.01899 0.833984 8.66536V2.66536C0.833984 2.31174 0.97446 1.9726 1.22451 1.72256C1.47456 1.47251 1.8137 1.33203 2.16732 1.33203H8.16732C8.52094 1.33203 8.86008 1.47251 9.11013 1.72256C9.36018 1.9726 9.50065 2.31174 9.50065 2.66536V3.33203M6.83398 5.9987H12.834C13.5704 5.9987 14.1673 6.59565 14.1673 7.33203V13.332C14.1673 14.0684 13.5704 14.6654 12.834 14.6654H6.83398C6.09761 14.6654 5.50065 14.0684 5.50065 13.332V7.33203C5.50065 6.59565 6.09761 5.9987 6.83398 5.9987Z"
-                                  stroke="#00A85A"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                />
-                              </svg>
+                              / {modal3?.userBeneficiary?.beneficiaryBank?.iban}{" "}
+                            </b>
+                          </div>
+
+                          <div>
+                            <b>
+                              {modal3?.userBeneficiary?.beneficiaryBank?.bic}/{" "}
+                              {
+                                modal3?.userBeneficiary?.beneficiaryBank
+                                  ?.swiftCode
+                              }{" "}
                             </b>
                           </div>
                         </>
                       ),
                       ref: (
                         <>
-                          <div>{modal3?.paymentRef}</div>
+                          <div>{modal3?.transactionNote}</div>
                         </>
                       ),
                       newPaymentAmount: (
