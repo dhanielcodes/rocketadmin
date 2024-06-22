@@ -377,7 +377,13 @@ function CustomersTable() {
     {
       title: "CUSTOMER REF",
       dataIndex: "userId",
-      width: 190,
+      width: 140,
+    },
+    {
+      title: "ACCOUNT TYPE",
+      dataIndex: "accountType",
+      render: (e) => <div>{e === 1 ? "Individual" : "Business"}</div>,
+      width: 140,
     },
     {
       title: "NAME",
