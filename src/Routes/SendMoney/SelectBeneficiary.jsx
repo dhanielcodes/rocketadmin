@@ -1,22 +1,27 @@
 import styled from "styled-components";
 import SectionHeader from "../../reuseables/SectionHeader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { beneficiaries } from "../../services/Dashboard";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { Skeleton } from "@arco-design/web-react";
 
-export default function SelectBeneficiary({ active, setActive }) {
+export default function SelectBeneficiary({ active, setActive, recall, open }) {
   const [params] = useSearchParams();
 
   const {
     data: benelist,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery({
     queryKey: ["beneficiariessw"],
     queryFn: () => beneficiaries(params.get("id")),
   });
+
+  useEffect(() => {
+    refetch();
+  }, [recall]);
   return (
     <Content>
       <div className="tablecontent">
@@ -153,6 +158,35 @@ export default function SelectBeneficiary({ active, setActive }) {
                 </div>
               );
             })
+          ) : (
+            <Skeleton />
+          )}
+          {!isLoading ? (
+            <div
+              onClick={() => {
+                open(true);
+              }}
+              className="card"
+              style={{
+                border: `1px dashed #515151`,
+                display: "grid",
+                placeItems: "center",
+                cursor: "pointer",
+              }}
+            >
+              <div
+                onClick={() => {
+                  open(true);
+                }}
+                style={{
+                  border: `1px dashed #515151`,
+                  borderRadius: "10px",
+                  padding: "10px",
+                }}
+              >
+                Add Beneficiary
+              </div>
+            </div>
           ) : (
             <Skeleton />
           )}

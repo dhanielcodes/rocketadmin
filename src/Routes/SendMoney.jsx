@@ -15,6 +15,7 @@ import ReusableModal from "../reuseables/ReusableModal";
 import Msg from "../reuseables/Msg";
 import Btn from "../reuseables/Btn";
 import toast from "react-hot-toast";
+import CreateBeneficiary from "../modals/AddBeneficiary";
 function SendMoney() {
   const [userSelected, setUserSelected] = useState("");
   const [params] = useSearchParams();
@@ -124,267 +125,286 @@ function SendMoney() {
       return;
     },
   });
+
+  const [openCr, setOpenCr] = useState(false);
   return (
-    <BodyLayout>
-      {beneficiaryComponent && (
-        <BeneficiaryComponent
-          closeBeneficiaryComponent={setBeneficiaryComponent}
-        />
-      )}
-      {open && (
-        <ReusableModal
-          isOpen={open}
-          onClose={() => {
-            setOpen(!open);
-            setSelectedCountry(null);
-            setSelectedCountry2(null);
-            setShowBtn(false);
-          }}
-        >
-          {status === true ? (
-            <>
-              <Msg type={true}>{getmsg}</Msg>
-
-              {showBtn && (
-                <Btn
-                  clicking={() => {
-                    window.location.replace(getlink);
-                  }}
-                  styles={{
-                    width: "100%",
-                    marginTop: "20px",
-                  }}
-                >
-                  Proceed to Paymennt
-                </Btn>
-              )}
-            </>
-          ) : (
-            <>
-              {getmsg === "You are yet to complete your KYC." ? (
-                <Msg>This User is yet to complete their KYC</Msg>
-              ) : (
-                <Msg>{getmsg}</Msg>
-              )}
-            </>
-          )}
-        </ReusableModal>
-      )}
-      {statusCode && (
-        <ReusableModal
-          isOpen={statusCode}
-          onClose={() => {
-            navigate("/send-money?step=1");
-            localStorage.removeItem("amount");
-          }}
-        >
-          <Msg type={statusCode === "0" ? true : false}>
-            {params.get("statusMessage")}
-          </Msg>
-        </ReusableModal>
-      )}
-      {beneficiaryComponent ? (
-        ""
-      ) : (
-        <Content>
-          <div className="top">
-            <p>Send Money</p>
-            <span>
-              This page let's you send money to customer beneficiaries
-            </span>
-          </div>
-
-          <div className="main">
-            {params.get("step") === "1" && (
-              <SendMoneyCustomersTableList
-                setStep={setStep}
-                setUserSelected={setUserSelected}
-                userSelected={userSelected}
-              />
-            )}
-            {params.get("step") === "2" && (
-              <SelectBeneficiary active={active} setActive={setActive} />
-            )}
-            {params.get("step") === "3" && (
-              <SendDetails
-                customer={customer?.data}
-                details={details}
-                setDetails={setDetails}
-                setRate={setRate}
-                selectedCountry={selectedCountry}
-                setSelectedCountry={setSelectedCountry}
-                setSelectedCountry2={setSelectedCountry2}
-                selectedCountry2={selectedCountry2}
-                setPayment={setPayment}
-                setPayout={setPayout}
-                setPurpose={setPurpose}
-                newPurpose={newPurpose}
-                payment={payment}
-                payout={payout}
-              />
-            )}
-            {params.get("step") === "4" && (
-              <SendDetailsFinal rate={rate} dataId={data?.data} />
-            )}
-          </div>
-          <div
-            style={{
-              display: "grid",
-              width: "30%",
-              gridTemplateColumns: "1fr 1fr",
-              gridGap: "10px",
-              marginTop: "30px",
-              marginLeft: "auto",
-              paddingBottom: "20px",
-              paddingRight: "20px",
+    <>
+      {openCr && <CreateBeneficiary closeinviteAgent={setOpenCr} />}
+      <BodyLayout>
+        {beneficiaryComponent && (
+          <BeneficiaryComponent
+            closeBeneficiaryComponent={setBeneficiaryComponent}
+          />
+        )}
+        {open && (
+          <ReusableModal
+            isOpen={open}
+            onClose={() => {
+              setOpen(!open);
+              setSelectedCountry(null);
+              setSelectedCountry2(null);
+              setShowBtn(false);
             }}
           >
-            {params.get("step") === "1" ? (
-              <div></div>
-            ) : data?.status ? (
-              ""
+            {status === true ? (
+              <>
+                <Msg type={true}>{getmsg}</Msg>
+
+                {showBtn && (
+                  <Btn
+                    clicking={() => {
+                      window.location.replace(getlink);
+                    }}
+                    styles={{
+                      width: "100%",
+                      marginTop: "20px",
+                    }}
+                  >
+                    Proceed to Paymennt
+                  </Btn>
+                )}
+              </>
             ) : (
-              <button
-                onClick={() => {
-                  setStep((prev) => prev - 1);
-                  if (step === 1) {
-                    navigate(`/send-money?id=${params.get("id")}&step=${1}`);
-                  }
-                  if (step === 2) {
-                    navigate(`/send-money?step=${1}`);
-                  }
-                  if (step === 3) {
-                    navigate(`/send-money?id=${params.get("id")}&step=${2}`);
-                  }
-                  if (step === 4) {
-                    navigate(`/send-money?id=${params.get("id")}&step=${3}`);
-                  }
-                }}
-                className="cancel"
-              >
-                {" "}
-                <span>Previous</span>
-              </button>
+              <>
+                {getmsg === "You are yet to complete your KYC." ? (
+                  <Msg>This User is yet to complete their KYC</Msg>
+                ) : (
+                  <Msg>{getmsg}</Msg>
+                )}
+              </>
             )}
+          </ReusableModal>
+        )}
+        {statusCode && (
+          <ReusableModal
+            isOpen={statusCode}
+            onClose={() => {
+              navigate("/send-money?step=1");
+              localStorage.removeItem("amount");
+            }}
+          >
+            <Msg type={statusCode === "0" ? true : false}>
+              {params.get("statusMessage")}
+            </Msg>
+          </ReusableModal>
+        )}
+        {beneficiaryComponent ? (
+          ""
+        ) : (
+          <Content>
+            <div className="top">
+              <p>Send Money</p>
+              <span>
+                This page let's you send money to customer beneficiaries
+              </span>
+            </div>
 
-            {params.get("step") === "1" ? (
-              ""
-            ) : (
-              <button
-                disabled={isLoading}
-                onClick={() => {
-                  if (data?.status) {
-                    navigate(`/dashboard`);
-                  }
-                  if (step === 1) {
-                    navigate(`/send-money?id=${params.get("id")}&step=${2}`);
-                    setStep((prev) => prev + 1);
-                    localStorage.setItem(
-                      "userSend",
-                      JSON.stringify(userSelected)
-                    );
-                  }
-                  if (params.get("step") === "2") {
-                    if (active) {
-                      setStep(3);
-                      localStorage.setItem("userBene", JSON.stringify(active));
+            <div className="main">
+              {params.get("step") === "1" && (
+                <SendMoneyCustomersTableList
+                  setStep={setStep}
+                  setUserSelected={setUserSelected}
+                  userSelected={userSelected}
+                />
+              )}
+              {params.get("step") === "2" && (
+                <SelectBeneficiary
+                  active={active}
+                  setActive={setActive}
+                  recall={openCr}
+                  open={setOpenCr}
+                />
+              )}
+              {params.get("step") === "3" && (
+                <SendDetails
+                  customer={customer?.data}
+                  details={details}
+                  setDetails={setDetails}
+                  setRate={setRate}
+                  selectedCountry={selectedCountry}
+                  setSelectedCountry={setSelectedCountry}
+                  setSelectedCountry2={setSelectedCountry2}
+                  selectedCountry2={selectedCountry2}
+                  setPayment={setPayment}
+                  setPayout={setPayout}
+                  setPurpose={setPurpose}
+                  newPurpose={newPurpose}
+                  payment={payment}
+                  payout={payout}
+                />
+              )}
+              {params.get("step") === "4" && (
+                <SendDetailsFinal rate={rate} dataId={data?.data} />
+              )}
+            </div>
+            <div
+              style={{
+                display: "grid",
+                width: "30%",
+                gridTemplateColumns: "1fr 1fr",
+                gridGap: "10px",
+                marginTop: "30px",
+                marginLeft: "auto",
+                paddingBottom: "20px",
+                paddingRight: "20px",
+              }}
+            >
+              {params.get("step") === "1" ? (
+                <div></div>
+              ) : data?.status ? (
+                ""
+              ) : (
+                <button
+                  onClick={() => {
+                    setStep((prev) => prev - 1);
+                    if (step === 1) {
+                      navigate(`/send-money?id=${params.get("id")}&step=${1}`);
+                    }
+                    if (step === 2) {
+                      navigate(`/send-money?step=${1}`);
+                    }
+                    if (step === 3) {
+                      navigate(`/send-money?id=${params.get("id")}&step=${2}`);
+                    }
+                    if (step === 4) {
                       navigate(`/send-money?id=${params.get("id")}&step=${3}`);
-                    } else {
-                      toast.error("Select a beneficiary");
                     }
-                  }
-                  if (step === 3) {
-                    if (
-                      rate &&
-                      payment &&
-                      payout &&
-                      details?.amount &&
-                      details?.paymentChannelId &&
-                      details?.purpose
-                    ) {
+                  }}
+                  className="cancel"
+                >
+                  {" "}
+                  <span>Previous</span>
+                </button>
+              )}
+
+              {params.get("step") === "1" ? (
+                ""
+              ) : (
+                <button
+                  disabled={isLoading}
+                  onClick={() => {
+                    if (data?.status) {
+                      navigate(`/dashboard`);
+                    }
+                    if (step === 1) {
+                      navigate(`/send-money?id=${params.get("id")}&step=${2}`);
+                      setStep((prev) => prev + 1);
                       localStorage.setItem(
-                        "sendDetails",
-                        JSON.stringify({
-                          fromCurrency: selectedCountry,
-                          toCurrency: selectedCountry2,
-
-                          rate: rate,
-                          payment: payment,
-                          payout: payout,
-                          ...details,
-                        })
+                        "userSend",
+                        JSON.stringify(userSelected)
                       );
-                      setDetails({
-                        ...details,
-                        fromCurrencyId: selectedCountry?.id,
-                        toCurrencyId: selectedCountry2?.id,
-                      });
-
-                      navigate(`/send-money?id=${params.get("id")}&step=${4}`);
-                    } else {
-                      toast.error("All fields are required");
                     }
-                  }
-                  if (params.get("step") === "4") {
-                    mutate({
-                      ...details,
-                    });
-                  }
-                  const userDetails = JSON.parse(
-                    localStorage.getItem("userDetails")
-                  );
-
-                  const navAccess = userDetails?.userRoleMenuAccess
-                    ?.map((item) => {
-                      if (item?.menuAccessType?.id !== 1) {
-                        return {
-                          ...item,
-                        };
+                    if (params.get("step") === "2") {
+                      if (active) {
+                        setStep(3);
+                        localStorage.setItem(
+                          "userBene",
+                          JSON.stringify(active)
+                        );
+                        navigate(
+                          `/send-money?id=${params.get("id")}&step=${3}`
+                        );
+                      } else {
+                        toast.error("Select a beneficiary");
                       }
-                    })
-                    .filter((item) => item !== undefined);
-                  console.log(navAccess?.filter((item) => item !== undefined));
-                  const menu1 = navAccess?.[0]?.menuName
-                    ?.toLowerCase()
-                    ?.replace(/\s+/g, "-");
-                  const menu2 =
-                    navAccess?.[0]?.userRoleSubMenuAccess[0]?.subMenuName
-                      .toLowerCase()
-                      ?.replace(/\s+/g, "-");
-                  const menu3 =
-                    navAccess?.[0]?.userRoleSubMenuAccess[0]?.userRoleSuSubbMenuAccess[0]?.subMenuName
+                    }
+                    if (step === 3) {
+                      if (
+                        rate &&
+                        payment &&
+                        payout &&
+                        details?.amount &&
+                        details?.paymentChannelId &&
+                        details?.purpose
+                      ) {
+                        localStorage.setItem(
+                          "sendDetails",
+                          JSON.stringify({
+                            fromCurrency: selectedCountry,
+                            toCurrency: selectedCountry2,
+
+                            rate: rate,
+                            payment: payment,
+                            payout: payout,
+                            ...details,
+                          })
+                        );
+                        setDetails({
+                          ...details,
+                          fromCurrencyId: selectedCountry?.id,
+                          toCurrencyId: selectedCountry2?.id,
+                        });
+
+                        navigate(
+                          `/send-money?id=${params.get("id")}&step=${4}`
+                        );
+                      } else {
+                        toast.error("All fields are required");
+                      }
+                    }
+                    if (params.get("step") === "4") {
+                      mutate({
+                        ...details,
+                      });
+                    }
+                    const userDetails = JSON.parse(
+                      localStorage.getItem("userDetails")
+                    );
+
+                    const navAccess = userDetails?.userRoleMenuAccess
+                      ?.map((item) => {
+                        if (item?.menuAccessType?.id !== 1) {
+                          return {
+                            ...item,
+                          };
+                        }
+                      })
+                      .filter((item) => item !== undefined);
+                    console.log(
+                      navAccess?.filter((item) => item !== undefined)
+                    );
+                    const menu1 = navAccess?.[0]?.menuName
                       ?.toLowerCase()
                       ?.replace(/\s+/g, "-");
-                  if (data?.status) {
-                    navigate(
-                      menu3
-                        ? `/${menu3}`
-                        : menu2
-                        ? `/${menu2}`
-                        : menu1
-                        ? `/${menu1}`
-                        : "/"
-                    );
-                  }
-                }}
-                className="confirm"
-              >
-                {" "}
-                <span>
-                  {params.get("step") === "4"
-                    ? isLoading
-                      ? "sending..."
-                      : data?.status
-                      ? "To Dashboard"
-                      : "Proceed To Payment"
-                    : "Continue"}
-                </span>
-              </button>
-            )}
-          </div>
-        </Content>
-      )}
-    </BodyLayout>
+                    const menu2 =
+                      navAccess?.[0]?.userRoleSubMenuAccess[0]?.subMenuName
+                        .toLowerCase()
+                        ?.replace(/\s+/g, "-");
+                    const menu3 =
+                      navAccess?.[0]?.userRoleSubMenuAccess[0]?.userRoleSuSubbMenuAccess[0]?.subMenuName
+                        ?.toLowerCase()
+                        ?.replace(/\s+/g, "-");
+                    if (data?.status) {
+                      navigate(
+                        menu3
+                          ? `/${menu3}`
+                          : menu2
+                          ? `/${menu2}`
+                          : menu1
+                          ? `/${menu1}`
+                          : "/"
+                      );
+                    }
+                  }}
+                  className="confirm"
+                >
+                  {" "}
+                  <span>
+                    {params.get("step") === "4"
+                      ? isLoading
+                        ? "sending..."
+                        : data?.status
+                        ? "To Dashboard"
+                        : "Proceed To Payment"
+                      : "Continue"}
+                  </span>
+                </button>
+              )}
+            </div>
+          </Content>
+        )}
+      </BodyLayout>
+    </>
   );
 }
 
