@@ -23,6 +23,11 @@ export const beneficiaries = async (userId, bid) => {
   );
   return data;
 };
+export const deleteuserbeneficiary = async (body) => {
+  console.log("🚀 ~ file: Dashboard.jsx:32 ~ createBeneficiary ~ body:", body);
+  const { data } = await Axios.post(`${baseurl}/deleteuserbeneficiary/${body}`);
+  return data;
+};
 export const getCurrencies = async () => {
   const { data } = await Axios.get(`${baseurl}/getcurrency`);
   return data;

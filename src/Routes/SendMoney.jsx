@@ -129,7 +129,13 @@ function SendMoney() {
   const [openCr, setOpenCr] = useState(false);
   return (
     <>
-      {openCr && <CreateBeneficiary closeinviteAgent={setOpenCr} />}
+      {openCr && (
+        <CreateBeneficiary
+          closeinviteAgent={setOpenCr}
+          recall={setOpenCr}
+          call={openCr}
+        />
+      )}
       <BodyLayout>
         {beneficiaryComponent && (
           <BeneficiaryComponent
