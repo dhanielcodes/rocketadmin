@@ -29,7 +29,7 @@ import { countryObjectsArray } from "../../config/CountryCodes";
 import { BankTest } from "../../config/Test";
 import AppButton from "../reuseables/AppButton";
 
-function CreateBeneficiary({ closeinviteAgent }) {
+function CreateBeneficiary({ closeinviteAgent, recall, call }) {
   const [accNum, setAccNum] = useState(null);
   const [info, setInfo] = useState(null);
   const [show, setShow] = useState(false);
@@ -147,6 +147,7 @@ function CreateBeneficiary({ closeinviteAgent }) {
   } = useQuery({
     queryKey: [bankcode?.name, accNum],
     queryFn: nameEnquiry,
+    enabled: bankcode?.name && accNum?.length === 10 ? true : false,
     onSuccess: (data) => {
       console.log(
         "🚀 ~ file: CreateBeneficiary.jsx:93 ~ CreateBeneficiary ~ data:",
@@ -281,11 +282,13 @@ function CreateBeneficiary({ closeinviteAgent }) {
       if (!data.status) {
         setInfo(data);
         setShow(true);
+        recall(!call);
         closeinviteAgent(false);
         // toast.error(data?.message)
       }
       setInfo(data);
       setShow(true);
+      recall(!call);
 
       // localStorage.setItem("userDetails",JSON.stringify(UserTestData))
     },
@@ -480,10 +483,11 @@ function CreateBeneficiary({ closeinviteAgent }) {
                       <p>Bank Name</p>
                       <Select
                         options={banksSelection}
+                        value={bankcode}
                         placeholder="select your bank"
                         onChange={(e) => {
                           setBankCode(e);
-                          setAccNum("");
+                          setAccNum(null);
                         }}
                         styles={{
                           option: (styles) => ({
@@ -604,19 +608,20 @@ function CreateBeneficiary({ closeinviteAgent }) {
                     <ReusableModal
                       isOpen={show}
                       onClose={() => {
-                        navigate("/user/beneficiary");
+                        //navigate("/user/beneficiary");
+                        closeinviteAgent(false);
                         setShow(false);
                       }}
                     >
                       <Msg type={info?.status}>{info?.message}</Msg>
                     </ReusableModal>
                   )}
-                  {accNum && accNum.length > 1 ? (
+                  {accNum && accNum.length === 10 ? (
                     <>
                       <p>Account Name</p>
                       {nameEnq?.data?.account_name ? (
                         <AppInput
-                          val={nameEnq?.data?.account_name}
+                          value={nameEnq?.data?.account_name}
                           placeholder="Account name displayed here"
                           readOnly={true}
                           style={{
@@ -633,7 +638,7 @@ function CreateBeneficiary({ closeinviteAgent }) {
               )}
             </SectionThree>
 
-            {countryDetails?.id !== 161 && (
+            {(countryDetails?.id !== 161 && (
               <SectionThree>
                 <h3>Correspondent Bank</h3>
                 <div className="text">
@@ -725,6 +730,23 @@ function CreateBeneficiary({ closeinviteAgent }) {
                   ></AppButton>
                 )}
               </SectionThree>
+            )) || (
+              <AppButton
+                disabled={nameEnq?.data?.account_name ? false : true}
+                onClick={createbeneficiary}
+                style={{
+                  color: "white",
+                  transform: "translateX(2%)",
+                  width: "100%",
+                }}
+                placeholder={
+                  isLoading ? (
+                    <LoaderIcon color="#fff" style={{ textAlign: "center" }} />
+                  ) : (
+                    "Submit"
+                  )
+                }
+              ></AppButton>
             )}
           </div>
         </div>

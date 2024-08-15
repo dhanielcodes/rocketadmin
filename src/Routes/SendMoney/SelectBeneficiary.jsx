@@ -1,10 +1,13 @@
 import styled from "styled-components";
 import SectionHeader from "../../reuseables/SectionHeader";
 import { useEffect, useState } from "react";
-import { beneficiaries } from "../../services/Dashboard";
-import { useQuery } from "@tanstack/react-query";
+import { beneficiaries, deleteuserbeneficiary } from "../../services/Dashboard";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { Skeleton } from "@arco-design/web-react";
+import ReusableModal from "../../reuseables/ReusableModal";
+import toast from "react-hot-toast";
+import { TiDelete, TiDeleteOutline, TiPlus, TiTrash } from "react-icons/ti";
 
 export default function SelectBeneficiary({ active, setActive, recall, open }) {
   const [params] = useSearchParams();
@@ -19,11 +22,67 @@ export default function SelectBeneficiary({ active, setActive, recall, open }) {
     queryFn: () => beneficiaries(params.get("id")),
   });
 
+  const { mutate, isLoading: del } = useMutation({
+    mutationFn: deleteuserbeneficiary,
+    onSuccess: (data) => {
+      console.log("🚀 ~ file: Login.jsx:61 ~ Login ~ data:", data);
+      if (data.status) {
+        toast.success(data?.message);
+        refetch();
+        setModal(false);
+
+        // toast.error(data?.message)
+      } else {
+        toast.error(data?.message);
+      }
+
+      // localStorage.setItem("userDetails",JSON.stringify(UserTestData))
+    },
+    onError: (data) => {
+      return;
+    },
+  });
+
   useEffect(() => {
     refetch();
   }, [recall]);
+  const [modal, setModal] = useState(false);
+  const [id, setId] = useState(false);
   return (
     <Content>
+      {modal && (
+        <ReusableModal
+          width="400px"
+          isOpen={modal}
+          onClose={() => setModal(false)}
+        >
+          <div>
+            <h2>Are you sure you want to delete this beneficiary?</h2>
+            <br />
+            <br />
+            <div className="actions">
+              <div className="actionbtn">
+                <button
+                  style={{
+                    border: "1px solid #dadada",
+                  }}
+                  onClick={() => setModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="delete"
+                  onClick={() => {
+                    mutate(id);
+                  }}
+                >
+                  {del ? "deleting beneficiary..." : "Delete"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </ReusableModal>
+      )}
       <div className="tablecontent">
         <SectionHeader
           title="Beneficiary"
@@ -78,7 +137,6 @@ export default function SelectBeneficiary({ active, setActive, recall, open }) {
                       </clipPath>
                     </defs>
                   </svg>
-
                   <div className="card_title">{item?.beneficiaryName}</div>
                   <div className="card_cont">
                     {item?.beneficiaryCountry?.name}
@@ -155,6 +213,21 @@ export default function SelectBeneficiary({ active, setActive, recall, open }) {
                       </svg>
                     )}
                   </div>
+                  <br />
+                  <TiTrash
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      color: "red",
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setModal(true);
+
+                      setId(item?.id);
+                      refetch();
+                    }}
+                  />
                 </div>
               );
             })
@@ -179,12 +252,13 @@ export default function SelectBeneficiary({ active, setActive, recall, open }) {
                   open(true);
                 }}
                 style={{
-                  border: `1px dashed #515151`,
                   borderRadius: "10px",
                   padding: "10px",
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
-                Add Beneficiary
+                Add Beneficiary &nbsp; <TiPlus />
               </div>
             </div>
           ) : (
@@ -204,7 +278,50 @@ const Content = styled.div`
 
     padding: 20px;
   }
+  .delete {
+    padding: 15px 35px;
+    border: 0px solid rgba(90, 99, 118, 1);
+    border-radius: 4px;
+    cursor: pointer;
+    background: #d60000 !important;
+    width: 100%;
+    color: white !important;
 
+    @media screen and (max-width: 40em) {
+      margin-bottom: 30px;
+    }
+  }
+  .actionbtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    /* height: 100%; */
+
+    .send {
+      color: white !important;
+    }
+
+    button {
+      padding: 15px 35px;
+      border: 0px solid rgba(90, 99, 118, 1);
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+
+      @media screen and (max-width: 40em) {
+        margin-bottom: 30px;
+      }
+    }
+    button:nth-of-type(2) {
+      background: rgba(0, 168, 90, 1);
+    }
+    button:nth-of-type(1) {
+      background: #fff;
+      color: rgba(90, 99, 118, 1);
+    }
+  }
   .card {
     padding: 20px;
     border-radius: 10px;
