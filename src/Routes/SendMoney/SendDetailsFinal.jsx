@@ -72,7 +72,7 @@ export default function SendDetailsFinal({ rate, dataId }) {
               <div>
                 <AmountFormatter
                   currency={user?.toCurrency?.code}
-                  value={user?.rate?.data?.computedToAmount || 0}
+                  value={user?.rate?.data?.toComputedToAmount || 0}
                 />
               </div>
             </div>
