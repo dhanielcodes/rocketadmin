@@ -264,7 +264,7 @@ export default function SendDetails({
                 formatter={(value) => {
                   return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }}
-                value={rates?.data?.computedToAmount}
+                value={rates?.data?.toComputedToAmount}
                 disabled
               />
             </div>
