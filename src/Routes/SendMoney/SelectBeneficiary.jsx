@@ -138,6 +138,9 @@ export default function SelectBeneficiary({ active, setActive, recall, open }) {
                     </defs>
                   </svg>
                   <div className="card_title">{item?.beneficiaryName}</div>
+                  <div className="card_bank">
+                    {item?.beneficiaryBank?.bankName}
+                  </div>
                   <div className="card_cont">
                     {item?.beneficiaryCountry?.name}
                   </div>
@@ -331,6 +334,11 @@ const Content = styled.div`
     .card_title {
       color: #5a6376;
       font-size: 16px;
+    }
+    .card_bank {
+      color: #101010;
+      margin-top: 8px;
+      font-size: 12px;
     }
     .card_cont {
       color: #667085;
