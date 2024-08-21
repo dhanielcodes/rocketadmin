@@ -133,7 +133,10 @@ export default function CustomerDetailsPage() {
                 {isLoading || isFetching ? (
                   <Skeleton2 height="400px" />
                 ) : (
-                  <CustomerDetailsTop customerDetails={customerDetails} />
+                  <CustomerDetailsTop
+                    customerDetails={customerDetails}
+                    from={from}
+                  />
                 )}
 
                 {isLoading || isFetching ? (
