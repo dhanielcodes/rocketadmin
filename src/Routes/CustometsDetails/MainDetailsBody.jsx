@@ -7,6 +7,7 @@ export default function CustomerDetailsTop({
   profile,
   mail,
   phone,
+  from,
 }) {
   const [params] = useSearchParams();
   const user = JSON.parse(localStorage.getItem("customer_details"));
@@ -235,41 +236,52 @@ export default function CustomerDetailsTop({
               {customerDetails?.isKYCCompleted ? "Verified" : "Not Verified"}
             </div>
             <br />
-            <hr />
-            <br />
-            <div>
-              {/*  <div
-                style={{
-                  fontSize: "16px",
-                  fontWeight: "400",
-                  color: "#313131",
-                  marginBottom: "3%",
-                  textAlign: "right",
-                }}
-              >
-                Action
-              </div> */}
-              <div
-                onClick={() => {
-                  navigate(`/send-money?id=${customerDetails?.userId}&step=2`);
-                  localStorage.setItem("userSend", JSON.stringify(user));
-                }}
-                style={{
-                  padding: "6px",
-                  borderRadius: "7px",
-                  fontSize: "14px",
-                  background: "#000000",
-                  color: "white",
-                  width: "100px",
-                  textAlign: "center",
-                  fontWeight: "700",
-                  marginLeft: "auto",
-                  cursor: "pointer",
-                }}
-              >
-                Send Money
-              </div>
-            </div>
+            {from === "customer" ? (
+              <>
+                <hr />
+                <br />
+                <div>
+                  {/*  <div
+              style={{
+                fontSize: "16px",
+                fontWeight: "400",
+                color: "#313131",
+                marginBottom: "3%",
+                textAlign: "right",
+              }}
+            >
+              Action
+            </div> */}
+                  <div
+                    onClick={() => {
+                      navigate(
+                        `/send-money?id=${customerDetails?.userId}&step=2`
+                      );
+                      localStorage.setItem(
+                        "userSend",
+                        JSON.stringify(customerDetails)
+                      );
+                    }}
+                    style={{
+                      padding: "6px",
+                      borderRadius: "7px",
+                      fontSize: "14px",
+                      background: "#000000",
+                      color: "white",
+                      width: "100px",
+                      textAlign: "center",
+                      fontWeight: "700",
+                      marginLeft: "auto",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Send Money
+                  </div>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
