@@ -339,7 +339,7 @@ const Droplist2 = ({ action, setModal, setUserId, viewDetails }) => (
           marginLeft: "10px",
         }}
       >
-        Mark as Pay
+        Mark As Paid
       </span>
     </Menu.Item>
     <Menu.Item
@@ -707,6 +707,47 @@ const DroplistPending = ({ action, setModal, setUserId, viewDetails }) => (
         }}
       >
         Pay Transaction
+      </span>
+    </Menu.Item>
+  </Menu>
+);
+const DroplistProcessedReceived = ({
+  action,
+  setModal,
+  setUserId,
+  viewDetails,
+}) => (
+  //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
+
+  <Menu
+    style={{
+      borderRadius: "10px",
+      paddingTop: "6px",
+      // width: "150px",
+    }}
+  >
+    <Menu.Item
+      onClick={() => {
+        viewDetails();
+      }}
+      key="3"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <IconEye
+        fontSize={20}
+        style={{
+          margin: 0,
+        }}
+      />
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        View Details
       </span>
     </Menu.Item>
   </Menu>
@@ -1276,7 +1317,24 @@ function TransferLogsTable({ category, showFilter = false }) {
           >
             <Dropdown
               droplist={
-                item?.paymentStatus === "Deposited" ? (
+                item?.paymentStatus === "Deposited" &&
+                item?.collectStatus === "Received" ? (
+                  <DroplistProcessedReceived
+                    action={setCall}
+                    setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
+                    setUserId={() => {
+                      setUserIdd(item?.userId);
+                      refetch(item?.sn);
+                    }}
+                  />
+                ) : item?.paymentStatus === "Deposited" ? (
                   <Droplist2
                     action={setCall}
                     setModal={setModal}
@@ -1292,7 +1350,7 @@ function TransferLogsTable({ category, showFilter = false }) {
                       navigate("/transaction-details");
                     }}
                     paymentStatus={item?.paymentStatus}
-                    collectStatus={item?.collectionStatus}
+                    collectStatus={item?.collectStatus}
                   />
                 ) : item?.paymentStatus === "Pending" ? (
                   <DroplistPending
@@ -1471,6 +1529,8 @@ function TransferLogsTable({ category, showFilter = false }) {
                   ? "#37d744"
                   : item?.collectStatus === "Pending"
                   ? "#ffe063"
+                  : item?.collectStatus === "Processing"
+                  ? "#d7ac37"
                   : item?.collectStatus === ""
                   ? "#939393"
                   : "#ff6363",
@@ -1630,7 +1690,7 @@ function TransferLogsTable({ category, showFilter = false }) {
                   {call === "markAsSuspicious"
                     ? "Are you sure you want to Mark as suspicious?"
                     : call === "markAsPay"
-                    ? "Are you sure you want to Mark as pay?"
+                    ? "Are you sure you want to Mark As Paid?"
                     : call === "holdTransaction"
                     ? "Are you sure you want to Hold Transaction?"
                     : call === "cancelTransaction"
@@ -1704,7 +1764,7 @@ function TransferLogsTable({ category, showFilter = false }) {
                         call === "markAsSuspicious"
                           ? "Mark as suspicious"
                           : call === "markAsPay"
-                          ? "Mark as pay"
+                          ? "Mark As Paid"
                           : call === "holdTransaction"
                           ? "Hold Transaction"
                           : call === "cancelTransaction"
