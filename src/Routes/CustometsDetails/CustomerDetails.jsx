@@ -22,6 +22,8 @@ import AmountFormatter from "../../reuseables/AmountFormatter";
 import CountryFlag, { ReactCountryFlag } from "react-country-flag";
 import CustomTable from "../../reuseables/CustomTable";
 import CountryListAgent from "../../reuseables/CountryListAgent";
+import FundWallet from "../../modals/FundWallet";
+import DepleteWallet from "../../modals/DepleteWallet";
 
 export default function CustomerDetailsPage() {
   const [params] = useSearchParams();
@@ -47,6 +49,10 @@ export default function CustomerDetailsPage() {
   const [active, setActive] = useState("Overview");
   const [viewRisk, setViewRisk] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState();
+
+  const [modalFund, setModalFund] = useState(false);
+  const [modalDeplete, setModalDeplete] = useState(false);
+  const [rate, setRate] = useState();
 
   const tab = [
     "Overview",
@@ -263,6 +269,93 @@ export default function CustomerDetailsPage() {
                     {"" ||
                       (active === "Wallets" && (
                         <>
+                          {modalFund && (
+                            <FundWallet
+                              modal={modalFund}
+                              setModal={setModalFund}
+                              rateItem={{ userId: customerDetails?.userId }}
+                              setRateItem={setRate}
+                            />
+                          )}{" "}
+                          {modalDeplete && (
+                            <DepleteWallet
+                              modal={modalDeplete}
+                              setModal={setModalDeplete}
+                              rateItem={{ userId: customerDetails?.userId }}
+                              setRateItem={setRate}
+                            />
+                          )}
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                              className="fund"
+                              onClick={() => {
+                                setModalFund(true);
+                              }}
+                            >
+                              <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M14.7732 3.09026H2.5065C2.34384 3.09026 2.18783 3.02641 2.07281 2.91275C1.95779 2.79909 1.89317 2.64493 1.89317 2.4842C1.89317 2.32346 1.95779 2.16931 2.07281 2.05565C2.18783 1.94199 2.34384 1.87814 2.5065 1.87814H12.9332C13.0958 1.87814 13.2518 1.81428 13.3669 1.70063C13.4819 1.58697 13.5465 1.43281 13.5465 1.27208C13.5465 1.11134 13.4819 0.957185 13.3669 0.843527C13.2518 0.729868 13.0958 0.666016 12.9332 0.666016H2.5065C2.01851 0.666016 1.55049 0.857574 1.20543 1.19855C0.860361 1.53952 0.666504 2.00199 0.666504 2.4842V12.1812C0.666504 12.6634 0.860361 13.1258 1.20543 13.4668C1.55049 13.8078 2.01851 13.9993 2.5065 13.9993H14.7732C15.0985 13.9993 15.4105 13.8716 15.6406 13.6443C15.8706 13.417 15.9998 13.1087 15.9998 12.7872V4.30238C15.9998 3.9809 15.8706 3.6726 15.6406 3.44528C15.4105 3.21796 15.0985 3.09026 14.7732 3.09026ZM14.7732 12.7872H2.5065C2.34384 12.7872 2.18783 12.7234 2.07281 12.6097C1.95779 12.4961 1.89317 12.3419 1.89317 12.1812V4.19859C2.09011 4.26757 2.29756 4.30268 2.5065 4.30238H14.7732V12.7872ZM11.0932 8.24177C11.0932 8.06197 11.1471 7.88621 11.2482 7.73671C11.3493 7.58721 11.493 7.47069 11.6611 7.40188C11.8292 7.33308 12.0142 7.31507 12.1927 7.35015C12.3711 7.38523 12.535 7.47181 12.6637 7.59895C12.7924 7.72609 12.88 7.88807 12.9155 8.06442C12.951 8.24076 12.9328 8.42355 12.8631 8.58967C12.7935 8.75578 12.6756 8.89776 12.5243 8.99765C12.373 9.09755 12.1951 9.15086 12.0132 9.15086C11.7692 9.15086 11.5352 9.05508 11.3626 8.8846C11.1901 8.71411 11.0932 8.48288 11.0932 8.24177Z"
+                                  fill="#FFF"
+                                />
+                              </svg>
+
+                              <span
+                                style={{
+                                  marginLeft: "10px",
+                                }}
+                              >
+                                Fund Wallet
+                              </span>
+                            </div>
+                            &nbsp; &nbsp;
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                              className="suspend"
+                              onClick={() => {
+                                setModalDeplete(true);
+                              }}
+                            >
+                              <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M14.7732 3.09026H2.5065C2.34384 3.09026 2.18783 3.02641 2.07281 2.91275C1.95779 2.79909 1.89317 2.64493 1.89317 2.4842C1.89317 2.32346 1.95779 2.16931 2.07281 2.05565C2.18783 1.94199 2.34384 1.87814 2.5065 1.87814H12.9332C13.0958 1.87814 13.2518 1.81428 13.3669 1.70063C13.4819 1.58697 13.5465 1.43281 13.5465 1.27208C13.5465 1.11134 13.4819 0.957185 13.3669 0.843527C13.2518 0.729868 13.0958 0.666016 12.9332 0.666016H2.5065C2.01851 0.666016 1.55049 0.857574 1.20543 1.19855C0.860361 1.53952 0.666504 2.00199 0.666504 2.4842V12.1812C0.666504 12.6634 0.860361 13.1258 1.20543 13.4668C1.55049 13.8078 2.01851 13.9993 2.5065 13.9993H14.7732C15.0985 13.9993 15.4105 13.8716 15.6406 13.6443C15.8706 13.417 15.9998 13.1087 15.9998 12.7872V4.30238C15.9998 3.9809 15.8706 3.6726 15.6406 3.44528C15.4105 3.21796 15.0985 3.09026 14.7732 3.09026ZM14.7732 12.7872H2.5065C2.34384 12.7872 2.18783 12.7234 2.07281 12.6097C1.95779 12.4961 1.89317 12.3419 1.89317 12.1812V4.19859C2.09011 4.26757 2.29756 4.30268 2.5065 4.30238H14.7732V12.7872ZM11.0932 8.24177C11.0932 8.06197 11.1471 7.88621 11.2482 7.73671C11.3493 7.58721 11.493 7.47069 11.6611 7.40188C11.8292 7.33308 12.0142 7.31507 12.1927 7.35015C12.3711 7.38523 12.535 7.47181 12.6637 7.59895C12.7924 7.72609 12.88 7.88807 12.9155 8.06442C12.951 8.24076 12.9328 8.42355 12.8631 8.58967C12.7935 8.75578 12.6756 8.89776 12.5243 8.99765C12.373 9.09755 12.1951 9.15086 12.0132 9.15086C11.7692 9.15086 11.5352 9.05508 11.3626 8.8846C11.1901 8.71411 11.0932 8.48288 11.0932 8.24177Z"
+                                  fill="#FFF"
+                                />
+                              </svg>
+
+                              <span
+                                style={{
+                                  marginLeft: "10px",
+                                }}
+                              >
+                                Deplete Wallet
+                              </span>
+                            </div>
+                          </div>
+                          &nbsp; &nbsp; &nbsp; &nbsp;
                           <Body>
                             {customerDetails?.wallet?.map((item) => {
                               return (
@@ -497,9 +590,75 @@ const Body = styled.div`
       font-size: 36px;
     }
   }
+
+  .fund {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    outline: none;
+    border: none;
+    padding: 14px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    span {
+      margin-left: 10px;
+      font-size: 16px;
+    }
+  }
+
+  .suspend {
+    background-color: #d1293d;
+    display: flex;
+    align-items: center;
+    outline: none;
+    border: none;
+    padding: 14px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    span {
+      margin-left: 10px;
+      color: white;
+      font-size: 16px;
+    }
+  }
 `;
 const Client = styled.div`
   width: 100%;
+  .fund {
+    background-color: #3dd129;
+    display: flex;
+    align-items: center;
+    outline: none;
+    border: none;
+    padding: 12px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    span {
+      margin-left: 10px;
+      font-size: 16px;
+      color: white;
+    }
+  }
+
+  .suspend {
+    background-color: #d1293d;
+    display: flex;
+    align-items: center;
+    outline: none;
+    border: none;
+    padding: 12px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    span {
+      margin-left: 10px;
+      color: white;
+      font-size: 16px;
+    }
+  }
   .topBar {
     display: flex;
     justify-content: space-between;
@@ -528,17 +687,18 @@ const Client = styled.div`
     }
 
     .fund {
-      background-color: white;
+      background-color: #3dd129;
       display: flex;
       align-items: center;
       outline: none;
       border: none;
-      padding: 14px 14px;
+      padding: 12px 12px;
       border-radius: 6px;
       cursor: pointer;
 
       span {
         margin-left: 10px;
+        color: white;
         font-size: 16px;
       }
     }
@@ -549,7 +709,7 @@ const Client = styled.div`
       align-items: center;
       outline: none;
       border: none;
-      padding: 14px 18px;
+      padding: 12px 12px;
       border-radius: 6px;
       cursor: pointer;
 
