@@ -23,6 +23,7 @@ export default function DepleteWallet({
   modal,
   setRateItem,
   setModal,
+  walletId,
   recall,
 }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -123,7 +124,7 @@ export default function DepleteWallet({
             setRateItem();
           }}
           maxWidth="500px"
-          heading="Deplete Wallet"
+          heading={`Deplete ${walletId?.name || ""} Wallet `}
         >
           <div
             style={{
@@ -132,39 +133,43 @@ export default function DepleteWallet({
               gridGap: "20px",
             }}
           >
-            <div className="name" style={{}}>
-              <label>Currency</label>
-              <CountryListAgent
-                optionsNew={customerDetails?.wallet}
-                formatter={(country) => (
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    {" "}
-                    <ReactCountryFlag
-                      className="flag"
-                      countryCode={country?.currency?.code?.slice(0, 2)}
-                      svg
-                    />{" "}
-                    &nbsp; &nbsp;
-                    {country?.currency?.code}
-                    &nbsp; (
-                    <AmountFormatter
-                      currency={country?.currency?.code}
-                      value={country?.balance}
-                    />
-                    )
-                  </div>
-                )}
-                value={selectedCountry}
-                setValue={setSelectedCountry}
-                onChange={handleRates}
-              />
-            </div>
+            {walletId ? (
+              ""
+            ) : (
+              <div className="name" style={{}}>
+                <label>Currency</label>
+                <CountryListAgent
+                  optionsNew={customerDetails?.wallet}
+                  formatter={(country) => (
+                    <div
+                      style={{
+                        fontSize: "16px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {" "}
+                      <ReactCountryFlag
+                        className="flag"
+                        countryCode={country?.currency?.code?.slice(0, 2)}
+                        svg
+                      />{" "}
+                      &nbsp; &nbsp;
+                      {country?.currency?.code}
+                      &nbsp; (
+                      <AmountFormatter
+                        currency={country?.currency?.code}
+                        value={country?.balance}
+                      />
+                      )
+                    </div>
+                  )}
+                  value={selectedCountry}
+                  setValue={setSelectedCountry}
+                  onChange={handleRates}
+                />
+              </div>
+            )}
             <div
               className="name"
               style={{
@@ -209,7 +214,7 @@ export default function DepleteWallet({
                 width="95%"
                 name="username"
                 //value={selectedCountry?.charge}
-                defaultValue={selectedCountry?.charge}
+                defaultValue={walletId?.name || selectedCountry?.name}
               />
             </div>
           </div>
@@ -245,9 +250,9 @@ export default function DepleteWallet({
                   adminId: 0,
                   userId: rateItem?.userId,
                   userWallet: {
-                    walletId: selectedCountry?.walletId,
+                    walletId: walletId?.walletId || selectedCountry?.walletId,
                     balance: -Number(rate),
-                    note: fee,
+                    note: walletId?.name || fee,
                   },
                 });
               }}

@@ -23,6 +23,7 @@ export default function FundWallet({
   modal,
   setRateItem,
   setModal,
+  walletId,
   recall,
 }) {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -123,7 +124,7 @@ export default function FundWallet({
             setRateItem();
           }}
           maxWidth="500px"
-          heading="Fund Wallet"
+          heading={`Fund ${walletId?.name || ""} Wallet `}
         >
           <div
             style={{
@@ -132,39 +133,43 @@ export default function FundWallet({
               gridGap: "20px",
             }}
           >
-            <div className="name" style={{}}>
-              <label>Currency</label>
-              <CountryListAgent
-                optionsNew={customerDetails?.wallet}
-                formatter={(country) => (
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    {" "}
-                    <ReactCountryFlag
-                      className="flag"
-                      countryCode={country?.currency?.code?.slice(0, 2)}
-                      svg
-                    />{" "}
-                    &nbsp; &nbsp;
-                    {country?.currency?.code}
-                    &nbsp; (
-                    <AmountFormatter
-                      currency={country?.currency?.code}
-                      value={country?.balance}
-                    />
-                    )
-                  </div>
-                )}
-                value={selectedCountry}
-                setValue={setSelectedCountry}
-                onChange={handleRates}
-              />
-            </div>
+            {walletId ? (
+              ""
+            ) : (
+              <div className="name" style={{}}>
+                <label>Currency</label>
+                <CountryListAgent
+                  optionsNew={customerDetails?.wallet}
+                  formatter={(country) => (
+                    <div
+                      style={{
+                        fontSize: "16px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {" "}
+                      <ReactCountryFlag
+                        className="flag"
+                        countryCode={country?.currency?.code?.slice(0, 2)}
+                        svg
+                      />{" "}
+                      &nbsp; &nbsp;
+                      {country?.currency?.code}
+                      &nbsp; (
+                      <AmountFormatter
+                        currency={country?.currency?.code}
+                        value={country?.balance}
+                      />
+                      )
+                    </div>
+                  )}
+                  value={selectedCountry}
+                  setValue={setSelectedCountry}
+                  onChange={handleRates}
+                />
+              </div>
+            )}
             <div
               className="name"
               style={{
@@ -207,9 +212,10 @@ export default function FundWallet({
                   setFee(e.target.value);
                 }}
                 width="95%"
+                disabled
                 name="username"
                 //value={selectedCountry?.charge}
-                defaultValue={selectedCountry?.charge}
+                value={walletId?.name || selectedCountry?.name}
               />
             </div>
           </div>
@@ -245,9 +251,9 @@ export default function FundWallet({
                   adminId: 0,
                   userId: rateItem?.userId,
                   userWallet: {
-                    walletId: selectedCountry?.walletId,
+                    walletId: walletId?.walletId || selectedCountry?.walletId,
                     balance: Number(rate),
-                    note: fee,
+                    note: walletId?.name || fee,
                   },
                 });
               }}

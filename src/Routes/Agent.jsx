@@ -330,33 +330,6 @@ function Agent() {
       //render: () => "Other 2",
     },
     {
-      title: "CUSTOMER REF",
-      dataIndex: "userId",
-      width: 190,
-    },
-    {
-      title: "STATUS",
-      dataIndex: "userStatus",
-      width: 190,
-      //render: () => "Other 2",
-    },
-    {
-      title: "ID VERIFICATION",
-      dataIndex: "idNumber",
-      width: 190,
-    },
-    {
-      title: "MULTIPLE CURRENCY TRADING",
-      dataIndex: "multiCurrencySwitch",
-      width: 220,
-    },
-    {
-      title: "EMAIL",
-      dataIndex: "email",
-      width: 220,
-    },
-
-    {
       title: "NAME",
       dataIndex: "action",
       /*   sorter: {
@@ -371,7 +344,7 @@ function Agent() {
             <Input.Search
               ref={inputRef}
               searchButton
-              placeholder="Please enter name"
+              placeholder="Press enter to search"
               value={filterKeys[0] || ""}
               onChange={(value) => {
                 setFilterKeys(value ? [value] : []);
@@ -395,6 +368,59 @@ function Agent() {
 
       width: 200,
     },
+    {
+      title: "CUSTOMER REF",
+      dataIndex: "userId",
+      width: 190,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Press enter to search"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value ? row.userId.toString().indexOf(value.toString()) !== -1 : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
+    },
+    {
+      title: "STATUS",
+      dataIndex: "userStatus",
+      width: 190,
+      //render: () => "Other 2",
+    },
+    {
+      title: "ID VERIFICATION",
+      dataIndex: "idNumber",
+      width: 190,
+    },
+    {
+      title: "MULTIPLE CURRENCY TRADING",
+      dataIndex: "multiCurrencySwitch",
+      width: 220,
+    },
+    {
+      title: "EMAIL",
+      dataIndex: "email",
+      width: 220,
+    },
+
     {
       title: "ADDRESS",
       dataIndex: "address",

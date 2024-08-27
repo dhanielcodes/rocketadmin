@@ -22,9 +22,13 @@ import {
   viewCommentsTransaction,
 } from "../../services/Dashboard";
 import AmountFormatter from "../../reuseables/AmountFormatter";
-import { IconEye, IconMoreVertical } from "@arco-design/web-react/icon";
+import {
+  IconEye,
+  IconMoreVertical,
+  IconSearch,
+} from "@arco-design/web-react/icon";
 import { DatePicker, Dropdown, Input, Menu } from "@arco-design/web-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ReusableModal from "../../reuseables/ReusableModal";
 import Msg from "../../reuseables/Msg";
 import Btn from "../../reuseables/Btn";
@@ -1279,7 +1283,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
   console.log(rates, userId);
 
   const [details, setDetails] = useState();
-
+  const inputRef = useRef();
   const columns = [
     {
       title: "ACTION",
@@ -1318,14 +1322,68 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
     {
       title: "TRANSACTION REF",
       dataIndex: "paymentRef",
-      width: 150,
+      width: 180,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Press enter to search"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value
+          ? row.paymentRedf.toString().indexOf(value.toString()) !== -1
+          : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
 
       //render: () => "Other",
     },
     {
       title: "CUSTOMER REF",
       dataIndex: "userId",
-      width: 130,
+      width: 160,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Press enter to search"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value ? row.userIdd.toString().indexOf(value.toString()) !== -1 : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
     },
 
     {
@@ -1374,13 +1432,70 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
       title: "SENDER",
       dataIndex: "senderName",
       width: 190,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Press enter to search"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value
+          ? row.senderName.toUpperCase().indexOf(value.toUpperCase()) !== -1
+          : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
     },
 
     {
       title: "RECEIVER",
       dataIndex: "userBeneficiary[beneficiaryBank][accountName]",
       width: 280,
-
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Press enter to search"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value
+          ? row.userBeneficiary?.beneficiaryBank?.accountName
+              .toUpperCase()
+              .indexOf(value.toUpperCase()) !== -1
+          : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
       //render: () => "Other",
     },
     {
@@ -1581,6 +1696,118 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
                       refetch(item?.sn);
                     }}
                   /> /* : item?.collectStatus === "Processing" ? (
+                  <DroplistProcessing
+                    action={setCall}
+                    setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
+                    setUserId={() => {
+                      setUserIdd(item?.userId);
+                      refetch(item?.sn);
+                    }}
+                  />
+                ) */ /*: item?.collectStatus === "Processing" ? (
+                  <DroplistProcessing
+                    action={setCall}
+                    setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
+                    setUserId={() => {
+                      setUserIdd(item?.userId);
+                      refetch(item?.sn);
+                    }}
+                  />
+                ) */ /*: item?.collectStatus === "Processing" ? (
+                  <DroplistProcessing
+                    action={setCall}
+                    setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
+                    setUserId={() => {
+                      setUserIdd(item?.userId);
+                      refetch(item?.sn);
+                    }}
+                  />
+                ) */ /*: item?.collectStatus === "Processing" ? (
+                  <DroplistProcessing
+                    action={setCall}
+                    setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
+                    setUserId={() => {
+                      setUserIdd(item?.userId);
+                      refetch(item?.sn);
+                    }}
+                  />
+                ) */ /*: item?.collectStatus === "Processing" ? (
+                  <DroplistProcessing
+                    action={setCall}
+                    setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
+                    setUserId={() => {
+                      setUserIdd(item?.userId);
+                      refetch(item?.sn);
+                    }}
+                  />
+                ) */ /*: item?.collectStatus === "Processing" ? (
+                  <DroplistProcessing
+                    action={setCall}
+                    setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
+                    setUserId={() => {
+                      setUserIdd(item?.userId);
+                      refetch(item?.sn);
+                    }}
+                  />
+                ) */ /*: item?.collectStatus === "Processing" ? (
+                  <DroplistProcessing
+                    action={setCall}
+                    setModal={setModal}
+                    viewDetails={() => {
+                      localStorage.setItem(
+                        "transDetails",
+                        JSON.stringify(item)
+                      );
+                      navigate("/transaction-details");
+                    }}
+                    setUserId={() => {
+                      setUserIdd(item?.userId);
+                      refetch(item?.sn);
+                    }}
+                  />
+                ) */ /*: item?.collectStatus === "Processing" ? (
                   <DroplistProcessing
                     action={setCall}
                     setModal={setModal}
@@ -1905,6 +2132,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
             : item?.transactionLocation?.currency?.code || "-"}
         </div>
       ),
+      paymentRedf: item?.paymentRef,
       paymentRef: (
         <div
           style={{
@@ -1927,6 +2155,7 @@ function TransferLogsTable({ category, showFilter = false, typeee }) {
           </p>
         </div>
       ),
+      userIdd: item?.userId,
       userId: (
         <div
           style={{
