@@ -378,6 +378,33 @@ function CustomersTable() {
       title: "CUSTOMER REF",
       dataIndex: "userId",
       width: 140,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Please enter User ID"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+              }}
+              onSearch={() => {
+                confirm();
+                inputRef.current.focus();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value ? row?.userId.toString().indexOf(value.toString()) !== -1 : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
     },
     {
       title: "ACCOUNT TYPE",
@@ -404,9 +431,12 @@ function CustomersTable() {
               value={filterKeys[0] || ""}
               onChange={(value) => {
                 setFilterKeys(value ? [value] : []);
+                // confirm();
+                // inputRef.current.focus();
               }}
               onSearch={() => {
                 confirm();
+                inputRef.current.focus();
               }}
             />
           </div>
