@@ -385,7 +385,7 @@ function CustomersTable() {
             <Input.Search
               ref={inputRef}
               searchButton
-              placeholder="Please enter User ID"
+              placeholder="Press enter to search"
               value={filterKeys[0] || ""}
               onChange={(value) => {
                 setFilterKeys(value ? [value] : []);
@@ -427,7 +427,7 @@ function CustomersTable() {
             <Input.Search
               ref={inputRef}
               searchButton
-              placeholder="Please enter name"
+              placeholder="Press enter to search"
               value={filterKeys[0] || ""}
               onChange={(value) => {
                 setFilterKeys(value ? [value] : []);
