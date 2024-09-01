@@ -185,7 +185,7 @@ const Droplist = ({
     </Menu.Item>
     <Menu.Item
       onClick={() => fund()}
-      key="4"
+      key="5"
       style={{
         display: "flex",
         alignItems: "center",
@@ -215,7 +215,7 @@ const Droplist = ({
 
     <Menu.Item
       onClick={() => deplete()}
-      key="4"
+      key="6"
       style={{
         display: "flex",
         alignItems: "center",
@@ -652,6 +652,16 @@ function CustomersTable() {
                         userId: item?.userId,
                       });
                     }
+                    if (item?.status === "inactive") {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
+                    if (item?.status === "On Hold") {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
                     if (!item?.status) {
                       activate({
                         userId: item?.userId,
@@ -672,6 +682,11 @@ function CustomersTable() {
                   changeStatus2={() => {
                     setStatus(true);
                     if (item?.status === "Suspended") {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
+                    if (item?.status === "On Hold") {
                       activate({
                         userId: item?.userId,
                       });
