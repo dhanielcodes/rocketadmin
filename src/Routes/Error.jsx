@@ -53,11 +53,12 @@ export default function Error() {
           <h2>Page Not Found</h2>
           <img
             style={{
-              width: "500px",
+              width: "600px",
               margin: "10px 0",
             }}
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/ISR-HW-404.svg/2560px-ISR-HW-404.svg.png"
-            alt=""
+            src={Logo}
+            /*             src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/ISR-HW-404.svg/2560px-ISR-HW-404.svg.png"
+             */ alt=""
           />
           <div>
             <Link

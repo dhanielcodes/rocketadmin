@@ -458,12 +458,34 @@ function CustomersTable() {
       title: "STATUS",
       dataIndex: "userStatus",
       width: 190,
+      filters: removeDup(
+        customers?.data?.map((item) => {
+          return {
+            text: item?.status,
+            value: item?.status,
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row.statuss.indexOf(value) > -1,
+      filterMultiple: true,
       //render: () => "Other 2",
     },
     {
       title: "ID VERIFICATION",
       dataIndex: "idNumber",
       width: 190,
+      filters: removeDup(
+        customers?.data?.map((item) => {
+          return {
+            text: item?.isKYCCompleted ? "Verified" : "Not Verified",
+            value: item?.isKYCCompleted ? "Verified" : "Not Verified",
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row?.isKYCCompletedd.indexOf(value) > -1,
+      filterMultiple: true,
     },
     {
       title: "MULTIPLE CURRENCY TRADING",
@@ -530,6 +552,7 @@ function CustomersTable() {
   const newData = customers?.data?.map((item) => {
     return {
       ...item,
+      statuss: item?.status,
       sendMoney: (
         <p
           onClick={() => {
@@ -581,6 +604,8 @@ function CustomersTable() {
             borderRadius: "7px",
             background:
               item?.status === "InActive"
+                ? "#ff6363"
+                : item?.status === "inactive"
                 ? "#ff6363"
                 : item?.status === "Active"
                 ? "#37d744"
@@ -719,6 +744,7 @@ function CustomersTable() {
           />
         </div>
       ),
+      isKYCCompletedd: item?.isKYCCompleted ? "Verified" : "Not Verified",
       idNumber: (
         <div
           style={{

@@ -224,33 +224,33 @@ export default function Documents({ clientDetails, refetch }) {
     {
       title: "S/N",
       dataIndex: "id",
-      width: 40,
+      width: 80,
 
       //render: () => "Other",
     },
     {
       title: "NAME ON ID",
       dataIndex: "nameOnTheDocument",
-      width: 190,
+      width: 270,
 
       //render: () => "Other",
     },
     {
       title: "ID TYPE",
       dataIndex: "documentType['name']",
-      width: 240,
+      width: 280,
 
       //render: () => "Other",
     },
     {
       title: "ID NAME",
       dataIndex: "nameOnTheDocument",
-      width: 190,
+      width: 270,
     },
     {
       title: "ID NUMBER",
       dataIndex: "documentNumber",
-      width: 190,
+      width: 130,
     },
 
     {
@@ -299,7 +299,20 @@ export default function Documents({ clientDetails, refetch }) {
 
   const [document, setDocument] = useState();
   const [commentId, setCommentId] = useState(false);
-
+  const downloadFile = () => {
+    fetch(clientDetails?.idVerificationReportURL)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = window.document.createElement("a");
+        a.href = url;
+        a.download = "GBG-PDF.pdf";
+        window.document.body.appendChild(a);
+        a.click();
+        a.remove();
+      })
+      .catch((error) => console.error("Error downloading the file", error));
+  };
   const [note, setNote] = useState("");
   const {
     data: comments,
@@ -536,6 +549,24 @@ export default function Documents({ clientDetails, refetch }) {
             }}
           >
             <SectionHeader title="ID Documents" />
+
+            <div
+              onClick={downloadFile}
+              style={{
+                padding: "8px",
+                borderRadius: "7px",
+                fontSize: "14px",
+                background: "#505050",
+                color: "white",
+                width: "fit-content",
+                textAlign: "center",
+                fontWeight: "700",
+                marginLeft: "auto",
+                cursor: "pointer",
+              }}
+            >
+              Download ID Verification Report
+            </div>
           </div>
           <div
             style={{
