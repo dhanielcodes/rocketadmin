@@ -185,7 +185,7 @@ const Droplist = ({
     </Menu.Item>
     <Menu.Item
       onClick={() => fund()}
-      key="4"
+      key="5"
       style={{
         display: "flex",
         alignItems: "center",
@@ -215,7 +215,7 @@ const Droplist = ({
 
     <Menu.Item
       onClick={() => deplete()}
-      key="4"
+      key="6"
       style={{
         display: "flex",
         alignItems: "center",
@@ -458,12 +458,34 @@ function CustomersTable() {
       title: "STATUS",
       dataIndex: "userStatus",
       width: 190,
+      filters: removeDup(
+        customers?.data?.map((item) => {
+          return {
+            text: item?.status,
+            value: item?.status,
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row.statuss.indexOf(value) > -1,
+      filterMultiple: true,
       //render: () => "Other 2",
     },
     {
       title: "ID VERIFICATION",
       dataIndex: "idNumber",
       width: 190,
+      filters: removeDup(
+        customers?.data?.map((item) => {
+          return {
+            text: item?.isKYCCompleted ? "Verified" : "Not Verified",
+            value: item?.isKYCCompleted ? "Verified" : "Not Verified",
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row?.isKYCCompletedd.indexOf(value) > -1,
+      filterMultiple: true,
     },
     {
       title: "MULTIPLE CURRENCY TRADING",
@@ -530,6 +552,7 @@ function CustomersTable() {
   const newData = customers?.data?.map((item) => {
     return {
       ...item,
+      statuss: item?.status,
       sendMoney: (
         <p
           onClick={() => {
@@ -582,6 +605,8 @@ function CustomersTable() {
             background:
               item?.status === "InActive"
                 ? "#ff6363"
+                : item?.status === "inactive"
+                ? "#ff6363"
                 : item?.status === "Active"
                 ? "#37d744"
                 : "#d7ac37",
@@ -627,6 +652,16 @@ function CustomersTable() {
                         userId: item?.userId,
                       });
                     }
+                    if (item?.status === "inactive") {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
+                    if (item?.status === "On Hold") {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
                     if (!item?.status) {
                       activate({
                         userId: item?.userId,
@@ -647,6 +682,11 @@ function CustomersTable() {
                   changeStatus2={() => {
                     setStatus(true);
                     if (item?.status === "Suspended") {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
+                    if (item?.status === "On Hold") {
                       activate({
                         userId: item?.userId,
                       });
@@ -719,6 +759,7 @@ function CustomersTable() {
           />
         </div>
       ),
+      isKYCCompletedd: item?.isKYCCompleted ? "Verified" : "Not Verified",
       idNumber: (
         <div
           style={{

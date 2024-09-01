@@ -34,11 +34,11 @@ function CompanyBanksPage() {
 
   console.log(data?.data);
   const columns = [
-    {
+    /*  {
       title: "S/N",
       dataIndex: "sn",
       width: 50,
-    },
+    }, */
 
     {
       title: "BANK NAME",
@@ -71,12 +71,12 @@ function CompanyBanksPage() {
       width: 130,
       //render: () => "Other 2",
     },
-    {
+    /* {
       title: "STATUS",
       dataIndex: "status",
       width: 150,
       //render: () => "Other 2",
-    },
+    }, */
     {
       title: "DATE ADDED",
       dataIndex: "dateCreated",

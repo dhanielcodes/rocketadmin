@@ -108,12 +108,12 @@ function EmployeeMaster() {
       width: 220,
     }, */
 
-    {
+    /*   {
       title: "STATUS",
       dataIndex: "luStatus",
       width: 220,
       //render: () => "Other 2",
-    },
+    }, */
   ];
 
   const navigate = useNavigate();

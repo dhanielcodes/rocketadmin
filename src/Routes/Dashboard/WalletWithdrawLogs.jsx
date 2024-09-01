@@ -4,6 +4,7 @@ import CustomTable from "../../reuseables/CustomTable";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   getPayoutPartner,
+  getPayoutPartnerGateways,
   processuserwithdrawalrequest,
 } from "../../services/Dashboard";
 import AmountFormatter from "../../reuseables/AmountFormatter";
@@ -203,7 +204,7 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
           {/* ß */}
           <div>
             <AmountFormatter
-              currency={item?.userBeneficiary?.beneficiaryCountry?.currencyCode}
+              currency={item?.userWallet?.currency?.code}
               value={item?.amountRequested}
             />
           </div>
@@ -215,7 +216,7 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
           {/* ß */}
           <div>
             <AmountFormatter
-              currency={item?.userBeneficiary?.beneficiaryCountry?.currencyCode}
+              currency={item?.userWallet?.currency?.code}
               value={item?.amountPaid}
             />
           </div>
@@ -277,9 +278,24 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
     queryFn: () => getPayoutPartner(),
   });
   const [selectedPartner, setSelectedPartner] = useState();
-  const [approve, setApprove] = useState(false);
+  const [selectedGateway, setSelectedGateway] = useState();
 
-  console.log(selectedPartner, "selectedPartner");
+  const [approve, setApprove] = useState(false);
+  const [gateWays, setGateWays] = useState([]);
+
+  const getPayoutGateways = async (id) => {
+    try {
+      const data = await getPayoutPartnerGateways(id);
+      console.log(data?.data);
+      setGateWays(data?.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  console.log(gateWays);
+
+  console.log(selectedPartner, selectedGateway?.providerId, "selectedPartner");
 
   return (
     <Content>
@@ -570,7 +586,24 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
                         })}
                         onChange={(e) => {
                           setSelectedPartner(e);
+                          getPayoutGateways(e?.id);
                         }}
+                      />{" "}
+                      &nbsp; &nbsp; &nbsp;
+                      <AppSelect
+                        options={
+                          gateWays?.map((item) => {
+                            return {
+                              ...item,
+                              label: item?.providerName,
+                              value: item?.providerName,
+                            };
+                          }) || []
+                        }
+                        onChange={(e) => {
+                          setSelectedGateway(e);
+                        }}
+                        label="Gateway"
                       />{" "}
                       &nbsp; &nbsp; &nbsp;
                       <div>
@@ -644,7 +677,7 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
                           adminId: 0,
                           updateType: 1,
                           userId: item?.userBeneficiary?.id,
-                          pamentGatewayId: selectedPartner?.id,
+                          pamentGatewayId: selectedGateway?.providerId,
                           WithdrawalRequest: {
                             id: item?.id,
                             amountPaid: amount || item?.amountRequested,

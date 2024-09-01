@@ -22,6 +22,7 @@ import TransferLogsTable from "./Dashboard/TransferLogs";
 import NewCustomerList from "./Dashboard/NewCustomersTableList";
 import CountryDropdownDash from "../reuseables/CountryDropdownDash";
 import WalletWithdrawLogs from "./Dashboard/WalletWithdrawLogs";
+import AmountFormatter from "../reuseables/AmountFormatter";
 function Dashboard() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [selectedVolume, setSelectedVolume] = useState();
@@ -497,7 +498,12 @@ function Dashboard() {
                         </div>
                       </div>{" "}
                       <h2>
-                        {dashboard?.data?.systemSuspenseAccount?.balance || 0}
+                        <AmountFormatter
+                          value={
+                            dashboard?.data?.systemSuspenseAccount?.balance || 0
+                          }
+                          currency={"NGN"}
+                        />
                       </h2>
                     </p>
                   </div>
@@ -535,7 +541,13 @@ function Dashboard() {
                           </div>
                         </div>{" "}
                         <h2>
-                          {dashboard?.data?.systemSuspenseAccount?.credit || 0}
+                          <AmountFormatter
+                            value={
+                              dashboard?.data?.systemSuspenseAccount?.credit ||
+                              0
+                            }
+                            currency={"NGN"}
+                          />
                         </h2>{" "}
                       </p>
                     </div>
@@ -566,7 +578,12 @@ function Dashboard() {
                           </div>
                         </div>{" "}
                         <h2>
-                          {dashboard?.data?.systemSuspenseAccount?.debit || 0}
+                          <AmountFormatter
+                            value={
+                              dashboard?.data?.systemSuspenseAccount?.debit || 0
+                            }
+                            currency={"NGN"}
+                          />
                         </h2>{" "}
                       </p>
                     </div>
