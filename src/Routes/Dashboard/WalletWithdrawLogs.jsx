@@ -259,6 +259,8 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
                   ? "#37d744"
                   : item?.status === "Pending"
                   ? "#ffe063"
+                  : item?.status === "Processing"
+                  ? "#ffc163"
                   : "#ff6363",
               color: "white",
               width: "fit-content",

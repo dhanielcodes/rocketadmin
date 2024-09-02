@@ -181,7 +181,7 @@ const Droplist = ({
     </Menu.Item>
     <Menu.Item
       onClick={() => fund()}
-      key="4"
+      key="5"
       style={{
         display: "flex",
         alignItems: "center",
@@ -211,7 +211,7 @@ const Droplist = ({
 
     <Menu.Item
       onClick={() => deplete()}
-      key="4"
+      key="6"
       style={{
         display: "flex",
         alignItems: "center",
@@ -565,6 +565,16 @@ function Agent() {
                         userId: item?.userId,
                       });
                     }
+                    if (item?.status === "On Hold") {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
+                    if (item?.status === "inactive") {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
                     if (!item?.status) {
                       activate({
                         userId: item?.userId,
@@ -585,6 +595,11 @@ function Agent() {
                   changeStatus2={() => {
                     setStatus(true);
                     if (item?.status === "Suspended") {
+                      activate({
+                        userId: item?.userId,
+                      });
+                    }
+                    if (item?.status === "On Hold") {
                       activate({
                         userId: item?.userId,
                       });
@@ -676,6 +691,8 @@ function Agent() {
             borderRadius: "7px",
             background:
               item?.status === "InActive"
+                ? "#ff6363"
+                : item?.status === "inactive"
                 ? "#ff6363"
                 : item?.status === "Active"
                 ? "#37d744"

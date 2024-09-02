@@ -21,7 +21,9 @@ import {
   IconMoreVertical,
 } from "@arco-design/web-react/icon";
 import {
+  activateAccount,
   addcommenttouserkycdocument,
+  deactivateAccount,
   viewuserkycdocumentcomment,
 } from "../../../services/Dashboard";
 import Btn from "../../../reuseables/Btn";
@@ -409,7 +411,34 @@ export default function Documents({ clientDetails, refetch }) {
       ),
     };
   });
+  const { mutate: activate, isLoading: activateLoading } = useMutation({
+    mutationFn: activateAccount,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
 
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
+  const { mutate: deactivate, isLoading: deactivateLoading } = useMutation({
+    mutationFn: deactivateAccount,
+    onSuccess: (data) => {
+      refetch();
+    },
+    onError: (data) => {
+      //setModal(true);
+
+      setTimeout(() => {
+        //  seterr("")
+      }, 2000);
+      return;
+    },
+  });
   console.log(newData);
   return (
     <div>
@@ -549,23 +578,86 @@ export default function Documents({ clientDetails, refetch }) {
             }}
           >
             <SectionHeader title="ID Documents" />
-
             <div
-              onClick={downloadFile}
               style={{
-                padding: "8px",
-                borderRadius: "7px",
-                fontSize: "14px",
-                background: "#505050",
-                color: "white",
-                width: "fit-content",
-                textAlign: "center",
-                fontWeight: "700",
+                display: "flex",
+                width: "380px",
                 marginLeft: "auto",
-                cursor: "pointer",
               }}
             >
-              Download ID Verification Report
+              {activateLoading || deactivateLoading ? (
+                <div
+                  style={{
+                    padding: "8px",
+                    borderRadius: "7px",
+                    fontSize: "14px",
+                    background: "#505050",
+                    color: "white",
+                    width: "fit-content",
+                    textAlign: "center",
+                    fontWeight: "700",
+                    marginLeft: "auto",
+                    cursor: "pointer",
+                    opacity: 0.3,
+                  }}
+                >
+                  Loading...
+                </div>
+              ) : (
+                <div
+                  onClick={() => {
+                    if (clientDetails?.status === "Active") {
+                      deactivate({
+                        userId: clientDetails?.userId,
+                      });
+                    } else {
+                      activate({
+                        userId: clientDetails?.userId,
+                      });
+                    }
+                  }}
+                  style={{
+                    padding: "8px",
+                    borderRadius: "7px",
+                    fontSize: "14px",
+                    background:
+                      clientDetails?.status === "Active"
+                        ? "#ff6363"
+                        : clientDetails?.status === "inactive"
+                        ? "#37d744"
+                        : clientDetails?.status === "InActive"
+                        ? "#37d744"
+                        : "#ff6363",
+                    color: "white",
+                    width: "fit-content",
+                    textAlign: "center",
+                    fontWeight: "700",
+                    marginLeft: "auto",
+                    cursor: "pointer",
+                  }}
+                >
+                  {clientDetails?.status === "Active"
+                    ? "Deactivate User"
+                    : "Activate User"}
+                </div>
+              )}
+              <div
+                onClick={downloadFile}
+                style={{
+                  padding: "8px",
+                  borderRadius: "7px",
+                  fontSize: "14px",
+                  background: "#505050",
+                  color: "white",
+                  width: "fit-content",
+                  textAlign: "center",
+                  fontWeight: "700",
+                  marginLeft: "auto",
+                  cursor: "pointer",
+                }}
+              >
+                Download ID Verification Report
+              </div>
             </div>
           </div>
           <div

@@ -34,6 +34,7 @@ export default function CustomerDetailsPage() {
     data: customer,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery({
     queryKey: ["GetUserDetails"],
     queryFn: () => GetUserDetails(userId),
@@ -236,36 +237,52 @@ export default function CustomerDetailsPage() {
                         <RiskTable
                           clientDetails={customerDetails}
                           setViewRisk={setViewRisk}
+                          refetch={refetch}
                         />
                       )) || (
                         <Details
                           clientDetails={customerDetails}
                           setViewRisk={setViewRisk}
+                          refetch={refetch}
                         />
                       ))}
                     {active === "ID Documents" && (
-                      <Documents clientDetails={customerDetails} />
+                      <Documents
+                        clientDetails={customerDetails}
+                        refetch={refetch}
+                      />
                     )}
                     {active === "Audit Logs" && (
-                      <AuditLogs clientDetails={customerDetails} />
+                      <AuditLogs
+                        clientDetails={customerDetails}
+                        refetch={refetch}
+                      />
                     )}
                     {active === "Transfer List" && (
                       <TransactionsList
                         data={customerDetails?.userId}
+                        refetch={refetch}
                       ></TransactionsList>
                     )}
                     {active === "Beneficiary List" && (
-                      <ChargesList data={customerDetails?.userId}></ChargesList>
+                      <ChargesList
+                        data={customerDetails?.userId}
+                        refetch={refetch}
+                      ></ChargesList>
                     )}
 
                     {active === "Customers List" && (
                       <CustomerList
                         data={customerDetails?.userId}
+                        refetch={refetch}
                       ></CustomerList>
                     )}
 
                     {active === "Gateways" && (
-                      <Gateways data={customerDetails}></Gateways>
+                      <Gateways
+                        data={customerDetails}
+                        refetch={refetch}
+                      ></Gateways>
                     )}
                     {"" ||
                       (active === "Wallets" && (
