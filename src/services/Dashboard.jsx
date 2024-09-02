@@ -174,6 +174,13 @@ export const gettransactionlogbyref = async (payload) => {
   return data;
 };
 
+export const getwithdrawalrequestlog = async (payload) => {
+  const { data } = await Axios.get(
+    `${baseurl}/getwithdrawalrequestlog/0${payload ? `${payload}` : ""}`
+  );
+  return data;
+};
+
 export const togglecurrencyrateconversion = async (body) => {
   const { data } = await Axios.post(
     `${baseurl}/togglecurrencyrateconversion`,

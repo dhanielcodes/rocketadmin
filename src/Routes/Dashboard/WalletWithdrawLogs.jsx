@@ -16,6 +16,7 @@ import Btn from "../../reuseables/Btn";
 import toast from "react-hot-toast";
 import AppSelect from "../../reuseables/AppSelect";
 import InputNumber from "rc-input-number";
+import { Link } from "react-router-dom";
 
 const Droplist = ({ action, setModal }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
@@ -302,9 +303,30 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
   return (
     <Content>
       <div className="tablecontent">
-        <div className="content">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+          className="content"
+        >
           <div className="heading">Withdrawal Logs</div>
+          {window.location.pathname === "/withdrawal-logs" ? (
+            ""
+          ) : (
+            <Link to="/withdrawal-logs">
+              <div
+                style={{
+                  fontSize: "16px",
+                }}
+              >
+                View All
+              </div>
+            </Link>
+          )}
         </div>
+
         {/*   <div className="top">
           <SearchInput placeholder="Search Records" className="SearchRecords" />
         </div> */}

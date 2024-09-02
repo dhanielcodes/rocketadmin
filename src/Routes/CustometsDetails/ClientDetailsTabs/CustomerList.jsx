@@ -348,16 +348,22 @@ export default function CustomerList({ data }) {
     return {
       ...item,
       action: (
-        <Link
+        <div
           style={{
             textDecoration: "none",
           }}
           onClick={() => {
             localStorage.setItem("customer_details", JSON.stringify(item));
+            const id = item?.userId?.toString();
+            window.location.replace(
+              window.location.origin +
+                "/customers-details?from=customer&userId=" +
+                id
+            );
           }}
-          to={`/customers-details?from=customer&userId=${JSON.stringify(
+          /* to={`/customers-details?from=customer&userId=${JSON.stringify(
             item?.userId
-          )}`}
+          )}`} */
         >
           <p
             onClick={() => {
@@ -374,7 +380,7 @@ export default function CustomerList({ data }) {
             &nbsp;
             {item?.watchListStatus && <IconEye fontSize={20} />}
           </p>
-        </Link>
+        </div>
       ),
       userStatus: (
         <div
