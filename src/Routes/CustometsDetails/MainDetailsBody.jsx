@@ -205,14 +205,21 @@ export default function CustomerDetailsTop({
               style={{
                 padding: "6px",
                 borderRadius: "7px",
-                background: customerDetails?.status ? "#2dda58" : "#ff6363",
+                background:
+                  customerDetails?.status === "InActive"
+                    ? "#ff6363"
+                    : customerDetails?.status === "inactive"
+                    ? "#ff6363"
+                    : customerDetails?.status === "Active"
+                    ? "#37d744"
+                    : "#d7ac37",
                 color: "white",
                 width: "fit-content",
                 fontWeight: "700",
                 marginLeft: "auto",
               }}
             >
-              {customerDetails?.status ? "Active" : "Inactive"}
+              {customerDetails?.status}
             </div>
             <div
               style={{
