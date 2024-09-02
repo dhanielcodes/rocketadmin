@@ -13,6 +13,8 @@ export default function CustomerDetailsTop({
   const user = JSON.parse(localStorage.getItem("customer_details"));
   const navigate = useNavigate();
 
+  const faceScore = customerDetails?.faceMatchConfidenceScore?.toFixed();
+
   return (
     <div
       style={{
@@ -399,7 +401,6 @@ export default function CustomerDetailsTop({
               style={{
                 borderRadius: "7px",
                 overflow: "hidden",
-                border: "1px solid #d8d8d8",
                 background: "#d8d8d8",
                 width: "100%",
                 fontWeight: "700",
@@ -410,15 +411,15 @@ export default function CustomerDetailsTop({
                   padding: "4px",
                   borderRadius: "7px",
                   background:
-                    customerDetails?.faceMatchConfidenceScore <= 40
+                    faceScore < 50
                       ? "#ff6363"
-                      : customerDetails?.faceMatchConfidenceScore <= 40
+                      : faceScore < 50
                       ? "#ff6363"
-                      : customerDetails?.faceMatchConfidenceScore >= 70
+                      : faceScore > 75
                       ? "#37d744"
                       : "#d7ac37",
                   color: "white",
-                  width: `${customerDetails?.faceMatchConfidenceScore}%`,
+                  width: `${faceScore}%`,
                   fontWeight: "700",
                 }}
               >
@@ -427,7 +428,7 @@ export default function CustomerDetailsTop({
                     color: "#fff",
                   }}
                 >
-                  {customerDetails?.faceMatchConfidenceScore}%
+                  {faceScore}%
                 </span>
               </div>
             </div>

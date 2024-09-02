@@ -63,6 +63,7 @@ import UpdateEmployee from "./Routes/UpdateEmployee";
 import BeneficiaryDetailsPage from "./Routes/BeneficiaryDetails";
 import BanksPage from "./Routes/Banks";
 import CompanyBanksPage from "./Routes/CompanyBanks";
+import WithdrawalLogs from "./Routes/WithdrawalLogs";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -621,6 +622,16 @@ function App() {
                   element={
                     <AppLogout>
                       <TransferDetailsPage />
+                    </AppLogout>
+                  }
+                />
+              )}
+              {handleCheckAccess("View Transfers", actualArrayAccess) && (
+                <Route
+                  path="/withdrawal-logs"
+                  element={
+                    <AppLogout>
+                      <WithdrawalLogs />
                     </AppLogout>
                   }
                 />

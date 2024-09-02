@@ -286,7 +286,16 @@ export default function Details({ clientDetails, setViewRisk }) {
             </div>
             <div className="">
               (Fees:{" "}
-              <AmountFormatter value={0} currency={newSelected?.currency} /> )
+              <AmountFormatter
+                value={
+                  newSelected?.lastOneTwentyDaysTransitionFee +
+                    newSelected?.lastThirtyDaysTransitionFee +
+                    newSelected?.lastSixtyDaysTransitionFee +
+                    newSelected?.lastNinetyDaysTransitionFee || 0
+                }
+                currency={newSelected?.currency}
+              />{" "}
+              )
             </div>
           </div>
           <div className="box_bank_card two">
