@@ -375,10 +375,61 @@ export default function CustomerDetailsTop({
                 fontSize: "18px",
                 color: "#333B4A",
                 fontWeight: "700",
-                marginBottom: "3%",
+                marginBottom: "5%",
               }}
             >
               {customerDetails?.email}
+            </div>
+          </div>
+          <div
+            style={{
+              marginBottom: "10px",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "16px",
+                color: "#63666A",
+                marginBottom: "3%",
+              }}
+            >
+              Face Confidence Match Score
+            </div>
+            <div
+              style={{
+                borderRadius: "7px",
+                overflow: "hidden",
+                border: "1px solid #d8d8d8",
+                background: "#d8d8d8",
+                width: "100%",
+                fontWeight: "700",
+              }}
+            >
+              <div
+                style={{
+                  padding: "4px",
+                  borderRadius: "7px",
+                  background:
+                    customerDetails?.faceMatchConfidenceScore <= 40
+                      ? "#ff6363"
+                      : customerDetails?.faceMatchConfidenceScore <= 40
+                      ? "#ff6363"
+                      : customerDetails?.faceMatchConfidenceScore >= 70
+                      ? "#37d744"
+                      : "#d7ac37",
+                  color: "white",
+                  width: `${customerDetails?.faceMatchConfidenceScore}%`,
+                  fontWeight: "700",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#fff",
+                  }}
+                >
+                  {customerDetails?.faceMatchConfidenceScore}%
+                </span>
+              </div>
             </div>
           </div>
         </div>
