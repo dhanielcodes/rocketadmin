@@ -402,13 +402,13 @@ export default function CustomerDetailsTop({
                 borderRadius: "7px",
                 overflow: "hidden",
                 background: "#d8d8d8",
-                width: "100%",
+                width: "300px",
                 fontWeight: "700",
               }}
             >
               <div
                 style={{
-                  padding: "4px",
+                  padding: "4px 10px",
                   borderRadius: "7px",
                   background:
                     faceScore < 50
