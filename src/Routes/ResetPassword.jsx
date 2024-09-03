@@ -11,7 +11,7 @@ import Btn from "../reuseables/Btn";
 import { Switch, Timeline, Typography } from "@arco-design/web-react";
 import { DatePicker } from "@arco-design/web-react";
 import { Select } from "@arco-design/web-react";
-import { userLogin, checkEmail } from "../services/Auth";
+import { userLogin, checkEmail, forgotPassword } from "../services/Auth";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSessionStorage } from "../hooks/useSessionStorage";
 import { useNavigate } from "react-router-dom";
@@ -26,135 +26,31 @@ import AppInput from "../reuseables/AppInput";
 import lock from "../assets/images/padlock.jpeg";
 import toast from "react-hot-toast";
 
-// Inside your component
-
-const baseurl = BASE_URL;
-
-const Option = Select.Option;
-const TextArea = Input.TextArea;
-
-const TimelineItem = Timeline.Item;
-
-function Login() {
+function ResetPassword() {
   const navigate = useNavigate();
   const [err, seterr] = useState(null);
   const [modal, setModal] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const [isKyc, setIsKyc] = useState(false);
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-  const [loginDetails, setloginDetails] = useState({
-    username: "",
-    password: "",
-    deviceId: "Tets",
-    source: "Web",
-  });
+  const [type, setType] = useState(false);
+  const [vis, setVis] = useState(false);
+
+  const [email, setEmail] = useState("");
 
   const handleLogin = async () => {
-    mutate({
-      username: username,
-      password: password,
-      deviceId: "Tets",
-      source: "Web",
-    });
+    mutate({ email: email });
   };
 
-  const handleChange = (value, i) => {
-    const { name } = i.target;
-
-    if (name === "password" && loginDetails.password.length) {
-      const requestData = {
-        username: loginDetails.username,
-      };
-
-      axios
-        .get(`${baseurl}/checkUserExistByEmail`, requestData)
-        .then((response) => {
-          console.log(response.data);
-
-          setloginDetails((prev) => {
-            return { ...prev, [name]: value };
-          });
-        })
-        .catch((error) => {
-          seterr(error?.message);
-          setModal(true);
-          console.error(error);
-        });
-    }
-
-    setloginDetails((prev) => {
-      return { ...prev, [name]: value };
-    });
-  };
-
-  const { mutate, isLoading, isError } = useMutation({
-    mutationFn: userLogin,
+  const { mutate, isLoading, isError, data } = useMutation({
+    mutationFn: forgotPassword,
     onSuccess: (data) => {
-      if (!data.status) {
-        switch (data?.data) {
-          case "1":
-            seterr(data?.message);
-            toast.error(data?.message);
-            setModal(true);
-
-            break;
-          case "2":
-            seterr(data?.message);
-            toast.error(data?.message);
-            setModal(true);
-            break;
-          case "3":
-            setRedirect(true);
-            seterr(data?.message);
-            setModal(true);
-            break;
-          case "4":
-            setRedirect(true);
-            seterr(data?.message);
-            setModal(true);
-            break;
-          case "5":
-            // setRedirect(true)
-            setIsKyc(true);
-            seterr(data?.message);
-            setModal(true);
-            break;
-
-          default:
-            seterr(data?.message);
-            toast.error(data?.message);
-            setModal(true);
-            break;
-        }
-
+      setModal(true);
+      console.log(data);
+      if (data.status) {
+        toast.success(data?.message);
+      } else {
         return;
       }
-      localStorage.setItem("userDetails", JSON.stringify(data?.data));
-      //navigate("/dashboard");
-      const jkj = data?.data?.userRoleMenuAccess
-        ?.map((item) => {
-          if (item?.menuAccessType?.id !== 1) {
-            return {
-              ...item,
-            };
-          }
-        })
-        .filter((item) => item !== undefined);
-      console.log(jkj?.filter((item) => item !== undefined));
-      const menu1 = jkj?.[0]?.menuName?.toLowerCase()?.replace(/\s+/g, "-");
-      const menu2 = jkj?.[0]?.userRoleSubMenuAccess[0]?.subMenuName
-        ?.toLowerCase()
-        ?.replace(/\s+/g, "-");
-      const menu3 =
-        jkj?.[0]?.userRoleSubMenuAccess[0]?.userRoleSuSubbMenuAccess[0]?.subMenuName
-          ?.toLowerCase()
-          ?.replace(/\s+/g, "-");
-      window.location.pathname = menu3
-        ? `/${menu3}`
-        : menu2
-        ? `/${menu2}`
-        : `/${menu1}`;
     },
     onError: (data) => {
       setModal(true);
@@ -170,7 +66,6 @@ function Login() {
   return (
     <LoginCotainer>
       <div className="flex">
-        {/*  */}
         <div className="side1">
           <img
             style={{
@@ -185,21 +80,47 @@ function Login() {
           <Center>
             <img src={Logo} />
             <div className="logintext">
-              <h1>Log in to your account</h1>
-              <p>Welcome back! Please enter your details.</p>
+              <h1>Reset Password</h1>
             </div>
             <div className="inputform">
               {modal && (
-                <ReusableModal isOpen={modal} onClose={() => setModal(false)}>
-                  <Msg>
+                <ReusableModal
+                  width="400px"
+                  isOpen={modal}
+                  onClose={() => setModal(false)}
+                >
+                  <Msg type={data?.transactionRef === "SUCCESS"}>
                     {/* {err} */}
-                    <p>{err}</p>
+                    <p
+                      style={{
+                        fontSize: "20px",
+                      }}
+                    >
+                      {data?.message}
+                    </p>
                     <br />
-                    {isKyc && (
-                      <Btn clicking={() => navigate("/kyc")} size={30}>
-                        Continue with Kyc{" "}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Btn
+                        styles={{
+                          width: "100%",
+                          marginRight: "10px",
+                          padding: "8px",
+                          fontWeight: "600",
+                        }}
+                        clicking={() => {
+                          navigate("/");
+                        }}
+                        size={30}
+                      >
+                        <span style={{ color: "#fff" }}>CONTINUE TO LOGIN</span>
                       </Btn>
-                    )}
+                    </div>
                   </Msg>
                 </ReusableModal>
               )}
@@ -209,52 +130,17 @@ function Login() {
                   placeholder="Enter your email"
                   type="email"
                   onChange={(e) => {
-                    setUsername(e.target.value);
+                    setEmail(e.target.value);
                   }}
                   width="96%"
                   name="username"
                   padding="12px"
                 />
               </div>
-              {/*  <div>
-                <span>Password</span>
-                <InputStyle>
-                  <Input.Password
-                    style={{ width: "100%", outline: "none" }}
-                    className="input"
-                    defaultValue=""
-                    onChange={handleChange}
-                    name="password"
-                    placeholder="Enter your password"
-                  />
-                </InputStyle>
 
-              </div> */}
-              <div className="name">
-                <label>Password</label>
-                <AppInput
-                  placeholder="Enter your password"
-                  type="password"
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
-                  width="96%"
-                  name="password"
-                  padding="12px"
-                />
-              </div>
-              <div className="flexjustify">
-                <Checkbox>Remember me</Checkbox>
-                <Link
-                  onClick={() => navigate("/reset")}
-                  style={{ color: "var(--primary-color)" }}
-                >
-                  Forgot password
-                </Link>
-              </div>
               <div>
                 <Btn
-                  disabled={username === "" && password === "" ? true : false}
+                  disabled={email === "" ? true : false}
                   clicking={handleLogin}
                   styles={{
                     width: "100%",
@@ -267,10 +153,19 @@ function Login() {
                   {isLoading ? (
                     <Spin dot />
                   ) : (
-                    <span style={{ color: "#fff" }}>Sign In</span>
+                    <span style={{ color: "#fff" }}>Send Mail</span>
                   )}
                 </Btn>
               </div>
+              <CenterElement>
+                <span>Already have an account?</span>
+                <Link
+                  onClick={() => navigate("/")}
+                  style={{ color: "var(--primary-color)" }}
+                >
+                  Sign in
+                </Link>
+              </CenterElement>
             </div>
           </Center>
         </div>
@@ -293,6 +188,30 @@ const LoginCotainer = styled.div`
     outline: none;
     border: 0.1px solid var(--gray-300, #d0d5dd);
     background: #ffffff;
+  }
+
+  .emailinput {
+    width: 100%;
+    /* background: none; */
+    padding: 10px;
+    /* border: none; */
+    /* background: #fff !important; */
+    background-color: inherit;
+    line-height: 1;
+    border: 1px solid #d0d5dd;
+    /* border-radius: 5px; */
+    color: #000;
+    font-weight: 300;
+    border: none;
+    border-bottom: 1px solid #000;
+  }
+  .passwordcont {
+    position: relative;
+  }
+  .visibility {
+    position: absolute;
+    right: 30px;
+    bottom: 5px;
   }
   .inputdate {
     padding: 1.3rem;
@@ -326,10 +245,10 @@ const LoginCotainer = styled.div`
 
     .side1 {
       width: 50%;
-      height: 100%;
-      background: var(--Primary-Colour, #00a85a);
       display: grid;
       place-items: center;
+      height: 100%;
+      background: var(--Primary-Colour, #00a85a);
     }
     .side2 {
       background: #fcfcfc;
@@ -382,10 +301,7 @@ const Center = styled.div`
     }
   }
 
-  input[type="password"] {
-    padding: 0;
-    background-color: #ffffff;
-  }
+  /*  */
   .arco-input-password {
     width: 95%;
   }
@@ -439,4 +355,4 @@ const Center = styled.div`
   }
 `;
 
-export default Login;
+export default ResetPassword;

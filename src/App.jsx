@@ -64,6 +64,7 @@ import BeneficiaryDetailsPage from "./Routes/BeneficiaryDetails";
 import BanksPage from "./Routes/Banks";
 import CompanyBanksPage from "./Routes/CompanyBanks";
 import WithdrawalLogs from "./Routes/WithdrawalLogs";
+import ResetPassword from "./Routes/ResetPassword";
 function App() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -639,6 +640,7 @@ function App() {
             </>
           )}
           <Route path="/" element={<Login />} />
+          <Route path="/reset" element={<ResetPassword />} />
 
           {/* </Route> */}
           <Route path="*" element={<Error />} />
