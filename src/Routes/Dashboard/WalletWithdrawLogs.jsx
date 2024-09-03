@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import AppSelect from "../../reuseables/AppSelect";
 import InputNumber from "rc-input-number";
 import { Link } from "react-router-dom";
+import { removeDup } from "../../utils/format";
 
 const Droplist = ({ action, setModal }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
@@ -119,7 +120,7 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
       toast.error(data?.message);
     },
   });
-  //const inputRef = useRef();
+  const inputRef = useRef();
   const columns = [
     {
       title: "ACTION",
@@ -132,6 +133,35 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
       title: "TRANSACTION ID",
       dataIndex: "id",
       width: 180,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Press enter to search"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+                // confirm();
+                // inputRef.current.focus();
+              }}
+              onSearch={() => {
+                confirm();
+                inputRef.current.focus();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value ? row.id.toString().indexOf(value.toString()) !== -1 : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
 
       //render: () => "Other",
     },
@@ -149,7 +179,18 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
     {
       title: "TRANSACTION STATUS",
       dataIndex: "statuss",
-      width: 170,
+      width: 190,
+      filters: removeDup(
+        data?.map((item) => {
+          return {
+            text: item?.status,
+            value: item?.status,
+          };
+        })
+      ),
+
+      onFilter: (value, row) => row.statusss.indexOf(value) > -1,
+      filterMultiple: true,
 
       //render: () => "Other",
     },
@@ -167,7 +208,39 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
       title: "AGENT ACCOUNT DETAILS",
       dataIndex: "nameNew",
       width: 330,
+      filterIcon: <IconSearch />,
+      filterDropdown: ({ filterKeys, setFilterKeys, confirm }) => {
+        return (
+          <div className="arco-table-custom-filter">
+            <Input.Search
+              ref={inputRef}
+              searchButton
+              placeholder="Press enter to search account name"
+              value={filterKeys[0] || ""}
+              onChange={(value) => {
+                setFilterKeys(value ? [value] : []);
+                // confirm();
+                // inputRef.current.focus();
+              }}
+              onSearch={() => {
+                confirm();
+                inputRef.current.focus();
+              }}
+            />
+          </div>
+        );
+      },
+      onFilter: (value, row) =>
+        value
+          ? row?.accName?.toUpperCase().indexOf(value.toUpperCase()) !== -1
+          : true,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => inputRef.current.focus(), 150);
+        }
+      },
     },
+
     {
       title: "COMMENT",
       dataIndex: "comment",
@@ -223,6 +296,7 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
           </div>
         </>
       ),
+      accName: item?.userBeneficiary?.beneficiaryBank?.accountName,
       nameNew: (
         <div>
           <p
@@ -248,6 +322,7 @@ function WalletWithdrawLogs({ data, loading, refetch }) {
           </p>
         </div>
       ),
+      statusss: item?.status,
       statuss: (
         <>
           {" "}
