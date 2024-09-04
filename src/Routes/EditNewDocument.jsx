@@ -25,6 +25,7 @@ import { Switch } from "@arco-design/web-react";
 import AppSelect2 from "../reuseables/AppSelect2";
 import FileUpload from "../services/FileUpload";
 import FileUpload2 from "../services/FileUpload2";
+import AppModal from "../COMPONENTS/AppModal";
 function EditNewDocument({}) {
   const [params] = useSearchParams();
 
@@ -90,6 +91,17 @@ function EditNewDocument({}) {
         <BeneficiaryComponent
           closeBeneficiaryComponent={setBeneficiaryComponent}
         />
+      )}
+      {mutateLoading && (
+        <AppModal
+          padding="40px"
+          closeModal={() => {}}
+          heading={"Document Verification"}
+        >
+          <h3>
+            Verifying user document. Please wait as this may take few minutes.
+          </h3>
+        </AppModal>
       )}
       {beneficiaryComponent ? (
         ""
