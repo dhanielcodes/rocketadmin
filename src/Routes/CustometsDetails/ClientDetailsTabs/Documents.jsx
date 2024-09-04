@@ -385,7 +385,9 @@ export default function Documents({ clientDetails, refetch }) {
                   }}
                   edit={() => {
                     navigate(
-                      `/edit-document?userId=${params.get(
+                      `/edit-document?from=${params.get(
+                        "from"
+                      )}&userId=${params.get(
                         "userId"
                       )}&document=${JSON.stringify(item)}`
                     );
@@ -668,7 +670,11 @@ export default function Documents({ clientDetails, refetch }) {
               width: "fit-content",
             }}
           >
-            <Link to={`/new-document?userId=${params.get("userId")}`}>
+            <Link
+              to={`/new-document?from=${params.get("from")}&userId=${params.get(
+                "userId"
+              )}`}
+            >
               <button
                 onClick={() => {
                   setModal(true);
