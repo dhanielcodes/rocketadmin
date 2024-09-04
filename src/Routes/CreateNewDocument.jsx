@@ -48,7 +48,11 @@ function CreateNewDocument({}) {
       console.log(data);
       if (data?.status) {
         toast.success(data?.transactionRef);
-        navigate(`/customers-details?userId=${params.get("userId")}`);
+        navigate(
+          `/customers-details?from=${params.get("from")}&userId=${params.get(
+            "userId"
+          )}`
+        );
         //refetch();
       } else {
         toast.error(data?.message);
@@ -294,7 +298,7 @@ function CreateNewDocument({}) {
                     imageTwo
                   ) {
                     mutate({
-                      userId: JSON.parse(params.get("userId"))?.userId,
+                      userId: JSON.parse(params.get("userId")),
                       userKYCDocument: {
                         documentType: {
                           id: docType?.id,
