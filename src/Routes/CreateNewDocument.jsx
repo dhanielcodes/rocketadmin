@@ -24,6 +24,7 @@ import { Switch } from "@arco-design/web-react";
 import AppSelect2 from "../reuseables/AppSelect2";
 import FileUpload from "../services/FileUpload";
 import FileUpload2 from "../services/FileUpload2";
+import AppModal from "../COMPONENTS/AppModal";
 function CreateNewDocument({}) {
   const [params] = useSearchParams();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -85,6 +86,18 @@ function CreateNewDocument({}) {
         <BeneficiaryComponent
           closeBeneficiaryComponent={setBeneficiaryComponent}
         />
+      )}
+
+      {mutateLoading && (
+        <AppModal
+          padding="40px"
+          closeModal={() => {}}
+          heading={"Document Verification"}
+        >
+          <h3>
+            Verifying user document. Please wait as this may take few minutes.
+          </h3>
+        </AppModal>
       )}
       {beneficiaryComponent ? (
         ""

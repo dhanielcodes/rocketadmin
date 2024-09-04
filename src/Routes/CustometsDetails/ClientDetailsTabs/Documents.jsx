@@ -256,9 +256,17 @@ export default function Documents({ clientDetails, refetch }) {
       //render: () => "Other",
     },
     {
-      title: "NAME ON ID",
+      title: "ID NAME",
       dataIndex: "nameOnTheDocument",
       width: 270,
+
+      //render: () => "Other",
+    },
+
+    {
+      title: "VERIFIED STATUS",
+      dataIndex: "status",
+      width: 160,
 
       //render: () => "Other",
     },
@@ -269,11 +277,7 @@ export default function Documents({ clientDetails, refetch }) {
 
       //render: () => "Other",
     },
-    {
-      title: "ID NAME",
-      dataIndex: "nameOnTheDocument",
-      width: 270,
-    },
+
     {
       title: "ID NUMBER",
       dataIndex: "documentNumber",
@@ -305,14 +309,6 @@ export default function Documents({ clientDetails, refetch }) {
       title: "UPLOADED BY",
       dataIndex: "uploadedBy",
       width: 120,
-    },
-
-    {
-      title: "VERIFIED STATUS",
-      dataIndex: "status",
-      width: 160,
-
-      //render: () => "Other",
     },
 
     {
@@ -434,9 +430,12 @@ export default function Documents({ clientDetails, refetch }) {
                     setModal(true);
                   }}
                   setVer={() => {
-                    setModal4(true);
-
-                    setCommentId(item?.id);
+                    if (!item?.isKYCCompleted) {
+                      setModal4(true);
+                      setCommentId(item?.id);
+                    } else {
+                      toast("Documents Already Verified");
+                    }
                   }}
                   setBack={() => {
                     setModal2(true);
@@ -597,14 +596,6 @@ export default function Documents({ clientDetails, refetch }) {
           }}
           heading={"Confirm Document Verification"}
         >
-          {isLoadingVer ? (
-            <h3>
-              Verifyuing user document. Please wait as this may take few
-              minutes.
-            </h3>
-          ) : (
-            ""
-          )}
           <Btn
             clicking={() => {
               ver({
