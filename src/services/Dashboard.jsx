@@ -629,6 +629,11 @@ export const addcommenttouserkycdocument = async (body) => {
   return data;
 };
 
+export const markuseridasverified = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/markuseridasverified`, body);
+  return data;
+};
+
 export const viewuserkycdocumentcomment = async (userId) => {
   console.log("🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:md", userId);
   const { data } = await Axios.get(

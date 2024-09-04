@@ -10,6 +10,7 @@ import {
   addNewDocument,
   getIdTypes,
   getRoleMeta,
+  getUserDocTypes,
   updateDocument,
 } from "../services/Dashboard";
 import { getCurrencies } from "../services/Auth";
@@ -80,7 +81,7 @@ function EditNewDocument({}) {
 
   const { data: docTypes } = useQuery({
     queryKey: ["getIdTypes"],
-    queryFn: () => getIdTypes(),
+    queryFn: () => getUserDocTypes(),
   });
 
   return (

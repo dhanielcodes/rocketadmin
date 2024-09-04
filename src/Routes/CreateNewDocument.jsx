@@ -6,7 +6,12 @@ import SearchInput from "../reuseables/SearchInput";
 import BeneficiaryComponent from "../COMPONENTS/BeneficiaryComponent";
 import SendMoneyCustomersTableList from "./SendMoney/SendMoneyCustomersTableList";
 import CountryDropdown2 from "../reuseables/CountryDropdown2";
-import { addNewDocument, getIdTypes, getRoleMeta } from "../services/Dashboard";
+import {
+  addNewDocument,
+  getIdTypes,
+  getRoleMeta,
+  getUserDocTypes,
+} from "../services/Dashboard";
 import { getCurrencies } from "../services/Auth";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -70,8 +75,8 @@ function CreateNewDocument({}) {
   });
 
   const { data: docTypes } = useQuery({
-    queryKey: ["getIdTypes"],
-    queryFn: () => getIdTypes(),
+    queryKey: ["getUserDocTypes"],
+    queryFn: () => getUserDocTypes(),
   });
 
   return (
