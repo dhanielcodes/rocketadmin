@@ -24,6 +24,7 @@ import {
   activateAccount,
   addcommenttouserkycdocument,
   deactivateAccount,
+  markuseridasverified,
   viewuserkycdocumentcomment,
 } from "../../../services/Dashboard";
 import Btn from "../../../reuseables/Btn";
@@ -33,11 +34,11 @@ const Droplist = ({
   action,
   setModal,
   download,
-  download2,
   edit,
   setFront,
   setBack,
   setAdd,
+  setVer,
 }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
@@ -203,6 +204,30 @@ const Droplist = ({
         Add Comments
       </span>
     </Menu.Item>
+    <Menu.Item
+      key="6"
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+      onClick={() => {
+        setVer();
+      }}
+    >
+      <IconDownload
+        fontSize={20}
+        style={{
+          margin: 0,
+        }}
+      />
+      <span
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Verify Document
+      </span>
+    </Menu.Item>
   </Menu>
 );
 
@@ -224,7 +249,7 @@ export default function Documents({ clientDetails, refetch }) {
       fixed: "left",
     },
     {
-      title: "S/N",
+      title: "ID",
       dataIndex: "id",
       width: 80,
 
@@ -283,6 +308,14 @@ export default function Documents({ clientDetails, refetch }) {
     },
 
     {
+      title: "VERIFIED STATUS",
+      dataIndex: "status",
+      width: 160,
+
+      //render: () => "Other",
+    },
+
+    {
       title: "VERIFIED BY",
       dataIndex: "verifiedBy",
       width: 120,
@@ -300,6 +333,7 @@ export default function Documents({ clientDetails, refetch }) {
   ];
 
   const [document, setDocument] = useState();
+  const [modal4, setModal4] = useState(false);
   const [commentId, setCommentId] = useState(false);
   const downloadFile = () => {
     fetch(clientDetails?.idVerificationReportURL)
@@ -341,9 +375,40 @@ export default function Documents({ clientDetails, refetch }) {
     },
   });
 
+  const { mutate: ver, isLoading: isLoadingVer } = useMutation({
+    mutationFn: markuseridasverified,
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success(data?.message);
+        setNote();
+        setModal4(false);
+      } else {
+        toast.error(data?.message);
+      }
+    },
+    onError: (data) => {
+      toast.error(data?.message);
+    },
+  });
+
   const newData = clientDetails?.userKYCDocuments?.map((item) => {
     return {
       ...item,
+      status: (
+        <div
+          style={{
+            padding: "6px",
+            borderRadius: "7px",
+            background:
+              item?.verificationStatus === "Verified" ? "#37d744" : "#d7ac37",
+            color: "white",
+            width: "fit-content",
+            fontWeight: "700",
+          }}
+        >
+          {item?.verificationStatus}
+        </div>
+      ),
       action2: (
         <div
           style={{
@@ -367,6 +432,11 @@ export default function Documents({ clientDetails, refetch }) {
                   setFront={() => {
                     setImage(item?.documentFrontPageURL);
                     setModal(true);
+                  }}
+                  setVer={() => {
+                    setModal4(true);
+
+                    setCommentId(item?.id);
                   }}
                   setBack={() => {
                     setModal2(true);
@@ -519,7 +589,43 @@ export default function Documents({ clientDetails, refetch }) {
           })}
         </AppModal>
       </div>
-
+      {modal4 && (
+        <AppModal
+          padding="40px"
+          closeModal={() => {
+            setModal4(false);
+          }}
+          heading={"Confirm Document Verification"}
+        >
+          {isLoadingVer ? (
+            <h3>
+              Verifyuing user document. Please wait as this may take few
+              minutes.
+            </h3>
+          ) : (
+            ""
+          )}
+          <Btn
+            clicking={() => {
+              ver({
+                userId: params.get("userId"),
+                userKYCDocument: {
+                  id: commentId,
+                },
+              });
+            }}
+            disabled={isLoadingVer}
+          >
+            <span
+              style={{
+                color: "#fff",
+              }}
+            >
+              {isLoadingVer ? "Verifying Document..." : "Verify Document"}
+            </span>
+          </Btn>
+        </AppModal>
+      )}
       <div
         style={{
           opacity: modal3 ? "1" : "0",
