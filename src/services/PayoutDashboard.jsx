@@ -11,9 +11,7 @@ export const getPayoutDashboard = async (userId = 0) => {
 };
 
 export const getPayoutClientDashboard = async (userId = 0) => {
-  const { data } = await Axios.get(
-    `${baseurl}/getpayoutclientdashboard/${userId}`
-  );
+  const { data } = await Axios.get(`${baseurl}/getpayoutclientdashboard/0`);
   return data;
 };
 
