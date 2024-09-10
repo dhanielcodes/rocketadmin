@@ -144,6 +144,7 @@ export default function CustomerDetailsPage() {
                   <CustomerDetailsTop
                     customerDetails={customerDetails}
                     from={from}
+                    refetch={refetch}
                   />
                 )}
 

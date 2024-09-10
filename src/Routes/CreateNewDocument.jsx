@@ -259,7 +259,12 @@ function CreateNewDocument({}) {
                 }}
               >
                 <div style={{ width: "90%" }}>
-                  <div>Upload Front of Id</div>
+                  <div>
+                    Upload{" "}
+                    {docType?.name === "Photo Identification Document"
+                      ? "Select User Passport Photograph"
+                      : " Front of Id"}
+                  </div>
                   <br />
 
                   <FileUpload2
@@ -270,7 +275,12 @@ function CreateNewDocument({}) {
                   />
                 </div>
                 <div style={{ width: "90%" }}>
-                  <div>Upload Back of Id</div>
+                  <div>
+                    Upload{" "}
+                    {docType?.name === "Photo Identification Document"
+                      ? "Select User Passport Photograph"
+                      : "Back of Id"}
+                  </div>
                   <br />
                   <FileUpload2
                     setValue={setImageTwo}

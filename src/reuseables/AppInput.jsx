@@ -14,6 +14,7 @@ function AppInput({
   defaultValue,
   cut,
   removeCutBorder,
+  label,
 }) {
   const [ntype, setType] = useState("password");
 
@@ -32,6 +33,15 @@ function AppInput({
   return (
     <Content>
       <div className="top">
+        {label && (
+          <div
+            style={{
+              marginBottom: "6px",
+            }}
+          >
+            {label}
+          </div>
+        )}
         <input
           style={{
             width: width,

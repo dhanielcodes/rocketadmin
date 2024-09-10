@@ -1,12 +1,18 @@
-import React from "react";
 import { styled } from "styled-components";
 
-function AppButton({ placeholder, onClick, style, disabled }) {
+function AppButton({
+  placeholder,
+  onClick,
+  style,
+  disabled,
+  margin = "auto",
+  loading,
+}) {
   return (
     <Content>
       <div className="btn" onClick={onClick}>
-        <button disabled={disabled} style={style}>
-          {placeholder}
+        <button disabled={disabled} style={{ margin: margin, ...style }}>
+          {loading ? "Loading..." : placeholder}
         </button>
       </div>
     </Content>
@@ -26,7 +32,6 @@ const Content = styled.div`
     outline: none;
     color: white;
     border: none;
-    margin: auto;
     background-color: #00a85a;
   }
 `;

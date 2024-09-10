@@ -1,6 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../images/logo.svg";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { FiEdit } from "react-icons/fi";
+import AppModal from "../../COMPONENTS/AppModal";
+import AppInput from "../../reuseables/AppInput";
+import AppButton from "../../reuseables/AppButton";
+import {
+  updateauseraccounttype,
+  updateuseraddress,
+  updateuserdob,
+  updateuseremail,
+  updateusername,
+  updateuserphone,
+} from "../../services/Dashboard";
+import AppSelect from "../../reuseables/AppSelect";
 
 export default function CustomerDetailsTop({
   customerDetails,
@@ -8,12 +23,128 @@ export default function CustomerDetailsTop({
   mail,
   phone,
   from,
+  refetch,
 }) {
-  const [params] = useSearchParams();
-  const user = JSON.parse(localStorage.getItem("customer_details"));
   const navigate = useNavigate();
 
   const faceScore = customerDetails?.faceMatchConfidenceScore?.toFixed();
+
+  const [modal, setModal] = useState(false);
+
+  const { mutate: mutateupdateusername, isLoading: isLoadingupdateusername } =
+    useMutation({
+      mutationFn: updateusername,
+      onSuccess: (data) => {
+        if (data.status) {
+          toast.success(data?.message);
+          refetch();
+        } else {
+          toast.error(data?.message);
+        }
+      },
+      onError: (data) => {
+        toast.error(data?.message);
+      },
+    });
+  const { mutate: mutateupdateuseremail, isLoading: isLoadingupdateuseremail } =
+    useMutation({
+      mutationFn: updateuseremail,
+      onSuccess: (data) => {
+        if (data.status) {
+          toast.success(data?.message);
+          refetch();
+        } else {
+          toast.error(data?.message);
+        }
+      },
+      onError: (data) => {
+        toast.error(data?.message);
+      },
+    });
+  const { mutate: mutateupdateuserphone, isLoading: isLoadingupdateuserphone } =
+    useMutation({
+      mutationFn: updateuserphone,
+      onSuccess: (data) => {
+        if (data.status) {
+          toast.success(data?.message);
+          refetch();
+        } else {
+          toast.error(data?.message);
+        }
+      },
+      onError: (data) => {
+        toast.error(data?.message);
+      },
+    });
+  const {
+    mutate: mutateupdateuseraddress,
+    isLoading: isLoadingupdateuseraddress,
+  } = useMutation({
+    mutationFn: updateuseraddress,
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success(data?.message);
+        refetch();
+      } else {
+        toast.error(data?.message);
+      }
+    },
+    onError: (data) => {
+      toast.error(data?.message);
+    },
+  });
+  const { mutate: mutateupdateuserdob, isLoading: isLoadingupdateuserdob } =
+    useMutation({
+      mutationFn: updateuserdob,
+      onSuccess: (data) => {
+        if (data.status) {
+          toast.success(data?.message);
+          refetch();
+        } else {
+          toast.error(data?.message);
+        }
+      },
+      onError: (data) => {
+        toast.error(data?.message);
+      },
+    });
+  const {
+    mutate: mutateupdateauseraccounttype,
+    isLoading: isLoadingupdateauseraccounttype,
+  } = useMutation({
+    mutationFn: updateauseraccounttype,
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success(data?.message);
+        refetch();
+      } else {
+        toast.error(data?.message);
+      }
+    },
+    onError: (data) => {
+      toast.error(data?.message);
+    },
+  });
+
+  const [type, setType] = useState({});
+  const [user, setUser] = useState({
+    firstName: "",
+    surName: "",
+    email: "",
+    phone: "",
+    dob: "",
+    accountType: "",
+    address: "",
+  });
+
+  const nType = {
+    label: user.accountType === 1 ? "individual" : "Business",
+    value: user.accountType,
+  };
+
+  useEffect(() => {
+    setUser(customerDetails);
+  }, [customerDetails.accountType]);
 
   return (
     <div
@@ -22,8 +153,303 @@ export default function CustomerDetailsTop({
         gridTemplateColumns: "1fr 1fr",
         width: "100%",
         paddingTop: "30px",
+        position: "relative",
       }}
     >
+      <div
+        style={{
+          position: "absolute",
+          top: "30px",
+          right: "30px",
+          cursor: "pointer",
+        }}
+      >
+        <FiEdit
+          onClick={() => {
+            setModal(true);
+          }}
+          style={{
+            width: "22px",
+            height: "22px",
+          }}
+        />
+      </div>
+      {modal && (
+        <AppModal
+          closeModal={() => {
+            setModal(false);
+          }}
+          heading="Update User"
+          maxWidth={600}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gridGap: "14px",
+              paddingBottom: "40px",
+            }}
+          >
+            <div
+              style={{
+                padding: "14px",
+                border: "1px solid #d2d2d2",
+                borderRadius: "10px",
+              }}
+            >
+              <AppInput
+                placeholder="Update Last Name"
+                width="inherit"
+                label="Update Last Name"
+                value={user.surName}
+                onChange={(e) => {
+                  setUser({
+                    ...user,
+                    surName: e.target.value,
+                  });
+                }}
+              />
+              &nbsp;
+              <AppInput
+                placeholder="Update First Name"
+                width="inherit"
+                value={user.firstName}
+                label="Update First Name"
+                onChange={(e) => {
+                  setUser({
+                    ...user,
+                    firstName: e.target.value,
+                  });
+                }}
+              />
+              &nbsp;
+              <AppButton
+                disabled={isLoadingupdateusername}
+                loading={isLoadingupdateusername}
+                placeholder="Update"
+                onClick={() => {
+                  mutateupdateusername({
+                    adminId: 0,
+                    user: {
+                      userId: customerDetails?.userId,
+                      firstName: user.firstName,
+                      surName: user.surName,
+                    },
+                  });
+                }}
+                margin="0"
+              />
+            </div>
+
+            <div
+              style={{
+                padding: "14px",
+                border: "1px solid #d2d2d2",
+                borderRadius: "10px",
+              }}
+            >
+              <AppInput
+                placeholder="Update Email"
+                width="inherit"
+                value={user.email}
+                label="Update Email"
+                onChange={(e) => {
+                  setUser({
+                    ...user,
+                    email: e.target.value,
+                  });
+                }}
+              />
+              &nbsp;
+              <AppButton
+                placeholder="Update"
+                onClick={() => {
+                  mutateupdateuseremail({
+                    adminId: 0,
+                    user: {
+                      userId: customerDetails?.userId,
+                      email: user.email,
+                    },
+                  });
+                }}
+                margin="0"
+              />
+            </div>
+
+            <div
+              style={{
+                padding: "14px",
+                border: "1px solid #d2d2d2",
+                borderRadius: "10px",
+              }}
+            >
+              <AppInput
+                placeholder="Update Phone"
+                width="inherit"
+                value={user.phone}
+                label="Update Phone"
+                type={"number"}
+                onChange={(e) => {
+                  setUser({
+                    ...user,
+                    phone: e.target.value,
+                  });
+                }}
+              />
+              &nbsp;
+              <AppButton
+                disabled={isLoadingupdateuserphone}
+                loading={isLoadingupdateuserphone}
+                placeholder="Update"
+                onClick={() => {
+                  mutateupdateuserphone({
+                    adminId: 0,
+                    user: {
+                      userId: customerDetails?.userId,
+                      phone: user.phone,
+                    },
+                  });
+                }}
+                margin="0"
+              />
+            </div>
+
+            <div
+              style={{
+                padding: "14px",
+                border: "1px solid #d2d2d2",
+                borderRadius: "10px",
+              }}
+            >
+              <AppInput
+                placeholder="Update Address"
+                width="inherit"
+                label="Update Address"
+                value={user.address}
+                onChange={(e) => {
+                  setUser({
+                    ...user,
+                    address: e.target.value,
+                  });
+                }}
+              />
+              &nbsp;
+              <AppButton
+                disabled={isLoadingupdateuseraddress}
+                loading={isLoadingupdateuseraddress}
+                placeholder="Update"
+                onClick={() => {
+                  mutateupdateuseraddress({
+                    adminId: 0,
+                    user: {
+                      userId: customerDetails?.userId,
+                      address: user.address,
+                      postcode: "100101",
+                      country: {
+                        id: user.country.id,
+                      },
+                      state: {
+                        id: user.city.id,
+                      },
+                      city: {
+                        id: user.city.id,
+                      },
+                    },
+                  });
+                }}
+                margin="0"
+              />
+            </div>
+
+            <div
+              style={{
+                padding: "14px",
+                border: "1px solid #d2d2d2",
+                borderRadius: "10px",
+              }}
+            >
+              <AppInput
+                placeholder="Update DOB"
+                width="inherit"
+                type="date"
+                label="Update DOB"
+                value={user.dob}
+                onChange={(e) => {
+                  setUser({
+                    ...user,
+                    dob: e.target.value,
+                  });
+                }}
+              />
+              &nbsp;
+              <AppButton
+                disabled={isLoadingupdateuserdob}
+                loading={isLoadingupdateuserdob}
+                placeholder="Update"
+                onClick={() => {
+                  mutateupdateuserdob({
+                    adminId: 0,
+                    user: {
+                      userId: customerDetails?.userId,
+                      dob: user.dob,
+                    },
+                  });
+                }}
+                margin="0"
+              />
+            </div>
+
+            <div
+              style={{
+                padding: "14px",
+                border: "1px solid #d2d2d2",
+                borderRadius: "10px",
+              }}
+            >
+              <AppSelect
+                label="Update Account Type"
+                styles={{
+                  padding: "0px !important",
+                  // You can add custom styles here if needed
+                }}
+                options={[
+                  { label: "individual", value: 1 },
+                  { label: "Business", value: 2 },
+                ]}
+                // value={use} // Pass the selected option to the value prop
+                onChange={(e) => {
+                  console.log(e, "ddddsdsf");
+                  setType(e);
+                  setUser({
+                    ...user,
+                    accountType: e.value,
+                  });
+                }}
+                value={nType || type} // Handle option selection
+                placeholder="Please select a account type"
+                showSearch
+                isClearable={true} // Allow clearing the selected option
+              />
+              &nbsp;
+              <AppButton
+                placeholder="Update"
+                disabled={isLoadingupdateauseraccounttype}
+                loading={isLoadingupdateauseraccounttype}
+                onClick={() => {
+                  mutateupdateauseraccounttype({
+                    adminId: 0,
+                    user: {
+                      userId: customerDetails?.userId,
+                      accountType: type.value,
+                    },
+                  });
+                }}
+                margin="0"
+              />
+            </div>
+          </div>
+        </AppModal>
+      )}
       <div
         style={{
           display: "flex",

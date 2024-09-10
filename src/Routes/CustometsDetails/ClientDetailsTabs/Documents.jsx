@@ -1,17 +1,9 @@
-import React, { useState } from "react";
-import DownloadIcon from "../../../assets/icons/DownloadIcon";
-import { TiDelete, TiDownload, TiPen, TiPencil } from "react-icons/ti";
-import SmallDownload from "../../../assets/icons/Download";
-import MDeleteIcon from "../../../assets/icons/MDeleteIcon";
-import { isError, useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import AppModal from "../../../COMPONENTS/AppModal";
-import AppInput from "../../../reuseables/AppInput";
 import { saveAs } from "file-saver";
-import FileUpload from "../../../services/FileUpload";
-import { uploadFile } from "../../../services/Auth";
 import toast from "react-hot-toast";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { updateFile } from "../../../services/PayoutDashboard";
 import CustomTable from "../../../reuseables/CustomTable";
 import SectionHeader from "../../../reuseables/SectionHeader";
 import { Dropdown, Menu, Input } from "@arco-design/web-react";
@@ -39,6 +31,7 @@ const Droplist = ({
   setBack,
   setAdd,
   setVer,
+  ver,
 }) => (
   //   <Menu.Item key='1' onClick={() => onNavigate(id)}>
   <Menu
@@ -225,7 +218,7 @@ const Droplist = ({
           marginLeft: "10px",
         }}
       >
-        Verify Document
+        {ver === "Verified" ? "UnVerify Document" : " Verify Document"}
       </span>
     </Menu.Item>
   </Menu>
@@ -331,6 +324,7 @@ export default function Documents({ clientDetails, refetch }) {
   const [document, setDocument] = useState();
   const [modal4, setModal4] = useState(false);
   const [commentId, setCommentId] = useState(false);
+  const [vers, setVerS] = useState();
   const downloadFile = () => {
     fetch(clientDetails?.idVerificationReportURL)
       .then((response) => response.blob())
@@ -378,6 +372,7 @@ export default function Documents({ clientDetails, refetch }) {
         toast.success(data?.message);
         setNote();
         setModal4(false);
+        refetch();
       } else {
         toast.error(data?.message);
       }
@@ -429,13 +424,11 @@ export default function Documents({ clientDetails, refetch }) {
                     setImage(item?.documentFrontPageURL);
                     setModal(true);
                   }}
+                  ver={item?.verificationStatus}
                   setVer={() => {
-                    if (!item?.isKYCCompleted) {
-                      setModal4(true);
-                      setCommentId(item?.id);
-                    } else {
-                      toast("Documents Already Verified");
-                    }
+                    setModal4(true);
+                    setCommentId(item?.id);
+                    setVerS(item?.verificationStatus);
                   }}
                   setBack={() => {
                     setModal2(true);
@@ -594,13 +587,18 @@ export default function Documents({ clientDetails, refetch }) {
           closeModal={() => {
             setModal4(false);
           }}
-          heading={"Confirm Document Verification"}
+          heading={
+            vers === "Verified"
+              ? "Confirm UnVerification"
+              : "Confirm Verification"
+          }
         >
           <Btn
             clicking={() => {
               ver({
                 userId: params.get("userId"),
                 userKYCDocument: {
+                  documentVerificationStatusToggle: vers === "Verified" ? 0 : 1,
                   id: commentId,
                 },
               });

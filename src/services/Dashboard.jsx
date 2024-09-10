@@ -634,6 +634,36 @@ export const markuseridasverified = async (body) => {
   return data;
 };
 
+export const updateusername = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/updateusername`, body);
+  return data;
+};
+
+export const updateuseremail = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/updateuseremail`, body);
+  return data;
+};
+
+export const updateuserphone = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/updateuserphone`, body);
+  return data;
+};
+
+export const updateuseraddress = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/updateuseraddress`, body);
+  return data;
+};
+
+export const updateuserdob = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/updateuserdob`, body);
+  return data;
+};
+
+export const updateauseraccounttype = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/updateauseraccounttype`, body);
+  return data;
+};
+
 export const viewuserkycdocumentcomment = async (userId) => {
   console.log("🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:md", userId);
   const { data } = await Axios.get(
