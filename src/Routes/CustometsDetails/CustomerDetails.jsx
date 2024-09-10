@@ -138,15 +138,12 @@ export default function CustomerDetailsPage() {
               </div>
 
               <div className="body">
-                {isLoading || isFetching ? (
-                  <Skeleton2 height="400px" />
-                ) : (
-                  <CustomerDetailsTop
-                    customerDetails={customerDetails}
-                    from={from}
-                    refetch={refetch}
-                  />
-                )}
+                <CustomerDetailsTop
+                  customerDetails={customerDetails}
+                  from={from}
+                  refetch={refetch}
+                  loading={isLoading || isFetching}
+                />
 
                 {isLoading || isFetching ? (
                   <Skeleton2 height="400px" />
