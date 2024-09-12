@@ -17,6 +17,7 @@ import {
 } from "../../services/Dashboard";
 import AppSelect from "../../reuseables/AppSelect";
 import Skeleton2 from "../../reuseables/Skeleton2";
+import AppTextarea from "../../reuseables/AppTextarea";
 
 export default function CustomerDetailsTop({
   customerDetails,
@@ -378,19 +379,6 @@ export default function CustomerDetailsTop({
                 borderRadius: "10px",
               }}
             >
-              <AppInput
-                placeholder="Address"
-                width="inherit"
-                label="Update Address"
-                value={user.address}
-                onChange={(e) => {
-                  setUser({
-                    ...user,
-                    address: e.target.value,
-                  });
-                }}
-              />
-              &nbsp;
               <AppSelect
                 label="Country"
                 styles={{
@@ -414,7 +402,7 @@ export default function CustomerDetailsTop({
               />
               &nbsp;
               <AppSelect
-                label="State"
+                label="City"
                 styles={{
                   padding: "0px !important",
                   // You can add custom styles here if needed
@@ -435,6 +423,19 @@ export default function CustomerDetailsTop({
                 showSearch
               />
               &nbsp;
+              <AppTextarea
+                placeholder="Address"
+                width="90%"
+                label="Address"
+                value={user.address}
+                onChange={(e) => {
+                  setUser({
+                    ...user,
+                    address: e.target.value,
+                  });
+                }}
+              />
+              &nbsp;
               <AppButton
                 disabled={isLoadingupdateuseraddress}
                 loading={isLoadingupdateuseraddress}
@@ -449,9 +450,7 @@ export default function CustomerDetailsTop({
                       country: {
                         id: user.country?.id,
                       },
-                      state: {
-                        id: user.city?.id,
-                      },
+
                       city: {
                         id: user.city?.id,
                       },
