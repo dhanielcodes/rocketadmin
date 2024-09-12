@@ -597,8 +597,8 @@ export default function Documents({ clientDetails, refetch }) {
             clicking={() => {
               ver({
                 userId: params.get("userId"),
+                documentVerificationStatusToggle: vers === "Verified" ? 0 : 1,
                 userKYCDocument: {
-                  documentVerificationStatusToggle: vers === "Verified" ? 0 : 1,
                   id: commentId,
                 },
               });
