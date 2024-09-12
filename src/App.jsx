@@ -543,16 +543,24 @@ function App() {
                   </AppLogout>
                 }
               />
-              {handleCheckAccess("Notification", actualArrayAccess) && (
+              {/*  {handleCheckAccess("Notifications", actualArrayAccess) && (
                 <Route
-                  path="/notification"
+                  path="/notifications"
                   element={
                     <AppLogout>
                       <NotificationsPage />
                     </AppLogout>
                   }
                 />
-              )}
+              )} */}
+              <Route
+                path="/notifications"
+                element={
+                  <AppLogout>
+                    <NotificationsPage />
+                  </AppLogout>
+                }
+              />
               {handleCheckAccess("Banks", actualArrayAccess) && (
                 <Route
                   path="/banks"
