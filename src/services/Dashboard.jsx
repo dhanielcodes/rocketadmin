@@ -664,6 +664,21 @@ export const updateauseraccounttype = async (body) => {
   return data;
 };
 
+export const profession = async () => {
+  const { data } = await Axios.get(`${baseurl}/getprofession`);
+  return data;
+};
+
+export const employment = async () => {
+  const { data } = await Axios.get(`${baseurl}/getemploymentstatus`);
+  return data;
+};
+
+export const addUser = async (body) => {
+  const { data } = await Axios.post(`${baseurl}/signup`, body);
+  return data;
+};
+
 export const viewuserkycdocumentcomment = async (userId) => {
   console.log("🚀 ~ file: Dashboard.jsx:31 ~ Tranx ~ userId:md", userId);
   const { data } = await Axios.get(

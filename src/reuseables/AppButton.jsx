@@ -10,18 +10,20 @@ function AppButton({
 }) {
   return (
     <Content>
-      <div className="btn" onClick={onClick}>
-        <button disabled={disabled} style={{ margin: margin, ...style }}>
-          {loading ? "Loading..." : placeholder}
-        </button>
-      </div>
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        style={{ margin: margin, ...style }}
+      >
+        {loading ? "Loading..." : placeholder}
+      </button>
     </Content>
   );
 }
 
 export default AppButton;
 const Content = styled.div`
-  .btn button {
+  button {
     display: flex;
     justify-content: center;
     align-items: center;
