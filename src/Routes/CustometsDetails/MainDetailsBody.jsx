@@ -460,7 +460,7 @@ export default function CustomerDetailsTop({
                     user: {
                       userId: customerDetails?.userId,
                       address: user.address,
-                      postcode: "100101",
+                      postcode: user.postcode,
                       country: {
                         id: user.country?.id,
                       },
