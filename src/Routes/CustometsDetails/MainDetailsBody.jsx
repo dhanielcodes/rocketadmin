@@ -143,6 +143,7 @@ export default function CustomerDetailsTop({
     dob: "",
     accountType: "",
     address: "",
+    postcode: "",
   });
 
   const nCountry =
@@ -432,6 +433,19 @@ export default function CustomerDetailsTop({
                   setUser({
                     ...user,
                     address: e.target.value,
+                  });
+                }}
+              />
+              &nbsp;
+              <AppInput
+                placeholder="Postcode"
+                width="90%"
+                label="Postcode"
+                value={user.postcode}
+                onChange={(e) => {
+                  setUser({
+                    ...user,
+                    postcode: e.target.value,
                   });
                 }}
               />
