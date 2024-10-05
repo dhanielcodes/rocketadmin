@@ -27,6 +27,7 @@ import { TiPlus } from "react-icons/ti";
 import PlusIcon from "../../assets/icons/PlusIcon";
 import toast from "react-hot-toast";
 import Gateways from "./ClientDetailsTabs/Gateways";
+import { FormatCorrect } from "../../utils/format";
 
 export default function ClientDetailsPage() {
   const [params] = useSearchParams();
@@ -315,8 +316,18 @@ export default function ClientDetailsPage() {
                   (item) => {
                     return {
                       ...item,
-                      name: `${item?.providerName} - [${item?.wallet?.currency?.code}]`,
-                      value: `${item?.providerName} - [${item?.wallet?.currency?.code}]`,
+                      name: `${item?.providerName} - [${
+                        item?.wallet?.currency?.code
+                      }] ${FormatCorrect(
+                        item?.wallet?.balance,
+                        item?.wallet?.currency?.code
+                      )}`,
+                      value: `${item?.providerName} - [${
+                        item?.wallet?.currency?.code
+                      }] ${FormatCorrect(
+                        item?.wallet?.balance,
+                        item?.wallet?.currency?.code
+                      )}`,
                     };
                   }
                 )}
