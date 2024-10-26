@@ -639,8 +639,8 @@ const myParam = urlParams.get("userId");
 
 export const updateProfilePicture = async (body) => {
   const { data } = await Axios.post(
-    `${baseurl}/updateUserprofilepicture/${myParam}`,
-    body
+    `${baseurl}/updateUserprofilepicture/${body?.id}`,
+    body?.body
   );
   return data;
 };

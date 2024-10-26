@@ -644,7 +644,7 @@ export default function CustomerDetailsTop({
                   const formData = new FormData();
                   formData.append("file", e?.target?.files[0]);
                   if (e?.target?.files[0]) {
-                    mutate(formData);
+                    mutate({ body: formData, id: customerDetails?.userId });
                   }
                 }}
               />
