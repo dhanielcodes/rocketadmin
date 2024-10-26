@@ -634,6 +634,16 @@ export const markuseridasverified = async (body) => {
   return data;
 };
 
+const urlParams = new URLSearchParams(window.location.search);
+const myParam = urlParams.get("userId");
+
+export const updateProfilePicture = async (body) => {
+  const { data } = await Axios.post(
+    `${baseurl}/updateUserprofilepicture/${myParam}`,
+    body
+  );
+  return data;
+};
 export const updateusername = async (body) => {
   const { data } = await Axios.post(`${baseurl}/updateusername`, body);
   return data;
