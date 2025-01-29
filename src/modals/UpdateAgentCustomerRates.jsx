@@ -33,8 +33,8 @@ export default function UpdateAgentCustomerRates({
 
   const handleRates = (e) => {
     setSelectedCountry(e);
-    setRate(e?.currencyRate?.conversionRate);
-    setFee(e?.currencyRate?.charge);
+    setRate(e?.specialRate);
+    setFee(e?.charge);
     console.log(e, "kdksdsdsd");
   };
 
@@ -87,7 +87,7 @@ export default function UpdateAgentCustomerRates({
     queryFn: () => getRoleMeta("basic"),
   });
 
-  console.log(rateMetas?.data);
+  console.log(rateMetas?.data, selectedCountry, "koll");
   return (
     <div
       style={{
@@ -141,7 +141,7 @@ export default function UpdateAgentCustomerRates({
                 width="92%"
                 name="username"
                 //value={selectedCountry?.specialRate}
-                defaultValue={selectedCountry?.specialRate}
+                value={rate}
               />
             </div>
             <div
@@ -160,7 +160,7 @@ export default function UpdateAgentCustomerRates({
                 width="92%"
                 name="username"
                 //value={selectedCountry?.charge}
-                defaultValue={selectedCountry?.charge}
+                defaultValue={fee}
               />
             </div>
           </div>
@@ -197,7 +197,7 @@ export default function UpdateAgentCustomerRates({
                 />
                 <AmountFormatter
                   currency={selectedCountry?.currencyRate?.toCurrency?.code}
-                  value={selectedCountry?.specialRate || 0}
+                  value={selectedCountry?.currencyRate?.conversionRate || 0}
                 />
               </div>
             </div>
